@@ -2,6 +2,7 @@ package nl.tudelft.simulation.supplychain.content;
 
 import java.io.Serializable;
 
+import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
@@ -51,7 +52,7 @@ public abstract class Order extends Content
     /**
      * @return Returns the price.
      */
-    public abstract double getPrice();
+    public abstract Money getPrice();
 
     /**
      * @return Returns the proposedDeliveryDate.

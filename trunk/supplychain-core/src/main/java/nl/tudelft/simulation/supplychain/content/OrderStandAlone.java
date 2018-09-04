@@ -2,6 +2,7 @@ package nl.tudelft.simulation.supplychain.content;
 
 import java.io.Serializable;
 
+import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
@@ -29,7 +30,7 @@ public class OrderStandAlone extends Order
     private double amount;
 
     /** the price we want to pay for the product */
-    private double price;
+    private Money price;
 
     /**
      * The constructor for the OrderStandAlone
@@ -42,7 +43,7 @@ public class OrderStandAlone extends Order
      * @param price the price to pay
      */
     public OrderStandAlone(final SupplyChainActor sender, final SupplyChainActor receiver, final Serializable internalDemandID,
-            final Time deliveryDate, final Product product, final double amount, final double price)
+            final Time deliveryDate, final Product product, final double amount, final Money price)
     {
         super(sender, receiver, internalDemandID, deliveryDate);
         this.product = product;
@@ -59,7 +60,7 @@ public class OrderStandAlone extends Order
 
     /** {@inheritDoc} */
     @Override
-    public double getPrice()
+    public Money getPrice()
     {
         return this.price;
     }

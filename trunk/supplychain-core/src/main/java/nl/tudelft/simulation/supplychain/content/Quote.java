@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.djunits.unit.TimeUnit;
 import org.djunits.value.vdouble.scalar.Duration;
+import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
@@ -35,7 +36,7 @@ public class Quote extends Content
     private double amount;
 
     /** the price asked for the amount of products (in number of units) */
-    private double price;
+    private Money price;
 
     /** the date on which the goods will be sent */
     protected Time proposedShippingDate;
@@ -63,7 +64,7 @@ public class Quote extends Content
      * @param transportMode the transport mode
      */
     public Quote(final SupplyChainActor sender, final SupplyChainActor receiver, final Serializable internalDemandID,
-            final RequestForQuote requestForQuote, final Product product, final double amount, final double price,
+            final RequestForQuote requestForQuote, final Product product, final double amount, final Money price,
             final Time proposedShippingDate, final TransportMode transportMode)
     {
         super(sender, receiver, internalDemandID);
@@ -92,7 +93,7 @@ public class Quote extends Content
      * @param transportMode the transport mode
      */
     public Quote(final SupplyChainActor sender, final SupplyChainActor receiver, final Serializable internalDemandID,
-            final RequestForQuote requestForQuote, final Product product, final double amount, final double price,
+            final RequestForQuote requestForQuote, final Product product, final double amount, final Money price,
             final Time proposedShippingDate, final Time validityTime, final TransportMode transportMode)
     {
         this(sender, receiver, internalDemandID, requestForQuote, product, amount, price, proposedShippingDate, transportMode);
@@ -102,7 +103,7 @@ public class Quote extends Content
     /**
      * @return Returns the price.
      */
-    public double getPrice()
+    public Money getPrice()
     {
         return this.price;
     }

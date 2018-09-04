@@ -2,6 +2,7 @@ package nl.tudelft.simulation.supplychain.content;
 
 import java.io.Serializable;
 
+import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
@@ -48,7 +49,7 @@ public class OrderBasedOnQuote extends Order
 
     /** {@inheritDoc} */
     @Override
-    public double getPrice()
+    public Money getPrice()
     {
         return this.quote.getPrice();
     }
