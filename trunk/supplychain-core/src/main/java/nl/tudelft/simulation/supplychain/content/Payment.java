@@ -2,6 +2,8 @@ package nl.tudelft.simulation.supplychain.content;
 
 import java.io.Serializable;
 
+import org.djunits.value.vdouble.scalar.Money;
+
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.product.Product;
 
@@ -22,7 +24,7 @@ public class Payment extends Content
     private Bill bill;
 
     /** the amount reflecting the payment */
-    private double payment;
+    private Money payment;
 
     /**
      * Constructs a new Payment.
@@ -33,7 +35,7 @@ public class Payment extends Content
      * @param payment the payment
      */
     public Payment(final SupplyChainActor sender, final SupplyChainActor receiver, final Serializable internalDemandID,
-            final Bill bill, final double payment)
+            final Bill bill, final Money payment)
     {
         super(sender, receiver, internalDemandID);
         this.bill = bill;
@@ -44,7 +46,7 @@ public class Payment extends Content
      * Returns the payment.
      * @return double returns the amount reflecting the payment
      */
-    public double getPayment()
+    public Money getPayment()
     {
         return this.payment;
     }

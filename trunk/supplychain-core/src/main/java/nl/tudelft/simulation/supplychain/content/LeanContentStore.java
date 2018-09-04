@@ -34,7 +34,7 @@ public class LeanContentStore extends ContentStore
     private Map<Serializable, Content> unansweredContentMap = Collections.synchronizedMap(new HashMap<Serializable, Content>());
 
     /** the logger. */
-    private static Logger logger = LogManager.getLogger(Actor.class);
+    private static Logger logger = LogManager.getLogger(LeanContentStore.class);
 
     /**
      * @param owner the owner
@@ -62,31 +62,26 @@ public class LeanContentStore extends ContentStore
             {
                 InternalDemand internalDemand = (InternalDemand) content;
                 this.unansweredContentMap.put(content.getUniqueID(), content);
-                Time date = Time.max(this.simulator.getSimulatorTime(), internalDemand.getLatestDeliveryDate());
-                SimEvent event = new SimEvent(date, this, this, "internalDemandTimeout",
+                Time date = Time.max(this.simulator.getSimulatorTime().get(), internalDemand.getLatestDeliveryDate());
+                this.simulator.scheduleEventAbs(date, this, this, "internalDemandTimeout",
                         new Serializable[] { internalDemand, new Boolean(sent) });
-                this.simulator.scheduleEvent(event);
             }
             else if (RequestForQuote.class.isAssignableFrom(contentClass) && !sent)
             {
                 RequestForQuote rfq = (RequestForQuote) content;
                 this.unansweredContentMap.put(content.getUniqueID(), content);
                 this.unansweredContentMap.remove(rfq.getInternalDemandID());
-                double date = Math.max(this.simulator.getSimulatorTime(), rfq.getCutoffDate());
-                SimEvent event =
-                        new SimEvent(date, this, this, "requestForQuoteTimeout", new Serializable[] { rfq, new Boolean(sent) });
-                this.simulator.scheduleEvent(event);
+                Time date = Time.max(this.simulator.getSimulatorTime().get(), rfq.getCutoffDate());
+                this.simulator.scheduleEventAbs(date, this, this, "requestForQuoteTimeout", new Serializable[] { rfq, new Boolean(sent) });
             }
             else if (RequestForQuote.class.isAssignableFrom(contentClass) && sent)
             {
                 RequestForQuote rfq = (RequestForQuote) content;
                 this.unansweredContentMap.put(content.getUniqueID(), content);
                 this.unansweredContentMap.remove(rfq.getInternalDemandID());
-                double date = Math.max(this.simulator.getSimulatorTime(),
+                Time date = Time.max(this.simulator.getSimulatorTime().get(),
                         rfq.getCutoffDate() + TimeUnit.convert(1.0, TimeUnit.DAY, this.simulator));
-                SimEvent event =
-                        new SimEvent(date, this, this, "requestForQuoteTimeout", new Serializable[] { rfq, new Boolean(sent) });
-                this.simulator.scheduleEvent(event);
+                this.simulator.scheduleEventAbs(date, this, this, "requestForQuoteTimeout", new Serializable[] { rfq, new Boolean(sent) });
             }
             else if (Quote.class.isAssignableFrom(contentClass))
             {
@@ -97,9 +92,7 @@ public class LeanContentStore extends ContentStore
                         + TimeUnit.convert(1.0, TimeUnit.DAY, this.simulator));
                 date = Math.max(date, quote.getRequestForQuote().getLatestDeliveryDate());
                 date = Math.max(this.simulator.getSimulatorTime(), date);
-                SimEvent event =
-                        new SimEvent(date, this, this, "quoteTimeout", new Serializable[] { quote, new Boolean(sent) });
-                this.simulator.scheduleEvent(event);
+                this.simulator.scheduleEventAbs(date, this, this, "quoteTimeout", new Serializable[] { quote, new Boolean(sent) });
             }
             else if (OrderBasedOnQuote.class.isAssignableFrom(contentClass))
             {
@@ -118,7 +111,7 @@ public class LeanContentStore extends ContentStore
                 OrderStandAlone order = (OrderStandAlone) content;
                 this.unansweredContentMap.put(content.getUniqueID(), content);
                 this.unansweredContentMap.remove(order.getInternalDemandID());
-                double date = Math.max(this.simulator.getSimulatorTime(), order.getDeliveryDate());
+                Time date = Time.max(this.simulator.getSimulatorTime().get(), order.getDeliveryDate());
                 SimEvent event = new SimEvent(date, this, this, "orderStandAloneTimeout",
                         new Serializable[] { order, new Boolean(sent) });
                 this.simulator.scheduleEvent(event);
