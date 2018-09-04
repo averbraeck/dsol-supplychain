@@ -97,9 +97,8 @@ public class FieldComparator implements Comparator<Message>, Serializable
         /** the serial version uid */
         private static final long serialVersionUID = 12L;
 
-        /**
-         * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-         */
+        /** {@inheritDoc} */
+        @Override
         public int compare(final Object o1, final Object o2)
         {
             return 0;

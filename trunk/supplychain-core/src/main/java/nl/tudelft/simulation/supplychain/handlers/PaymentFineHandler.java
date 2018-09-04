@@ -4,8 +4,11 @@ import java.io.Serializable;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.djunits.unit.DurationUnit;
+import org.djunits.unit.MoneyUnit;
+import org.djunits.value.vdouble.scalar.Money;
+import org.djunits.value.vdouble.scalar.Time;
 
-import nl.tudelft.simulation.dsol.simtime.TimeUnit;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.banking.BankAccount;
 import nl.tudelft.simulation.supplychain.content.Payment;
@@ -30,7 +33,7 @@ public class PaymentFineHandler extends PaymentHandler
     private double fineMarginPerDay = 0.0;
 
     /** the fixed fine */
-    private double fixedFinePerDay = 0.0;
+    private Money fixedFinePerDay = new Money(0.0, MoneyUnit.USD);
 
     /** the logger. */
     private static Logger logger = LogManager.getLogger(PaymentFineHandler.class);
@@ -43,16 +46,15 @@ public class PaymentFineHandler extends PaymentHandler
      * @param fixedFinePerDay the fixed fine per day
      */
     public PaymentFineHandler(final SupplyChainActor owner, final BankAccount bankAccount, final double fineMarginPerDay,
-            final double fixedFinePerDay)
+            final Money fixedFinePerDay)
     {
         super(owner, bankAccount);
         this.fineMarginPerDay = fineMarginPerDay;
         this.fixedFinePerDay = fixedFinePerDay;
     }
 
-    /**
-     * @see nl.tudelft.simulation.content.HandlerInterface#handleContent(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     public boolean handleContent(final Serializable content)
     {
         try
@@ -60,19 +62,19 @@ public class PaymentFineHandler extends PaymentHandler
             if (super.handleContent(content))
             {
                 Payment payment = (Payment) content;
-                double time = payment.getSender().getSimulatorTime();
-                if ((time > payment.getBill().getFinalPaymentDate()))
+                Time time = payment.getSender().getSimulatorTime();
+                if (time.gt(payment.getBill().getFinalPaymentDate()))
                 {
                     // YES!! we can fine! Finally we earn some money
-                    double day = 1.0;
-                    day = TimeUnit.convert(1.0, TimeUnit.DAY, getOwner().getSimulator());
+                    Money fine = this.fixedFinePerDay.plus(payment.getPayment().multiplyBy(this.fineMarginPerDay)
+                            .multiplyBy((time.minus(payment.getBill().getFinalPaymentDate()).getInUnit(DurationUnit.DAY))));
 
-                    double fine = ((time - payment.getBill().getFinalPaymentDate()) / day)
-                            * (this.fixedFinePerDay + (this.fineMarginPerDay * payment.getPayment()));
-                    // send the bill for the fine
-                    /*
-                     * Bill bill = new Bill(getOwner(), payment.getSender(), payment.getInternalDemandID(), payment.getBill()
-                     * .getOrder(), getOwner().getSimulatorTime() + (14.0 * day), fine, "FINE");
+                    /*-
+                      // send the bill for the fine
+                      Bill bill = new Bill(getOwner(), payment.getSender(), payment.getInternalDemandID(), payment.getBill()
+                          .getOrder(), getOwner().getSimulatorTime().plus(new Duration(14.0, DurationUnit.DAY), fine, "FINE");
+                      getOwner().sendContent(payment, Duration.ZERO);
+                      getOwner().sendContent(bill, Duration.ZERO);
                      */
                     // do a forced payment
                     payment.getSender().getBankAccount().withdrawFromBalance(fine);
@@ -82,9 +84,6 @@ public class PaymentFineHandler extends PaymentHandler
                     {
                         System.out.println("DEBUG -- PAYMENTFINEHANDLER: FINE IMPOSED: " + fine);
                     }
-
-                    // getOwner().sendContent(payment, 0.0);
-                    // getOwner().sendContent(bill, 0.0);
                 }
                 return true;
             }

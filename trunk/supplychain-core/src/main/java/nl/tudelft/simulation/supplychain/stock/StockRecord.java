@@ -4,9 +4,10 @@ import java.io.Serializable;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.djunits.unit.TimeUnit;
+import org.djunits.unit.DurationUnit;
+import org.djunits.value.vdouble.scalar.Duration;
+import org.djunits.value.vdouble.scalar.Money;
 
-import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.actor.Trader;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
@@ -44,9 +45,9 @@ public class StockRecord implements Serializable
     private double orderedAmount;
 
     /** the costprice of the total amount of these products in stock */
-    private double costprice;
+    private Money costprice;
 
-    /** the depreciation per day */
+    /** the depreciation factor per day */
     private double dailyDepreciation = 0.0;
 
     /** the logger. */
@@ -67,7 +68,7 @@ public class StockRecord implements Serializable
         // start the depreciation process...
         try
         {
-            this.simulator.scheduleEvent(0.0, this, this, "depreciate", null);
+            this.simulator.scheduleEventNow(this, this, "depreciate", null);
         }
         catch (Exception exception)
         {
@@ -116,10 +117,10 @@ public class StockRecord implements Serializable
      * @param actualAmount the actual amount
      * @param unitprice the unit price
      */
-    public void setActualAmount(final double actualAmount, final double unitprice)
+    public void setActualAmount(final double actualAmount, final Money unitprice)
     {
         this.actualAmount = actualAmount;
-        this.costprice = actualAmount * unitprice;
+        this.costprice = unitprice.multiplyBy(actualAmount);
     }
 
     /**
@@ -145,10 +146,10 @@ public class StockRecord implements Serializable
      * @param delta The change in product; must be positive
      * @param unitprice The costprice of the products. Has to be positive
      */
-    public void addActualAmount(final double delta, final double unitprice)
+    public void addActualAmount(final double delta, final Money unitprice)
     {
         this.actualAmount += delta;
-        this.costprice += delta * unitprice;
+        this.costprice = this.costprice.plus(unitprice.multiplyBy(delta));
     }
 
     /**
@@ -157,7 +158,7 @@ public class StockRecord implements Serializable
      */
     public void removeActualAmount(final double delta)
     {
-        this.costprice -= getUnitPrice() * delta;
+        this.costprice = this.costprice.minus(getUnitPrice().multiplyBy(delta));
         this.actualAmount -= delta;
     }
 
@@ -183,7 +184,7 @@ public class StockRecord implements Serializable
      * Returns the costprice.
      * @return double
      */
-    public double getCostprice()
+    public Money getCostprice()
     {
         return this.costprice;
     }
@@ -192,11 +193,11 @@ public class StockRecord implements Serializable
      * Returns the costprice per product unit.
      * @return double Returns the costprice per unit
      */
-    public double getUnitPrice()
+    public Money getUnitPrice()
     {
         if (this.actualAmount > 0.0)
         {
-            return this.costprice / this.actualAmount;
+            return this.costprice.divideBy(this.actualAmount);
         }
         return this.product.getUnitMarketPrice();
     }
@@ -216,9 +217,9 @@ public class StockRecord implements Serializable
     {
         try
         {
-            this.costprice = (1.0 - this.dailyDepreciation) * this.costprice;
-            this.owner.getBankAccount().withdrawFromBalance(this.dailyDepreciation * this.costprice);
-            this.simulator.scheduleEvent(TimeUnit.convert(1.0, TimeUnit.DAY, this.simulator), this, this, "depreciate", null);
+            this.costprice = this.costprice.multiplyBy(1.0 - this.dailyDepreciation);
+            this.owner.getBankAccount().withdrawFromBalance(this.costprice.multiplyBy(this.dailyDepreciation));
+            this.simulator.scheduleEventRel(new Duration(1.0, DurationUnit.DAY), this, this, "depreciate", null);
         }
         catch (Exception exception)
         {

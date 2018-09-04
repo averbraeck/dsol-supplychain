@@ -8,15 +8,15 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.djunits.value.vdouble.scalar.Duration;
 
-import nl.tudelft.simulation.jstats.distributions.DistConstant;
-import nl.tudelft.simulation.jstats.distributions.DistContinuous;
-import nl.tudelft.simulation.jstats.streams.Java2Random;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.InternalDemand;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
+import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
+import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * The InternalDemandHandlerRFQ is a simple implementation of the business logic to handle a request for new products through
@@ -46,7 +46,8 @@ public class InternalDemandHandlerRFQ extends InternalDemandHandler
      * @param handlingTime the handling time distribution delay to use
      * @param stock the stock for being able to change the ordered amount
      */
-    public InternalDemandHandlerRFQ(final SupplyChainActor owner, final DistContinuous handlingTime, final StockInterface stock)
+    public InternalDemandHandlerRFQ(final SupplyChainActor owner, final DistContinuousDurationUnit handlingTime,
+            final StockInterface stock)
     {
         super(owner, handlingTime, stock);
     }
@@ -57,9 +58,9 @@ public class InternalDemandHandlerRFQ extends InternalDemandHandler
      * @param handlingTime the constant handling time delay to use
      * @param stock the stock for being able to change the ordered amount
      */
-    public InternalDemandHandlerRFQ(final SupplyChainActor owner, final double handlingTime, final StockInterface stock)
+    public InternalDemandHandlerRFQ(final SupplyChainActor owner, final Duration handlingTime, final StockInterface stock)
     {
-        this(owner, new DistConstant(new Java2Random(), handlingTime), stock);
+        this(owner, new DistConstantDurationUnit(handlingTime), stock);
     }
 
     /**
@@ -92,9 +93,8 @@ public class InternalDemandHandlerRFQ extends InternalDemandHandler
         }
     }
 
-    /**
-     * @see nl.tudelft.simulation.content.HandlerInterface #handleContent(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     public boolean handleContent(final Serializable content)
     {
         InternalDemand internalDemand = (InternalDemand) checkContent(content);
@@ -117,11 +117,11 @@ public class InternalDemandHandlerRFQ extends InternalDemandHandler
         {
             super.stock.changeOrderedAmount(internalDemand.getProduct(), internalDemand.getAmount());
         }
-        double delay = this.handlingTime.draw();
-        Iterator supplierIterator = supplierSet.iterator();
+        Duration delay = this.handlingTime.draw();
+        Iterator<SupplyChainActor> supplierIterator = supplierSet.iterator();
         while (supplierIterator.hasNext())
         {
-            SupplyChainActor supplier = (SupplyChainActor) supplierIterator.next();
+            SupplyChainActor supplier = supplierIterator.next();
             RequestForQuote rfq = new RequestForQuote(getOwner(), supplier, internalDemand, internalDemand.getProduct(),
                     internalDemand.getAmount(), internalDemand.getEarliestDeliveryDate(),
                     internalDemand.getLatestDeliveryDate());

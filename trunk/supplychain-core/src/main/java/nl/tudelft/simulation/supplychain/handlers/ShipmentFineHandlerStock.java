@@ -2,9 +2,11 @@ package nl.tudelft.simulation.supplychain.handlers;
 
 import java.io.Serializable;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.djunits.unit.TimeUnit;
+import org.djunits.unit.DurationUnit;
+import org.djunits.unit.MoneyUnit;
+import org.djunits.value.vdouble.scalar.Duration;
+import org.djunits.value.vdouble.scalar.Money;
+import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.Shipment;
@@ -25,16 +27,13 @@ public class ShipmentFineHandlerStock extends ShipmentHandlerStock
     private static final long serialVersionUID = 11L;
 
     /** the maximum time out for a shipment */
-    private double maximumTimeOut = 0.0;
+    private Duration maximumTimeOut = Duration.ZERO;
 
     /** the margin for the fine */
     private double fineMarginPerDay = 0.0;
 
     /** the fixed fine */
-    private double fixedFinePerDay = 0.0;
-
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(ShipmentFineHandlerStock.class);
+    private Money fixedFinePerDay = new Money(0.0, MoneyUnit.USD);
 
     /**
      * constructs a new ShipmentFineHandlerStock
@@ -44,8 +43,8 @@ public class ShipmentFineHandlerStock extends ShipmentHandlerStock
      * @param fineMarginPerDay the fine margin per day
      * @param fixedFinePerDay the fixed fine per day
      */
-    public ShipmentFineHandlerStock(final SupplyChainActor owner, final StockInterface stock, final double maximumTimeOut,
-            final double fineMarginPerDay, final double fixedFinePerDay)
+    public ShipmentFineHandlerStock(final SupplyChainActor owner, final StockInterface stock, final Duration maximumTimeOut,
+            final double fineMarginPerDay, final Money fixedFinePerDay)
     {
         super(owner, stock);
         this.maximumTimeOut = maximumTimeOut;
@@ -53,43 +52,31 @@ public class ShipmentFineHandlerStock extends ShipmentHandlerStock
         this.fixedFinePerDay = fixedFinePerDay;
     }
 
-    /**
-     * @see nl.tudelft.simulation.content.HandlerInterface#handleContent(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     public boolean handleContent(final Serializable content)
     {
         if (super.handleContent(content))
         {
             Shipment shipment = (Shipment) content;
-            double time = shipment.getSender().getSimulatorTime();
-            if ((time > shipment.getOrder().getDeliveryDate())
-                    && (time < shipment.getOrder().getDeliveryDate() + this.maximumTimeOut))
+            Time time = shipment.getSender().getSimulatorTime();
+            if ((time.gt(shipment.getOrder().getDeliveryDate()))
+                    && (time.lt(shipment.getOrder().getDeliveryDate().plus(this.maximumTimeOut))))
             {
                 // YES!! we can fine! Finally we earn some money
-                double day = 1.0;
-                try
-                {
-                    day = TimeUnit.convert(1.0, TimeUnit.DAY, getOwner().getSimulator());
-                }
-                catch (Exception exception)
-                {
-                    logger.fatal("handleContent", exception);
-                }
+                Money fine = (this.fixedFinePerDay.plus(shipment.getOrder().getPrice().multiplyBy(this.fineMarginPerDay)))
+                        .multiplyBy((shipment.getOrder().getDeliveryDate().minus(time).getInUnit(DurationUnit.DAY)));
 
-                double fine = ((shipment.getOrder().getDeliveryDate() - time) / day)
-                        * (this.fixedFinePerDay + this.fineMarginPerDay * shipment.getOrder().getPrice());
-
-                // we are pragmatic
-                // send the bill for the fine
-
-                /*
+                /*-
+                 * TODO: send the bill for the fine
                  * Bill bill = new Bill(getOwner(), shipment.getSender(), shipment.getInternalDemandID(), shipment.getOrder(),
                  * getOwner().getSimulatorTime() + (14.0 * day), fine, "FINE");
+                 * getOwner().sendContent(bill, Duration.ZERO);
                  */
+
+                // we are pragmatic -- just book it through the bank...
                 shipment.getSender().getBankAccount().withdrawFromBalance(fine);
                 shipment.getReceiver().getBankAccount().addToBalance(fine);
-
-                // getOwner().sendContent(bill, 0.0);
             }
             return true;
         }

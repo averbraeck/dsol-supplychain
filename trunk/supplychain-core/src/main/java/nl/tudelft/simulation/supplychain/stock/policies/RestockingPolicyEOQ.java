@@ -2,10 +2,11 @@ package nl.tudelft.simulation.supplychain.stock.policies;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.djunits.value.vdouble.scalar.Duration;
 
-import nl.tudelft.simulation.jstats.distributions.DistContinuous;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
+import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * Restocking according to economic order quantity. Needs fixed and variable costs when it has to be implemented. For that
@@ -30,8 +31,8 @@ public abstract class RestockingPolicyEOQ extends RestockingPolicy
      * @param frequency the frequency distribution for restocking or checking
      * @param maxDeliveryTime the maximum delivery time to use
      */
-    public RestockingPolicyEOQ(final StockInterface stock, final Product product, final DistContinuous frequency,
-            final double maxDeliveryTime)
+    public RestockingPolicyEOQ(final StockInterface stock, final Product product, final DistContinuousDurationUnit frequency,
+            final Duration maxDeliveryTime)
     {
         super(stock, product, frequency, maxDeliveryTime);
     }
@@ -42,15 +43,14 @@ public abstract class RestockingPolicyEOQ extends RestockingPolicy
      * @param frequency the constant frequency for restocking or checking
      * @param maxDeliveryTime the maximum delivery time to use
      */
-    public RestockingPolicyEOQ(final StockInterface stock, final Product product, final double frequency,
-            final double maxDeliveryTime)
+    public RestockingPolicyEOQ(final StockInterface stock, final Product product, final Duration frequency,
+            final Duration maxDeliveryTime)
     {
         super(stock, product, frequency, maxDeliveryTime);
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.stock.policies.RestockingPolicy#checkStockLevel()
-     */
+    /** {@inheritDoc} */
+    @Override
     protected void checkStockLevel()
     {
         // TODO: EOQ

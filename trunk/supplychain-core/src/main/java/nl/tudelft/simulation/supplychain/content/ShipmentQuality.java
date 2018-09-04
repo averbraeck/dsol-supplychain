@@ -2,6 +2,8 @@ package nl.tudelft.simulation.supplychain.content;
 
 import java.io.Serializable;
 
+import org.djunits.value.vdouble.scalar.Money;
+
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.product.Product;
 
@@ -24,12 +26,12 @@ public class ShipmentQuality extends Shipment
      * @param order the order for which this is the shipment
      * @param product the product type
      * @param amount the number of product units
-     * @param value the price of the cargo
+     * @param totalCargoValue the price of the cargo
      */
     public ShipmentQuality(SupplyChainActor sender, SupplyChainActor receiver, Serializable internalDemandID, Order order,
-            Product product, double amount, double value)
+            Product product, double amount, Money totalCargoValue)
     {
-        super(sender, receiver, internalDemandID, order, product, amount, value);
+        super(sender, receiver, internalDemandID, order, product, amount, totalCargoValue);
     }
 
 }

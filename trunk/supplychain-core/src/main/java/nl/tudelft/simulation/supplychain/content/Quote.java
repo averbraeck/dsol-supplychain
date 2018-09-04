@@ -174,9 +174,8 @@ public class Quote extends Content
         return this.transportMode;
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
+    /** {@inheritDoc} */
+    @Override
     public String toString()
     {
         return super.toString() + ", for " + this.getAmount() + " units of product " + this.getProduct().getName()

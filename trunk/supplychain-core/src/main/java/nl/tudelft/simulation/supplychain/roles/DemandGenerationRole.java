@@ -6,15 +6,15 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.djunits.value.vdouble.scalar.Time;
 
-import nl.tudelft.simulation.dsol.formalisms.eventscheduling.SimEvent;
 import nl.tudelft.simulation.event.EventType;
 import nl.tudelft.simulation.event.TimedEvent;
-import nl.tudelft.simulation.jstats.distributions.DistContinuous;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.InternalDemand;
 import nl.tudelft.simulation.supplychain.demand.Demand;
 import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 
 /**
@@ -36,7 +36,7 @@ public class DemandGenerationRole extends Role
     protected Map<Product, Demand> demandGenerators = new HashMap<Product, Demand>();
 
     /** the administrative delay when sending messages */
-    private DistContinuous administrativeDelay;
+    private DistContinuousDurationUnit administrativeDelay;
 
     /** the logger. */
     private static Logger logger = LogManager.getLogger(DemandGenerationRole.class);
@@ -47,7 +47,7 @@ public class DemandGenerationRole extends Role
      * @param administrativeDelay the administrative delay when sending messages
      */
     public DemandGenerationRole(final SupplyChainActor owner, final DEVSSimulatorInterfaceUnit simulator,
-            final DistContinuous administrativeDelay)
+            final DistContinuousDurationUnit administrativeDelay)
     {
         super(owner, simulator);
         this.administrativeDelay = administrativeDelay;
@@ -63,8 +63,7 @@ public class DemandGenerationRole extends Role
         try
         {
             Serializable[] args = { product, demand };
-            SimEvent se = new SimEvent(this.simulator.getSimulatorTime(), this, this, "createInternalDemand", args);
-            super.simulator.scheduleEvent(se);
+            super.simulator.scheduleEventNow(this, this, "createInternalDemand", args);
         }
         catch (Exception e)
         {
@@ -102,17 +101,16 @@ public class DemandGenerationRole extends Role
             try
             {
                 InternalDemand id = new InternalDemand(getOwner(), product, demand.getAmount().draw(),
-                        super.simulator.getSimulatorTime() + demand.getEarliestDeliveryDate().draw(),
-                        super.simulator.getSimulatorTime() + demand.getLatestDeliveryDate().draw());
+                        super.simulator.getSimulatorTime().get().plus(demand.getEarliestDeliveryDuration().draw()),
+                        super.simulator.getSimulatorTime().get().plus(demand.getLatestDeliveryDuration().draw()));
                 getOwner().sendContent(id, this.administrativeDelay.draw());
                 Serializable[] args = { product, demand };
-                double time = super.simulator.getSimulatorTime() + demand.getInterval().draw();
-                SimEvent se = new SimEvent(time, this, this, "createInternalDemand", args);
-                super.simulator.scheduleEvent(se);
+                Time time = super.simulator.getSimulatorTime().get().plus(demand.getInterval().draw());
+                super.simulator.scheduleEventAbs(time, this, this, "createInternalDemand", args);
 
                 // we collect some statistics for the internal demand
-                super.fireEvent(new TimedEvent(DemandGenerationRole.DEMAND_GENERATED_EVENT, this, id,
-                        super.simulator.getSimulatorTime()));
+                super.fireEvent(new TimedEvent<Time>(DemandGenerationRole.DEMAND_GENERATED_EVENT, this, id,
+                        super.simulator.getSimulatorTime().get()));
             }
             catch (Exception e)
             {
@@ -124,7 +122,7 @@ public class DemandGenerationRole extends Role
     /**
      * @return Returns the administrativeDelay.
      */
-    public DistContinuous getAdministrativeDelay()
+    public DistContinuousDurationUnit getAdministrativeDelay()
     {
         return this.administrativeDelay;
     }
@@ -132,14 +130,13 @@ public class DemandGenerationRole extends Role
     /**
      * @param administrativeDelay The administrativeDelay to set.
      */
-    public void setAdministrativeDelay(final DistContinuous administrativeDelay)
+    public void setAdministrativeDelay(final DistContinuousDurationUnit administrativeDelay)
     {
         this.administrativeDelay = administrativeDelay;
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
+    /** {@inheritDoc} */
+    @Override
     public String toString()
     {
         return this.owner.getName() + "-DemandGenerationRole";

@@ -57,11 +57,8 @@ public class ShipmentHandlerStock extends SupplyChainHandler
 		this.stock = stock;
 	}
 
-	/**
-	 * Add the incoming products to the Stock.
-	 * 
-	 * @see nl.tudelft.simulation.content.HandlerInterface#handleContent(java.io.Serializable)
-	 */
+    /** {@inheritDoc} */
+    @Override
 	public boolean handleContent(final Serializable content)
 	{
 		Shipment shipment = (Shipment) checkContent(content);
@@ -72,7 +69,7 @@ public class ShipmentHandlerStock extends SupplyChainHandler
 		// get the cargo from the shipment, and add its contents to the stock
 		Product product = shipment.getProduct();
 		double amount = shipment.getAmount();
-		this.stock.addStock(product, amount, shipment.getValue());
+		this.stock.addStock(product, amount, shipment.getTotalCargoValue());
 		// update the administration
 		this.stock.changeOrderedAmount(product, -amount);
 		shipment.setInTransit(false);
@@ -80,9 +77,8 @@ public class ShipmentHandlerStock extends SupplyChainHandler
 		return true;
 	}
 
-	/**
-	 * @see nl.tudelft.simulation.supplychain.handlers.SupplyChainHandler#checkContentClass(java.io.Serializable)
-	 */
+    /** {@inheritDoc} */
+    @Override
 	protected boolean checkContentClass(final Serializable content)
 	{
 		return (content instanceof Shipment);

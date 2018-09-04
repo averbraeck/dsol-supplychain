@@ -8,14 +8,17 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import nl.tudelft.simulation.jstats.distributions.DistConstant;
-import nl.tudelft.simulation.jstats.distributions.DistContinuous;
-import nl.tudelft.simulation.jstats.streams.Java2Random;
+import org.djunits.unit.LengthUnit;
+import org.djunits.value.vdouble.scalar.Duration;
+import org.djunits.value.vdouble.scalar.Length;
+
 import nl.tudelft.simulation.language.d3.DirectedPoint;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.YellowPageAnswer;
 import nl.tudelft.simulation.supplychain.content.YellowPageRequest;
 import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
+import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * The YellowPageRequestHandler implements the business logic for a yellow page actor who receives a YellowPageRequest and has
@@ -33,17 +36,17 @@ public class YellowPageRequestHandler extends SupplyChainHandler
     private static final long serialVersionUID = 12L;
 
     /** the handling time of the handler in simulation time units */
-    private DistContinuous handlingTime;
+    private DistContinuousDurationUnit handlingTime;
 
     /** the dictionary of product-actor combinations */
-    private Map<Product, HashSet<SupplyChainActor>> dictionary = new HashMap<Product, HashSet<SupplyChainActor>>();
+    private Map<Product, HashSet<SupplyChainActor>> dictionary = new HashMap<>();
 
     /**
      * Constructs a new YellowPageRequestHandler.
      * @param owner the owner of the handler
      * @param handlingTime the distribution of the time to react on the YP request
      */
-    public YellowPageRequestHandler(final SupplyChainActor owner, final DistContinuous handlingTime)
+    public YellowPageRequestHandler(final SupplyChainActor owner, final DistContinuousDurationUnit handlingTime)
     {
         super(owner);
         this.handlingTime = handlingTime;
@@ -54,9 +57,9 @@ public class YellowPageRequestHandler extends SupplyChainHandler
      * @param owner the owner of the handler
      * @param handlingTime the constant time to react on the YP request
      */
-    public YellowPageRequestHandler(final SupplyChainActor owner, final double handlingTime)
+    public YellowPageRequestHandler(final SupplyChainActor owner, final Duration handlingTime)
     {
-        this(owner, new DistConstant(new Java2Random(), handlingTime));
+        this(owner, new DistConstantDurationUnit(handlingTime));
     }
 
     /**
@@ -89,9 +92,8 @@ public class YellowPageRequestHandler extends SupplyChainHandler
         }
     }
 
-    /**
-     * @see nl.tudelft.simulation.content.HandlerInterface#handleContent(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     public boolean handleContent(final Serializable content)
     {
         YellowPageRequest ypRequest = (YellowPageRequest) checkContent(content);
@@ -100,7 +102,7 @@ public class YellowPageRequestHandler extends SupplyChainHandler
             return false;
         }
         HashSet<SupplyChainActor> supplierSet = this.dictionary.get(ypRequest.getProduct());
-        SortedMap<Double, SupplyChainActor> suppliers =
+        SortedMap<Length, SupplyChainActor> suppliers =
                 pruneDistance(supplierSet, ypRequest.getMaximumDistance(), ypRequest.getSender().getLocation());
         pruneNumber(suppliers, ypRequest.getMaximumNumber());
         SupplyChainActor[] potentialSuppliers = (SupplyChainActor[]) suppliers.values().toArray();
@@ -117,18 +119,19 @@ public class YellowPageRequestHandler extends SupplyChainHandler
      * @param location the location to compare the supplier locations with
      * @return a map of suppliers, sorted on distance
      */
-    private SortedMap<Double, SupplyChainActor> pruneDistance(final HashSet<SupplyChainActor> supplierSet,
-            final double maxDistance, final DirectedPoint location)
+    private SortedMap<Length, SupplyChainActor> pruneDistance(final HashSet<SupplyChainActor> supplierSet,
+            final Length maxDistance, final DirectedPoint location)
     {
-        SortedMap<Double, SupplyChainActor> sortedSuppliers = new TreeMap<Double, SupplyChainActor>();
+        SortedMap<Length, SupplyChainActor> sortedSuppliers = new TreeMap<>();
         Iterator<SupplyChainActor> i = supplierSet.iterator();
         while (i.hasNext())
         {
             SupplyChainActor actor = i.next();
-            double distance = actor.getLocation().distance(location);
-            if (distance < maxDistance)
+            // TODO: get proper locations; assume km for now...
+            Length distance = new Length(actor.getLocation().distance(location), LengthUnit.KILOMETER);
+            if (distance.le(maxDistance))
             {
-                sortedSuppliers.put(new Double(distance), actor);
+                sortedSuppliers.put(distance, actor);
             }
         }
         return sortedSuppliers;
@@ -139,23 +142,22 @@ public class YellowPageRequestHandler extends SupplyChainHandler
      * @param suppliers the map of suppliers (sorted on distance)
      * @param maxNumber the maximum number to leave
      */
-    private void pruneNumber(final SortedMap suppliers, final int maxNumber)
+    private void pruneNumber(final SortedMap<Length, SupplyChainActor> suppliers, final int maxNumber)
     {
         int count = 0;
-        Iterator i = suppliers.values().iterator();
-        while (i.hasNext())
+        Iterator<SupplyChainActor> supplierIterator = suppliers.values().iterator();
+        while (supplierIterator.hasNext())
         {
-            i.next();
+            supplierIterator.next();
             if (++count > maxNumber)
             {
-                i.remove();
+                supplierIterator.remove();
             }
         }
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.handlers.SupplyChainHandler#checkContentClass(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     protected boolean checkContentClass(final Serializable content)
     {
         return (content instanceof YellowPageRequest);

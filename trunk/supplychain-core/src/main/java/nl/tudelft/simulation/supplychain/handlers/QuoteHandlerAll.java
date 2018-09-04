@@ -4,14 +4,15 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.List;
 
-import nl.tudelft.simulation.jstats.distributions.DistContinuous;
+import org.djunits.value.vdouble.scalar.Duration;
+
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
-import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.content.OrderBasedOnQuote;
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
+import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * The QuoteHandlerAll just waits patiently till all the Quotes are in for each RequestForQuote that has been sent out. When
@@ -38,8 +39,8 @@ public class QuoteHandlerAll extends QuoteHandler
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the margin within which the offered amount may differ from the requested amount.
      */
-    public QuoteHandlerAll(final SupplyChainActor owner, final Comparator<Quote> comparator, final DistContinuous handlingTime,
-            final double maximumPriceMargin, final double minimumAmountMargin)
+    public QuoteHandlerAll(final SupplyChainActor owner, final Comparator<Quote> comparator,
+            final DistContinuousDurationUnit handlingTime, final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super(owner, comparator, handlingTime, maximumPriceMargin, minimumAmountMargin);
     }
@@ -52,7 +53,7 @@ public class QuoteHandlerAll extends QuoteHandler
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the margin within which the offered amount may differ from the requested amount.
      */
-    public QuoteHandlerAll(final SupplyChainActor owner, final Comparator<Quote> comparator, final double handlingTime,
+    public QuoteHandlerAll(final SupplyChainActor owner, final Comparator<Quote> comparator, final Duration handlingTime,
             final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super(owner, comparator, handlingTime, maximumPriceMargin, minimumAmountMargin);
@@ -66,8 +67,8 @@ public class QuoteHandlerAll extends QuoteHandler
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the minimal amount margin
      */
-    public QuoteHandlerAll(final SupplyChainActor owner, final int comparatorType, final DistContinuous handlingTime,
-            final double maximumPriceMargin, final double minimumAmountMargin)
+    public QuoteHandlerAll(final SupplyChainActor owner, final int comparatorType,
+            final DistContinuousDurationUnit handlingTime, final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super(owner, comparatorType, handlingTime, maximumPriceMargin, minimumAmountMargin);
     }
@@ -80,15 +81,14 @@ public class QuoteHandlerAll extends QuoteHandler
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the minimal amount margin
      */
-    public QuoteHandlerAll(final SupplyChainActor owner, final int comparatorType, final double handlingTime,
+    public QuoteHandlerAll(final SupplyChainActor owner, final int comparatorType, final Duration handlingTime,
             final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super(owner, comparatorType, handlingTime, maximumPriceMargin, minimumAmountMargin);
     }
 
-    /**
-     * @see nl.tudelft.simulation.content.HandlerInterface#handleContent(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     public boolean handleContent(final Serializable content)
     {
         Quote quote = (Quote) checkContent(content);
@@ -110,7 +110,7 @@ public class QuoteHandlerAll extends QuoteHandler
                         + ", size=" + contentStore.getContentList(id, Quote.class).size());
             }
 
-            List<Content> quotes = contentStore.getContentList(id, Quote.class);
+            List<Quote> quotes = contentStore.getContentList(id, Quote.class);
             Quote bestQuote = selectBestQuote(quotes);
 
             if (QuoteHandlerAll.DEBUG)

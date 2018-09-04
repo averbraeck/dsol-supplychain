@@ -4,7 +4,9 @@ import java.io.Serializable;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.djunits.unit.MoneyUnit;
 import org.djunits.value.vdouble.scalar.Duration;
+import org.djunits.value.vdouble.scalar.Money;
 
 import nl.tudelft.simulation.dsol.formalisms.eventscheduling.SimEventInterface;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
@@ -38,7 +40,7 @@ public class FixedCost implements Serializable
     private Duration interval = Duration.ZERO;
 
     /** The amount to book on every interval */
-    private double amount = 0.0;
+    private Money amount = new Money(0.0, MoneyUnit.USD);
 
     /** the event for the next period -- stored to be able to remove it */
     private SimEventInterface<SimTimeUnit> fixedAmountEvent = null;
@@ -55,7 +57,7 @@ public class FixedCost implements Serializable
      * @param amount the fixed cost per interval
      */
     public FixedCost(final SupplyChainActor owner, final BankAccount bankAccount, final String description,
-            final Duration interval, final double amount)
+            final Duration interval, final Money amount)
     {
         super();
         this.owner = owner;
@@ -91,11 +93,11 @@ public class FixedCost implements Serializable
     /**
      * Change the fixed costs to book each interval. The change is effective on the next scheduled event for deduction of fixed
      * costs.
-     * @param _amount the new amount
+     * @param newAmount the new amount
      */
-    public void changeAmount(final double _amount)
+    public void changeAmount(final Money newAmount)
     {
-        this.amount = _amount;
+        this.amount = newAmount;
     }
 
     /**
@@ -117,7 +119,7 @@ public class FixedCost implements Serializable
     /**
      * @return Returns the amount.
      */
-    public double getAmount()
+    public Money getAmount()
     {
         return this.amount;
     }

@@ -2,6 +2,9 @@ package nl.tudelft.simulation.supplychain.reference;
 
 import javax.vecmath.Point3d;
 
+import org.djunits.unit.MoneyUnit;
+import org.djunits.value.vdouble.scalar.Money;
+
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.roles.Role;
 import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
@@ -29,7 +32,7 @@ public class DistributionCenter extends Retailer
     public DistributionCenter(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position,
             final Role[] roles, final Bank bank)
     {
-        this(name, simulator, position, roles, bank, 0.0);
+        this(name, simulator, position, roles, bank, new Money(0.0, MoneyUnit.USD));
     }
 
     /**
@@ -41,7 +44,7 @@ public class DistributionCenter extends Retailer
      * @param initialBankAccount the initial bank balance
      */
     public DistributionCenter(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position,
-            final Role[] roles, final Bank bank, final double initialBankAccount)
+            final Role[] roles, final Bank bank, final Money initialBankAccount)
     {
         super(name, simulator, position, roles, bank, initialBankAccount);
     }

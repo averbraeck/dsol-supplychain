@@ -1,18 +1,18 @@
 package nl.tudelft.simulation.supplychain.handlers;
 
 import java.io.Serializable;
-import java.rmi.RemoteException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.djunits.unit.DurationUnit;
+import org.djunits.value.vdouble.scalar.Duration;
+import org.djunits.value.vdouble.scalar.Time;
 
-import nl.tudelft.simulation.dsol.formalisms.eventscheduling.SimEvent;
-import nl.tudelft.simulation.dsol.simtime.TimeUnit;
-import nl.tudelft.simulation.jstats.distributions.DistContinuous;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.banking.BankAccount;
 import nl.tudelft.simulation.supplychain.content.Bill;
 import nl.tudelft.simulation.supplychain.content.Payment;
+import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * The BillHandler is a simple implementation of the business logic to pay a bill. Four different policies are available in this
@@ -48,7 +48,7 @@ public class BillHandler extends SupplyChainHandler
     private int paymentPolicy = 0;
 
     /** the delay distribution to use with certain policies */
-    private DistContinuous paymentDelay = null;
+    private DistContinuousDurationUnit paymentDelay = null;
 
     /** the logger. */
     private static Logger logger = LogManager.getLogger(BillHandler.class);
@@ -61,7 +61,7 @@ public class BillHandler extends SupplyChainHandler
      * @param paymentDelay the delay to use in early or late payment
      */
     public BillHandler(final SupplyChainActor owner, final BankAccount bankAccount, final int paymentPolicy,
-            final DistContinuous paymentDelay)
+            final DistContinuousDurationUnit paymentDelay)
     {
         super(owner);
         this.bankAccount = bankAccount;
@@ -79,9 +79,8 @@ public class BillHandler extends SupplyChainHandler
         this(owner, bankAccount, 0, null);
     }
 
-    /**
-     * @see nl.tudelft.simulation.content.HandlerInterface#handleContent(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     public boolean handleContent(final Serializable content)
     {
         Bill bill = (Bill) checkContent(content);
@@ -90,27 +89,19 @@ public class BillHandler extends SupplyChainHandler
             return false;
         }
         // schedule the payment
-        double currentTime = Double.NaN;
-        try
-        {
-            currentTime = getOwner().getSimulator().getSimulatorTime();
-        }
-        catch (RemoteException remoteException)
-        {
-            logger.fatal("handleContent", remoteException);
-            return false;
-        }
-        double paymentTime = bill.getFinalPaymentDate();
+        Time currentTime = Time.ZERO;
+        currentTime = getOwner().getSimulator().getSimulatorTime().get();
+        Time paymentTime = bill.getFinalPaymentDate();
         switch (this.paymentPolicy)
         {
             case BillHandler.PAYMENT_ON_TIME:
                 // do nothing, we pay on the requested date
                 break;
             case BillHandler.PAYMENT_EARLY:
-                paymentTime -= this.paymentDelay.draw();
+                paymentTime = paymentTime.minus(this.paymentDelay.draw());
                 break;
             case BillHandler.PAYMENT_LATE:
-                paymentTime += this.paymentDelay.draw();
+                paymentTime = paymentTime.plus(this.paymentDelay.draw());
                 break;
             case BillHandler.PAYMENT_IMMEDIATE:
                 paymentTime = currentTime;
@@ -121,12 +112,11 @@ public class BillHandler extends SupplyChainHandler
         }
         // check if payment is still possible, if it already should have taken
         // place, schedule it for now.
-        paymentTime = Math.max(paymentTime, currentTime);
+        paymentTime = Time.max(paymentTime, currentTime);
         try
         {
             Serializable[] args = new Serializable[] { bill };
-            SimEvent simEvent = new SimEvent(paymentTime, this, this, "pay", args);
-            getOwner().getSimulator().scheduleEvent(simEvent);
+            getOwner().getSimulator().scheduleEventAbs(paymentTime, this, this, "pay", args);
         }
         catch (Exception exception)
         {
@@ -142,16 +132,13 @@ public class BillHandler extends SupplyChainHandler
      */
     protected void pay(final Bill bill)
     {
-        if (this.bankAccount.getBalance() < bill.getPrice())
+        if (this.bankAccount.getBalance().lt(bill.getPrice()))
         {
             // the bank account is not enough. Try one day later.
             try
             {
-                double currentTime = getOwner().getSimulator().getSimulatorTime();
-                currentTime += TimeUnit.convert(1.0, TimeUnit.DAY, getOwner().getSimulator());
                 Serializable[] args = new Serializable[] { bill };
-                SimEvent simEvent = new SimEvent(currentTime, this, this, "pay", args);
-                getOwner().getSimulator().scheduleEvent(simEvent);
+                getOwner().getSimulator().scheduleEventRel(new Duration(1.0, DurationUnit.DAY), this, this, "pay", args);
             }
             catch (Exception exception)
             {
@@ -162,13 +149,13 @@ public class BillHandler extends SupplyChainHandler
         // make a payment to send out
         this.bankAccount.withdrawFromBalance(bill.getPrice());
         Payment payment = new Payment(getOwner(), bill.getSender(), bill.getInternalDemandID(), bill, bill.getPrice());
-        getOwner().sendContent(payment, 0.0);
+        getOwner().sendContent(payment, Duration.ZERO);
     }
 
     /**
      * @param paymentDelay The paymentDelay to set.
      */
-    public void setPaymentDelay(final DistContinuous paymentDelay)
+    public void setPaymentDelay(final DistContinuousDurationUnit paymentDelay)
     {
         this.paymentDelay = paymentDelay;
     }
@@ -181,9 +168,8 @@ public class BillHandler extends SupplyChainHandler
         this.paymentPolicy = paymentPolicy;
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.handlers.SupplyChainHandler#checkContentClass(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     protected boolean checkContentClass(final Serializable content)
     {
         return (content instanceof Bill);

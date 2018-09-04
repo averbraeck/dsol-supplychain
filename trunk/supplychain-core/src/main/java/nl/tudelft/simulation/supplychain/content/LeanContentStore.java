@@ -7,11 +7,10 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.djunits.unit.DurationUnit;
+import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
 
-import nl.tudelft.simulation.actor.Actor;
-import nl.tudelft.simulation.dsol.formalisms.eventscheduling.SimEvent;
-import nl.tudelft.simulation.dsol.simtime.TimeUnit;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 
@@ -46,10 +45,8 @@ public class LeanContentStore extends ContentStore
         this.simulator = simulator;
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.content.ContentStore#addContent(nl.tudelft.simulation.supplychain.content.Content,
-     *      boolean)
-     */
+    /** {@inheritDoc} */
+    @Override
     public synchronized void addContent(final Content content, final boolean sent)
     {
         super.addContent(content, sent);
@@ -72,7 +69,8 @@ public class LeanContentStore extends ContentStore
                 this.unansweredContentMap.put(content.getUniqueID(), content);
                 this.unansweredContentMap.remove(rfq.getInternalDemandID());
                 Time date = Time.max(this.simulator.getSimulatorTime().get(), rfq.getCutoffDate());
-                this.simulator.scheduleEventAbs(date, this, this, "requestForQuoteTimeout", new Serializable[] { rfq, new Boolean(sent) });
+                this.simulator.scheduleEventAbs(date, this, this, "requestForQuoteTimeout",
+                        new Serializable[] { rfq, new Boolean(sent) });
             }
             else if (RequestForQuote.class.isAssignableFrom(contentClass) && sent)
             {
@@ -80,31 +78,32 @@ public class LeanContentStore extends ContentStore
                 this.unansweredContentMap.put(content.getUniqueID(), content);
                 this.unansweredContentMap.remove(rfq.getInternalDemandID());
                 Time date = Time.max(this.simulator.getSimulatorTime().get(),
-                        rfq.getCutoffDate() + TimeUnit.convert(1.0, TimeUnit.DAY, this.simulator));
-                this.simulator.scheduleEventAbs(date, this, this, "requestForQuoteTimeout", new Serializable[] { rfq, new Boolean(sent) });
+                        rfq.getCutoffDate().plus(new Duration(1.0, DurationUnit.DAY)));
+                this.simulator.scheduleEventAbs(date, this, this, "requestForQuoteTimeout",
+                        new Serializable[] { rfq, new Boolean(sent) });
             }
             else if (Quote.class.isAssignableFrom(contentClass))
             {
                 Quote quote = (Quote) content;
                 this.unansweredContentMap.put(content.getUniqueID(), content);
                 this.unansweredContentMap.remove(quote.getRequestForQuote().getUniqueID());
-                double date = Math.max(quote.getProposedDeliveryDate(), quote.getRequestForQuote().getCutoffDate()
-                        + TimeUnit.convert(1.0, TimeUnit.DAY, this.simulator));
-                date = Math.max(date, quote.getRequestForQuote().getLatestDeliveryDate());
-                date = Math.max(this.simulator.getSimulatorTime(), date);
-                this.simulator.scheduleEventAbs(date, this, this, "quoteTimeout", new Serializable[] { quote, new Boolean(sent) });
+                Time date = Time.max(quote.getProposedDeliveryDate(),
+                        quote.getRequestForQuote().getCutoffDate().plus(new Duration(1.0, DurationUnit.DAY)));
+                date = Time.max(date, quote.getRequestForQuote().getLatestDeliveryDate());
+                date = Time.max(this.simulator.getSimulatorTime().get(), date);
+                this.simulator.scheduleEventAbs(date, this, this, "quoteTimeout",
+                        new Serializable[] { quote, new Boolean(sent) });
             }
             else if (OrderBasedOnQuote.class.isAssignableFrom(contentClass))
             {
                 OrderBasedOnQuote order = (OrderBasedOnQuote) content;
                 this.unansweredContentMap.put(content.getUniqueID(), content);
                 this.unansweredContentMap.remove(order.getQuote().getUniqueID());
-                double date = Math.max(order.getDeliveryDate(), order.getQuote().getProposedDeliveryDate());
-                date = Math.max(date, order.getQuote().getRequestForQuote().getLatestDeliveryDate());
-                date = Math.max(this.simulator.getSimulatorTime(), date);
-                SimEvent event = new SimEvent(date, this, this, "orderBasedOnQuoteTimeout",
+                Time date = Time.max(order.getDeliveryDate(), order.getQuote().getProposedDeliveryDate());
+                date = Time.max(date, order.getQuote().getRequestForQuote().getLatestDeliveryDate());
+                date = Time.max(this.simulator.getSimulatorTime().get(), date);
+                this.simulator.scheduleEventAbs(date, this, this, "orderBasedOnQuoteTimeout",
                         new Serializable[] { order, new Boolean(sent) });
-                this.simulator.scheduleEvent(event);
             }
             else if (OrderStandAlone.class.isAssignableFrom(contentClass))
             {
@@ -112,9 +111,8 @@ public class LeanContentStore extends ContentStore
                 this.unansweredContentMap.put(content.getUniqueID(), content);
                 this.unansweredContentMap.remove(order.getInternalDemandID());
                 Time date = Time.max(this.simulator.getSimulatorTime().get(), order.getDeliveryDate());
-                SimEvent event = new SimEvent(date, this, this, "orderStandAloneTimeout",
+                this.simulator.scheduleEventAbs(date, this, this, "orderStandAloneTimeout",
                         new Serializable[] { order, new Boolean(sent) });
-                this.simulator.scheduleEvent(event);
             }
             else if (OrderConfirmation.class.isAssignableFrom(contentClass))
             {
@@ -137,10 +135,8 @@ public class LeanContentStore extends ContentStore
         }
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.content.ContentStore#removeContent(nl.tudelft.simulation.supplychain.content.Content,
-     *      boolean)
-     */
+    /** {@inheritDoc} */
+    @Override
     public synchronized void removeContent(final Content content, final boolean sent)
     {
         super.removeContent(content, sent);

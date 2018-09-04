@@ -1,5 +1,7 @@
 package nl.tudelft.simulation.supplychain.production;
 
+import org.djunits.value.vdouble.scalar.Duration;
+
 import nl.tudelft.simulation.supplychain.actor.Trader;
 import nl.tudelft.simulation.supplychain.content.ProductionOrder;
 import nl.tudelft.simulation.supplychain.product.Product;
@@ -16,6 +18,9 @@ import nl.tudelft.simulation.supplychain.stock.StockInterface;
  */
 public abstract class ProductionService implements ProductionServiceInterface
 {
+    /** */
+    private static final long serialVersionUID = 1L;
+
     /** The actor that owns the production service */
     protected Trader owner;
 
@@ -39,15 +44,13 @@ public abstract class ProductionService implements ProductionServiceInterface
         this.product = product;
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.production.ProductionServiceInterface#acceptProductionOrder(nl.tudelft.simulation.supplychain.content.ProductionOrder)
-     */
+    /** {@inheritDoc} */
+    @Override
     public abstract void acceptProductionOrder(final ProductionOrder productionOrder);
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.production.ProductionServiceInterface#getExpectedProductionTime(nl.tudelft.simulation.supplychain.content.ProductionOrder)
-     */
-    public abstract double getExpectedProductionTime(final ProductionOrder productionOrder);
+    /** {@inheritDoc} */
+    @Override
+    public abstract Duration getExpectedProductionDuration(final ProductionOrder productionOrder);
 
     /**
      * @return Returns the product.

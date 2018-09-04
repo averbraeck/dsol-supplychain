@@ -57,17 +57,15 @@ public class YellowPageAnswer extends Content
         return this.ypRequest;
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.content.Content#getProduct()
-     */
+    /** {@inheritDoc} */
+    @Override
     public Product getProduct()
     {
         return this.ypRequest.getProduct();
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
+    /** {@inheritDoc} */
+    @Override
     public String toString()
     {
         return super.toString() + ", for " + this.getYellowPageRequest().toString();

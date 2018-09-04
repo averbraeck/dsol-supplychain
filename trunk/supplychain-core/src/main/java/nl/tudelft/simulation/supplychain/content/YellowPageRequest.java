@@ -2,6 +2,9 @@ package nl.tudelft.simulation.supplychain.content;
 
 import java.io.Serializable;
 
+import org.djunits.unit.LengthUnit;
+import org.djunits.value.vdouble.scalar.Length;
+
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.product.Product;
 
@@ -20,7 +23,7 @@ public class YellowPageRequest extends Content
     private static final long serialVersionUID = 12L;
 
     /** maximum distance to use in the search */
-    private double maximumDistance;
+    private Length maximumDistance;
 
     /** maximum number to return */
     private int maximumNumber;
@@ -37,7 +40,7 @@ public class YellowPageRequest extends Content
      * @param maximumDistance the maximum distance around the 'sender' to search for suppliers
      */
     public YellowPageRequest(final SupplyChainActor sender, final SupplyChainActor receiver,
-            final Serializable internalDemandID, final Product product, final double maximumDistance)
+            final Serializable internalDemandID, final Product product, final Length maximumDistance)
     {
         this(sender, receiver, internalDemandID, product, maximumDistance, Integer.MAX_VALUE);
     }
@@ -53,7 +56,7 @@ public class YellowPageRequest extends Content
     public YellowPageRequest(final SupplyChainActor sender, final SupplyChainActor receiver,
             final Serializable internalDemandID, final Product product, final int maximumNumber)
     {
-        this(sender, receiver, internalDemandID, product, Double.MAX_VALUE, maximumNumber);
+        this(sender, receiver, internalDemandID, product, new Length(Double.MAX_VALUE, LengthUnit.SI), maximumNumber);
     }
 
     /**
@@ -66,7 +69,7 @@ public class YellowPageRequest extends Content
     public YellowPageRequest(final SupplyChainActor sender, final SupplyChainActor receiver,
             final Serializable internalDemandID, final Product product)
     {
-        this(sender, receiver, internalDemandID, product, Double.MAX_VALUE, Integer.MAX_VALUE);
+        this(sender, receiver, internalDemandID, product, new Length(Double.MAX_VALUE, LengthUnit.SI), Integer.MAX_VALUE);
     }
 
     /**
@@ -80,7 +83,7 @@ public class YellowPageRequest extends Content
      * @param maximumNumber the maximum number of supplier to return
      */
     public YellowPageRequest(final SupplyChainActor sender, final SupplyChainActor receiver,
-            final Serializable internalDemandID, final Product product, final double maximumDistance, final int maximumNumber)
+            final Serializable internalDemandID, final Product product, final Length maximumDistance, final int maximumNumber)
     {
         super(sender, receiver, internalDemandID);
         this.maximumDistance = maximumDistance;
@@ -92,7 +95,7 @@ public class YellowPageRequest extends Content
      * Method getMaximumDistance.
      * @return the maximum distance to look for suppliers.
      */
-    public double getMaximumDistance()
+    public Length getMaximumDistance()
     {
         return this.maximumDistance;
     }
@@ -106,18 +109,15 @@ public class YellowPageRequest extends Content
         return this.maximumNumber;
     }
 
-    /**
-     * Returns the product.
-     * @return the product we are looking for.
-     */
+    /** {@inheritDoc} */
+    @Override
     public Product getProduct()
     {
         return this.product;
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
+    /** {@inheritDoc} */
+    @Override
     public String toString()
     {
         return super.toString() + ", for " + this.getProduct().getName();

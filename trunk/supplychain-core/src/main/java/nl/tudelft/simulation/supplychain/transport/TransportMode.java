@@ -4,10 +4,15 @@ import java.io.Serializable;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.djunits.unit.DurationUnit;
 import org.djunits.unit.LengthUnit;
+import org.djunits.unit.MassUnit;
+import org.djunits.unit.MoneyUnit;
+import org.djunits.unit.SpeedUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Length;
 import org.djunits.value.vdouble.scalar.Mass;
+import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Speed;
 
 import nl.tudelft.simulation.dsol.animation.Locatable;
@@ -35,10 +40,10 @@ public class TransportMode implements Serializable
     protected Speed speed;
 
     /** the fixed cost for a transport */
-    protected double fixedCost;
+    protected Money fixedCost;
 
     /** the cost per km per kg */
-    protected double costKmKg;
+    protected Money costKmKg;
 
     /** the logger. */
     private static Logger logger = LogManager.getLogger(TransportMode.class);
@@ -47,7 +52,8 @@ public class TransportMode implements Serializable
      * predefined transport mode: plane including transport to/from the airport 250 dollar handling costs, taxes, and transport
      * to/from airport. For the price of 0.0007 per kg per km, see conf/data/AirRates.xls
      */
-    public static final TransportMode PLANE = new TransportMode("Plane", 48.0, 800, 250, 0.0007);
+    public static final TransportMode PLANE = new TransportMode("Plane", new Duration(8.0, DurationUnit.HOUR),
+            new Speed(800.0, SpeedUnit.KM_PER_HOUR), new Money(250.0, MoneyUnit.USD), new Money(0.0007, MoneyUnit.USD));
 
     /**
      * Constructor for TransportMode.
@@ -57,8 +63,8 @@ public class TransportMode implements Serializable
      * @param fixedCost the fixed costs
      * @param costKmKg the cost per km and kg
      */
-    public TransportMode(final String name, final Duration fixedTime, final Speed speed, final double fixedCost,
-            final double costKmKg)
+    public TransportMode(final String name, final Duration fixedTime, final Speed speed, final Money fixedCost,
+            final Money costKmKg)
     {
         super();
         this.name = name;
@@ -115,9 +121,10 @@ public class TransportMode implements Serializable
      * @param weight the weight in kgs
      * @return the costs for transportation
      */
-    public double transportCosts(final Length distance, final Mass weight)
+    public Money transportCosts(final Length distance, final Mass weight)
     {
-        return this.fixedCost + this.costKmKg * distance * weight;
+        return this.fixedCost
+                .plus(this.costKmKg.multiplyBy(distance.getInUnit(LengthUnit.KILOMETER) * weight.getInUnit(MassUnit.KILOGRAM)));
     }
 
     /**
@@ -126,9 +133,9 @@ public class TransportMode implements Serializable
      * @param unitWeight the weight
      * @return the costs for transportation per unit weight
      */
-    public double transportCostsPerUnit(final Length distance, final Mass unitWeight)
+    public Money transportCostsPerUnit(final Length distance, final Mass unitWeight)
     {
-        return this.costKmKg * distance * unitWeight;
+        return this.costKmKg.multiplyBy(distance.getInUnit(LengthUnit.KILOMETER) * unitWeight.getInUnit(MassUnit.KILOGRAM));
     }
 
     /**
@@ -138,7 +145,7 @@ public class TransportMode implements Serializable
      * @param weight the weight in kgs
      * @return the costs for transportation
      */
-    public double transportCosts(final SupplyChainActor actor1, final SupplyChainActor actor2, final Mass weight)
+    public Money transportCosts(final SupplyChainActor actor1, final SupplyChainActor actor2, final Mass weight)
     {
         return this.transportCosts(actor1.calculateDistance(actor2), weight);
     }
@@ -146,14 +153,13 @@ public class TransportMode implements Serializable
     /**
      * @return returns the fixed costs
      */
-    public double getFixedCost()
+    public Money getFixedCost()
     {
         return this.fixedCost;
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
+    /** {@inheritDoc} */
+    @Override
     public String toString()
     {
         return this.name;

@@ -33,9 +33,8 @@ public class PaymentHandler extends SupplyChainHandler
         this.bankAccount = bankAccount;
     }
 
-    /**
-     * @see nl.tudelft.simulation.content.HandlerInterface#handleContent(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     public boolean handleContent(final Serializable content)
     {
         Payment payment = (Payment) checkContent(content);
@@ -50,9 +49,8 @@ public class PaymentHandler extends SupplyChainHandler
         return true;
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.handlers.SupplyChainHandler#checkContentClass(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     protected boolean checkContentClass(final Serializable content)
     {
         return (content instanceof Payment);

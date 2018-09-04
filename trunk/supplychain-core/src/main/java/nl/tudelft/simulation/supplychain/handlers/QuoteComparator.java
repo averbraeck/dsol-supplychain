@@ -7,6 +7,8 @@ import javax.vecmath.Point3d;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.djunits.value.vdouble.scalar.Money;
+import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.Quote;
@@ -44,20 +46,16 @@ public class QuoteComparator implements Comparator<Quote>, Serializable
         this.ownerPosition = owner.getLocation();
     }
 
-    /**
-     * Method compare
-     * @param quote1 the first quote
-     * @param quote2 the second quote
-     * @return returns 1 or -1
-     */
+    /** {@inheritDoc} */
+    @Override
     public int compare(final Quote quote1, final Quote quote2)
     {
-        double price0 = quote1.getPrice();
-        double price1 = quote2.getPrice();
-        int priceCompare = Double.compare(price0, price1);
-        double date0 = quote1.getProposedDeliveryDate();
-        double date1 = quote2.getProposedDeliveryDate();
-        int dateCompare = Double.compare(date0, date1);
+        Money price0 = quote1.getPrice();
+        Money price1 = quote2.getPrice();
+        int priceCompare = Double.compare(price0.si, price1.si);
+        Time date0 = quote1.getProposedDeliveryDate();
+        Time date1 = quote2.getProposedDeliveryDate();
+        int dateCompare = Double.compare(date0.si, date1.si);
         double distance0 = quote1.getSender().getLocation().distance(this.ownerPosition);
         double distance1 = quote2.getSender().getLocation().distance(this.ownerPosition);
         int distanceCompare = Double.compare(distance0, distance1);
@@ -148,9 +146,8 @@ public class QuoteComparator implements Comparator<Quote>, Serializable
         return 0;
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
+    /** {@inheritDoc} */
+    @Override
     public String toString()
     {
         if (this.comparatorType == QuoteHandler.SORT_DATE_DISTANCE_PRICE)

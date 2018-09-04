@@ -1,25 +1,18 @@
 package nl.tudelft.simulation.supplychain.handlers;
 
 import java.io.Serializable;
-import java.rmi.RemoteException;
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.djunits.value.vdouble.scalar.Duration;
 
-import nl.tudelft.simulation.dsol.experiment.TimeUnitInterface;
-import nl.tudelft.simulation.dsol.simtime.TimeUnit;
-import nl.tudelft.simulation.dsol.simulators.SimulatorInterface;
-import nl.tudelft.simulation.jstats.distributions.DistConstant;
-import nl.tudelft.simulation.jstats.distributions.DistContinuous;
-import nl.tudelft.simulation.jstats.streams.Java2Random;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.Quote;
+import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
+import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * The abstract QuoteHandler can be extended into several ways how to deal with Quotes. One is the QuoteHandlerAll that waits
@@ -59,7 +52,7 @@ public abstract class QuoteHandler extends SupplyChainHandler
     public static final int SORT_DATE_DISTANCE_PRICE = 6;
 
     /** the time to handle quotes when they are in and to place an order */
-    protected DistContinuous handlingTime;
+    protected DistContinuousDurationUnit handlingTime;
 
     /** the comparator to sort the quotes */
     private Comparator<Quote> quoteComparator = null;
@@ -70,9 +63,6 @@ public abstract class QuoteHandler extends SupplyChainHandler
     /** the minimal amount margin */
     private double minimumAmountMargin = 0.0;
 
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(QuoteHandler.class);
-
     /**
      * Constructor of the QuoteHandler with a one of the predefined comparators for quotes
      * @param owner the actor for this QuoteHandler.
@@ -81,7 +71,7 @@ public abstract class QuoteHandler extends SupplyChainHandler
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the margin within which the offered amount may differ from the requested amount.
      */
-    public QuoteHandler(final SupplyChainActor owner, final int comparatorType, final DistContinuous handlingTime,
+    public QuoteHandler(final SupplyChainActor owner, final int comparatorType, final DistContinuousDurationUnit handlingTime,
             final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super(owner);
@@ -99,10 +89,10 @@ public abstract class QuoteHandler extends SupplyChainHandler
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the margin within which the offered amount may differ from the requested amount.
      */
-    public QuoteHandler(final SupplyChainActor owner, final int comparatorType, final double handlingTime,
+    public QuoteHandler(final SupplyChainActor owner, final int comparatorType, final Duration handlingTime,
             final double maximumPriceMargin, final double minimumAmountMargin)
     {
-        this(owner, comparatorType, new DistConstant(new Java2Random(), handlingTime), maximumPriceMargin, minimumAmountMargin);
+        this(owner, comparatorType, new DistConstantDurationUnit(handlingTime), maximumPriceMargin, minimumAmountMargin);
     }
 
     /**
@@ -113,8 +103,8 @@ public abstract class QuoteHandler extends SupplyChainHandler
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the margin within which the offered amount may differ from the requested amount.
      */
-    public QuoteHandler(final SupplyChainActor owner, final Comparator<Quote> comparator, final DistContinuous handlingTime,
-            final double maximumPriceMargin, final double minimumAmountMargin)
+    public QuoteHandler(final SupplyChainActor owner, final Comparator<Quote> comparator,
+            final DistContinuousDurationUnit handlingTime, final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super(owner);
         this.quoteComparator = comparator;
@@ -131,20 +121,18 @@ public abstract class QuoteHandler extends SupplyChainHandler
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the margin within which the offered amount may differ from the requested amount.
      */
-    public QuoteHandler(final SupplyChainActor owner, final Comparator<Quote> comparator, final double handlingTime,
+    public QuoteHandler(final SupplyChainActor owner, final Comparator<Quote> comparator, final Duration handlingTime,
             final double maximumPriceMargin, final double minimumAmountMargin)
     {
-        this(owner, comparator, new DistConstant(new Java2Random(), handlingTime), maximumPriceMargin, minimumAmountMargin);
+        this(owner, comparator, new DistConstantDurationUnit(handlingTime), maximumPriceMargin, minimumAmountMargin);
     }
 
-    /**
-     * @see nl.tudelft.simulation.content.HandlerInterface#handleContent(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     public abstract boolean handleContent(final Serializable content);
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.handlers.SupplyChainHandler#checkContentClass(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     protected boolean checkContentClass(final Serializable content)
     {
         return (content instanceof Quote);
@@ -174,23 +162,23 @@ public abstract class QuoteHandler extends SupplyChainHandler
      * @param quotes the list of quotes to select from
      * @return Quote the best quote according to the sorting criterion or null of no quote passed the validity tests
      */
-    protected Quote selectBestQuote(final List quotes)
+    protected Quote selectBestQuote(final List<Quote> quotes)
     {
-        SortedSet<Quote> sortedQuotes = new TreeSet<Quote>(this.quoteComparator);
-        Iterator i = quotes.iterator();
-        while (i.hasNext())
+        SortedSet<Quote> sortedQuotes = new TreeSet<>(this.quoteComparator);
+        Iterator<Quote> quoteIterator = quotes.iterator();
+        while (quoteIterator.hasNext())
         {
-            Quote quote = (Quote) i.next();
+            Quote quote = quoteIterator.next();
             // only take valid quotes...
-            if (quote.getValidityTime() > getOwner().getSimulatorTime() && quote.getAmount() > 0.0)
+            if (quote.getValidityTime().gt(getOwner().getSimulatorTime()) && quote.getAmount() > 0.0)
             {
-                if (((quote.getPrice() / quote.getAmount()))
-                        / quote.getProduct().getUnitMarketPrice() <= (1.0 + this.maximumPriceMargin))
+                if (((quote.getPrice().si / quote.getAmount()))
+                        / quote.getProduct().getUnitMarketPrice().si <= (1.0 + this.maximumPriceMargin))
                 {
                     if (quote.getAmount() <= quote.getRequestForQuote().getAmount() && ((quote.getRequestForQuote().getAmount()
                             / quote.getAmount()) <= (1.0 + this.minimumAmountMargin)))
                     {
-                        if ((quote.getProposedDeliveryDate() <= quote.getRequestForQuote().getLatestDeliveryDate()))
+                        if ((quote.getProposedDeliveryDate().le(quote.getRequestForQuote().getLatestDeliveryDate())))
                         // && (quote.getProposedDeliveryDate() >= quote
                         // .getRequestForQuote()
                         // .getEarliestDeliveryDate()))
@@ -202,13 +190,9 @@ public abstract class QuoteHandler extends SupplyChainHandler
                             if (QuoteHandler.DEBUG)
                             {
                                 System.err.println("QuoteHandler: quote: + prop delivery date: "
-                                        + this.makeDate(quote.getProposedDeliveryDate(), getOwner().getDEVSSimulator())
-                                        + " earliest delivery date: "
-                                        + this.makeDate(quote.getRequestForQuote().getEarliestDeliveryDate(),
-                                                getOwner().getDEVSSimulator())
-                                        + " latest delivery date: "
-                                        + this.makeDate(quote.getRequestForQuote().getLatestDeliveryDate(),
-                                                getOwner().getDEVSSimulator()));
+                                        + quote.getProposedDeliveryDate() + " earliest delivery date: "
+                                        + quote.getRequestForQuote().getEarliestDeliveryDate() + " latest delivery date: "
+                                        + quote.getRequestForQuote().getLatestDeliveryDate());
                                 System.err.println("Quote: " + quote);
                                 System.err.println("Owner of quote handler: " + getOwner().getName());
                             }
@@ -232,8 +216,8 @@ public abstract class QuoteHandler extends SupplyChainHandler
                     {
                         {
                             System.err.println("DEBUG -- QuoteHandler: " + " Price of quote: " + quote + " is too high: "
-                                    + (((quote.getPrice() / quote.getAmount())) / quote.getProduct().getUnitMarketPrice() + "> "
-                                            + (1.0 + this.maximumPriceMargin)));
+                                    + (((quote.getPrice().si / quote.getAmount())) / quote.getProduct().getUnitMarketPrice().si
+                                            + "> " + (1.0 + this.maximumPriceMargin)));
                         }
                     }
                 }
@@ -257,33 +241,9 @@ public abstract class QuoteHandler extends SupplyChainHandler
     }
 
     /**
-     * @param date the date
-     * @param simulator the simulator
-     * @return returns a DateIntData object
-     */
-    private String makeDate(final double date, final SimulatorInterface simulator)
-    {
-        Calendar calendar = Calendar.getInstance();
-        long time = 0L;
-        try
-        {
-            time = (long) TimeUnit.convert(date, simulator.getReplication().getRunControl().getTreatment().getTimeUnit(),
-                    TimeUnitInterface.MILLISECOND);
-
-            calendar.setTimeInMillis((time) + simulator.getReplication().getRunControl().getTreatment().getStartTime());
-
-        }
-        catch (RemoteException exception)
-        {
-            logger.fatal("makeDate", exception);
-        }
-        return calendar.get(Calendar.YEAR) + " " + calendar.get(Calendar.MONTH) + " " + calendar.get(Calendar.DATE);
-    }
-
-    /**
      * @param handlingTime The handlingTime to set.
      */
-    public void setHandlingTime(final DistContinuous handlingTime)
+    public void setHandlingTime(final DistContinuousDurationUnit handlingTime)
     {
         this.handlingTime = handlingTime;
     }

@@ -4,12 +4,13 @@ import java.io.Serializable;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.djunits.value.vdouble.scalar.Duration;
 
-import nl.tudelft.simulation.jstats.distributions.DistContinuous;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.banking.BankAccount;
 import nl.tudelft.simulation.supplychain.content.Bill;
 import nl.tudelft.simulation.supplychain.content.Payment;
+import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * A Bill handler which has a restriction that after a time out the bill is paid automatically if not paid yet. <br>
@@ -25,7 +26,7 @@ public class BillTimeOutHandler extends BillHandler
     private static final long serialVersionUID = 11L;
 
     /** the maximum time out for a shipment */
-    private double maximumTimeOut = 0.0;
+    private Duration maximumTimeOut = Duration.ZERO;
 
     /** true for debug */
     private boolean debug = true;
@@ -42,7 +43,7 @@ public class BillTimeOutHandler extends BillHandler
      * @param maximumTimeOut the maximum time out for a bill
      */
     public BillTimeOutHandler(final SupplyChainActor owner, final BankAccount bankAccount, final int paymentPolicy,
-            final DistContinuous paymentDelay, final double maximumTimeOut)
+            final DistContinuousDurationUnit paymentDelay, final Duration maximumTimeOut)
     {
         super(owner, bankAccount, paymentPolicy, paymentDelay);
         this.maximumTimeOut = maximumTimeOut;
@@ -54,14 +55,13 @@ public class BillTimeOutHandler extends BillHandler
      * @param bankAccount the bankaccount to use.
      * @param maximumTimeOut the maximum time out for a bill
      */
-    public BillTimeOutHandler(final SupplyChainActor owner, final BankAccount bankAccount, final double maximumTimeOut)
+    public BillTimeOutHandler(final SupplyChainActor owner, final BankAccount bankAccount, final Duration maximumTimeOut)
     {
         this(owner, bankAccount, 0, null, maximumTimeOut);
     }
 
-    /**
-     * @see nl.tudelft.simulation.content.HandlerInterface#handleContent(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     public boolean handleContent(final Serializable content)
     {
         if (super.handleContent(content))
@@ -69,9 +69,8 @@ public class BillTimeOutHandler extends BillHandler
             Bill bill = (Bill) content;
             try
             {
-                bill.getSender().getSimulator().scheduleEvent(
-                        bill.getFinalPaymentDate() - bill.getSender().getSimulatorTime() + this.maximumTimeOut, this, this,
-                        "checkPayment", new Serializable[] { bill });
+                bill.getSender().getSimulator().scheduleEventAbs(bill.getFinalPaymentDate().plus(this.maximumTimeOut), this,
+                        this, "checkPayment", new Serializable[] { bill });
             }
             catch (Exception exception)
             {
@@ -103,7 +102,7 @@ public class BillTimeOutHandler extends BillHandler
         // make a payment to send out
         super.bankAccount.withdrawFromBalance(bill.getPrice());
         Payment payment = new Payment(getOwner(), bill.getSender(), bill.getInternalDemandID(), bill, bill.getPrice());
-        getOwner().sendContent(payment, 0.0);
+        getOwner().sendContent(payment, Duration.ZERO);
         if (this.debug)
         {
             System.out.println("DEBUG -- BILLTIMEOUTHANDLER: FORCED PAYMENT IMPOSED: ");

@@ -40,17 +40,15 @@ public class ProductionOrderHandler extends SupplyChainHandler
         }
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.handlers.SupplyChainHandler#checkContentClass(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     protected boolean checkContentClass(final Serializable content)
     {
         return (content instanceof ProductionOrder);
     }
 
-    /**
-     * @see nl.tudelft.simulation.content.HandlerInterface#handleContent(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     public boolean handleContent(final Serializable content)
     {
         return this.production.acceptProductionOrder((ProductionOrder) content);

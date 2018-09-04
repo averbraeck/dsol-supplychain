@@ -2,6 +2,8 @@ package nl.tudelft.simulation.supplychain.production;
 
 import java.io.Serializable;
 
+import org.djunits.value.vdouble.scalar.Duration;
+
 import nl.tudelft.simulation.supplychain.content.ProductionOrder;
 
 /**
@@ -22,9 +24,9 @@ public interface ProductionServiceInterface extends Serializable
     void acceptProductionOrder(ProductionOrder productionOrder);
 
     /**
-     * Method getExpectedProductionTime
+     * Method getExpectedProductionDuration
      * @param productionOrder the production order
      * @return returns the expected production time for an order in simulator time units
      */
-    double getExpectedProductionTime(final ProductionOrder productionOrder);
+    Duration getExpectedProductionDuration(final ProductionOrder productionOrder);
 }

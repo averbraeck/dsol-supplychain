@@ -8,6 +8,7 @@ import javax.vecmath.Point3d;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.djunits.value.vdouble.scalar.Money;
 
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.product.Product;
@@ -62,7 +63,7 @@ public abstract class Trader extends SupplyChainActor
      * @param initialBankBalance the initial bank balance
      */
     public Trader(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position,
-            final Role[] roles, final Bank bank, final double initialBankBalance)
+            final Role[] roles, final Bank bank, final Money initialBankBalance)
     {
         super(name, simulator, position, roles, bank, initialBankBalance);
     }

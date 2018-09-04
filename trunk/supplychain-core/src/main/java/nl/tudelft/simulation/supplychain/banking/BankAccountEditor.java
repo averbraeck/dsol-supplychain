@@ -42,10 +42,8 @@ public class BankAccountEditor extends AbstractCellEditor implements TableCellEd
         System.out.println("BankAccountEditor has been instantiated");
     }
 
-    /**
-     * @see javax.swing.table.TableCellEditor#getTableCellEditorComponent(javax.swing.JTable, java.lang.Object, boolean, int,
-     *      int)
-     */
+    /** {@inheritDoc} */
+    @Override
     public Component getTableCellEditorComponent(final JTable table, final Object _value, final boolean isSelected,
             final int row, final int column)
     {
@@ -66,9 +64,8 @@ public class BankAccountEditor extends AbstractCellEditor implements TableCellEd
         return this.cellPanel;
     }
 
-    /**
-     * @see javax.swing.CellEditor#getCellEditorValue()
-     */
+    /** {@inheritDoc} */
+    @Override
     public Object getCellEditorValue()
     {
         return null;
@@ -91,9 +88,8 @@ public class BankAccountEditor extends AbstractCellEditor implements TableCellEd
             this.chooser = chooser;
         }
 
-        /**
-         * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
-         */
+        /** {@inheritDoc} */
+        @Override
         public synchronized void actionPerformed(final ActionEvent event)
         {
             BankAccountEditor.this.value = this.chooser.getColor();
@@ -108,9 +104,8 @@ public class BankAccountEditor extends AbstractCellEditor implements TableCellEd
      */
     protected class CancelListener implements ActionListener
     {
-        /**
-         * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
-         */
+        /** {@inheritDoc} */
+        @Override
         public void actionPerformed(final ActionEvent e)
         {
             BankAccountEditor.this.cancelCellEditing();

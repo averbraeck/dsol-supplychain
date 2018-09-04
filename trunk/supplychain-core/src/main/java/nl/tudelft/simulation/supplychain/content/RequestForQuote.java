@@ -123,17 +123,15 @@ public class RequestForQuote extends Content
         return this.cutoffDate;
     }
 
-    /**
-     * @return Returns the product.
-     */
+    /** {@inheritDoc} */
+    @Override
     public Product getProduct()
     {
         return this.product;
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
+    /** {@inheritDoc} */
+    @Override
     public String toString()
     {
         return super.toString() + ", for " + this.getAmount() + " units of product " + this.getProduct().getName();

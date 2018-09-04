@@ -4,10 +4,11 @@ import java.io.Serializable;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.djunits.unit.DurationUnit;
+import org.djunits.value.vdouble.scalar.Duration;
+import org.djunits.value.vdouble.scalar.Money;
+import org.djunits.value.vdouble.scalar.Time;
 
-import nl.tudelft.simulation.dsol.formalisms.eventscheduling.SimEvent;
-import nl.tudelft.simulation.dsol.formalisms.eventscheduling.SimEventInterface;
-import nl.tudelft.simulation.dsol.simtime.TimeUnit;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.Bill;
 import nl.tudelft.simulation.supplychain.content.Order;
@@ -49,9 +50,8 @@ public class OrderHandlerStock extends OrderHandler
         super(owner, stock);
     }
 
-    /**
-     * @see nl.tudelft.simulation.content.HandlerInterface#handleContent(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     public boolean handleContent(final Serializable content)
     {
         // get the order
@@ -59,7 +59,7 @@ public class OrderHandlerStock extends OrderHandler
         // send out the confirmation
         OrderConfirmation orderConfirmation = new OrderConfirmation(getOwner(), order.getSender(), order.getInternalDemandID(),
                 order, OrderConfirmation.CONFIRMED);
-        getOwner().sendContent(orderConfirmation, 0.00000);
+        getOwner().sendContent(orderConfirmation, Duration.ZERO);
 
         if (OrderHandlerStock.DEBUG)
         {
@@ -72,32 +72,25 @@ public class OrderHandlerStock extends OrderHandler
         // wait till the right time to start shipping
         try
         {
-            double hour = TimeUnit.convert(1.0, TimeUnit.HOUR, getOwner().getSimulator());
-            // TODO is this handler used in the game? if so --> remove and use
-            // the GameTransportMode
-
             // for now we use the TransportMode.PLANE
-            // TODO get the transportation mode, currently using
-            // TransportMode.PLANE
-            double transportationTimeInHours = TransportMode.PLANE.transportTime(order.getSender(), order.getReceiver());
+            // TODO get the transportation mode, currently using TransportMode.PLANE
+            Duration transportationDuration = TransportMode.PLANE.transportTime(order.getSender(), order.getReceiver());
 
-            double proposedShippingDate = ((OrderBasedOnQuote) order).getQuote().getProposedShippingDate();
+            Time proposedShippingDate = ((OrderBasedOnQuote) order).getQuote().getProposedShippingDate();
 
-            double scheduledShippingTime = proposedShippingDate
-                    - TimeUnit.convert(transportationTimeInHours, TimeUnit.HOUR, getOwner().getSimulator());
+            Time scheduledShippingTime = proposedShippingDate.minus(transportationDuration);
 
             // start shipping 8 hours from now at the earliest
-            double shippingTime = Math.max(getOwner().getSimulatorTime() + 8.0 * hour, scheduledShippingTime);
+            Time shippingTime =
+                    Time.max(getOwner().getSimulatorTime().plus(new Duration(8.0, DurationUnit.HOUR)), scheduledShippingTime);
             Serializable[] args = new Serializable[] { order };
-            SimEventInterface simEvent = new SimEvent(shippingTime, this, this, "ship", args);
+            getOwner().getSimulator().scheduleEventAbs(shippingTime, this, this, "ship", args);
 
             if (OrderHandlerStock.DEBUG)
             {
                 System.err.println("t=" + getOwner().getSimulatorTime() + " DEBUG -- SHIPPING from actor " + getOwner()
                         + " scheduled for t=" + shippingTime);
             }
-
-            getOwner().getSimulator().scheduleEvent(simEvent);
         }
         catch (Exception e)
         {
@@ -117,49 +110,43 @@ public class OrderHandlerStock extends OrderHandler
         double amount = order.getAmount();
         try
         {
-            double day = TimeUnit.convert(1.0, TimeUnit.DAY, getOwner().getSimulator());
             if (this.stock.getActualAmount(product) < amount)
             {
                 // try again in one day
                 Serializable[] args = new Serializable[] { order };
-                SimEventInterface simEvent = new SimEvent(getOwner().getSimulatorTime() + day, this, this, "ship", args);
-                getOwner().getSimulator().scheduleEvent(simEvent);
+                getOwner().getSimulator().scheduleEventRel(new Duration(1.0, DurationUnit.DAY), this, this, "ship", args);
             }
             else
             {
                 // tell the stock that we got the claimed amount
                 this.stock.changeClaimedAmount(order.getProduct(), -order.getAmount());
                 // available: make shipment and ship to customer
-                double unitPrice = this.stock.getUnitPrice(product);
+                Money unitPrice = this.stock.getUnitPrice(product);
                 double actualAmount = this.stock.removeStock(product, amount);
                 Shipment shipment = new Shipment(getOwner(), order.getSender(), order.getInternalDemandID(), order, product,
-                        actualAmount, actualAmount * unitPrice);
+                        actualAmount, unitPrice.multiplyBy(actualAmount));
                 shipment.setInTransit(true);
 
                 if (OrderHandlerStock.DEBUG)
                 {
                     System.out.println("DEBUG -- OrderHandlerStock: transportation delay for order: " + order + " is: "
-                            + TimeUnit.convert(TransportMode.PLANE.transportTime(shipment.getSender(), shipment.getReceiver()),
-                                    TimeUnit.HOUR, getOwner().getSimulator())
-                            + " expressed in: "
-                            + getOwner().getSimulator().getReplication().getRunControl().getTreatment().getTimeUnit());
+                            + TransportMode.PLANE.transportTime(shipment.getSender(), shipment.getReceiver()));
                 }
 
-                // TODO get the transportation mode from the shipment?
+                // TODO: get the transportation mode from the shipment?
                 getOwner().sendContent(shipment,
                         TransportMode.PLANE.transportTime(shipment.getSender(), shipment.getReceiver()));
 
                 // send a bill when the shipment leaves...
                 Bill bill = new Bill(getOwner(), order.getSender(), order.getInternalDemandID(), order,
-                        getOwner().getSimulatorTime() + (14.0 * day), shipment.getValue(), "SALE");
+                        getOwner().getSimulatorTime().plus(new Duration(14.0, DurationUnit.DAY)), shipment.getTotalCargoValue(),
+                        "SALE");
 
                 // .... by scheduling it based on the transportation delay
                 Serializable[] args = new Serializable[] { bill };
-                SimEventInterface simEvent = new SimEvent(getOwner().getSimulatorTime()
-                        + TimeUnit.convert(TransportMode.PLANE.transportTime(shipment.getSender(), shipment.getReceiver()),
-                                TimeUnit.HOUR, getOwner().getSimulator()),
-                        this, this, "sendBill", args);
-                getOwner().getSimulator().scheduleEvent(simEvent);
+                getOwner().getSimulator().scheduleEventRel(
+                        TransportMode.PLANE.transportTime(shipment.getSender(), shipment.getReceiver()), this, this, "sendBill",
+                        args);
             }
         }
         catch (Exception e)
@@ -175,6 +162,7 @@ public class OrderHandlerStock extends OrderHandler
      */
     protected void sendBill(final Bill bill)
     {
-        getOwner().sendContent(bill, 0.002);
+        // send after accepting the order.
+        getOwner().sendContent(bill, new Duration(1.0, DurationUnit.MINUTE));
     }
 }

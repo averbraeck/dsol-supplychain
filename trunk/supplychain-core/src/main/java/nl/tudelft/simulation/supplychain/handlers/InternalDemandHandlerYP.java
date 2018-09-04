@@ -2,13 +2,15 @@ package nl.tudelft.simulation.supplychain.handlers;
 
 import java.io.Serializable;
 
-import nl.tudelft.simulation.jstats.distributions.DistConstant;
-import nl.tudelft.simulation.jstats.distributions.DistContinuous;
-import nl.tudelft.simulation.jstats.streams.Java2Random;
+import org.djunits.value.vdouble.scalar.Duration;
+import org.djunits.value.vdouble.scalar.Length;
+
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.InternalDemand;
 import nl.tudelft.simulation.supplychain.content.YellowPageRequest;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
+import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
+import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * The InternalDemandHandlerYP is a simple implementation of the business logic to handle a request for new products through a
@@ -28,7 +30,7 @@ public class InternalDemandHandlerYP extends InternalDemandHandler
     private SupplyChainActor yp;
 
     /** maximum distance to use in the search */
-    private double maximumDistance;
+    private Length maximumDistance;
 
     /** maximum number of actors to return */
     private int maximumNumber;
@@ -42,8 +44,8 @@ public class InternalDemandHandlerYP extends InternalDemandHandler
      * @param maximumNumber the max number of suppliers to return
      * @param stock the stock for being able to change the ordered amount
      */
-    public InternalDemandHandlerYP(final SupplyChainActor owner, final DistContinuous handlingTime, final SupplyChainActor yp,
-            final double maximumDistance, final int maximumNumber, final StockInterface stock)
+    public InternalDemandHandlerYP(final SupplyChainActor owner, final DistContinuousDurationUnit handlingTime,
+            final SupplyChainActor yp, final Length maximumDistance, final int maximumNumber, final StockInterface stock)
     {
         super(owner, handlingTime, stock);
         this.yp = yp;
@@ -60,15 +62,14 @@ public class InternalDemandHandlerYP extends InternalDemandHandler
      * @param maximumNumber the max number of suppliers to return
      * @param stock the stock for being able to change the ordered amount
      */
-    public InternalDemandHandlerYP(final SupplyChainActor owner, final double handlingTime, final SupplyChainActor yp,
-            final double maximumDistance, final int maximumNumber, final StockInterface stock)
+    public InternalDemandHandlerYP(final SupplyChainActor owner, final Duration handlingTime, final SupplyChainActor yp,
+            final Length maximumDistance, final int maximumNumber, final StockInterface stock)
     {
-        this(owner, new DistConstant(new Java2Random(), handlingTime), yp, maximumDistance, maximumNumber, stock);
+        this(owner, new DistConstantDurationUnit(handlingTime), yp, maximumDistance, maximumNumber, stock);
     }
 
-    /**
-     * @see nl.tudelft.simulation.content.HandlerInterface #handleContent(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     public boolean handleContent(final Serializable content)
     {
         InternalDemand internalDemand = (InternalDemand) checkContent(content);

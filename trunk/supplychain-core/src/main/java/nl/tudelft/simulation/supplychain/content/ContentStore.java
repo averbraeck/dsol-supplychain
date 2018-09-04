@@ -254,20 +254,15 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
      * @param clazz the content class to look for
      * @return returns a list of content of type class based on the internalDemandID
      */
-    public List<Content> getContentList(final Serializable internalDemandID, final Class<?> clazz)
+    @SuppressWarnings("unchecked")
+    public <C extends Content> List<C> getContentList(final Serializable internalDemandID, final Class<C> clazz)
     {
-        Map<Class<?>, List<Content>> contentMap = this.internalDemandMap.get(internalDemandID);
-        if (contentMap == null)
+        List<C> contentList = new ArrayList<>();
+        for (Content content : this.internalDemandMap.get(internalDemandID).get(clazz))
         {
-            return new ArrayList<Content>();
+            contentList.add((C) content);
         }
-        List<Content> contentList = contentMap.get(clazz);
-        if (contentList == null)
-        {
-            return new ArrayList<Content>();
-        }
-        // clone the list before returning!
-        return new ArrayList<Content>(contentList);
+        return contentList;
     }
 
     /**
@@ -278,7 +273,9 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
      * @param sent indicates whether the content was sent or received
      * @return returns a list of content of type class based on the internalDemandID
      */
-    public List<Content> getContentList(final Serializable internalDemandID, final Class<?> clazz, final boolean sent)
+    @SuppressWarnings("unchecked")
+    public <C extends Content> List<C> getContentList(final Serializable internalDemandID, final Class<C> clazz,
+            final boolean sent)
     {
         Class<?> contentClass = clazz;
         if (clazz.equals(OrderBasedOnQuote.class) || clazz.equals(OrderStandAlone.class))
@@ -296,7 +293,7 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
             contentMap = this.receivedStateMap;
         }
         List<Content> contentList = contentMap.get(contentClass);
-        List<Content> result = new ArrayList<Content>();
+        List<C> result = new ArrayList<>();
         if (contentList != null)
         {
             Iterator<Content> it = contentList.iterator();
@@ -305,7 +302,7 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
                 Content itContent = it.next();
                 if (itContent.getInternalDemandID().equals(internalDemandID))
                 {
-                    result.add(itContent);
+                    result.add((C) itContent);
                 }
             }
         }

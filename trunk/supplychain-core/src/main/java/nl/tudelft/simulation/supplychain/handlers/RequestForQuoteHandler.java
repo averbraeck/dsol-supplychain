@@ -1,21 +1,21 @@
 package nl.tudelft.simulation.supplychain.handlers;
 
 import java.io.Serializable;
-import java.rmi.RemoteException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.djunits.unit.DurationUnit;
+import org.djunits.value.vdouble.scalar.Duration;
+import org.djunits.value.vdouble.scalar.Mass;
+import org.djunits.value.vdouble.scalar.Money;
+import org.djunits.value.vdouble.scalar.Time;
 
-import nl.tudelft.simulation.dsol.simtime.TimeUnit;
-import nl.tudelft.simulation.jstats.distributions.DistConstant;
-import nl.tudelft.simulation.jstats.distributions.DistContinuous;
-import nl.tudelft.simulation.jstats.streams.Java2Random;
 import nl.tudelft.simulation.supplychain.actor.Trader;
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
 import nl.tudelft.simulation.supplychain.transport.TransportMode;
+import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
+import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * The RequestForQuotehandler implements the business logic for a supplier who receives a RequestForQuote. The most simple
@@ -36,16 +36,13 @@ public class RequestForQuoteHandler extends SupplyChainHandler
     protected StockInterface stock;
 
     /** the reaction time of the handler in simulation time units */
-    protected DistContinuous handlingTime;
+    protected DistContinuousDurationUnit handlingTime;
 
     /** the profit margin to use in the quotes, 1.0 is no profit */
     protected double profitMargin;
 
     /** the transport mode */
     protected TransportMode transportMode;
-
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(RequestForQuoteHandler.class);
 
     /**
      * Construct a new RFQ handler.
@@ -56,7 +53,7 @@ public class RequestForQuoteHandler extends SupplyChainHandler
      * @param transportMode the default transport mode
      */
     public RequestForQuoteHandler(final Trader owner, final StockInterface stock, final double profitMargin,
-            final DistContinuous handlingTime, final TransportMode transportMode)
+            final DistContinuousDurationUnit handlingTime, final TransportMode transportMode)
     {
         super(owner);
         this.stock = stock;
@@ -74,17 +71,18 @@ public class RequestForQuoteHandler extends SupplyChainHandler
      * @param transportMode the default transport mode
      */
     public RequestForQuoteHandler(final Trader owner, final StockInterface stock, final double profitMargin,
-            final double handlingTime, final TransportMode transportMode)
+            final Duration handlingTime, final TransportMode transportMode)
     {
-        this(owner, stock, profitMargin, new DistConstant(new Java2Random(), handlingTime), transportMode);
+        this(owner, stock, profitMargin, new DistConstantDurationUnit(handlingTime), transportMode);
     }
 
     /**
-     * @see nl.tudelft.simulation.content.HandlerInterface#handleContent(java.io.Serializable) The default implementation is an
-     *      opportunistic one: send a positive answer after a certain time if the trader has the product on stock or ordered. Do
-     *      not look at the required quantity of the product, as the Trader might still get enough units of the product on time.
-     *      React negative if the actual plus ordered amount equals zero.
+     * The default implementation is an opportunistic one: send a positive answer after a certain time if the trader has the
+     * product on stock or ordered. Do not look at the required quantity of the product, as the Trader might still get enough
+     * units of the product on time. React negative if the actual plus ordered amount equals zero. <br>
+     * {@inheritDoc}
      */
+    @Override
     public boolean handleContent(final Serializable content)
     {
         RequestForQuote rfq = (RequestForQuote) checkContent(content);
@@ -95,22 +93,15 @@ public class RequestForQuoteHandler extends SupplyChainHandler
         Product product = rfq.getProduct();
         // calculate the expected transportation time (in hours)
         // add half a day for handling to be sure it arrives on time
-        double shippingTimeHours = this.transportMode.transportTime(rfq.getSender(), rfq.getReceiver()) + 12.0;
-        double shippingTime = 0.0;
-        try
-        {
-            shippingTime = TimeUnit.convert(shippingTimeHours, TimeUnit.HOUR, getOwner().getSimulator());
-        }
-        catch (RemoteException exception)
-        {
-            logger.fatal("handleContent", exception);
-        }
-        double weight = rfq.getAmount() * rfq.getProduct().getAverageUnitWeight();
-        double transportCosts = this.transportMode.transportCosts(rfq.getSender(), rfq.getReceiver(), weight);
+        Duration shippingDuration = this.transportMode.transportTime(rfq.getSender(), rfq.getReceiver())
+                .plus(new Duration(12.0, DurationUnit.HOUR));
+        Mass weight = rfq.getProduct().getAverageUnitWeight().multiplyBy(rfq.getAmount());
+        Money transportCosts = this.transportMode.transportCosts(rfq.getSender(), rfq.getReceiver(), weight);
         // react with a Quote. First calculate the price
-        double price = rfq.getAmount() * this.stock.getUnitPrice(product) * this.profitMargin + transportCosts;
+        Money price = this.stock.getUnitPrice(product).multiplyBy(rfq.getAmount() * this.profitMargin).plus(transportCosts);
         // then look at the delivery date
-        double proposedShippingDate = Math.max(getOwner().getSimulatorTime(), rfq.getEarliestDeliveryDate() - shippingTime);
+        Time proposedShippingDate =
+                Time.max(getOwner().getSimulatorTime(), rfq.getEarliestDeliveryDate().minus(shippingDuration));
         // construct the quote
         Quote quote = new Quote(getOwner(), rfq.getSender(), rfq.getInternalDemandID(), rfq, product, rfq.getAmount(), price,
                 proposedShippingDate, this.transportMode);
@@ -118,9 +109,8 @@ public class RequestForQuoteHandler extends SupplyChainHandler
         return true;
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.handlers.SupplyChainHandler#checkContentClass(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     protected boolean checkContentClass(final Serializable content)
     {
         return (content instanceof RequestForQuote);
@@ -129,15 +119,7 @@ public class RequestForQuoteHandler extends SupplyChainHandler
     /**
      * @param handlingTime The handlingTime to set.
      */
-    public void setReactionTime(final DistContinuous handlingTime)
-    {
-        this.handlingTime = handlingTime;
-    }
-
-    /**
-     * @param handlingTime The handlingTime to set.
-     */
-    public void setHandlingTime(final DistContinuous handlingTime)
+    public void setHandlingTime(final DistContinuousDurationUnit handlingTime)
     {
         this.handlingTime = handlingTime;
     }

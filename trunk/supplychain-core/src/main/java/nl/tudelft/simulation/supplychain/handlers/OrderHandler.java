@@ -55,9 +55,8 @@ public abstract class OrderHandler extends SupplyChainHandler
         this.stock = stock;
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.handlers.SupplyChainHandler#checkContentClass(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     protected boolean checkContentClass(final Serializable content)
     {
         return (content instanceof Order);

@@ -57,9 +57,8 @@ public class Category
         return Category.specializationOf(cat1.getParent(), cat2);
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
+    /** {@inheritDoc} */
+    @Override
     public String toString()
     {
         return this.description;

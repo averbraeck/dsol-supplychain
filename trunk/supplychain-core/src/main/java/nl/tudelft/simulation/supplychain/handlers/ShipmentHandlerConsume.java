@@ -52,10 +52,9 @@ public class ShipmentHandlerConsume extends SupplyChainHandler
 	}
 
 	/**
-	 * Do nothing with the incoming cargo.
-	 * 
-	 * @see nl.tudelft.simulation.content.HandlerInterface#handleContent(java.io.Serializable)
-	 */
+	 * Do nothing with the incoming cargo. <br>
+     * {@inheritDoc} */
+    @Override
 	public boolean handleContent(final Serializable content)
 	{
 		Shipment shipment = (Shipment) checkContent(content);
@@ -69,9 +68,8 @@ public class ShipmentHandlerConsume extends SupplyChainHandler
 		return true;
 	}
 
-	/**
-	 * @see nl.tudelft.simulation.supplychain.handlers.SupplyChainHandler#checkContentClass(java.io.Serializable)
-	 */
+    /** {@inheritDoc} */
+    @Override
 	protected boolean checkContentClass(final Serializable content)
 	{
 		return (content instanceof Shipment);

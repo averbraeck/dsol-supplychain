@@ -27,9 +27,8 @@ public class OrderHandlerMake extends OrderHandler
         super(owner, stock);
     }
 
-    /**
-     * @see nl.tudelft.simulation.content.HandlerInterface#handleContent(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     public boolean handleContent(final Serializable content)
     {
         // TODO OrderHandlerMake

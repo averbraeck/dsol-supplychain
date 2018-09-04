@@ -13,7 +13,6 @@
 
 package nl.tudelft.simulation.supplychain.stock;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -23,10 +22,11 @@ import java.util.TreeMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.djunits.value.vdouble.scalar.Money;
+import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.event.EventProducer;
 import nl.tudelft.simulation.event.TimedEvent;
-import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.actor.Trader;
 import nl.tudelft.simulation.supplychain.content.Shipment;
 import nl.tudelft.simulation.supplychain.product.Product;
@@ -58,8 +58,7 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
     /**
      * <Product, <time moment, ArrayList<values for time moment>>> future changes
      */
-    protected Map<Product, TreeMap<Double, ArrayList<Double>>> futureChanges =
-            new HashMap<Product, TreeMap<Double, ArrayList<Double>>>();
+    protected Map<Product, TreeMap<Time, ArrayList<Double>>> futureChanges = new HashMap<>();
 
     /**
      * Create a new Stock for an actor.
@@ -79,9 +78,9 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
     public Stock(final Trader owner, final Stock initialStock)
     {
         this(owner);
-        for (Iterator i = initialStock.iterator(); i.hasNext();)
+        for (Iterator<Product> productIterator = initialStock.iterator(); productIterator.hasNext();)
         {
-            Product product = (Product) i.next();
+            Product product = productIterator.next();
             addStock(product, initialStock.getActualAmount(product), product.getUnitMarketPrice());
             this.changeClaimedAmount(product, initialStock.getClaimedAmount(product));
             this.changeFutureClaimedAmount(product, initialStock.getClaimedAmount(product), owner.getSimulatorTime());
@@ -90,19 +89,16 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
         }
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.stock.StockInterface#getOwner()
-     */
+    /** {@inheritDoc} */
+    @Override
     public Trader getOwner()
     {
         return this.owner;
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.stock.StockInterface#addStock(nl.tudelft.simulation.supplychain.product.Product,
-     *      double, double)
-     */
-    public void addStock(final Product product, final double amount, final double totalPrice)
+    /** {@inheritDoc} */
+    @Override
+    public void addStock(final Product product, final double amount, final Money totalPrice)
     {
         StockRecord stockRecord = this.stockRecords.get(product);
         if (stockRecord == null)
@@ -116,7 +112,7 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
             {
                 throw new Exception("Amount is 0.0; leading to a divide by zero.");
             }
-            stockRecord.addActualAmount(amount, totalPrice / amount);
+            stockRecord.addActualAmount(amount, totalPrice.divideBy(amount));
         }
         catch (Exception exception)
         {
@@ -126,9 +122,8 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
         this.sendStockUpdateEvent(stockRecord);
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.stock.StockInterface#addStock(nl.tudelft.simulation.supplychain.content.Shipment)
-     */
+    /** {@inheritDoc} */
+    @Override
     public void addStock(final Shipment shipment)
     {
         StockRecord stockRecord = this.stockRecords.get(shipment.getProduct());
@@ -137,14 +132,12 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
             stockRecord = new StockRecord(this.owner, this.owner.getSimulator(), shipment.getProduct());
             this.stockRecords.put(shipment.getProduct(), stockRecord);
         }
-        stockRecord.addActualAmount(shipment.getAmount(), shipment.getValue() / shipment.getAmount());
+        stockRecord.addActualAmount(shipment.getAmount(), shipment.getTotalCargoValue().divideBy(shipment.getAmount()));
         this.sendStockUpdateEvent(stockRecord);
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.stock.StockInterface#removeStock(nl.tudelft.simulation.supplychain.product.Product,
-     *      double)
-     */
+    /** {@inheritDoc} */
+    @Override
     public double removeStock(final Product product, final double amount)
     {
         StockRecord stockRecord = this.stockRecords.get(product);
@@ -160,9 +153,8 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
         return actualAmount;
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.stock.StockInterface#getActualAmount(nl.tudelft.simulation.supplychain.product.Product)
-     */
+    /** {@inheritDoc} */
+    @Override
     public double getActualAmount(final Product product)
     {
         StockRecord stockRecord = this.stockRecords.get(product);
@@ -173,9 +165,8 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
         return stockRecord.getActualAmount();
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.stock.StockInterface#getClaimedAmount(nl.tudelft.simulation.supplychain.product.Product)
-     */
+    /** {@inheritDoc} */
+    @Override
     public double getClaimedAmount(final Product product)
     {
         StockRecord stockRecord = this.stockRecords.get(product);
@@ -186,9 +177,8 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
         return stockRecord.getClaimedAmount();
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.stock.StockInterface#getOrderedAmount(nl.tudelft.simulation.supplychain.product.Product)
-     */
+    /** {@inheritDoc} */
+    @Override
     public double getOrderedAmount(final Product product)
     {
         StockRecord stockRecord = this.stockRecords.get(product);
@@ -199,10 +189,8 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
         return stockRecord.getOrderedAmount();
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.stock.StockInterface#changeClaimedAmount(nl.tudelft.simulation.supplychain.product.Product,
-     *      double)
-     */
+    /** {@inheritDoc} */
+    @Override
     public boolean changeClaimedAmount(final Product product, final double delta)
     {
         StockRecord stockRecord = this.stockRecords.get(product);
@@ -216,52 +204,43 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
         return true;
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.stock.StockForecastInterface#changeFutureClaimedAmount(nl.tudelft.simulation.supplychain.product.Product,
-     *      double, double)
-     */
-    public boolean changeFutureClaimedAmount(final Product product, final double delta, final double time)
+    /** {@inheritDoc} */
+    @Override
+    public boolean changeFutureClaimedAmount(final Product product, final double delta, final Time time)
     {
-        // if (time < this.owner.getSimulatorTime())
-        // {
-        // logger.fatal("changeFutureClaimedAmount",
-        // new IllegalArgumentException(
-        // "Time for the change is smaller than current simulator time ("
-        // + time + "<"
-        // + this.owner.getSimulatorTime() + ")."));
-        // return false;
-        // }
-        //
-        // if (delta < 0)
-        // {
-        // logger.fatal("changeFutureOrderedAmount",
-        // new IllegalArgumentException(
-        // "The delta may not be smaller than 0 (" + delta
-        // + "<" + 0 + ")."));
-        // return false;
-        // }
-        //
-        // if (!this.futureChanges.containsKey(product))
-        // {
-        // this.futureChanges.put(product,
-        // new TreeMap<Double, ArrayList<Double>>());
-        // }
-        // if (!this.futureChanges.get(product).containsKey(time))
-        // {
-        // this.futureChanges.get(product).put(time, new ArrayList<Double>());
-        // }
-        // // we consider a future claimed amount as a negative change for our
-        // // stock
-        // // value
-        // this.futureChanges.get(product).get(time).add(-delta);
-        // this.sendForecastUpdateEvent(product);
+        if (time.lt(this.owner.getSimulatorTime()))
+        {
+            logger.fatal("changeFutureClaimedAmount",
+                    new IllegalArgumentException("Time for the change is smaller than current simulator time (" + time + "<"
+                            + this.owner.getSimulatorTime() + ")."));
+            return false;
+        }
+
+        if (delta < 0)
+        {
+            logger.fatal("changeFutureOrderedAmount",
+                    new IllegalArgumentException("The delta may not be smaller than 0 (" + delta + "<" + 0 + ")."));
+            return false;
+        }
+
+        if (!this.futureChanges.containsKey(product))
+        {
+            this.futureChanges.put(product, new TreeMap<Time, ArrayList<Double>>());
+        }
+        if (!this.futureChanges.get(product).containsKey(time))
+        {
+            this.futureChanges.get(product).put(time, new ArrayList<Double>());
+        }
+        // we consider a future claimed amount as a negative change for our
+        // stock
+        // value
+        this.futureChanges.get(product).get(time).add(-delta);
+        this.sendForecastUpdateEvent(product);
         return true;
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.stock.StockInterface#changeOrderedAmount(nl.tudelft.simulation.supplychain.product.Product,
-     *      double)
-     */
+    /** {@inheritDoc} */
+    @Override
     public boolean changeOrderedAmount(final Product product, final double delta)
     {
         StockRecord stockRecord = this.stockRecords.get(product);
@@ -275,48 +254,40 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
         return true;
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.stock.StockForecastInterface#changeFutureOrderedAmount(nl.tudelft.simulation.supplychain.product.Product,
-     *      double, double)
-     */
-    public boolean changeFutureOrderedAmount(Product product, double delta, double time)
+    /** {@inheritDoc} */
+    @Override
+    public boolean changeFutureOrderedAmount(Product product, double delta, Time time)
     {
-        // if (time < this.owner.getSimulatorTime())
-        // {
-        // logger.fatal("changeFutureOrderedAmount",
-        // new IllegalArgumentException(
-        // "Time for the change is smaller than current simulator time ("
-        // + time + "<"
-        // + this.owner.getSimulatorTime() + ")."));
-        // return false;
-        // }
-        // if (delta < 0)
-        // {
-        // logger.fatal("changeFutureOrderedAmount",
-        // new IllegalArgumentException(
-        // "The delta may not be smaller than 0 (" + delta
-        // + "<" + 0 + ")."));
-        // return false;
-        // }
-        //
-        // if (!this.futureChanges.containsKey(product))
-        // {
-        // this.futureChanges.put(product,
-        // new TreeMap<Double, ArrayList<Double>>());
-        // }
-        // if (!this.futureChanges.get(product).containsKey(time))
-        // {
-        // this.futureChanges.get(product).put(time, new ArrayList<Double>());
-        // }
-        // this.futureChanges.get(product).get(time).add(delta);
-        // this.sendForecastUpdateEvent(product);
+        if (time.lt(this.owner.getSimulatorTime()))
+        {
+            logger.fatal("changeFutureOrderedAmount",
+                    new IllegalArgumentException("Time for the change is smaller than current simulator time (" + time + "<"
+                            + this.owner.getSimulatorTime() + ")."));
+            return false;
+        }
+        if (delta < 0)
+        {
+            logger.fatal("changeFutureOrderedAmount",
+                    new IllegalArgumentException("The delta may not be smaller than 0 (" + delta + "<" + 0 + ")."));
+            return false;
+        }
+
+        if (!this.futureChanges.containsKey(product))
+        {
+            this.futureChanges.put(product, new TreeMap<Time, ArrayList<Double>>());
+        }
+        if (!this.futureChanges.get(product).containsKey(time))
+        {
+            this.futureChanges.get(product).put(time, new ArrayList<Double>());
+        }
+        this.futureChanges.get(product).get(time).add(delta);
+        this.sendForecastUpdateEvent(product);
         return true;
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.stock.StockInterface#getUnitPrice(nl.tudelft.simulation.supplychain.product.Product)
-     */
-    public double getUnitPrice(final Product product)
+    /** {@inheritDoc} */
+    @Override
+    public Money getUnitPrice(final Product product)
     {
         StockRecord stockRecord = this.stockRecords.get(product);
         if (stockRecord == null)
@@ -326,17 +297,15 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
         return stockRecord.getUnitPrice();
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.stock.StockInterface#iterator()
-     */
+    /** {@inheritDoc} */
+    @Override
     public Iterator<Product> iterator()
     {
         return this.stockRecords.keySet().iterator();
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.stock.StockInterface#numberOfProducts()
-     */
+    /** {@inheritDoc} */
+    @Override
     public int numberOfProducts()
     {
         return this.stockRecords.keySet().size();
@@ -348,18 +317,10 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
      */
     public void sendStockUpdateEvent(final StockRecord stockRecord)
     {
-        try
-        {
-            StockUpdateData data = new StockUpdateData(stockRecord.getProduct().getName(), stockRecord.getActualAmount(),
-                    stockRecord.getClaimedAmount(), stockRecord.getOrderedAmount());
+        StockUpdateData data = new StockUpdateData(stockRecord.getProduct().getName(), stockRecord.getActualAmount(),
+                stockRecord.getClaimedAmount(), stockRecord.getOrderedAmount());
 
-            this.fireEvent(new TimedEvent(StockInterface.STOCK_CHANGE_EVENT, this, data,
-                    this.owner.getSimulator().getSimulatorTime()));
-        }
-        catch (RemoteException exception)
-        {
-            logger.warn("sendStockUpdateEvent", exception);
-        }
+        this.fireEvent(new TimedEvent<Time>(StockInterface.STOCK_CHANGE_EVENT, this, data, this.owner.getSimulatorTime()));
     }
 
     // TODO: schedule the method below on a regular interval instead of invoking
@@ -426,9 +387,7 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
         }
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
+    /** {@inheritDoc} */
     @Override
     public String toString()
     {

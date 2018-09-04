@@ -15,6 +15,9 @@ package nl.tudelft.simulation.supplychain.reference;
 
 import javax.vecmath.Point3d;
 
+import org.djunits.unit.MoneyUnit;
+import org.djunits.value.vdouble.scalar.Money;
+
 import nl.tudelft.simulation.supplychain.actor.Trader;
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.product.Product;
@@ -44,7 +47,7 @@ public class Supplier extends Trader
     public Supplier(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position,
             final Role[] roles, final Bank bank)
     {
-        this(name, simulator, position, roles, bank, 0.0);
+        this(name, simulator, position, roles, bank, new Money(0.0, MoneyUnit.USD));
     }
 
     /**
@@ -55,17 +58,16 @@ public class Supplier extends Trader
      * @param bank the bank
      * @param initialBankAccount the initial bank balance
      */
-    public Supplier(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position,
-            final Role[] roles, final Bank bank, final double initialBankAccount)
+    public Supplier(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position, final Role[] roles,
+            final Bank bank, final Money initialBankAccount)
     {
         super(name, simulator, position, roles, bank, initialBankAccount);
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.actor.Trader#checkStock(nl.tudelft.simulation.supplychain.product.Product)
-     */
+    /** {@inheritDoc} */
+    @Override
     public void checkStock(final Product product)
     {
-        // TODO implement checkStock
+        // TODO: implement checkStock
     }
 }

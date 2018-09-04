@@ -15,6 +15,7 @@ import org.djunits.unit.DurationUnit;
 import org.djunits.unit.LengthUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Length;
+import org.djunits.value.vdouble.scalar.Money;
 
 import nl.tudelft.simulation.actor.Actor;
 import nl.tudelft.simulation.content.HandlerInterface;
@@ -95,7 +96,7 @@ public abstract class SupplyChainActor extends Actor
      * @param initialBankBalance the initial bank balance
      */
     public SupplyChainActor(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position,
-            final Role[] roles, final Bank bank, final double initialBankBalance)
+            final Role[] roles, final Bank bank, final Money initialBankBalance)
     {
         this(name, simulator, position, roles, bank);
         this.bankAccount.addToBalance(initialBankBalance);
@@ -121,9 +122,7 @@ public abstract class SupplyChainActor extends Actor
         this.roles.remove(role);
     }
 
-    /**
-     * @see nl.tudelft.simulation.content.HandlerInterface #handleContent(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
     @Override
     public boolean handleContent(final Serializable content)
     {
@@ -260,7 +259,7 @@ public abstract class SupplyChainActor extends Actor
      * @param interval the interval
      * @param amount the amount
      */
-    public void addFixedCost(final String description, final Duration interval, final double amount)
+    public void addFixedCost(final String description, final Duration interval, final Money amount)
     {
         FixedCost fixedCost = new FixedCost(this, this.bankAccount, description, interval, amount);
         this.fixedCosts.add(fixedCost);

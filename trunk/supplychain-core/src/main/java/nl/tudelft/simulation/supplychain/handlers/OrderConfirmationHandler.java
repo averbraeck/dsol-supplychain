@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.djunits.value.vdouble.scalar.Duration;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.InternalDemand;
@@ -42,9 +43,9 @@ public class OrderConfirmationHandler extends SupplyChainHandler
 
     /**
      * For the moment, the handler will just reorder the products from the start of the process, in case the confirmation is
-     * negative.
-     * @see nl.tudelft.simulation.content.HandlerInterface#handleContent(java.io.Serializable)
+     * negative. {@inheritDoc}
      */
+    @Override
     public boolean handleContent(final Serializable content)
     {
         OrderConfirmation orderConfirmation = (OrderConfirmation) checkContent(content);
@@ -62,8 +63,8 @@ public class OrderConfirmationHandler extends SupplyChainHandler
             InternalDemand oldID = null;
             try
             {
-                // place some business logic here to handle the problem
-                oldID = (InternalDemand) getOwner().getContentStore()
+                // TODO: place some business logic here to handle the problem
+                oldID = getOwner().getContentStore()
                         .getContentList(orderConfirmation.getInternalDemandID(), InternalDemand.class).get(0);
 
                 if (oldID == null)
@@ -82,7 +83,7 @@ public class OrderConfirmationHandler extends SupplyChainHandler
 
             InternalDemand newID = new InternalDemand(oldID.getSender(), oldID.getProduct(), oldID.getAmount(),
                     oldID.getEarliestDeliveryDate(), oldID.getLatestDeliveryDate());
-            getOwner().sendContent(newID, 0.0);
+            getOwner().sendContent(newID, Duration.ZERO);
 
             // also clean the contentStore for the old internal demand
             getOwner().getContentStore().removeAllContent(orderConfirmation.getInternalDemandID());
@@ -90,9 +91,8 @@ public class OrderConfirmationHandler extends SupplyChainHandler
         return true;
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.handlers.SupplyChainHandler#checkContentClass(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     protected boolean checkContentClass(final Serializable content)
     {
         return (content instanceof OrderConfirmation);

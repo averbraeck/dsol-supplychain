@@ -60,17 +60,15 @@ public class Payment extends Content
         return this.bill;
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
+    /** {@inheritDoc} */
+    @Override
     public String toString()
     {
         return super.toString() + ", for " + this.getBill().toString();
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.content.Content#getProduct()
-     */
+    /** {@inheritDoc} */
+    @Override
     public Product getProduct()
     {
         return this.bill.getProduct();

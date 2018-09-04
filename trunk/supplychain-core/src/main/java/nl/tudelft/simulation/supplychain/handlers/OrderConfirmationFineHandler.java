@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.djunits.unit.MoneyUnit;
+import org.djunits.value.vdouble.scalar.Duration;
+import org.djunits.value.vdouble.scalar.Money;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
@@ -24,13 +27,13 @@ public class OrderConfirmationFineHandler extends OrderConfirmationHandler
     private static final long serialVersionUID = 11L;
 
     /** the maximum time out for a shipment */
-    private double maximumTimeOut = 0.0;
+    private Duration maximumTimeOut = Duration.ZERO;
 
     /** the margin for the fine */
     private double fineMargin = 0.0;
 
     /** the fixed fine */
-    private double fixedFine = 0.0;
+    private Money fixedFine = new Money(0.0, MoneyUnit.USD);
 
     /** the logger. */
     private static Logger logger = LogManager.getLogger(OrderConfirmationFineHandler.class);
@@ -42,8 +45,8 @@ public class OrderConfirmationFineHandler extends OrderConfirmationHandler
      * @param fineMargin the margin
      * @param fixedFine the fixed fine
      */
-    public OrderConfirmationFineHandler(final SupplyChainActor owner, final double maximumTimeOut, final double fineMargin,
-            final double fixedFine)
+    public OrderConfirmationFineHandler(final SupplyChainActor owner, final Duration maximumTimeOut, final double fineMargin,
+            final Money fixedFine)
     {
         super(owner);
         this.maximumTimeOut = maximumTimeOut;
@@ -51,9 +54,8 @@ public class OrderConfirmationFineHandler extends OrderConfirmationHandler
         this.fixedFine = fixedFine;
     }
 
-    /**
-     * @see nl.tudelft.simulation.content.HandlerInterface#handleContent(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     public boolean handleContent(final Serializable content)
     {
         if (super.handleContent(content))
@@ -63,9 +65,9 @@ public class OrderConfirmationFineHandler extends OrderConfirmationHandler
             {
                 try
                 {
-                    orderConfirmation.getSender().getSimulator().scheduleEvent(
-                            orderConfirmation.getOrder().getDeliveryDate() - getOwner().getSimulatorTime()
-                                    + this.maximumTimeOut,
+                    orderConfirmation.getSender().getSimulator().scheduleEventRel(
+                            orderConfirmation.getOrder().getDeliveryDate().minus(getOwner().getSimulatorTime())
+                                    .plus(this.maximumTimeOut),
                             this, this, "checkShipment", new Serializable[] { orderConfirmation });
                 }
                 catch (Exception exception)
@@ -87,15 +89,18 @@ public class OrderConfirmationFineHandler extends OrderConfirmationHandler
         {
 
             // there is still an order, but no shipment... we fine!
-            double fine = this.fixedFine + this.fineMargin * orderConfirmation.getOrder().getPrice();
+            Money fine = this.fixedFine.plus(orderConfirmation.getOrder().getPrice().multiplyBy(this.fineMargin));
 
-            /*
-             * System.err.println("BILL FOR SUPPLIER ORDERCONF FINE, ACTOR " + getOwner()); double day = 1.0; try { day =
-             * TimeUnit.convert(1.0, TimeUnit.DAY, getOwner() .getSimulator()); } catch (RemoteException exception) {
-             * Logger.severe(this, "checkShipment", exception); } // send the bill for the fine Bill bill = new Bill(getOwner(),
-             * orderConfirmation.getSender(), orderConfirmation.getInternalDemandID(), orderConfirmation .getOrder(),
-             * getOwner().getSimulatorTime() + 14.0 day, fine, "FINE - LATE PAYMENT"); getOwner().sendContent(bill, 0.0);
-             */
+            /*-
+            // TODO: send a bill for the fine instead of direct booking through the bank
+            System.err.println("BILL FOR SUPPLIER ORDERCONF FINE, ACTOR " + getOwner());
+            // send the bill for the fine
+            Bill bill = new Bill(getOwner(), orderConfirmation.getSender(), orderConfirmation.getInternalDemandID(),
+                    orderConfirmation.getOrder(), getOwner().getSimulatorTime().plus(new Duration(14.0, DurationUnit.DAY)),
+                    fine, "FINE - LATE PAYMENT");
+            getOwner().sendContent(bill, Duration.ZERO);
+            */
+
             orderConfirmation.getSender().getBankAccount().withdrawFromBalance(fine);
             orderConfirmation.getReceiver().getBankAccount().addToBalance(fine);
         }

@@ -4,16 +4,14 @@ import java.io.Serializable;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.djunits.value.vdouble.scalar.Duration;
 
-import nl.tudelft.simulation.dsol.formalisms.eventscheduling.SimEvent;
-import nl.tudelft.simulation.jstats.distributions.DistConstant;
-import nl.tudelft.simulation.jstats.distributions.DistContinuous;
-import nl.tudelft.simulation.jstats.streams.Java2Random;
-import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.actor.Trader;
 import nl.tudelft.simulation.supplychain.content.InternalDemand;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
+import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
+import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 
 /**
@@ -37,11 +35,12 @@ public abstract class RestockingPolicy implements Serializable
     /** the product that has to be restocked */
     protected Product product;
 
-    /** the frquency distribution for restocking or checking the stock */
-    protected DistContinuous frequency;
+    // TODO: See if this should be a Duration ot a Frequency
+    /** the frequency distribution for restocking or checking the stock */
+    protected DistContinuousDurationUnit frequency;
 
     /** the maximum delivery time */
-    protected double maxDeliveryTime = 0.0;
+    protected Duration maxDeliveryDuration = Duration.ZERO;
 
     /** the logger. */
     private static Logger logger = LogManager.getLogger(RestockingPolicy.class);
@@ -51,22 +50,20 @@ public abstract class RestockingPolicy implements Serializable
      * @param stock the stock for which the policy holds
      * @param product the product that has to be restocked
      * @param frequency the frequency distribution for restocking or checking
-     * @param maxDeliveryTime the maximum delivery time to use
+     * @param maxDeliveryDuration the maximum delivery time to use
      */
-    public RestockingPolicy(final StockInterface stock, final Product product, final DistContinuous frequency,
-            final double maxDeliveryTime)
+    public RestockingPolicy(final StockInterface stock, final Product product, final DistContinuousDurationUnit frequency,
+            final Duration maxDeliveryDuration)
     {
         super();
         this.simulator = stock.getOwner().getSimulator();
         this.stock = stock;
         this.product = product;
         this.frequency = frequency;
-        this.maxDeliveryTime = maxDeliveryTime;
+        this.maxDeliveryDuration = maxDeliveryDuration;
         try
         {
-            SimEvent simEvent = new SimEvent(this.simulator.getSimulatorTime() + frequency.draw(), this, this, "checkLoop",
-                    new Serializable[] {});
-            this.simulator.scheduleEvent(simEvent);
+            this.simulator.scheduleEventRel(frequency.draw(), this, this, "checkLoop", new Serializable[] {});
         }
         catch (Exception e)
         {
@@ -79,12 +76,12 @@ public abstract class RestockingPolicy implements Serializable
      * @param stock the stock for which the policy holds
      * @param product the product that has to be restocked
      * @param frequency the constant frequency for restocking or checking
-     * @param maxDeliveryTime the maximum delivery time to use
+     * @param maxDeliveryDuration the maximum delivery time to use
      */
-    public RestockingPolicy(final StockInterface stock, final Product product, final double frequency,
-            final double maxDeliveryTime)
+    public RestockingPolicy(final StockInterface stock, final Product product, final Duration frequency,
+            final Duration maxDeliveryDuration)
     {
-        this(stock, product, new DistConstant(new Java2Random(), frequency), maxDeliveryTime);
+        this(stock, product, new DistConstantDurationUnit(frequency), maxDeliveryDuration);
     }
 
     /**
@@ -95,9 +92,7 @@ public abstract class RestockingPolicy implements Serializable
         checkStockLevel();
         try
         {
-            SimEvent simEvent = new SimEvent(this.simulator.getSimulatorTime() + this.frequency.draw(), this, this, "checkLoop",
-                    new Serializable[] {});
-            this.simulator.scheduleEvent(simEvent);
+            this.simulator.scheduleEventRel(this.frequency.draw(), this, this, "checkLoop", new Serializable[] {});
         }
         catch (Exception e)
         {
@@ -118,14 +113,14 @@ public abstract class RestockingPolicy implements Serializable
     {
         Trader owner = this.stock.getOwner();
         InternalDemand internalDemand = new InternalDemand(owner, this.product, orderAmount, owner.getSimulatorTime(),
-                owner.getSimulatorTime() + this.maxDeliveryTime);
-        owner.sendContent(internalDemand, 0.0);
+                owner.getSimulatorTime().plus(this.maxDeliveryDuration));
+        owner.sendContent(internalDemand, Duration.ZERO);
     }
 
     /**
      * @return Returns the frequency distribution.
      */
-    public DistContinuous getFrequency()
+    public DistContinuousDurationUnit getFrequency()
     {
         return this.frequency;
     }
@@ -133,7 +128,7 @@ public abstract class RestockingPolicy implements Serializable
     /**
      * @param frequency The frequency distribution to set.
      */
-    public void setFrequency(final DistContinuous frequency)
+    public void setFrequency(final DistContinuousDurationUnit frequency)
     {
         this.frequency = frequency;
     }
@@ -141,9 +136,9 @@ public abstract class RestockingPolicy implements Serializable
     /**
      * @param frequency The constant frequency to set.
      */
-    public void setFrequency(final double frequency)
+    public void setFrequency(final Duration frequency)
     {
-        this.frequency = new DistConstant(new Java2Random(), frequency);
+        this.frequency = new DistConstantDurationUnit(frequency);
     }
 
     /**

@@ -2,10 +2,10 @@ package nl.tudelft.simulation.supplychain.handlers;
 
 import java.io.Serializable;
 
-import nl.tudelft.simulation.jstats.distributions.DistContinuous;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.InternalDemand;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
+import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * The abstract InternalDemandHandler class provides the general methods that
@@ -23,7 +23,7 @@ public abstract class InternalDemandHandler extends SupplyChainHandler
     private static final long serialVersionUID = 1L;
 
     /** the handling time distribution to handle internal demand */
-	protected DistContinuous handlingTime;
+	protected DistContinuousDurationUnit handlingTime;
 
 	/** the stock for changing 'ordered amount' */
 	protected StockInterface stock;
@@ -37,7 +37,7 @@ public abstract class InternalDemandHandler extends SupplyChainHandler
 	 * @param stock the stock for being able to change the ordered amount
 	 */
 	public InternalDemandHandler(final SupplyChainActor owner,
-			final DistContinuous handlingTime, final StockInterface stock)
+			final DistContinuousDurationUnit handlingTime, final StockInterface stock)
 	{
 		super(owner);
 		this.handlingTime = handlingTime;
@@ -47,19 +47,17 @@ public abstract class InternalDemandHandler extends SupplyChainHandler
 	/**
 	 * @param handlingTime The handlingTime to set.
 	 */
-	public void setHandlingTime(final DistContinuous handlingTime)
+	public void setHandlingTime(final DistContinuousDurationUnit handlingTime)
 	{
 		this.handlingTime = handlingTime;
 	}
 
-	/**
-	 * @see nl.tudelft.simulation.content.HandlerInterface#handleContent(java.io.Serializable)
-	 */
+    /** {@inheritDoc} */
+    @Override
 	public abstract boolean handleContent(final Serializable content);
 
-	/**
-	 * @see nl.tudelft.simulation.supplychain.handlers.SupplyChainHandler#checkContentClass(java.io.Serializable)
-	 */
+    /** {@inheritDoc} */
+    @Override
 	protected boolean checkContentClass(final Serializable content)
 	{
 		return (content instanceof InternalDemand);

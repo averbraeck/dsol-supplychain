@@ -6,6 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.djunits.unit.DurationUnit;
+import org.djunits.unit.MoneyUnit;
+import org.djunits.unit.TimeUnit;
+import org.djunits.value.vdouble.scalar.Duration;
+import org.djunits.value.vdouble.scalar.Money;
+import org.djunits.value.vdouble.scalar.Time;
+
 import nl.tudelft.simulation.event.EventProducer;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.Bill;
@@ -37,7 +44,7 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
     /** true for debug */
     private static final boolean DEBUG = false;
 
-    /** the instantiation time of this game in milliseconds after 1-1-1970 */
+    /** the instantiation time of this simulation in milliseconds after 1-1-1970 */
     private long instantiationTime = 0;
 
     /** the description of the simulation */
@@ -299,18 +306,20 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
 
     /** {@inheritDoc} */
     @Override
-    public List<Content> getContentList(Serializable internalDemandID, Class<?> clazz, String actorName)
+    public <C extends Content> List<C> getContentList(Serializable internalDemandID, Class<C> clazz, String actorName)
     {
-        List<Content> contentList = this.getContentList(internalDemandID, clazz, actorName, true);
+        List<C> contentList = this.getContentList(internalDemandID, clazz, actorName, true);
         contentList.addAll(this.getContentList(internalDemandID, clazz, actorName, false));
         return contentList;
     }
 
     /** {@inheritDoc} */
+    @SuppressWarnings("unchecked")
     @Override
-    public List<Content> getContentList(Serializable internalDemandID, Class<?> clazz, String actorName, boolean sent)
+    public <C extends Content> List<C> getContentList(Serializable internalDemandID, Class<C> clazz, String actorName,
+            boolean sent)
     {
-        List<Content> contentList = new ArrayList<Content>();
+        List<C> contentList = new ArrayList<>();
         RecordList<Record> recordList = null;
         TableDescriptor td = null;
         if (InternalDemand.class.isAssignableFrom(clazz))
@@ -376,39 +385,39 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
         {
             if (InternalDemand.class.isAssignableFrom(clazz))
             {
-                contentList.add(this.parseInternalDemand(record));
+                contentList.add((C) parseInternalDemand(record));
             }
             else if (RequestForQuote.class.isAssignableFrom(clazz))
             {
-                contentList.add(this.parseRequestForQuote(record));
+                contentList.add((C) parseRequestForQuote(record));
             }
             else if (Quote.class.isAssignableFrom(clazz))
             {
-                contentList.add(this.parseQuote(record));
+                contentList.add((C) parseQuote(record));
             }
             else if (OrderBasedOnQuote.class.isAssignableFrom(clazz))
             {
-                contentList.add(this.parseOrderBasedOnQuote(record));
+                contentList.add((C) parseOrderBasedOnQuote(record));
             }
             else if (OrderStandAlone.class.isAssignableFrom(clazz))
             {
-                contentList.add(this.parseOrderStandAlone(record));
+                contentList.add((C) parseOrderStandAlone(record));
             }
             else if (OrderConfirmation.class.isAssignableFrom(clazz))
             {
-                contentList.add(this.parseOrderConfirmation(record));
+                contentList.add((C) parseOrderConfirmation(record));
             }
             else if (Shipment.class.isAssignableFrom(clazz))
             {
-                contentList.add(this.parseShipment(record));
+                contentList.add((C) parseShipment(record));
             }
             else if (Bill.class.isAssignableFrom(clazz))
             {
-                contentList.add(this.parseBill(record));
+                contentList.add((C) parseBill(record));
             }
             else if (Payment.class.isAssignableFrom(clazz))
             {
-                contentList.add(this.parsePayment(record));
+                contentList.add((C) parsePayment(record));
             }
         }
         return contentList;
@@ -500,6 +509,96 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
     }
 
     /**
+     * @param record the record to find and convert the value of the field
+     * @param fieldName the field to look for
+     * @return the value as a Duration
+     */
+    private Duration durationValue(final Record record, final String fieldName)
+    {
+        // TODO: store the unit!
+        Duration retValue = Duration.NaN;
+        if (record.getValues().containsKey(fieldName))
+        {
+            try
+            {
+                String retString = record.getValue(fieldName);
+                double d = Double.parseDouble(retString);
+                retValue = new Duration(d, DurationUnit.SI);
+            }
+            catch (Exception exception)
+            {
+                System.err.println("Record contains invalid field " + fieldName);
+                exception.printStackTrace();
+            }
+        }
+        else
+        {
+            System.err.println("Record does not contain field " + fieldName);
+        }
+        return retValue;
+    }
+
+    /**
+     * @param record the record to find and convert the value of the field
+     * @param fieldName the field to look for
+     * @return the value as a Time
+     */
+    private Time timeValue(final Record record, final String fieldName)
+    {
+        // TODO: store the unit!
+        Time retValue = Time.ZERO;
+        if (record.getValues().containsKey(fieldName))
+        {
+            try
+            {
+                String retString = record.getValue(fieldName);
+                double d = Double.parseDouble(retString);
+                retValue = new Time(d, TimeUnit.BASE);
+            }
+            catch (Exception exception)
+            {
+                System.err.println("Record contains invalid field " + fieldName);
+                exception.printStackTrace();
+            }
+        }
+        else
+        {
+            System.err.println("Record does not contain field " + fieldName);
+        }
+        return retValue;
+    }
+
+    /**
+     * @param record the record to find and convert the value of the field
+     * @param fieldName the field to look for
+     * @return the value as a Duration
+     */
+    private Money moneyValue(final Record record, final String fieldName)
+    {
+        // TODO: store the unit!
+        Money retValue = new Money(Double.NaN, MoneyUnit.USD);
+        if (record.getValues().containsKey(fieldName))
+        {
+            try
+            {
+                String retString = record.getValue(fieldName);
+                double d = Double.parseDouble(retString);
+                retValue = new Money(d, MoneyUnit.USD);
+            }
+            catch (Exception exception)
+            {
+                System.err.println("Record contains invalid field " + fieldName);
+                exception.printStackTrace();
+            }
+        }
+        else
+        {
+            System.err.println("Record does not contain field " + fieldName);
+        }
+        return retValue;
+    }
+
+    /**
      * @param id
      * @return the internal demand content
      */
@@ -507,7 +606,7 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
     {
         Record record = new Record(TableFactory.createInternalDemandTable(), this.sqlDatabaseConnector);
         record.readRecord(id);
-        return this.parseInternalDemand(record);
+        return parseInternalDemand(record);
     }
 
     /**
@@ -516,9 +615,8 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
      */
     private InternalDemand parseInternalDemand(final Record record)
     {
-        InternalDemand content =
-                new InternalDemand(this.parseSender(record), this.parseProduct(record), this.doubleValue(record, "amount"),
-                        this.doubleValue(record, "earliestDeliveryDate"), this.doubleValue(record, "latestDeliveryDate"));
+        InternalDemand content = new InternalDemand(parseSender(record), parseProduct(record), doubleValue(record, "amount"),
+                timeValue(record, "earliestDeliveryDate"), timeValue(record, "latestDeliveryDate"));
         content.setUniqueID(record.getValue("internalDemandId"));
         return content;
     }
@@ -531,7 +629,7 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
     {
         Record record = new Record(TableFactory.createRequestForQuoteTable(), this.sqlDatabaseConnector);
         record.readRecord(id);
-        return this.parseRequestForQuote(record);
+        return parseRequestForQuote(record);
     }
 
     /**
@@ -541,9 +639,9 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
     private RequestForQuote parseRequestForQuote(final Record record)
     {
         InternalDemand internalDemand = this.readInternalDemand(record.getValue("internalDemandId"));
-        RequestForQuote content = new RequestForQuote(this.parseSender(record), this.parseReceiver(record), internalDemand,
-                this.parseProduct(record), this.doubleValue(record, "amount"), this.doubleValue(record, "earliestDeliveryDate"),
-                this.doubleValue(record, "latestDeliveryDate"));
+        RequestForQuote content = new RequestForQuote(parseSender(record), parseReceiver(record), internalDemand,
+                parseProduct(record), doubleValue(record, "amount"), timeValue(record, "earliestDeliveryDate"),
+                timeValue(record, "latestDeliveryDate"));
         content.setUniqueID(record.getValue("requestForQuoteId"));
         return content;
     }
@@ -556,7 +654,7 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
     {
         Record record = new Record(TableFactory.createQuoteTable(), this.sqlDatabaseConnector);
         record.readRecord(id);
-        return this.parseQuote(record);
+        return parseQuote(record);
     }
 
     /**
@@ -567,10 +665,9 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
     {
         InternalDemand internalDemand = this.readInternalDemand(record.getValue("internalDemandId"));
         RequestForQuote rfq = this.readRequestForQuote(record.getValue("requestForQuoteId"));
-        Quote content = new Quote(this.parseSender(record), this.parseReceiver(record), internalDemand, rfq,
-                this.parseProduct(record), this.doubleValue(record, "amount"), this.doubleValue(record, "price"),
-                this.doubleValue(record, "proposedShippingDate"), this.doubleValue(record, "validityTime"),
-                this.parseTransportMode(record));
+        Quote content = new Quote(parseSender(record), parseReceiver(record), internalDemand, rfq, parseProduct(record),
+                doubleValue(record, "amount"), moneyValue(record, "price"), timeValue(record, "proposedShippingDate"),
+                timeValue(record, "validityTime"), parseTransportMode(record));
         content.setUniqueID(record.getValue("quoteId"));
         return content;
     }
@@ -583,7 +680,7 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
     {
         Record record = new Record(TableFactory.createOrderBasedOnQuoteTable(), this.sqlDatabaseConnector);
         record.readRecord(id);
-        return this.parseOrderBasedOnQuote(record);
+        return parseOrderBasedOnQuote(record);
     }
 
     /**
@@ -594,8 +691,8 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
     {
         InternalDemand internalDemand = this.readInternalDemand(record.getValue("internalDemandId"));
         Quote quote = this.readQuote(record.getValue("quoteId"));
-        OrderBasedOnQuote content = new OrderBasedOnQuote(this.parseSender(record), this.parseReceiver(record), internalDemand,
-                this.doubleValue(record, "deliveryDate"), quote);
+        OrderBasedOnQuote content = new OrderBasedOnQuote(parseSender(record), parseReceiver(record), internalDemand,
+                timeValue(record, "deliveryDate"), quote);
         content.setUniqueID(record.getValue("orderId"));
         return content;
     }
@@ -609,7 +706,7 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
     {
         Record record = new Record(TableFactory.createOrderStandAloneTable(), this.sqlDatabaseConnector);
         record.readRecord(id);
-        return this.parseOrderStandAlone(record);
+        return parseOrderStandAlone(record);
     }
 
     /**
@@ -619,9 +716,9 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
     private OrderStandAlone parseOrderStandAlone(final Record record)
     {
         InternalDemand internalDemand = this.readInternalDemand(record.getValue("internalDemandId"));
-        OrderStandAlone content = new OrderStandAlone(this.parseSender(record), this.parseReceiver(record), internalDemand,
-                this.doubleValue(record, "deliveryDate"), this.parseProduct(record), this.doubleValue(record, "amount"),
-                this.doubleValue(record, "price"));
+        OrderStandAlone content = new OrderStandAlone(parseSender(record), parseReceiver(record), internalDemand,
+                timeValue(record, "deliveryDate"), parseProduct(record), doubleValue(record, "amount"),
+                moneyValue(record, "price"));
         content.setUniqueID(record.getValue("orderId"));
         return content;
     }
@@ -635,7 +732,7 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
     {
         Record record = new Record(TableFactory.createOrderConfirmationTable(), this.sqlDatabaseConnector);
         record.readRecord(id);
-        return this.parseOrderConfirmation(record);
+        return parseOrderConfirmation(record);
     }
 
     /**
@@ -646,8 +743,8 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
     {
         InternalDemand internalDemand = this.readInternalDemand(record.getValue("internalDemandId"));
         Order order = this.readOrderBasedOnQuote(record.getValue("orderId"));
-        OrderConfirmation content = new OrderConfirmation(this.parseSender(record), this.parseReceiver(record), internalDemand,
-                order, this.intValue(record, "status"));
+        OrderConfirmation content = new OrderConfirmation(parseSender(record), parseReceiver(record), internalDemand, order,
+                this.intValue(record, "status"));
         content.setUniqueID(record.getValue("orderConfirmationId"));
         return content;
     }
@@ -661,7 +758,7 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
     {
         Record record = new Record(TableFactory.createShipmentTable(), this.sqlDatabaseConnector);
         record.readRecord(id);
-        return this.parseShipment(record);
+        return parseShipment(record);
     }
 
     /**
@@ -672,8 +769,8 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
     {
         InternalDemand internalDemand = this.readInternalDemand(record.getValue("internalDemandId"));
         Order order = this.readOrderBasedOnQuote(record.getValue("orderId"));
-        Shipment content = new Shipment(this.parseSender(record), this.parseReceiver(record), internalDemand, order,
-                this.parseProduct(record), this.doubleValue(record, "amount"), this.doubleValue(record, "value"));
+        Shipment content = new Shipment(parseSender(record), parseReceiver(record), internalDemand, order, parseProduct(record),
+                doubleValue(record, "amount"), moneyValue(record, "totalCargoValue"));
         content.setUniqueID(record.getValue("shipmentId"));
         return content;
     }
@@ -686,7 +783,7 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
     {
         Record record = new Record(TableFactory.createBillTable(), this.sqlDatabaseConnector);
         record.readRecord(id);
-        return this.parseBill(record);
+        return parseBill(record);
     }
 
     /**
@@ -697,9 +794,8 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
     {
         InternalDemand internalDemand = this.readInternalDemand(record.getValue("internalDemandId"));
         Order order = this.readOrderBasedOnQuote(record.getValue("orderId"));
-        Bill content = new Bill(this.parseSender(record), this.parseReceiver(record), internalDemand, order,
-                this.doubleValue(record, "finalPaymentDate"), this.doubleValue(record, "price"),
-                record.getValue("description"));
+        Bill content = new Bill(parseSender(record), parseReceiver(record), internalDemand, order,
+                timeValue(record, "finalPaymentDate"), moneyValue(record, "price"), record.getValue("description"));
         content.setUniqueID(record.getValue("billId"));
         return content;
     }
@@ -712,7 +808,7 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
     {
         Record record = new Record(TableFactory.createPaymentTable(), this.sqlDatabaseConnector);
         record.readRecord(id);
-        return this.parsePayment(record);
+        return parsePayment(record);
     }
 
     /**
@@ -723,8 +819,8 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
     {
         InternalDemand internalDemand = this.readInternalDemand(record.getValue("internalDemandId"));
         Bill bill = this.readBill(record.getValue("billId"));
-        Payment content = new Payment(this.parseSender(record), this.parseReceiver(record), internalDemand, bill,
-                this.doubleValue(record, "payment"));
+        Payment content =
+                new Payment(parseSender(record), parseReceiver(record), internalDemand, bill, moneyValue(record, "payment"));
         content.setUniqueID(record.getValue("paymentId"));
         return content;
     }

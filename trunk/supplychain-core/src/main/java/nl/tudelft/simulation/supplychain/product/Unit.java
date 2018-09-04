@@ -51,9 +51,8 @@ public class Unit implements Serializable
         this.name = name;
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
+    /** {@inheritDoc} */
+    @Override
     public String toString()
     {
         return this.name;

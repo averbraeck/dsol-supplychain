@@ -36,7 +36,7 @@ public class BuyingRole extends Role
     {
         super(owner, simulator);
         this.bankAccount = bankAccount;
-        // add standard handlers for this role
+        // TODO: add standard handlers for this role
         /*
          * super.addContentHandler(OrderConfirmation.class, new OrderConfirmationHandler(getOwner()));
          * super.addContentHandler(Bill.class, new BillHandler(getOwner(), this.bankAccount, BillHandler.PAYMENT_ON_TIME, new
@@ -44,9 +44,8 @@ public class BuyingRole extends Role
          */
     }
 
-    /**
-     * @see nl.tudelft.simulation.content.HandlerInterface#handleContent(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     public boolean handleContent(final Serializable content)
     {
         /*

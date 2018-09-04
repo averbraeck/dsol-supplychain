@@ -9,6 +9,8 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.djunits.value.Scalar;
+
 import nl.tudelft.simulation.language.reflection.ClassUtil;
 
 /**
@@ -128,7 +130,10 @@ public class Record implements Serializable
                     value = field.get(object);
                     if (value != null)
                     {
-                        valueString = value.toString();
+                        if (value instanceof Scalar)
+                            valueString = "" + ((Scalar<?>) value).doubleValue();
+                        else
+                            valueString = value.toString();
                         this.values.put(recordDescriptor.getName(), valueString);
                     }
                 }
@@ -308,7 +313,6 @@ public class Record implements Serializable
      * @param whereValue the value
      * @return successful or not
      */
-    @SuppressWarnings("unchecked")
     public boolean readRecordWhere(final String whereField, final String whereValue)
     {
         String query = "";
@@ -589,9 +593,8 @@ public class Record implements Serializable
         return this.values;
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
+    /** {@inheritDoc} */
+    @Override
     public String toString()
     {
         return this.values.get(this.tableDescriptor.getDisplayField());

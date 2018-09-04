@@ -1,23 +1,22 @@
 package nl.tudelft.simulation.supplychain.production;
 
 import java.io.Serializable;
-import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.djunits.unit.TimeUnit;
+import org.djunits.unit.DurationUnit;
+import org.djunits.value.vdouble.scalar.Duration;
+import org.djunits.value.vdouble.scalar.Money;
+import org.djunits.value.vdouble.scalar.Time;
 
-import nl.tudelft.simulation.dsol.experiment.TimeUnitInterface;
-import nl.tudelft.simulation.dsol.formalisms.eventscheduling.SimEvent;
-import nl.tudelft.simulation.jstats.distributions.DistContinuous;
-import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.actor.Trader;
 import nl.tudelft.simulation.supplychain.content.ProductionOrder;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
+import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * The DelayProductionService starts production at the latest possible moment to meet the delivery date of the production order.
@@ -36,7 +35,7 @@ public class DelayProductionService extends ProductionService
     private static final long serialVersionUID = 12L;
 
     /** the time distribution to produce products */
-    protected DistContinuous productionTime;
+    protected DistContinuousDurationUnit productionTime;
 
     /** fixed time, independent of order size; otherwise time is per unit */
     protected boolean fixedTime;
@@ -61,7 +60,8 @@ public class DelayProductionService extends ProductionService
      * @param profitMargin the fraction that is added to the cost of the materials.
      */
     public DelayProductionService(final Trader owner, final StockInterface stock, final Product product,
-            final DistContinuous productionTime, final boolean fixedTime, final boolean greedy, final double profitMargin)
+            final DistContinuousDurationUnit productionTime, final boolean fixedTime, final boolean greedy,
+            final double profitMargin)
     {
         super(owner, stock, product);
         this.productionTime = productionTime;
@@ -72,41 +72,41 @@ public class DelayProductionService extends ProductionService
 
     /**
      * Accept the production order, and delay till the start of production (equals delivery time minus production time minus
-     * transportation time) to get the raw materials to produce. Acquire the materials either greedy or all-at-once.
-     * @see nl.tudelft.simulation.supplychain.production.ProductionServiceInterface#acceptProductionOrder(nl.tudelft.simulation.supplychain.content.ProductionOrder)
+     * transportation time) to get the raw materials to produce. Acquire the materials either greedy or all-at-once. <br>
+     * {@inheritDoc}
      */
+    @Override
     public void acceptProductionOrder(final ProductionOrder productionOrder)
     {
         System.out.println("DelayProductionOrder: acceptProductionOrder received: " + productionOrder);
 
         // calculate production time
-        double ptime = this.productionTime.draw();
+        Duration ptime = this.productionTime.draw();
         if (!this.fixedTime)
         {
-            ptime *= productionOrder.getAmount();
+            ptime = ptime.multiplyBy(productionOrder.getAmount());
         }
-        double startTime = productionOrder.getDateReady() - ptime;
-        startTime = Math.max(getOwner().getSimulatorTime(), startTime);
+        Time startTime = productionOrder.getDateReady().minus(ptime);
+        startTime = Time.max(this.owner.getSimulatorTime(), startTime);
         // determine the needed raw materials
         Product _product = productionOrder.getProduct();
-        Map bom = _product.getBillOfMaterials().getMaterials();
+        Map<Product, Double> bom = _product.getBillOfMaterials().getMaterials();
 
-        HashMap<Product, Double> availableMaterials = new HashMap<Product, Double>();
-        Iterator bomIter = bom.keySet().iterator();
+        HashMap<Product, Double> availableMaterials = new HashMap<>();
+        Iterator<Product> bomIter = bom.keySet().iterator();
         while (bomIter.hasNext())
         {
-            Product raw = (Product) (bomIter.next());
-            double amount = ((Double) (bom.get(raw))).doubleValue();
+            Product raw = bomIter.next();
+            double amount = bom.get(raw).doubleValue();
             amount *= productionOrder.getAmount();
             availableMaterials.put(raw, new Double(amount));
         }
         // don't do anyting before production has to start
-        Serializable[] args = new Serializable[] { productionOrder, new Double(ptime), availableMaterials };
+        Serializable[] args = new Serializable[] { productionOrder, ptime, availableMaterials };
         try
         {
-            SimEvent simEvent = new SimEvent(startTime, this, this, "startProduction", args);
             System.out.println("DelayProduction: production started for product: " + productionOrder.getProduct());
-            getOwner().getSimulator().scheduleEvent(simEvent);
+            this.owner.getSimulator().scheduleEventAbs(startTime, this, this, "startProduction", args);
         }
         catch (Exception e)
         {
@@ -114,28 +114,27 @@ public class DelayProductionService extends ProductionService
         }
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.production.ProductionService#getExpectedProductionTime(nl.tudelft.simulation.supplychain.content.ProductionOrder)
-     */
-    public double getExpectedProductionTime(final ProductionOrder productionOrder)
+    /** {@inheritDoc} */
+    @Override
+    public Duration getExpectedProductionDuration(final ProductionOrder productionOrder)
     {
         // calculate production time
-        double ptime = this.productionTime.draw();
+        Duration ptime = this.productionTime.draw();
         if (!this.fixedTime)
         {
-            ptime *= productionOrder.getAmount();
+            ptime = ptime.multiplyBy(productionOrder.getAmount());
         }
 
         Product _product = productionOrder.getProduct();
-        Map bom = _product.getBillOfMaterials().getMaterials();
+        Map<Product, Double> bom = _product.getBillOfMaterials().getMaterials();
 
         // check whether there is enough on stock for this order
-        HashMap<Product, Double> availableMaterials = new HashMap<Product, Double>();
-        Iterator bomIter = bom.keySet().iterator();
+        HashMap<Product, Double> availableMaterials = new HashMap<>();
+        Iterator<Product> bomIter = bom.keySet().iterator();
         while (bomIter.hasNext())
         {
-            Product raw = (Product) (bomIter.next());
-            double amount = ((Double) (bom.get(raw))).doubleValue();
+            Product raw = bomIter.next();
+            double amount = bom.get(raw).doubleValue();
             amount *= productionOrder.getAmount();
             availableMaterials.put(raw, new Double(amount));
         }
@@ -148,14 +147,7 @@ public class DelayProductionService extends ProductionService
         if (!enoughOnStock)
         {
             // for now we simply add one week to the expected production time
-            try
-            {
-                ptime += TimeUnit.convert(1, TimeUnitInterface.WEEK, getOwner().getDEVSSimulator());
-            }
-            catch (RemoteException remoteException)
-            {
-                logger.fatal("getExpectedProductionTime", remoteException);
-            }
+            ptime = ptime.plus(new Duration(1.0, DurationUnit.WEEK));
         }
 
         return ptime;
@@ -164,10 +156,11 @@ public class DelayProductionService extends ProductionService
     /**
      * Start the production at the latest possible time. When raw materials are
      * @param productionOrder the production order.
-     * @param ptime the production time.
+     * @param prodctionDuration the production duration.
      * @param availableMaterials the gathered raw materials.
      */
-    protected void startProduction(final ProductionOrder productionOrder, final double ptime, final HashMap availableMaterials)
+    protected void startProduction(final ProductionOrder productionOrder, final Duration prodctionDuration,
+            final HashMap<Product, Double> availableMaterials)
     {
         // implement production: look if raw materials available in stock
         boolean ready = pickRawMaterials(productionOrder, availableMaterials, false);
@@ -178,8 +171,7 @@ public class DelayProductionService extends ProductionService
             Serializable[] args = new Serializable[] { productionOrder };
             try
             {
-                SimEvent simEvent = new SimEvent(getOwner().getSimulatorTime() + ptime, this, this, "endProduction", args);
-                getOwner().getSimulator().scheduleEvent(simEvent);
+                this.owner.getSimulator().scheduleEventRel(prodctionDuration, this, this, "endProduction", args);
             }
             catch (Exception e)
             {
@@ -193,13 +185,11 @@ public class DelayProductionService extends ProductionService
                 pickRawMaterials(productionOrder, availableMaterials, true);
             }
             // try again in one day
-            Serializable[] args = new Serializable[] { productionOrder, new Double(ptime), availableMaterials };
+            Serializable[] args = new Serializable[] { productionOrder, prodctionDuration, availableMaterials };
             try
             {
-                SimEvent simEvent = new SimEvent(
-                        getOwner().getSimulatorTime() + TimeUnit.convert(1.0, TimeUnit.DAY, getOwner().getSimulator()), this,
-                        this, "startProduction", args);
-                getOwner().getSimulator().scheduleEvent(simEvent);
+                this.owner.getSimulator().scheduleEventRel(new Duration(1.0, DurationUnit.DAY), this, this, "startProduction",
+                        args);
             }
             catch (Exception e)
             {
@@ -217,8 +207,8 @@ public class DelayProductionService extends ProductionService
     {
         Product _product = productionOrder.getProduct();
         double amount = productionOrder.getAmount();
-        double cost = productionOrder.getMaterialCost();
-        super.stock.addStock(_product, amount, cost * this.profitMargin);
+        Money cost = productionOrder.getMaterialCost();
+        super.stock.addStock(_product, amount, cost.multiplyBy(this.profitMargin));
     }
 
     /**
@@ -227,15 +217,15 @@ public class DelayProductionService extends ProductionService
      * @param pick pick materials (true) or just check availability (false)
      * @return success meaning that all materials were available
      */
-    private boolean pickRawMaterials(final ProductionOrder productionOrder, final HashMap availableMaterials,
+    private boolean pickRawMaterials(final ProductionOrder productionOrder, final HashMap<Product, Double> availableMaterials,
             final boolean pick)
     {
         boolean ready = true;
-        Iterator materialIter = availableMaterials.keySet().iterator();
+        Iterator<Product> materialIter = availableMaterials.keySet().iterator();
         while (materialIter.hasNext())
         {
-            Product rawProduct = (Product) (materialIter.next());
-            double neededAmount = ((Double) (availableMaterials.get(rawProduct))).doubleValue();
+            Product rawProduct = materialIter.next();
+            double neededAmount = availableMaterials.get(rawProduct).doubleValue();
             double pickAmount = Math.min(super.stock.getActualAmount(rawProduct), neededAmount);
             if (pickAmount == 0)
             {
@@ -244,7 +234,7 @@ public class DelayProductionService extends ProductionService
             if (pick)
             {
                 double actualAmount = super.stock.removeStock(rawProduct, pickAmount);
-                productionOrder.addMaterialCost(actualAmount * super.stock.getUnitPrice(rawProduct));
+                productionOrder.addMaterialCost(super.stock.getUnitPrice(rawProduct).multiplyBy(actualAmount));
                 System.out.println("DelayProduction: products taken from stock: " + rawProduct + ", amount=" + actualAmount);
             }
         }

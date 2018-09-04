@@ -1,8 +1,10 @@
 package nl.tudelft.simulation.supplychain.stock.policies;
 
-import nl.tudelft.simulation.jstats.distributions.DistContinuous;
+import org.djunits.value.vdouble.scalar.Duration;
+
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
+import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * This restocking policy looks at a safety stock level. As long as the stock level is above the safety stock level, do nothing.
@@ -32,9 +34,9 @@ public class RestockingPolicySafety extends RestockingPolicyFixed
      * @param safetyAmount the safety stock level for the product
      * @param maxDeliveryTime the maximum delivery time to use
      */
-    public RestockingPolicySafety(final StockInterface stock, final Product product, final DistContinuous frequency,
+    public RestockingPolicySafety(final StockInterface stock, final Product product, final DistContinuousDurationUnit frequency,
             final boolean ceiling, final double amount, final boolean includeClaims, final double safetyAmount,
-            final double maxDeliveryTime)
+            final Duration maxDeliveryTime)
     {
         super(stock, product, frequency, ceiling, amount, includeClaims, maxDeliveryTime);
         this.safetyAmount = safetyAmount;
@@ -51,17 +53,15 @@ public class RestockingPolicySafety extends RestockingPolicyFixed
      * @param safetyAmount the safety stock level for the product
      * @param maxDeliveryTime the maximum delivery time to use
      */
-    public RestockingPolicySafety(final StockInterface stock, final Product product, final double frequency,
+    public RestockingPolicySafety(final StockInterface stock, final Product product, final Duration frequency,
             final boolean ceiling, final double amount, final boolean includeClaims, final double safetyAmount,
-            final double maxDeliveryTime)
+            final Duration maxDeliveryTime)
     {
         super(stock, product, frequency, ceiling, amount, includeClaims, maxDeliveryTime);
         this.safetyAmount = safetyAmount;
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.stock.policies.RestockingPolicy#checkStockLevel()
-     */
+    /** {@inheritDoc} */
     @Override
     protected void checkStockLevel()
     {

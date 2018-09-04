@@ -2,6 +2,8 @@ package nl.tudelft.simulation.supplychain.content;
 
 import java.io.Serializable;
 
+import org.djunits.unit.MoneyUnit;
+import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.supplychain.actor.Trader;
@@ -32,7 +34,7 @@ public class ProductionOrder extends Content
     private double amount;
 
     /** the accumulated costs for gathered raw materials */
-    private double materialCost = 0.0;
+    private Money materialCost = new Money(0.0, MoneyUnit.USD);
 
     /**
      * The constructor for the ProductionOrder
@@ -42,8 +44,8 @@ public class ProductionOrder extends Content
      * @param product the product that has to be produced
      * @param amount the amount of products to be produced, in the product's units
      */
-    public ProductionOrder(final Trader owner, final Serializable internalDemandID, final Time dateReady,
-            final Product product, final double amount)
+    public ProductionOrder(final Trader owner, final Serializable internalDemandID, final Time dateReady, final Product product,
+            final double amount)
     {
         super(owner, owner, internalDemandID);
         this.dateReady = dateReady;
@@ -77,7 +79,7 @@ public class ProductionOrder extends Content
     /**
      * @return Returns the materialCost.
      */
-    public double getMaterialCost()
+    public Money getMaterialCost()
     {
         return this.materialCost;
     }
@@ -85,9 +87,9 @@ public class ProductionOrder extends Content
     /**
      * @param cost The cost of materials to add.
      */
-    public void addMaterialCost(final double cost)
+    public void addMaterialCost(final Money cost)
     {
-        this.materialCost += cost;
+        this.materialCost = this.materialCost.plus(cost);
     }
 
     /** {@inheritDoc} */

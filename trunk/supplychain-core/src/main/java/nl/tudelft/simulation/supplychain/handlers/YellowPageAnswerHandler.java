@@ -2,15 +2,16 @@ package nl.tudelft.simulation.supplychain.handlers;
 
 import java.io.Serializable;
 
-import nl.tudelft.simulation.jstats.distributions.DistConstant;
-import nl.tudelft.simulation.jstats.distributions.DistContinuous;
-import nl.tudelft.simulation.jstats.streams.Java2Random;
+import org.djunits.value.vdouble.scalar.Duration;
+
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.content.InternalDemand;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.content.YellowPageAnswer;
 import nl.tudelft.simulation.supplychain.content.YellowPageRequest;
+import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
+import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * The YellowPageAnswerHandler implements the business logic for a buyer who receives a YellowPageAnswer from a yellow page
@@ -28,14 +29,14 @@ public class YellowPageAnswerHandler extends SupplyChainHandler
     private static final long serialVersionUID = 12L;
 
     /** the handling time of the handler in simulation time units */
-    protected DistContinuous handlingTime;
+    protected DistContinuousDurationUnit handlingTime;
 
     /**
      * Constructs a new YellowPageAnswerHandler.
      * @param owner the owner of the handler
      * @param handlingTime the distribution of the time to react on the YP answer
      */
-    public YellowPageAnswerHandler(final SupplyChainActor owner, final DistContinuous handlingTime)
+    public YellowPageAnswerHandler(final SupplyChainActor owner, final DistContinuousDurationUnit handlingTime)
     {
         super(owner);
         this.handlingTime = handlingTime;
@@ -46,14 +47,13 @@ public class YellowPageAnswerHandler extends SupplyChainHandler
      * @param owner the owner of the handler
      * @param handlingTime the dconstant time to react on the YP answer
      */
-    public YellowPageAnswerHandler(final SupplyChainActor owner, final double handlingTime)
+    public YellowPageAnswerHandler(final SupplyChainActor owner, final Duration handlingTime)
     {
-        this(owner, new DistConstant(new Java2Random(), handlingTime));
+        this(owner, new DistConstantDurationUnit(handlingTime));
     }
 
-    /**
-     * @see nl.tudelft.simulation.content.HandlerInterface#handleContent(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     public boolean handleContent(final Serializable content)
     {
         YellowPageAnswer ypAnswer = (YellowPageAnswer) checkContent(content);
@@ -66,7 +66,7 @@ public class YellowPageAnswerHandler extends SupplyChainHandler
         InternalDemand internalDemand =
                 (InternalDemand) contentStore.getContentList(ypRequest.getInternalDemandID(), InternalDemand.class);
         SupplyChainActor[] potentialSuppliers = ypAnswer.getSuppliers();
-        double delay = this.handlingTime.draw();
+        Duration delay = this.handlingTime.draw();
         for (int i = 0; i < potentialSuppliers.length; i++)
         {
             RequestForQuote rfq = new RequestForQuote(getOwner(), potentialSuppliers[i], internalDemand,
@@ -77,9 +77,8 @@ public class YellowPageAnswerHandler extends SupplyChainHandler
         return true;
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.handlers.SupplyChainHandler#checkContentClass(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     protected boolean checkContentClass(final Serializable content)
     {
         return (content instanceof YellowPageAnswer);

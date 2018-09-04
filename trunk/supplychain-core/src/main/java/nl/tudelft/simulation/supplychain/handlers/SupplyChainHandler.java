@@ -125,12 +125,12 @@ public abstract class SupplyChainHandler extends AbstractHandler
         }
         Serializable id = content.getInternalDemandID();
         // get the internal demand to retrieve the product
-        List<Content> storedIDs = getOwner().getContentStore().getContentList(id, InternalDemand.class);
+        List<InternalDemand> storedIDs = getOwner().getContentStore().getContentList(id, InternalDemand.class);
         if (storedIDs.size() == 0)
         {
             return false;
         }
-        InternalDemand internalDemand = (InternalDemand) storedIDs.get(0);
+        InternalDemand internalDemand = storedIDs.get(0);
         return (this.validProducts.contains(internalDemand.getProduct()));
     }
 

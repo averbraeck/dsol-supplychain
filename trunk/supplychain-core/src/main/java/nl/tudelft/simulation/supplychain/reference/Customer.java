@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.vecmath.Point3d;
 
+import org.djunits.value.vdouble.scalar.Money;
+
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.roles.BuyingRole;
@@ -38,8 +40,8 @@ public class Customer extends SupplyChainActor
      * @param bank the bank
      * @param initialBankAccount the initial bank account
      */
-    public Customer(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position,
-            final Bank bank, final double initialBankAccount)
+    public Customer(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position, final Bank bank,
+            final Money initialBankAccount)
     {
         super(name, simulator, position, new Role[] {}, bank, initialBankAccount);
     }
@@ -88,9 +90,8 @@ public class Customer extends SupplyChainActor
         this.demandGenerationRole = demandGenerationRole;
     }
 
-    /**
-     * @see nl.tudelft.simulation.content.HandlerInterface#handleContent(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     public boolean handleContent(final Serializable content)
     {
         if (this.demandGenerationRole == null || this.buyingRole == null)

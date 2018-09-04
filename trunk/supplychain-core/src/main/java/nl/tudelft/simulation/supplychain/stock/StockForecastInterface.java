@@ -1,5 +1,7 @@
 package nl.tudelft.simulation.supplychain.stock;
 
+import org.djunits.value.vdouble.scalar.Time;
+
 import nl.tudelft.simulation.event.EventType;
 import nl.tudelft.simulation.supplychain.product.Product;
 
@@ -24,7 +26,7 @@ public interface StockForecastInterface extends StockInterface
      * @param time the time the change is scheduled to take place
      * @return boolean success or not
      */
-    boolean changeFutureClaimedAmount(Product product, double delta, double time);
+    boolean changeFutureClaimedAmount(Product product, double delta, Time time);
 
     /**
      * Method changeFutureOrderedAmount.
@@ -33,5 +35,5 @@ public interface StockForecastInterface extends StockInterface
      * @param time the time the change is scheduled to take place
      * @return boolean success or not
      */
-    boolean changeFutureOrderedAmount(Product product, double delta, double time);
+    boolean changeFutureOrderedAmount(Product product, double delta, Time time);
 }

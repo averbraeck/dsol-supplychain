@@ -53,7 +53,7 @@ public interface DatabaseWorkerInterface extends Serializable
      * @param clazz the content class to look for
      * @return returns a list of content of type class based on the internalDemandID
      */
-    List<Content> getContentList(final Serializable internalDemandID, final Class<?> clazz, String actorName);
+    <C extends Content> List<C> getContentList(final Serializable internalDemandID, final Class<C> clazz, String actorName);
 
     /**
      * Method getContentList returns the Content object of type clazz based on the internalDemandID, for either sent or received
@@ -64,5 +64,6 @@ public interface DatabaseWorkerInterface extends Serializable
      * @param sent indicates whether the content was sent or received
      * @return returns a list of content of type class based on the internalDemandID
      */
-    List<Content> getContentList(final Serializable internalDemandID, final Class<?> clazz, String actorName, final boolean sent);
+    <C extends Content> List<C> getContentList(final Serializable internalDemandID, final Class<C> clazz, String actorName,
+            final boolean sent);
 }

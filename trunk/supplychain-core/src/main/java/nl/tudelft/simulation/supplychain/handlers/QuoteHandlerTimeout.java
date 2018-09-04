@@ -8,16 +8,16 @@ import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
 
-import nl.tudelft.simulation.dsol.formalisms.eventscheduling.SimEvent;
-import nl.tudelft.simulation.jstats.distributions.DistContinuous;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.content.OrderBasedOnQuote;
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
+import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * The QuoteHandlerTimeout handles quotes until a certain timeout is reached. When all Quotes are in, it reacts. It schedules
@@ -49,7 +49,7 @@ public class QuoteHandlerTimeout extends QuoteHandler
      * @param minimumAmountMargin the margin within which the offered amount may differ from the requested amount.
      */
     public QuoteHandlerTimeout(final SupplyChainActor owner, final Comparator<Quote> comparator,
-            final DistContinuous handlingTime, final double maximumPriceMargin, final double minimumAmountMargin)
+            final DistContinuousDurationUnit handlingTime, final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super(owner, comparator, handlingTime, maximumPriceMargin, minimumAmountMargin);
     }
@@ -62,7 +62,7 @@ public class QuoteHandlerTimeout extends QuoteHandler
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the margin within which the offered amount may differ from the requested amount.
      */
-    public QuoteHandlerTimeout(final SupplyChainActor owner, final Comparator<Quote> comparator, final double handlingTime,
+    public QuoteHandlerTimeout(final SupplyChainActor owner, final Comparator<Quote> comparator, final Duration handlingTime,
             final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super(owner, comparator, handlingTime, maximumPriceMargin, minimumAmountMargin);
@@ -76,8 +76,8 @@ public class QuoteHandlerTimeout extends QuoteHandler
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the minimal amount margin
      */
-    public QuoteHandlerTimeout(final SupplyChainActor owner, final int comparatorType, final DistContinuous handlingTime,
-            final double maximumPriceMargin, final double minimumAmountMargin)
+    public QuoteHandlerTimeout(final SupplyChainActor owner, final int comparatorType,
+            final DistContinuousDurationUnit handlingTime, final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super(owner, comparatorType, handlingTime, maximumPriceMargin, minimumAmountMargin);
     }
@@ -90,15 +90,14 @@ public class QuoteHandlerTimeout extends QuoteHandler
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the minimal amount margin
      */
-    public QuoteHandlerTimeout(final SupplyChainActor owner, final int comparatorType, final double handlingTime,
+    public QuoteHandlerTimeout(final SupplyChainActor owner, final int comparatorType, final Duration handlingTime,
             final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super(owner, comparatorType, handlingTime, maximumPriceMargin, minimumAmountMargin);
     }
 
-    /**
-     * @see nl.tudelft.simulation.content.HandlerInterface#handleContent(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     public boolean handleContent(final Serializable content)
     {
         Quote quote = (Quote) checkContent(content);
@@ -120,9 +119,7 @@ public class QuoteHandlerTimeout extends QuoteHandler
 
                 // calculate the actual time out
                 Time time = Time.max(getOwner().getSimulatorTime(), quote.getRequestForQuote().getCutoffDate());
-
-                SimEvent simEvent = new SimEvent(time, this, this, "createOrder", args);
-                getOwner().getSimulator().scheduleEvent(simEvent);
+                getOwner().getSimulator().scheduleEventAbs(time, this, this, "createOrder", args);
             }
             catch (Exception exception)
             {
@@ -150,7 +147,7 @@ public class QuoteHandlerTimeout extends QuoteHandler
         {
             this.unansweredIDs.remove(internalDemandID);
             ContentStoreInterface contentStore = getOwner().getContentStore();
-            List quotes = contentStore.getContentList(internalDemandID, Quote.class);
+            List<Quote> quotes = contentStore.getContentList(internalDemandID, Quote.class);
 
             // the size of the quotes is at least one
             // since the invocation of this method is scheduled after a first

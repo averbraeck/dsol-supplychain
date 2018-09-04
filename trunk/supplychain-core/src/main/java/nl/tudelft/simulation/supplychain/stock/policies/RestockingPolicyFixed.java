@@ -1,8 +1,10 @@
 package nl.tudelft.simulation.supplychain.stock.policies;
 
-import nl.tudelft.simulation.jstats.distributions.DistContinuous;
+import org.djunits.value.vdouble.scalar.Duration;
+
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
+import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * This RestockingPolicy either orders fixed amounts of goods at the times indicated by the 'frequency', or supplements the
@@ -37,8 +39,8 @@ public class RestockingPolicyFixed extends RestockingPolicy
      * @param includeClaims whether to include the claims in the stock or not
      * @param maxDeliveryTime the maximum delivery time to use
      */
-    public RestockingPolicyFixed(final StockInterface stock, final Product product, final DistContinuous frequency,
-            final boolean ceiling, final double amount, final boolean includeClaims, final double maxDeliveryTime)
+    public RestockingPolicyFixed(final StockInterface stock, final Product product, final DistContinuousDurationUnit frequency,
+            final boolean ceiling, final double amount, final boolean includeClaims, final Duration maxDeliveryTime)
     {
         super(stock, product, frequency, maxDeliveryTime);
         this.ceiling = ceiling;
@@ -56,8 +58,8 @@ public class RestockingPolicyFixed extends RestockingPolicy
      * @param includeClaims whether to include the claims in the stock or not
      * @param maxDeliveryTime the maximum delivery time to use
      */
-    public RestockingPolicyFixed(final StockInterface stock, final Product product, final double frequency,
-            final boolean ceiling, final double amount, final boolean includeClaims, final double maxDeliveryTime)
+    public RestockingPolicyFixed(final StockInterface stock, final Product product, final Duration frequency,
+            final boolean ceiling, final double amount, final boolean includeClaims, final Duration maxDeliveryTime)
     {
         super(stock, product, frequency, maxDeliveryTime);
         this.ceiling = ceiling;
@@ -65,9 +67,8 @@ public class RestockingPolicyFixed extends RestockingPolicy
         this.includeClaims = includeClaims;
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.stock.policies.RestockingPolicy#checkStockLevel()
-     */
+    /** {@inheritDoc} */
+    @Override
     protected void checkStockLevel()
     {
         // just create an internal demand and send it to the owner

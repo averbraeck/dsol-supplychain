@@ -29,7 +29,7 @@ public class Production implements Serializable
     protected Trader owner = null;
 
     /** the handlers for this role */
-    protected Map<String, ProductionService> productionServices = new HashMap<String, ProductionService>();
+    protected Map<String, ProductionService> productionServices = new HashMap<>();
 
     /**
      * Constructor for a production department of a Trader.

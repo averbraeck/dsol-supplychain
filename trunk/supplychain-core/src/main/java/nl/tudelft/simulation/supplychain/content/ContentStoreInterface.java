@@ -52,7 +52,7 @@ public interface ContentStoreInterface extends Serializable
      * @param clazz the content class to look for
      * @return returns a list of content of type class based on the internalDemandID
      */
-    List<Content> getContentList(final Serializable internalDemandID, final Class<?> clazz);
+    <C extends Content> List<C> getContentList(final Serializable internalDemandID, final Class<C> clazz);
 
     /**
      * Method getContentList returns the Content object of type clazz based on the internalDemandID, for either sent or received
@@ -62,7 +62,7 @@ public interface ContentStoreInterface extends Serializable
      * @param sent indicates whether the content was sent or received
      * @return returns a list of content of type class based on the internalDemandID
      */
-    List<Content> getContentList(final Serializable internalDemandID, final Class<?> clazz, final boolean sent);
+    <C extends Content> List<C> getContentList(final Serializable internalDemandID, final Class<C> clazz, final boolean sent);
 
     /**
      * @return Returns the owner.

@@ -2,11 +2,15 @@ package nl.tudelft.simulation.supplychain.demand;
 
 import java.io.Serializable;
 
+import org.djunits.unit.DurationUnit;
+import org.djunits.value.vdouble.scalar.Duration;
+
 import nl.tudelft.simulation.jstats.distributions.DistConstant;
 import nl.tudelft.simulation.jstats.distributions.DistContinuous;
 import nl.tudelft.simulation.jstats.streams.Java2Random;
 import nl.tudelft.simulation.jstats.streams.StreamInterface;
 import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * The Demand. <br>
@@ -25,16 +29,16 @@ public class Demand implements Serializable
     private Product product;
 
     /** the interval between demand requests */
-    private DistContinuous interval;
+    private DistContinuousDurationUnit interval;
 
     /** the amount of products to order or make */
     private DistContinuous amount;
 
     /** the earliest delivery date relative to the current simulator time */
-    private DistContinuous earliestDeliveryDate;
+    private DistContinuousDurationUnit earliestDeliveryDuration;
 
     /** the latest delivery date relative to the current simulator time */
-    private DistContinuous latestDeliveryDate;
+    private DistContinuousDurationUnit latestDeliveryDuration;
 
     /** a default stream for DistConstant */
     private static StreamInterface stream = new Java2Random();
@@ -46,15 +50,15 @@ public class Demand implements Serializable
      * @param earliestDeliveryDate the earliest delivery date distribution
      * @param latestDeliveryDate the latest delivery date distribution
      */
-    public Demand(final Product product, final DistContinuous interval, final DistContinuous amount,
-            final DistContinuous earliestDeliveryDate, final DistContinuous latestDeliveryDate)
+    public Demand(final Product product, final DistContinuousDurationUnit interval, final DistContinuous amount,
+            final DistContinuousDurationUnit earliestDeliveryDate, final DistContinuousDurationUnit latestDeliveryDate)
     {
         super();
         this.product = product;
         this.interval = interval;
         this.amount = amount;
-        this.earliestDeliveryDate = earliestDeliveryDate;
-        this.latestDeliveryDate = latestDeliveryDate;
+        this.earliestDeliveryDuration = earliestDeliveryDate;
+        this.latestDeliveryDuration = latestDeliveryDate;
     }
 
     /**
@@ -64,15 +68,15 @@ public class Demand implements Serializable
      * @param earliestDeliveryDate the earliest delivery date
      * @param latestDeliveryDate the latest delivery date
      */
-    public Demand(final Product product, final DistContinuous interval, final double amount, final double earliestDeliveryDate,
-            final double latestDeliveryDate)
+    public Demand(final Product product, final DistContinuousDurationUnit interval, final double amount, final Duration earliestDeliveryDate,
+            final Duration latestDeliveryDate)
     {
         super();
         this.product = product;
         this.interval = interval;
         this.amount = new DistConstant(Demand.stream, amount);
-        this.earliestDeliveryDate = new DistConstant(Demand.stream, earliestDeliveryDate);
-        this.latestDeliveryDate = new DistConstant(Demand.stream, latestDeliveryDate);
+        this.earliestDeliveryDuration = new DistContinuousDurationUnit(new DistConstant(Demand.stream, earliestDeliveryDate.si), DurationUnit.SI);
+        this.latestDeliveryDuration = new DistContinuousDurationUnit(new DistConstant(Demand.stream, latestDeliveryDate.si), DurationUnit.SI);
     }
 
     /**
@@ -94,7 +98,7 @@ public class Demand implements Serializable
     /**
      * @return Returns the interval.
      */
-    public DistContinuous getInterval()
+    public DistContinuousDurationUnit getInterval()
     {
         return this.interval;
     }
@@ -102,7 +106,7 @@ public class Demand implements Serializable
     /**
      * @param interval The interval to set.
      */
-    public void setInterval(final DistContinuous interval)
+    public void setInterval(final DistContinuousDurationUnit interval)
     {
         this.interval = interval;
     }
@@ -126,32 +130,32 @@ public class Demand implements Serializable
     /**
      * @return Returns the earliestDeliveryDate.
      */
-    public DistContinuous getEarliestDeliveryDate()
+    public DistContinuousDurationUnit getEarliestDeliveryDuration()
     {
-        return this.earliestDeliveryDate;
+        return this.earliestDeliveryDuration;
     }
 
     /**
-     * @param earliestDeliveryDate The earliestDeliveryDate to set.
+     * @param earliestDeliveryDuration The earliestDeliveryDate to set.
      */
-    public void setEarliestDeliveryDate(final DistContinuous earliestDeliveryDate)
+    public void setEarliestDeliveryDuration(final DistContinuousDurationUnit earliestDeliveryDuration)
     {
-        this.earliestDeliveryDate = earliestDeliveryDate;
+        this.earliestDeliveryDuration = earliestDeliveryDuration;
     }
 
     /**
      * @return Returns the latestDeliveryDate.
      */
-    public DistContinuous getLatestDeliveryDate()
+    public DistContinuousDurationUnit getLatestDeliveryDuration()
     {
-        return this.latestDeliveryDate;
+        return this.latestDeliveryDuration;
     }
 
     /**
-     * @param latestDeliveryDate The latestDeliveryDate to set.
+     * @param latestDeliveryDuration The latestDeliveryDate to set.
      */
-    public void setLatestDeliveryDate(final DistContinuous latestDeliveryDate)
+    public void setLatestDeliveryDUration(final DistContinuousDurationUnit latestDeliveryDuration)
     {
-        this.latestDeliveryDate = latestDeliveryDate;
+        this.latestDeliveryDuration = latestDeliveryDuration;
     }
 }

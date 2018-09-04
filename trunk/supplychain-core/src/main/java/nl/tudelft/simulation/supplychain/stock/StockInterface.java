@@ -3,6 +3,8 @@ package nl.tudelft.simulation.supplychain.stock;
 import java.io.Serializable;
 import java.util.Iterator;
 
+import org.djunits.value.vdouble.scalar.Money;
+
 import nl.tudelft.simulation.event.EventProducerInterface;
 import nl.tudelft.simulation.event.EventType;
 import nl.tudelft.simulation.supplychain.actor.Trader;
@@ -36,7 +38,7 @@ public interface StockInterface extends Serializable, EventProducerInterface
      * @param amount the amount
      * @param totalPrice the value of this amount of product
      */
-    void addStock(Product product, double amount, double totalPrice);
+    void addStock(Product product, double amount, Money totalPrice);
 
     /**
      * Method addStock.
@@ -94,7 +96,7 @@ public interface StockInterface extends Serializable, EventProducerInterface
      * @param product the product
      * @return double the price per unit
      */
-    double getUnitPrice(Product product);
+    Money getUnitPrice(Product product);
 
     /**
      * Method iterator.

@@ -1,8 +1,10 @@
 package nl.tudelft.simulation.supplychain.stock.policies;
 
-import nl.tudelft.simulation.jstats.distributions.DistContinuous;
+import org.djunits.value.vdouble.scalar.Duration;
+
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
+import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * This restocking policy looks at the difference between ordered and stock on hand on one hand, and the committed stock on the
@@ -33,9 +35,9 @@ public class RestockingPolicyOscillation extends RestockingPolicyFixed
      * @param overReactionMargin the over reaction margin
      * @param maxDeliveryTime the maximum delivery time to use
      */
-    public RestockingPolicyOscillation(final StockInterface stock, final Product product, final DistContinuous frequency,
-            final boolean ceiling, final double amount, final boolean includeClaims, final double overReactionMargin,
-            final double maxDeliveryTime)
+    public RestockingPolicyOscillation(final StockInterface stock, final Product product,
+            final DistContinuousDurationUnit frequency, final boolean ceiling, final double amount, final boolean includeClaims,
+            final double overReactionMargin, final Duration maxDeliveryTime)
     {
         super(stock, product, frequency, ceiling, amount, includeClaims, maxDeliveryTime);
         this.oscillationMargin = overReactionMargin;
@@ -52,17 +54,15 @@ public class RestockingPolicyOscillation extends RestockingPolicyFixed
      * @param overReactionMargin the over reaction margin
      * @param maxDeliveryTime the maximum delivery time to use
      */
-    public RestockingPolicyOscillation(final StockInterface stock, final Product product, final double frequency,
+    public RestockingPolicyOscillation(final StockInterface stock, final Product product, final Duration frequency,
             final boolean ceiling, final double amount, final boolean includeClaims, final double overReactionMargin,
-            final double maxDeliveryTime)
+            final Duration maxDeliveryTime)
     {
         super(stock, product, frequency, ceiling, amount, includeClaims, maxDeliveryTime);
         this.oscillationMargin = overReactionMargin;
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.stock.policies.RestockingPolicy#checkStockLevel()
-     */
+    /** {@inheritDoc} */
     @Override
     protected void checkStockLevel()
     {

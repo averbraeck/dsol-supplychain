@@ -6,16 +6,17 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.djunits.value.vdouble.scalar.Duration;
+import org.djunits.value.vdouble.scalar.Money;
 
-import nl.tudelft.simulation.jstats.distributions.DistConstant;
-import nl.tudelft.simulation.jstats.distributions.DistContinuous;
-import nl.tudelft.simulation.jstats.streams.Java2Random;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.InternalDemand;
 import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.content.OrderStandAlone;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
+import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
+import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * The InternalDemandHandlerOrder is a simple implementation of the business logic to handle a request for new products through
@@ -44,7 +45,7 @@ public class InternalDemandHandlerOrder extends InternalDemandHandler
      * @param handlingTime the handling time distribution
      * @param stock the stock for being able to change the ordered amount
      */
-    public InternalDemandHandlerOrder(final SupplyChainActor owner, final DistContinuous handlingTime,
+    public InternalDemandHandlerOrder(final SupplyChainActor owner, final DistContinuousDurationUnit handlingTime,
             final StockInterface stock)
     {
         super(owner, handlingTime, stock);
@@ -56,9 +57,9 @@ public class InternalDemandHandlerOrder extends InternalDemandHandler
      * @param handlingTime the constant handling time
      * @param stock the stock for being able to change the ordered amount
      */
-    public InternalDemandHandlerOrder(final SupplyChainActor owner, final double handlingTime, final StockInterface stock)
+    public InternalDemandHandlerOrder(final SupplyChainActor owner, final Duration handlingTime, final StockInterface stock)
     {
-        this(owner, new DistConstant(new Java2Random(), handlingTime), stock);
+        this(owner, new DistConstantDurationUnit(handlingTime), stock);
     }
 
     /**
@@ -66,14 +67,13 @@ public class InternalDemandHandlerOrder extends InternalDemandHandler
      * @param supplier the supplier for that product.
      * @param unitPrice the price per unit to ask for.
      */
-    public void addSupplier(final Product product, final SupplyChainActor supplier, final double unitPrice)
+    public void addSupplier(final Product product, final SupplyChainActor supplier, final Money unitPrice)
     {
         this.suppliers.put(product, new SupplierRecord(supplier, unitPrice));
     }
 
-    /**
-     * @see nl.tudelft.simulation.content.HandlerInterface #handleContent(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     public boolean handleContent(final Serializable content)
     {
         InternalDemand internalDemand = (InternalDemand) checkContent(content);
@@ -95,7 +95,7 @@ public class InternalDemandHandlerOrder extends InternalDemandHandler
             super.stock.changeOrderedAmount(internalDemand.getProduct(), internalDemand.getAmount());
         }
         SupplyChainActor supplier = supplierRecord.getSupplier();
-        double price = internalDemand.getAmount() * supplierRecord.getUnitPrice();
+        Money price = supplierRecord.getUnitPrice().multiplyBy(internalDemand.getAmount());
         Order order = new OrderStandAlone(getOwner(), supplier, internalDemand.getInternalDemandID(),
                 internalDemand.getLatestDeliveryDate(), internalDemand.getProduct(), internalDemand.getAmount(), price);
         // and send it out after the handling time
@@ -105,11 +105,11 @@ public class InternalDemandHandlerOrder extends InternalDemandHandler
 
     /**
      * INNER CLASS FOR STORING RECORDS OF SUPPLIERS AND PRICE <br>
-     * Copyright (c) 2003-2006 Delft University of Technology, Jaffalaan 5, 2628 BX Delft, the Netherlands. All rights reserved.
-     * See for project information <a href="http://www.simulation.tudelft.nl/"> www.simulation.tudelft.nl </a>. The source code
-     * and binary code of this software is proprietary information of Delft University of Technology.
-     * @version May 1, 2004 <br>
-     * @author <a href="http://www.tbm.tudelft.nl/webstaf/alexandv/index.htm">Alexander Verbraeck </a>
+     * <br>
+     * Copyright (c) 2003-2018 Delft University of Technology, Jaffalaan 5, 2628 BX Delft, the Netherlands. All rights reserved.
+     * See for project information <a href="https://www.simulation.tudelft.nl/" target="_blank">www.simulation.tudelft.nl</a>.
+     * The source code and binary code of this software is proprietary information of Delft University of Technology.
+     * @author <a href="https://www.tudelft.nl/averbraeck" target="_blank">Alexander Verbraeck</a>
      */
     protected class SupplierRecord
     {
@@ -117,14 +117,14 @@ public class InternalDemandHandlerOrder extends InternalDemandHandler
         private SupplyChainActor supplier;
 
         /** the agreed price to pay per unit of product */
-        private double unitPrice;
+        private Money unitPrice;
 
         /**
          * Construct a new SupplierRecord
          * @param supplier the supplier
          * @param unitPrice the price per unit
          */
-        public SupplierRecord(final SupplyChainActor supplier, final double unitPrice)
+        public SupplierRecord(final SupplyChainActor supplier, final Money unitPrice)
         {
             super();
             this.supplier = supplier;
@@ -142,7 +142,7 @@ public class InternalDemandHandlerOrder extends InternalDemandHandler
         /**
          * @return Returns the unitPrice.
          */
-        public double getUnitPrice()
+        public Money getUnitPrice()
         {
             return this.unitPrice;
         }

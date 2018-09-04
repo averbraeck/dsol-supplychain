@@ -2,6 +2,10 @@ package nl.tudelft.simulation.supplychain.product;
 
 import java.io.Serializable;
 
+import org.djunits.unit.MoneyUnit;
+import org.djunits.value.vdouble.scalar.Mass;
+import org.djunits.value.vdouble.scalar.Money;
+
 /**
  * Product represents a certain type of product. It might have a billOfMaterials of other products and amounts, indicating from
  * which products this product can be put together in a production process. When a product does not have a billOfMaterials, the
@@ -28,10 +32,10 @@ public class Product implements Serializable
     protected String name;
 
     /** the current world market price of the product per unit */
-    protected double unitMarketPrice = 0.0;
+    protected Money unitMarketPrice = new Money(0.0, MoneyUnit.USD);
 
     /** the average weight per unit */
-    protected double averageUnitWeight = 0.0;
+    protected Mass averageUnitWeight = Mass.ZERO;
 
     /** depreciation the depreciation as a percentage per day */
     protected double depreciation = 0.0;
@@ -44,7 +48,7 @@ public class Product implements Serializable
      * @param averageUnitWeight the average weight per unit
      * @param depreciation the depreciation as a percentage per day for the product
      */
-    public Product(final String name, final Unit unit, final double initialUnitMarketPrice, final double averageUnitWeight,
+    public Product(final String name, final Unit unit, final Money initialUnitMarketPrice, final Mass averageUnitWeight,
             final double depreciation)
     {
         super();
@@ -96,7 +100,7 @@ public class Product implements Serializable
     /**
      * @return Returns the averageUnitWeight.
      */
-    public double getAverageUnitWeight()
+    public Mass getAverageUnitWeight()
     {
         return this.averageUnitWeight;
     }
@@ -112,7 +116,7 @@ public class Product implements Serializable
     /**
      * @return Returns the unitMarketPrice.
      */
-    public double getUnitMarketPrice()
+    public Money getUnitMarketPrice()
     {
         return this.unitMarketPrice;
     }
@@ -120,14 +124,12 @@ public class Product implements Serializable
     /**
      * @param unitMarketPrice The unitMarketPrice to set.
      */
-    public void setUnitMarketPrice(final double unitMarketPrice)
+    public void setUnitMarketPrice(final Money unitMarketPrice)
     {
         this.unitMarketPrice = unitMarketPrice;
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
+    /** {@inheritDoc} */
     @Override
     public String toString()
     {

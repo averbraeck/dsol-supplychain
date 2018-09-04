@@ -38,62 +38,50 @@ public class CentralDatabaseContentStore extends EventProducer implements Conten
         this.databaseWorker = databaseWorker;
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.content.ContentStoreInterface#addContent(nl.tudelft.simulation.supplychain.content.Content,
-     *      boolean)
-     */
+    /** {@inheritDoc} */
+    @Override
     public void addContent(Content content, boolean sent)
     {
         this.databaseWorker.addContent(content, sent);
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.content.ContentStoreInterface#removeContent(nl.tudelft.simulation.supplychain.content.Content,
-     *      boolean)
-     */
+    /** {@inheritDoc} */
+    @Override
     public void removeContent(Content content, boolean sent)
     {
         this.databaseWorker.removeContent(content, sent);
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.content.ContentStoreInterface#removeSentReceivedContent(nl.tudelft.simulation.supplychain.content.Content,
-     *      boolean)
-     */
+    /** {@inheritDoc} */
+    @Override
     public void removeSentReceivedContent(Content content, boolean sent)
     {
         this.databaseWorker.removeSentReceivedContent(content, sent);
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.content.ContentStoreInterface#removeAllContent(java.io.Serializable)
-     */
+    /** {@inheritDoc} */
+    @Override
     public void removeAllContent(Serializable internalDemandID)
     {
         this.databaseWorker.removeAllContent(internalDemandID);
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.content.ContentStoreInterface#getContentList(java.io.Serializable,
-     *      java.lang.Class)
-     */
-    public List<Content> getContentList(Serializable internalDemandID, Class clazz)
+    /** {@inheritDoc} */
+    @Override
+    public <C extends Content> List<C> getContentList(Serializable internalDemandID, Class<C> clazz)
     {
         return this.databaseWorker.getContentList(internalDemandID, clazz, this.owner.getName());
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.content.ContentStoreInterface#getContentList(java.io.Serializable,
-     *      java.lang.Class, boolean)
-     */
-    public List<Content> getContentList(Serializable internalDemandID, Class clazz, boolean sent)
+    /** {@inheritDoc} */
+    @Override
+    public <C extends Content> List<C> getContentList(Serializable internalDemandID, Class<C> clazz, boolean sent)
     {
         return this.databaseWorker.getContentList(internalDemandID, clazz, this.owner.getName(), sent);
     }
 
-    /**
-     * @see nl.tudelft.simulation.supplychain.content.ContentStoreInterface#getOwner()
-     */
+    /** {@inheritDoc} */
+    @Override
     public SupplyChainActor getOwner()
     {
         return this.owner;

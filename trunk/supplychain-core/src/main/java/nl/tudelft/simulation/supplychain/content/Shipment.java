@@ -2,6 +2,8 @@ package nl.tudelft.simulation.supplychain.content;
 
 import java.io.Serializable;
 
+import org.djunits.value.vdouble.scalar.Money;
+
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.product.Product;
 
@@ -29,7 +31,7 @@ public class Shipment extends Content
     private double amount;
 
     /** the total value of the cargo */
-    private double value;
+    private Money totalCargoValue;
 
     /** is the shipment in transit? */
     private boolean inTransit = false;
@@ -44,16 +46,16 @@ public class Shipment extends Content
      * @param order the order for which this is the shipment
      * @param product the product type
      * @param amount the number of product units
-     * @param value the price of the cargo
+     * @param totalCargoValue the price of the cargo
      */
     public Shipment(final SupplyChainActor sender, final SupplyChainActor receiver, final Serializable internalDemandID,
-            final Order order, final Product product, final double amount, final double value)
+            final Order order, final Product product, final double amount, final Money totalCargoValue)
     {
         super(sender, receiver, internalDemandID);
         this.order = order;
         this.product = product;
         this.amount = amount;
-        this.value = value;
+        this.totalCargoValue = totalCargoValue;
     }
 
     /**
@@ -105,10 +107,8 @@ public class Shipment extends Content
         return this.amount;
     }
 
-    /**
-     * Returns the product.
-     * @return Product
-     */
+    /** {@inheritDoc} */
+    @Override
     public Product getProduct()
     {
         return this.product;
@@ -118,17 +118,16 @@ public class Shipment extends Content
      * Returns the price per unit.
      * @return double
      */
-    public double getValue()
+    public Money getTotalCargoValue()
     {
-        return this.value;
+        return this.totalCargoValue;
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
+    /** {@inheritDoc} */
+    @Override
     public String toString()
     {
         return super.toString() + ", content [" + this.getAmount() + " units of " + this.getProduct().getName() + ", value = "
-                + this.getValue() + "], [belongs to " + this.getOrder().toString() + "]";
+                + this.getTotalCargoValue() + "], [belongs to " + this.getOrder().toString() + "]";
     }
 }
