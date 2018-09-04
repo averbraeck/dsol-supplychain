@@ -1,0 +1,89 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>nl.tudelft.simulation</groupId>
+  <artifactId>supplychain-core</artifactId>
+  <version>3.0</version>
+
+  <name>Generic supplychain definitions package for supplychain simulation</name>
+  <description>Generic supplychain definitions package for supplychain simulation</description>
+  <packaging>pom</packaging>
+
+  <organization>
+    <name>Delft University of Technology</name>
+    <url>www.simulation.tudelft.nl</url>
+  </organization>
+
+  <inceptionYear>2003</inceptionYear>
+
+  <properties>
+    <jdk.version>1.8</jdk.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven-jar-plugin.version>2.5</maven-jar-plugin.version>
+    <maven.compiler.version>3.7.0</maven.compiler.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>nl.tudelft.simulation</groupId>
+      <artifactId>actor</artifactId>
+      <version>3.0</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <directory>target</directory>
+    <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
+    <testSourceDirectory>${basedir}/src/test/java</testSourceDirectory>
+    <outputDirectory>${basedir}/target/classes</outputDirectory>
+    <testOutputDirectory> ${basedir}/target/test-classes</testOutputDirectory>
+
+    <resources>
+      <resource>
+        <directory>${basedir}/src/main/resources</directory>
+        <filtering>false</filtering>
+      </resource>
+    </resources>
+    <testResources>
+      <testResource>
+        <directory>${basedir}/src/test/resources</directory>
+        <filtering>false</filtering>
+      </testResource>
+    </testResources>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven.compiler.version}</version>
+        <configuration>
+          <source>${jdk.version}</source>
+          <target>${jdk.version}</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <repositories>
+
+    <repository>
+      <name>DSOL Public Repository</name>
+      <id>dsol</id>
+      <url>http://simulation.tudelft.nl/maven</url>
+    </repository>
+
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>apache</id>
+      <name>apache</name>
+      <url>http://repo.maven.apache.org/maven2</url>
+    </repository>
+
+  </repositories>
+
+</project>
