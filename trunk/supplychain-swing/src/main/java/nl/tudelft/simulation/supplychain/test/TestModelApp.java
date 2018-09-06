@@ -8,7 +8,6 @@ import javax.naming.NamingException;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
@@ -25,7 +24,6 @@ import nl.tudelft.simulation.dsol.gui.swing.DSOLPanel;
 import nl.tudelft.simulation.dsol.simulators.SimulatorInterface;
 import nl.tudelft.simulation.event.Event;
 import nl.tudelft.simulation.jstats.streams.MersenneTwister;
-import nl.tudelft.simulation.unit.simulator.DEVSAnimatorUnit;
 import nl.tudelft.simulation.unit.simulator.DEVSRealTimeClockUnit;
 import nl.tudelft.simulation.unit.simulator.ModelInterfaceUnit;
 import nl.tudelft.simulation.unit.simulator.SimTimeUnit;

@@ -58,7 +58,7 @@ public class TestModel implements ModelInterfaceUnit
 
     /** {@inheritDoc} */
     @Override
-    public void constructModel(final SimulatorInterface simulator) throws RemoteException
+    public void constructModel(final SimulatorInterface<Time, Duration, SimTimeUnit> simulator) throws RemoteException
     {
         try
         {

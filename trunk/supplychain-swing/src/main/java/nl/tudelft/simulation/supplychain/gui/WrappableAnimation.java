@@ -9,7 +9,6 @@ import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.dsol.SimRuntimeException;
 import nl.tudelft.simulation.unit.simulator.DEVSAnimatorUnit;
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorUnit;
 
 /**
  * Requirements for demonstration that can be shown in the SuperDemo.

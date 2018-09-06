@@ -16,7 +16,6 @@ import nl.tudelft.simulation.dsol.animation.interpolation.LinearInterpolation;
 import nl.tudelft.simulation.language.d3.BoundingBox;
 import nl.tudelft.simulation.language.d3.DirectedPoint;
 import nl.tudelft.simulation.supplychain.content.Content;
-import nl.tudelft.simulation.supplychain.content.Shipment;
 import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 
 /**
@@ -90,53 +89,17 @@ public class ContentAnimation implements Locatable, Serializable
      */
     public ContentAnimation(final Content content, final Duration delay, final URL imageURL)
     {
-        this.content = content;
-        if (Shipment.class.isAssignableFrom(content.getClass()))
-        {
-            // support for customized product animation
-            String productName = content.getProduct().getName();
-            if (productName.equalsIgnoreCase("Becks") | productName.equalsIgnoreCase("Heineken")
-                    | productName.equalsIgnoreCase("Urquell"))
-            {
-                if (productName.equalsIgnoreCase("Becks"))
-                {
-                    this.imageURLlName =
-                            Content.class.getResource("/nl/tudelft/simulation/supplychain/images/Becks.gif").toString();
-                }
-                else if (productName.equalsIgnoreCase("Heineken"))
-                {
-                    this.imageURLlName =
-                            Content.class.getResource("/nl/tudelft/simulation/supplychain/images/Heineken.gif").toString();
-                }
-                else if (productName.equalsIgnoreCase("Urquell"))
-                {
-                    this.imageURLlName =
-                            Content.class.getResource("/nl/tudelft/simulation/supplychain/images/Urquell.gif").toString();
-
-                }
-                else
-                {
-                    // should not happen...
-                    this.imageURLlName = imageURL.toString();
-                }
-            }
-            else
-            {
-                this.imageURLlName = imageURL.toString();
-
-            }
-        }
-        else
-        {
-            this.imageURLlName = imageURL.toString();
-        }
-        this.delay = delay;
         try
         {
             if (imageURL == null)
             {
                 throw new IllegalArgumentException("imageURL should not be null. Could not find image");
             }
+
+            this.content = content;
+            this.imageURLlName = imageURL.toString();
+            this.delay = delay;
+
             // We set the simulator
             this.simulator = content.getSender().getSimulator();
 
@@ -146,12 +109,12 @@ public class ContentAnimation implements Locatable, Serializable
                     content.getReceiver().getLocation());
 
             // We load the image
-            this.imageRenderable = new SingleImageRenderable(this, this.simulator, imageURL); 
+            this.imageRenderable = new SingleImageRenderable(this, this.simulator, imageURL);
             // new GISContentAnimation(this, this.simulator, imageURL);
 
             // We do rotate and thus not flip the image
             this.imageRenderable.setRotate(false);
-            
+
             // scale for now.
             this.imageRenderable.setScale(true);
 

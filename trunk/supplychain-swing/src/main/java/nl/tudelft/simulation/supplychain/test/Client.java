@@ -20,7 +20,6 @@ import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.jstats.charts.xy.XYChart;
 import nl.tudelft.simulation.jstats.distributions.DistConstant;
 import nl.tudelft.simulation.jstats.distributions.DistExponential;
-import nl.tudelft.simulation.jstats.streams.MersenneTwister;
 import nl.tudelft.simulation.jstats.streams.StreamInterface;
 import nl.tudelft.simulation.language.d3.BoundingBox;
 import nl.tudelft.simulation.messaging.devices.reference.FaxDevice;
