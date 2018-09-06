@@ -56,15 +56,15 @@ import nl.tudelft.simulation.unit.simulator.SimTimeUnit;
  * source code and binary code of this software is proprietary information of Delft University of Technology.
  * @author <a href="https://www.tudelft.nl/averbraeck" target="_blank">Alexander Verbraeck</a>
  */
-public class Shell extends Customer
+public class Client extends Customer
 {
     /** the serial version uid */
     private static final long serialVersionUID = 12L;
 
-    /** the product that Shell wants to buy */
+    /** the product that Client wants to buy */
     private Product product;
 
-    /** the fixed retailer where Shell buys */
+    /** the fixed retailer where Client buys */
     private Retailer retailer;
 
     /**
@@ -78,7 +78,7 @@ public class Shell extends Customer
      * @throws RemoteException remote simulator error
      * @throws NamingException
      */
-    public Shell(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position, final Bank bank,
+    public Client(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position, final Bank bank,
             final Money initialBankAccount, final Product product, final Retailer retailer)
             throws RemoteException, NamingException
     {
@@ -86,11 +86,11 @@ public class Shell extends Customer
         this.product = product;
         this.retailer = retailer;
         this.init();
-        // Let's give Shell its corresponding image
+        // Let's give Client its corresponding image
         if (simulator instanceof AnimatorInterface)
         {
             new SingleImageRenderable(this, simulator,
-                    Dell.class.getResource("/nl/tudelft/simulation/supplychain/images/Market.gif"));
+                    Factory.class.getResource("/nl/tudelft/simulation/supplychain/images/Market.gif"));
         }
     }
 
@@ -105,7 +105,7 @@ public class Shell extends Customer
         Time current = this.simulator.getSimulatorTime().get();
         //
         // give the actor a fax device which is checked every hour
-        FaxDevice fax = new FaxDevice("ShellFax", this.simulator);
+        FaxDevice fax = new FaxDevice("ClientFax", this.simulator);
         super.addSendingDevice(fax);
         MessageHandlerInterface secretary = new HandleAllMessages(this);
         super.addReceivingDevice(fax, secretary, new DistConstantDurationUnit(hour));
@@ -120,31 +120,31 @@ public class Shell extends Customer
         dgRole.addDemandGenerator(this.product, demand);
         super.setDemandGenerationRole(dgRole);
         //
-        // create the buying role for Shell
+        // create the buying role for Client
         BuyingRole buyingRole = new BuyingRole(this, super.simulator, super.bankAccount);
         super.setBuyingRole(buyingRole);
         //
-        // tell Shell to use the InternalDemandHandler
+        // tell Client to use the InternalDemandHandler
         InternalDemandHandlerRFQ internalDemandHandler =
                 new InternalDemandHandlerRFQ(this, new Duration(24.0, DurationUnit.HOUR), null); // XXX: Why does it need stock?
         internalDemandHandler.addSupplier(this.product, this.retailer);
         super.addContentHandler(InternalDemand.class, internalDemandHandler);
         //
-        // tell Shell to use the Quotehandler to handle quotes
+        // tell Client to use the Quotehandler to handle quotes
         HandlerInterface quoteHandler = new QuoteHandlerAll(this, QuoteHandler.SORT_PRICE_DATE_DISTANCE,
                 new DistConstantDurationUnit(new Duration(2.0, DurationUnit.HOUR)), 0.4, 0.1);
         super.addContentHandler(Quote.class, quoteHandler);
         //
-        // Shell has the standard order confirmation handler
+        // Client has the standard order confirmation handler
         HandlerInterface confirmationHandler = new OrderConfirmationHandler(this);
         super.addContentHandler(OrderConfirmation.class, confirmationHandler);
         //
-        // Shell will get a bill in the end
+        // Client will get a bill in the end
         HandlerInterface billHandler = new BillHandler(this, super.bankAccount, BillHandler.PAYMENT_IMMEDIATE,
                 new DistConstantDurationUnit(Duration.ZERO));
         super.addContentHandler(Bill.class, billHandler);
         //
-        // hopefully, Shell will get laptop shipments
+        // hopefully, Client will get laptop shipments
         HandlerInterface shipmentHandler = new ShipmentHandlerConsume(this);
         super.addContentHandler(Shipment.class, shipmentHandler);
         //

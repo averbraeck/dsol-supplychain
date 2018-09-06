@@ -36,14 +36,14 @@ import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
 import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 
 /**
- * The ComputerShop named Dell. <br>
+ * The ComputerShop named Factory. <br>
  * <br>
  * Copyright (c) 2003-2018 Delft University of Technology, Jaffalaan 5, 2628 BX Delft, the Netherlands. All rights reserved. See
  * for project information <a href="https://www.simulation.tudelft.nl/" target="_blank">www.simulation.tudelft.nl</a>. The
  * source code and binary code of this software is proprietary information of Delft University of Technology.
  * @author <a href="https://www.tudelft.nl/averbraeck" target="_blank">Alexander Verbraeck</a>
  */
-public class Dell extends Manufacturer
+public class Factory extends Manufacturer
 {
     /** the serial version uid */
     private static final long serialVersionUID = 12L;
@@ -59,7 +59,7 @@ public class Dell extends Manufacturer
      * @throws RemoteException remote simulator error
      * @throws NamingException
      */
-    public Dell(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position, final Role[] roles,
+    public Factory(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position, final Role[] roles,
             final Bank bank, final Product product, final double amount) throws RemoteException, NamingException
     {
         this(name, simulator, position, roles, bank, new Money(0.0, MoneyUnit.USD), product, amount);
@@ -77,7 +77,7 @@ public class Dell extends Manufacturer
      * @throws RemoteException remote simulator error
      * @throws NamingException
      */
-    public Dell(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position, final Role[] roles,
+    public Factory(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position, final Role[] roles,
             final Bank bank, final Money initialBankAccount, final Product product, final double amount)
             throws RemoteException, NamingException
     {
@@ -89,13 +89,13 @@ public class Dell extends Manufacturer
             _stock.addStock(product, amount, product.getUnitMarketPrice().multiplyBy(amount));
             super.setInitialStock(_stock);
         }
-        // We initialize Dell
+        // We initialize Factory
         this.init();
-        // Let's give Dell its corresponding image
+        // Let's give Factory its corresponding image
         if (simulator instanceof AnimatorInterface)
         {
             new SingleImageRenderable(this, simulator,
-                    Dell.class.getResource("/nl/tudelft/simulation/supplychain/images/Manufacturer.gif"));
+                    Factory.class.getResource("/nl/tudelft/simulation/supplychain/images/Manufacturer.gif"));
         }
     }
 
@@ -105,12 +105,12 @@ public class Dell extends Manufacturer
     public void init() throws RemoteException
     {
         // give the actor a fax device which is checked every hour
-        FaxDevice fax = new FaxDevice("DellFax", this.simulator);
+        FaxDevice fax = new FaxDevice("FactoryFax", this.simulator);
         super.addSendingDevice(fax);
         MessageHandlerInterface secretary = new HandleAllMessages(this);
         super.addReceivingDevice(fax, secretary, new DistConstantDurationUnit(new Duration(1.0, DurationUnit.HOUR)));
         //
-        // tell Dell to use the RFQhandler to handle RFQs
+        // tell Factory to use the RFQhandler to handle RFQs
         HandlerInterface rfqHandler = new RequestForQuoteHandler(this, super.stock, 1.2,
                 new DistConstantDurationUnit(new Duration(1.23, DurationUnit.HOUR)), TransportMode.PLANE);
         super.addContentHandler(RequestForQuote.class, rfqHandler);
@@ -119,7 +119,7 @@ public class Dell extends Manufacturer
         HandlerInterface orderHandler = new OrderHandlerStock(this, super.stock);
         super.addContentHandler(Order.class, orderHandler);
         //
-        // hopefully, Dell will get payments in the end
+        // hopefully, Factory will get payments in the end
         HandlerInterface paymentHandler = new PaymentHandler(this, super.bankAccount);
         super.addContentHandler(Payment.class, paymentHandler);
         //

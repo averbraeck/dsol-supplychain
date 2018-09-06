@@ -83,19 +83,19 @@ public class TestModel implements ModelInterfaceUnit
                     new Product("Laptop", Unit.PIECE, new Money(1400.0, MoneyUnit.USD), new Mass(6.5, MassUnit.KILOGRAM), 0.0);
 
             // create a manufacturer
-            Dell dell = new Dell("Dell", this.devsSimulator, new Point3d(200, 200, 0), new Role[] {}, ing,
+            Factory Factory = new Factory("Factory", this.devsSimulator, new Point3d(200, 200, 0), new Role[] {}, ing,
                     new Money(50000.0, MoneyUnit.USD), laptop, 1000);
-            dell.setContentStore(new LeanContentStore(dell, this.devsSimulator));
+            Factory.setContentStore(new LeanContentStore(Factory, this.devsSimulator));
 
             // create a retailer
             PCShop pcShop = new PCShop("PCshop", this.devsSimulator, new Point3d(20, 200, 0), new Role[] {}, ing,
-                    new Money(50000.0, MoneyUnit.USD), laptop, 10, dell);
+                    new Money(50000.0, MoneyUnit.USD), laptop, 10, Factory);
             pcShop.setContentStore(new LeanContentStore(pcShop, this.devsSimulator));
 
             // create a customer
-            Shell shell = new Shell("Shell", this.devsSimulator, new Point3d(100, 100, 0), ing,
+            Client Client = new Client("Client", this.devsSimulator, new Point3d(100, 100, 0), ing,
                     new Money(1500000.0, MoneyUnit.USD), laptop, pcShop);
-            shell.setContentStore(new LeanContentStore(shell, this.devsSimulator));
+            Client.setContentStore(new LeanContentStore(Client, this.devsSimulator));
 
             // schedule a remark that the simulation is ready
             Duration endTime = new Duration(simulator.getReplication().getTreatment().getRunLength().doubleValue() - 0.001,
@@ -104,9 +104,9 @@ public class TestModel implements ModelInterfaceUnit
             
             // Create the animation.
             ContentAnimator contentAnimator = new ContentAnimator(this.devsSimulator);
-            contentAnimator.subscribe(dell);
+            contentAnimator.subscribe(Factory);
             contentAnimator.subscribe(pcShop);
-            contentAnimator.subscribe(shell);
+            contentAnimator.subscribe(Client);
         }
         catch (Exception e)
         {

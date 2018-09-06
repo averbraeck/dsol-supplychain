@@ -102,19 +102,19 @@ public class TestModelCentralDatabase implements ModelInterfaceUnit
             DatabaseWorkerInterface dbw = new CachingDatabaseWorker("TestModel_simulation");
 
             // create a manufacturer
-            Dell dell = new Dell("Dell", this.devsSimulator, new Point3d(200, 200, 0), new Role[] {}, ing,
+            Factory Factory = new Factory("Factory", this.devsSimulator, new Point3d(200, 200, 0), new Role[] {}, ing,
                     new Money(50000.0, MoneyUnit.USD), laptop, 1000);
-            dell.setContentStore(new CentralDatabaseContentStore(dell, dbw));
+            Factory.setContentStore(new CentralDatabaseContentStore(Factory, dbw));
 
             // create a retailer
             PCShop pcShop = new PCShop("PCshop", this.devsSimulator, new Point3d(20, 200, 0), new Role[] {}, ing,
-                    new Money(50000.0, MoneyUnit.USD), laptop, 10, dell);
+                    new Money(50000.0, MoneyUnit.USD), laptop, 10, Factory);
             pcShop.setContentStore(new CentralDatabaseContentStore(pcShop, dbw));
 
             // create a customer
-            Shell shell = new Shell("Shell", this.devsSimulator, new Point3d(100, 100, 0), ing,
+            Client Client = new Client("Client", this.devsSimulator, new Point3d(100, 100, 0), ing,
                     new Money(1500000.0, MoneyUnit.USD), laptop, pcShop);
-            shell.setContentStore(new CentralDatabaseContentStore(shell, dbw));
+            Client.setContentStore(new CentralDatabaseContentStore(Client, dbw));
 
             // schedule a remark that the simulation is ready
             Duration endTime = new Duration(simulator.getReplication().getTreatment().getRunLength().doubleValue() - 0.001,

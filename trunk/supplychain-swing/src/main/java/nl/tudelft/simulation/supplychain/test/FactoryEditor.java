@@ -1,5 +1,5 @@
 /*
- * @(#)DellEditor.java May 11, 2004
+ * @(#)FactoryEditor.java May 11, 2004
  * 
  * Copyright (c) 2003-2006 Delft University of Technology, Jaffalaan 5, 2628 BX
  * Delft, the Netherlands. All rights reserved.
@@ -37,7 +37,7 @@ import nl.tudelft.simulation.supplychain.banking.BankAccount;
  * @author <a href="http://www.tbm.tudelft.nl/webstaf/stijnh/index.htm">Stijn-Pieter van Houten </a>
  * @version $$Revision: 1.1 $$ $$Date: 2009/03/10 22:54:03 $$
  */
-public class DellEditor extends AbstractCellEditor implements TableCellEditor
+public class FactoryEditor extends AbstractCellEditor implements TableCellEditor
 {
     /** the serial version uid */
     private static final long serialVersionUID = 12L;
@@ -51,10 +51,10 @@ public class DellEditor extends AbstractCellEditor implements TableCellEditor
     /**
      * constructs a new
      */
-    public DellEditor()
+    public FactoryEditor()
     {
         super();
-        System.out.println("DellEditor has been instantiated");
+        System.out.println("FactoryEditor has been instantiated");
     }
 
     /** {@inheritDoc} */
@@ -115,10 +115,10 @@ public class DellEditor extends AbstractCellEditor implements TableCellEditor
         @Override
         public synchronized void actionPerformed(final ActionEvent event)
         {
-            DellEditor.this.value = this.chooser.getColor();
-            DellEditor.this.stopCellEditing();
-            DellEditor.this.cellPanel.setBackground(DellEditor.this.value.darker());
-            DellEditor.this.cellPanel.paintImmediately(DellEditor.this.cellPanel.getBounds());
+            FactoryEditor.this.value = this.chooser.getColor();
+            FactoryEditor.this.stopCellEditing();
+            FactoryEditor.this.cellPanel.setBackground(FactoryEditor.this.value.darker());
+            FactoryEditor.this.cellPanel.paintImmediately(FactoryEditor.this.cellPanel.getBounds());
         }
     }
 
@@ -131,7 +131,7 @@ public class DellEditor extends AbstractCellEditor implements TableCellEditor
         @Override
         public void actionPerformed(final ActionEvent e)
         {
-            DellEditor.this.cancelCellEditing();
+            FactoryEditor.this.cancelCellEditing();
         }
     }
 
