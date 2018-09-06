@@ -1,0 +1,25 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>nl.tudelft.simulation</groupId>
+    <version>3.0</version>
+    <artifactId>supplychain-base</artifactId>
+    <relativePath>../supplychain-base/pom.xml</relativePath>
+  </parent>
+
+  <artifactId>supplychain-demo</artifactId>
+  <name>Supply Chain Simulation demos</name>
+  <description>Supply Chain Simulation demonstrations</description>
+
+  <packaging>jar</packaging>
+
+  <dependencies>
+    <dependency>
+      <groupId>nl.tudelft.simulation</groupId>
+      <artifactId>supplychain-swing</artifactId>
+    </dependency>
+  </dependencies>
+
+</project>
