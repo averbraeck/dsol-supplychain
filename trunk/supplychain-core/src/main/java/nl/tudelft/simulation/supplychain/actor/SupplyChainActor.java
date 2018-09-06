@@ -46,9 +46,6 @@ public abstract class SupplyChainActor extends Actor
     /** */
     private static final long serialVersionUID = 1L;
 
-    /** true for debugging */
-    private static final boolean DEBUG = false;
-
     /** the bank account of the actor */
     protected BankAccount bankAccount = null;
 
@@ -126,6 +123,9 @@ public abstract class SupplyChainActor extends Actor
     @Override
     public boolean handleContent(final Serializable content)
     {
+        logger.info(getName() + ".handleContent: " + content.toString());
+        System.out.println(
+                this.simulator.getSimulatorTime().toString() + "  " + getName() + ".handleContent: " + content.toString());
         // save content in the content store
         this.contentStore.addContent((Content) content, false);
         Iterator<Role> roleIterator = this.roles.iterator();

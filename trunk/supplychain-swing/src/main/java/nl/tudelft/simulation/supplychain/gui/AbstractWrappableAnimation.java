@@ -48,6 +48,7 @@ import nl.tudelft.simulation.dsol.animation.D2.AnimationPanel;
 import nl.tudelft.simulation.dsol.animation.D2.GisRenderable2D;
 import nl.tudelft.simulation.dsol.experiment.Replication;
 import nl.tudelft.simulation.dsol.experiment.ReplicationMode;
+import nl.tudelft.simulation.jstats.streams.MersenneTwister;
 import nl.tudelft.simulation.unit.simulator.DEVSAnimatorUnit;
 import nl.tudelft.simulation.unit.simulator.ModelInterfaceUnit;
 import nl.tudelft.simulation.unit.simulator.SimTimeUnit;
@@ -114,9 +115,11 @@ public abstract class AbstractWrappableAnimation implements WrappableAnimation, 
         DEVSAnimatorUnit animator = new DEVSAnimatorUnit();
         animator.setPauseOnError(true);
         animator.setAnimationDelay(20); // 50 Hz animation update
-        animator.initialize(
-                new Replication("rep" + ++replication, new SimTimeUnit(startTime), warmupPeriod, runLength, scModel),
-                ReplicationMode.TERMINATING);
+        Replication<Time, Duration, SimTimeUnit> rep =
+                new Replication<>("rep" + ++this.replication, new SimTimeUnit(startTime), warmupPeriod, runLength, scModel);
+        animator.initialize(rep, ReplicationMode.TERMINATING);
+        animator.getReplication().getExperiment().setSimulator(animator);
+        rep.getStreams().put("default", new MersenneTwister(this.replication));
         return animator;
     }
 
@@ -138,9 +141,11 @@ public abstract class AbstractWrappableAnimation implements WrappableAnimation, 
         DEVSAnimatorUnit animator = new DEVSAnimatorUnit();
         animator.setPauseOnError(true);
         animator.setAnimationDelay(20); // 50 Hz animation update
-        animator.initialize(
-                new Replication("rep" + replicationNumber, new SimTimeUnit(startTime), warmupPeriod, runLength, scModel),
-                ReplicationMode.TERMINATING);
+        Replication<Time, Duration, SimTimeUnit> rep =
+                new Replication<>("rep" + replicationNumber, new SimTimeUnit(startTime), warmupPeriod, runLength, scModel);
+        animator.initialize(rep, ReplicationMode.TERMINATING);
+        animator.getReplication().getExperiment().setSimulator(animator);
+        rep.getStreams().put("default", new MersenneTwister(replicationNumber));
         return animator;
     }
 
@@ -150,7 +155,6 @@ public abstract class AbstractWrappableAnimation implements WrappableAnimation, 
     public DEVSAnimatorUnit buildAnimator(final Time startTime, final Duration warmupPeriod, final Duration runLength,
             final Rectangle rect, final boolean eoc) throws SimRuntimeException, NamingException
     {
-
         this.exitOnClose = eoc;
         this.savedStartTime = startTime;
         this.savedWarmupPeriod = warmupPeriod;
@@ -211,7 +215,7 @@ public abstract class AbstractWrappableAnimation implements WrappableAnimation, 
                     FileWriter writer = new FileWriter(f);
                     AbstractWrappableAnimation.this.frameProperties.store(writer, "OTS user settings");
                 }
-                catch (@SuppressWarnings("unused") IOException exception)
+                catch (IOException exception)
                 {
                     System.err.println("Could not store properties at " + propertiesFile + ".");
                 }
@@ -228,7 +232,7 @@ public abstract class AbstractWrappableAnimation implements WrappableAnimation, 
             FileReader reader = new FileReader(propertiesFile);
             this.frameProperties.load(reader);
         }
-        catch (@SuppressWarnings("unused") IOException ioe)
+        catch (IOException ioe)
         {
             // ok, use defaults
         }

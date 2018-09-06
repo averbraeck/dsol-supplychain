@@ -15,10 +15,12 @@ import nl.tudelft.simulation.actor.messagehandlers.HandleAllMessages;
 import nl.tudelft.simulation.actor.messagehandlers.MessageHandlerInterface;
 import nl.tudelft.simulation.content.HandlerInterface;
 import nl.tudelft.simulation.dsol.animation.D2.SingleImageRenderable;
+import nl.tudelft.simulation.dsol.experiment.Replication;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.jstats.charts.xy.XYChart;
 import nl.tudelft.simulation.jstats.distributions.DistConstant;
 import nl.tudelft.simulation.jstats.distributions.DistExponential;
+import nl.tudelft.simulation.jstats.streams.MersenneTwister;
 import nl.tudelft.simulation.jstats.streams.StreamInterface;
 import nl.tudelft.simulation.language.d3.BoundingBox;
 import nl.tudelft.simulation.messaging.devices.reference.FaxDevice;
@@ -44,6 +46,7 @@ import nl.tudelft.simulation.supplychain.roles.DemandGenerationRole;
 import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
 import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
+import nl.tudelft.simulation.unit.simulator.SimTimeUnit;
 
 /**
  * Customer. <br>
@@ -96,6 +99,7 @@ public class Shell extends Customer
      */
     public void init() throws RemoteException
     {
+        Replication<Time, Duration, SimTimeUnit> r = this.simulator.getReplication();
         StreamInterface stream = this.simulator.getReplication().getStream("default");
         Duration hour = new Duration(1.0, DurationUnit.HOUR);
         Time current = this.simulator.getSimulatorTime().get();

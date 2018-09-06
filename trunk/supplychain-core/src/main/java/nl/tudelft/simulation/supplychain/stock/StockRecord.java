@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.djunits.unit.DurationUnit;
+import org.djunits.unit.MoneyUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Money;
 
@@ -45,7 +46,7 @@ public class StockRecord implements Serializable
     private double orderedAmount;
 
     /** the costprice of the total amount of these products in stock */
-    private Money costprice;
+    private Money costprice = new Money(0.0, MoneyUnit.USD);
 
     /** the depreciation factor per day */
     private double dailyDepreciation = 0.0;
