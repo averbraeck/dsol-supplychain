@@ -161,6 +161,6 @@ public class Shell extends Customer
     @Override
     public Bounds getBounds()
     {
-        return new BoundingBox(50.0, 50.0, 0.0);
+        return new BoundingBox(25.0, 25.0, 1.0);
     }
 }

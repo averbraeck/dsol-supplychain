@@ -50,7 +50,7 @@ public class ContentAnimation implements Locatable, Serializable
     private String imageURLlName = null;
 
     /** the image renderable */
-    private GISContentAnimation imageRenderable = null;
+    private SingleImageRenderable imageRenderable = null;
 
     /** the animation delay for the content */
     private Duration delay = Duration.ZERO;
@@ -146,10 +146,14 @@ public class ContentAnimation implements Locatable, Serializable
                     content.getReceiver().getLocation());
 
             // We load the image
-            this.imageRenderable = new GISContentAnimation(this, this.simulator, imageURL);
+            this.imageRenderable = new SingleImageRenderable(this, this.simulator, imageURL); 
+            // new GISContentAnimation(this, this.simulator, imageURL);
 
             // We do rotate and thus not flip the image
             this.imageRenderable.setRotate(false);
+            
+            // scale for now.
+            this.imageRenderable.setScale(true);
 
             // We schedule its destroy.
             this.simulator.scheduleEventRel(delay, this, this.imageRenderable, "destroy", null);
@@ -164,14 +168,16 @@ public class ContentAnimation implements Locatable, Serializable
     @Override
     public DirectedPoint getLocation() throws RemoteException
     {
-        return this.linearInterpolation.getLocation(this.simulator.getSimulatorTime().get().si);
+        DirectedPoint dp = this.linearInterpolation.getLocation(this.simulator.getSimulatorTime().get().si);
+        return new DirectedPoint(dp.x, dp.y, 100.0);
     }
 
     /** {@inheritDoc} */
     @Override
     public Bounds getBounds() throws RemoteException
     {
-        return new BoundingBox(0.6, 0.6, 2.0);
+        // determines the size on the screen (!)
+        return new BoundingBox(10, 10, 2.0);
     }
 
     /**

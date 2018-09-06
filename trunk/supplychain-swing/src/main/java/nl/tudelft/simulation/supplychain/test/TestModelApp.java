@@ -67,19 +67,19 @@ public class TestModelApp extends DSOLApplication
         ctx.updateLoggers();
         
         ModelInterfaceUnit model = new TestModel();
-        DEVSAnimatorUnit animator = new DEVSAnimatorUnit();
-        // DEVSRealTimeClockUnit animator = new DEVSRealTimeClockUnit();
+        // DEVSAnimatorUnit animator = new DEVSAnimatorUnit();
+        DEVSRealTimeClockUnit animator = new DEVSRealTimeClockUnit();
         Replication<Time, Duration, SimTimeUnit> replication = new Replication<>("rep1", new SimTimeUnit(Time.ZERO),
                 Duration.ZERO, new Duration(1800.0, DurationUnit.HOUR), model);
         animator.setPauseOnError(true);
         animator.setAnimationDelay(20); // 50 Hz animation update
         replication.getStreams().put("default", new MersenneTwister(1L));
         animator.initialize(replication, ReplicationMode.TERMINATING);
-        // animator.setSpeedFactor(10000.0);
+        animator.setSpeedFactor(10000.0);
         
         DSOLPanel<Time, Duration, SimTimeUnit> panel = new DSOLPanel<Time, Duration, SimTimeUnit>(model, animator);
 
-        Rectangle2D extent = new Rectangle2D.Double(-50, -50, 300, 100);
+        Rectangle2D extent = new Rectangle2D.Double(-100, 50, 400, 200);
         Dimension size = new Dimension(1024, 768);
         AnimationPanel animationPanel = new AnimationPanel(extent, size, animator);
         panel.getTabbedPane().addTab(0, "animation", animationPanel);

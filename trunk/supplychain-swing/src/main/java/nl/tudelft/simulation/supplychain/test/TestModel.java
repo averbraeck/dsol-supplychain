@@ -18,6 +18,7 @@ import nl.tudelft.simulation.dsol.animation.D2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.dsol.simulators.SimulatorInterface;
 import nl.tudelft.simulation.language.d3.DirectedPoint;
+import nl.tudelft.simulation.supplychain.animation.ContentAnimator;
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.content.LeanContentStore;
 import nl.tudelft.simulation.supplychain.product.Product;
@@ -100,6 +101,12 @@ public class TestModel implements ModelInterfaceUnit
             Duration endTime = new Duration(simulator.getReplication().getTreatment().getRunLength().doubleValue() - 0.001,
                     DurationUnit.SI);
             this.devsSimulator.scheduleEventRel(endTime, this, this, "endSimulation", new Serializable[] {});
+            
+            // Create the animation.
+            ContentAnimator contentAnimator = new ContentAnimator(this.devsSimulator);
+            contentAnimator.subscribe(dell);
+            contentAnimator.subscribe(pcShop);
+            contentAnimator.subscribe(shell);
         }
         catch (Exception e)
         {

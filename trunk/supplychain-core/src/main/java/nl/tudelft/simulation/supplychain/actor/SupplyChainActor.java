@@ -19,6 +19,7 @@ import org.djunits.value.vdouble.scalar.Money;
 
 import nl.tudelft.simulation.actor.Actor;
 import nl.tudelft.simulation.content.HandlerInterface;
+import nl.tudelft.simulation.event.EventType;
 import nl.tudelft.simulation.messaging.Message;
 import nl.tudelft.simulation.messaging.devices.components.SendingDeviceInterface;
 import nl.tudelft.simulation.messaging.devices.components.SendingReceivingDevice;
@@ -57,7 +58,13 @@ public abstract class SupplyChainActor extends Actor
 
     /** the fixed costs for this supply chain actor */
     private List<FixedCost> fixedCosts = new ArrayList<FixedCost>();
+    
+    /** the event to indicate that information has been sent. E.g., for animation. */
+    public static EventType SEND_CONTENT_EVENT = new EventType("SEND_CONTENT_EVENT");
 
+    /** DEBUG messages? */
+    public static boolean DEBUG = false;
+    
     /** the logger. */
     private static Logger logger = LogManager.getLogger(SupplyChainActor.class);
 
@@ -199,22 +206,7 @@ public abstract class SupplyChainActor extends Actor
     protected void scheduledSendContent(final Message message, final SendingDeviceInterface sendingDevice)
     {
         sendingDevice.send(message); // ignore success or failure
-        // TODO: create animation if necessary
-        /*-
-        if (this.simulator instanceof AnimatorInterface)
-        {
-            double hour = 1.0;
-            try
-            {
-                hour = TimeUnit.convert(1.0, TimeUnit.HOUR, this.simulator);
-            }
-            catch (RemoteException exception)
-            {
-                logger.fatal("scheduledSendContent", exception);
-            }
-            new ContentAnimation((Content) message.getBody(), hour);
-        }
-        */
+        fireEvent(SEND_CONTENT_EVENT, new Object[] {message.getBody(), new Duration(1.0, DurationUnit.HOUR)});
     }
 
     /**
@@ -225,21 +217,12 @@ public abstract class SupplyChainActor extends Actor
      */
     protected void scheduledSendContent(final Message message, final SendingDeviceInterface sendingDevice, final Duration delay)
     {
-        // TODO: create animation if necessary
-        /*-
-        double delayInDays = 0.0;
-        if (this.simulator instanceof AnimatorInterface)
+        fireEvent(SEND_CONTENT_EVENT, new Object[] {message.getBody(), delay});
+        if (SupplyChainActor.DEBUG)
         {
-            delayInDays = 0.0;
-            delayInDays = TimeUnit.convert(delay, TimeUnit.HOUR, TimeUnit.DAY);
-            if (SupplyChainActor.DEBUG)
-            {
-                System.out.println("SupplyChainActor: scheduledSendContent: delay in days for content: " + message.getBody()
-                        + " delay: " + delayInDays);
-            }
-            new ContentAnimation((Content) message.getBody(), delayInDays);
+            System.out.println("SupplyChainActor: scheduledSendContent: delay in days for content: " + message.getBody()
+                    + " delay: " + delay);
         }
-        */
 
         // we schedule the delayed invocation of the send content
         try
@@ -263,7 +246,6 @@ public abstract class SupplyChainActor extends Actor
     {
         FixedCost fixedCost = new FixedCost(this, this.bankAccount, description, interval, amount);
         this.fixedCosts.add(fixedCost);
-
     }
 
     /**
