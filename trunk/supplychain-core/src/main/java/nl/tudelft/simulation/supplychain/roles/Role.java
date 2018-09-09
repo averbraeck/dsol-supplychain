@@ -8,10 +8,10 @@ import java.util.Map;
 import java.util.Set;
 
 import nl.tudelft.simulation.content.HandlerInterface;
+import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.event.EventProducer;
 import nl.tudelft.simulation.jstats.streams.StreamInterface;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 
 /**
  * <br>
@@ -35,14 +35,14 @@ public class Role extends EventProducer implements HandlerInterface
     protected StreamInterface stream = null;
 
     /** the simulator to schedule on */
-    protected DEVSSimulatorInterfaceUnit simulator;
+    protected DEVSSimulatorInterface.TimeDoubleUnit simulator;
 
     /**
      * Constructs a new Role
      * @param owner the owner of this role
      * @param simulator the simulator to schedule on
      */
-    public Role(final SupplyChainActor owner, final DEVSSimulatorInterfaceUnit simulator)
+    public Role(final SupplyChainActor owner, final DEVSSimulatorInterface.TimeDoubleUnit simulator)
     {
         super();
         this.owner = owner;

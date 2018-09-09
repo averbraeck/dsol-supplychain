@@ -90,7 +90,7 @@ public class BillHandler extends SupplyChainHandler
         }
         // schedule the payment
         Time currentTime = Time.ZERO;
-        currentTime = getOwner().getSimulator().getSimulatorTime().get();
+        currentTime = getOwner().getSimulator().getSimulatorTime();
         Time paymentTime = bill.getFinalPaymentDate();
         switch (this.paymentPolicy)
         {

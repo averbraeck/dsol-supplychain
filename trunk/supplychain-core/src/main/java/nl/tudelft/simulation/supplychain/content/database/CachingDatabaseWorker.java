@@ -593,6 +593,7 @@ public class CachingDatabaseWorker extends EventProducer implements DatabaseWork
      * @param fieldName the field to look for
      * @return the value as a Duration
      */
+    @SuppressWarnings("unused")
     private Duration durationValue(final Record record, final String fieldName)
     {
         // TODO: store the unit!

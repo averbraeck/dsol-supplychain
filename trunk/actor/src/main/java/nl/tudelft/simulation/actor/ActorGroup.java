@@ -5,7 +5,7 @@ import java.util.Set;
 
 import javax.vecmath.Point3d;
 
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
+import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 
 /**
  * An ActorGroup is a group of actors that acts like a normal Actor object, but which can also act on behalf of the <i>group</i>
@@ -31,7 +31,7 @@ public abstract class ActorGroup extends Actor
      * @param simulator the simulator to schedule on
      * @param position the position of the actor
      */
-    public ActorGroup(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position)
+    public ActorGroup(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position)
     {
         super(name, simulator, position);
     }

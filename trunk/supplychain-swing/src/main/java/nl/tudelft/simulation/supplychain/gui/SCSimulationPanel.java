@@ -12,7 +12,7 @@ import javax.swing.UIManager;
 import nl.tudelft.simulation.dsol.gui.swing.Console;
 import nl.tudelft.simulation.dsol.gui.swing.StatusBar;
 import nl.tudelft.simulation.dsol.gui.swing.TabbedContentPane;
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
+import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 
 /**
  * GUI with simulator, console, control panel, status bar, etc.
@@ -31,7 +31,7 @@ public class SCSimulationPanel extends JPanel
     private static final long serialVersionUID = 20150617L;
 
     /** The simulator. */
-    private final DEVSSimulatorInterfaceUnit simulator;
+    private final DEVSSimulatorInterface.TimeDoubleUnit simulator;
 
     /** The console to log messages. */
     private final Console console = new Console();
@@ -57,7 +57,7 @@ public class SCSimulationPanel extends JPanel
      * @param wrappableAnimation the builder and rebuilder of the simulation, based on properties.
      * @throws RemoteException when communications to a remote machine fails
      */
-    public SCSimulationPanel(final DEVSSimulatorInterfaceUnit simulator, final WrappableAnimation wrappableAnimation)
+    public SCSimulationPanel(final DEVSSimulatorInterface.TimeDoubleUnit simulator, final WrappableAnimation wrappableAnimation)
             throws RemoteException
     {
 
@@ -95,7 +95,7 @@ public class SCSimulationPanel extends JPanel
     /**
      * @return simulator.
      */
-    public final DEVSSimulatorInterfaceUnit getSimulator()
+    public final DEVSSimulatorInterface.TimeDoubleUnit getSimulator()
     {
         return this.simulator;
     }
@@ -121,7 +121,7 @@ public class SCSimulationPanel extends JPanel
     @Override
     public final String toString()
     {
-        return "OTSSimulationPanel [simulatorTime=" + this.simulator.getSimulatorTime().getTime() + "]";
+        return "OTSSimulationPanel [simulatorTime=" + this.simulator.getSimulatorTime() + "]";
     }
 
     /**

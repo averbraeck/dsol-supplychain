@@ -8,7 +8,7 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.dsol.SimRuntimeException;
-import nl.tudelft.simulation.unit.simulator.DEVSAnimatorUnit;
+import nl.tudelft.simulation.dsol.simulators.DEVSAnimator;
 
 /**
  * Requirements for demonstration that can be shown in the SuperDemo.
@@ -34,7 +34,7 @@ public interface WrappableAnimation
      * @throws SimRuntimeException on ???
      * @throws NamingException when context for the animation cannot be created
      */
-    DEVSAnimatorUnit buildAnimator(Time startTime, Duration warmupPeriod, Duration runLength, Rectangle rect,
+    DEVSAnimator.TimeDoubleUnit buildAnimator(Time startTime, Duration warmupPeriod, Duration runLength, Rectangle rect,
             boolean exitOnClose) throws SimRuntimeException, NamingException;
 
     /**
@@ -44,7 +44,7 @@ public interface WrappableAnimation
      * @throws SimRuntimeException on ???
      * @throws NamingException when context for the animation cannot be created
      */
-    DEVSAnimatorUnit rebuildSimulator(Rectangle rect) throws SimRuntimeException, NamingException;
+    DEVSAnimator.TimeDoubleUnit rebuildSimulator(Rectangle rect) throws SimRuntimeException, NamingException;
 
     /**
      * Return a very short description of the simulation.

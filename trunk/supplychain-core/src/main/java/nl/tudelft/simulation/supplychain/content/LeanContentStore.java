@@ -11,8 +11,8 @@ import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
 
+import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 
 /**
  * <br>
@@ -27,7 +27,7 @@ public class LeanContentStore extends ContentStore
     private static final long serialVersionUID = 12L;
 
     /** the simulator to schedule time-out events */
-    protected DEVSSimulatorInterfaceUnit simulator;
+    protected DEVSSimulatorInterface.TimeDoubleUnit simulator;
 
     /** the map of unanswered content */
     private Map<Serializable, Content> unansweredContentMap = Collections.synchronizedMap(new HashMap<Serializable, Content>());
@@ -39,7 +39,7 @@ public class LeanContentStore extends ContentStore
      * @param owner the owner
      * @param simulator the simulator
      */
-    public LeanContentStore(final SupplyChainActor owner, final DEVSSimulatorInterfaceUnit simulator)
+    public LeanContentStore(final SupplyChainActor owner, final DEVSSimulatorInterface.TimeDoubleUnit simulator)
     {
         super(owner);
         this.simulator = simulator;
@@ -59,7 +59,7 @@ public class LeanContentStore extends ContentStore
             {
                 InternalDemand internalDemand = (InternalDemand) content;
                 this.unansweredContentMap.put(content.getUniqueID(), content);
-                Time date = Time.max(this.simulator.getSimulatorTime().get(), internalDemand.getLatestDeliveryDate());
+                Time date = Time.max(this.simulator.getSimulatorTime(), internalDemand.getLatestDeliveryDate());
                 this.simulator.scheduleEventAbs(date, this, this, "internalDemandTimeout",
                         new Serializable[] { internalDemand, new Boolean(sent) });
             }
@@ -68,7 +68,7 @@ public class LeanContentStore extends ContentStore
                 RequestForQuote rfq = (RequestForQuote) content;
                 this.unansweredContentMap.put(content.getUniqueID(), content);
                 this.unansweredContentMap.remove(rfq.getInternalDemandID());
-                Time date = Time.max(this.simulator.getSimulatorTime().get(), rfq.getCutoffDate());
+                Time date = Time.max(this.simulator.getSimulatorTime(), rfq.getCutoffDate());
                 this.simulator.scheduleEventAbs(date, this, this, "requestForQuoteTimeout",
                         new Serializable[] { rfq, new Boolean(sent) });
             }
@@ -77,7 +77,7 @@ public class LeanContentStore extends ContentStore
                 RequestForQuote rfq = (RequestForQuote) content;
                 this.unansweredContentMap.put(content.getUniqueID(), content);
                 this.unansweredContentMap.remove(rfq.getInternalDemandID());
-                Time date = Time.max(this.simulator.getSimulatorTime().get(),
+                Time date = Time.max(this.simulator.getSimulatorTime(),
                         rfq.getCutoffDate().plus(new Duration(1.0, DurationUnit.DAY)));
                 this.simulator.scheduleEventAbs(date, this, this, "requestForQuoteTimeout",
                         new Serializable[] { rfq, new Boolean(sent) });
@@ -90,7 +90,7 @@ public class LeanContentStore extends ContentStore
                 Time date = Time.max(quote.getProposedDeliveryDate(),
                         quote.getRequestForQuote().getCutoffDate().plus(new Duration(1.0, DurationUnit.DAY)));
                 date = Time.max(date, quote.getRequestForQuote().getLatestDeliveryDate());
-                date = Time.max(this.simulator.getSimulatorTime().get(), date);
+                date = Time.max(this.simulator.getSimulatorTime(), date);
                 this.simulator.scheduleEventAbs(date, this, this, "quoteTimeout",
                         new Serializable[] { quote, new Boolean(sent) });
             }
@@ -101,7 +101,7 @@ public class LeanContentStore extends ContentStore
                 this.unansweredContentMap.remove(order.getQuote().getUniqueID());
                 Time date = Time.max(order.getDeliveryDate(), order.getQuote().getProposedDeliveryDate());
                 date = Time.max(date, order.getQuote().getRequestForQuote().getLatestDeliveryDate());
-                date = Time.max(this.simulator.getSimulatorTime().get(), date);
+                date = Time.max(this.simulator.getSimulatorTime(), date);
                 this.simulator.scheduleEventAbs(date, this, this, "orderBasedOnQuoteTimeout",
                         new Serializable[] { order, new Boolean(sent) });
             }
@@ -110,7 +110,7 @@ public class LeanContentStore extends ContentStore
                 OrderStandAlone order = (OrderStandAlone) content;
                 this.unansweredContentMap.put(content.getUniqueID(), content);
                 this.unansweredContentMap.remove(order.getInternalDemandID());
-                Time date = Time.max(this.simulator.getSimulatorTime().get(), order.getDeliveryDate());
+                Time date = Time.max(this.simulator.getSimulatorTime(), order.getDeliveryDate());
                 this.simulator.scheduleEventAbs(date, this, this, "orderStandAloneTimeout",
                         new Serializable[] { order, new Boolean(sent) });
             }

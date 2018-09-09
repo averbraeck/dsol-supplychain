@@ -8,9 +8,8 @@ import org.djunits.unit.MoneyUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Money;
 
-import nl.tudelft.simulation.dsol.formalisms.eventscheduling.SimEventInterface;
+import nl.tudelft.simulation.dsol.formalisms.eventscheduling.SimEvent;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
-import nl.tudelft.simulation.unit.simulator.SimTimeUnit;
 
 /**
  * When a supply chain actor is created, one or more FixedCost objects can be created to book fixed costs for e.g. personnel,
@@ -43,7 +42,7 @@ public class FixedCost implements Serializable
     private Money amount = new Money(0.0, MoneyUnit.USD);
 
     /** the event for the next period -- stored to be able to remove it */
-    private SimEventInterface<SimTimeUnit> fixedAmountEvent = null;
+    private SimEvent.TimeDoubleUnit fixedAmountEvent = null;
 
     /** the logger. */
     private static Logger logger = LogManager.getLogger(FixedCost.class);

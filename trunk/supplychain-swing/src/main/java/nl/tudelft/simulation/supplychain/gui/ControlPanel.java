@@ -54,6 +54,7 @@ import org.djunits.value.vdouble.scalar.Time;
 import nl.tudelft.simulation.dsol.SimRuntimeException;
 import nl.tudelft.simulation.dsol.formalisms.eventscheduling.SimEvent;
 import nl.tudelft.simulation.dsol.formalisms.eventscheduling.SimEventInterface;
+import nl.tudelft.simulation.dsol.simtime.SimTimeDoubleUnit;
 import nl.tudelft.simulation.dsol.simulators.DEVSRealTimeClock;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulator;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
@@ -61,8 +62,6 @@ import nl.tudelft.simulation.dsol.simulators.SimulatorInterface;
 import nl.tudelft.simulation.event.EventInterface;
 import nl.tudelft.simulation.event.EventListenerInterface;
 import nl.tudelft.simulation.language.io.URLResource;
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
-import nl.tudelft.simulation.unit.simulator.SimTimeUnit;
 
 /**
  * Peter's improved simulation control panel.
@@ -82,7 +81,7 @@ public class ControlPanel extends JPanel
     private static final long serialVersionUID = 20150617L;
 
     /** The simulator. */
-    private DEVSSimulatorInterfaceUnit simulator;
+    private DEVSSimulatorInterface.TimeDoubleUnit simulator;
 
     /** The WrappableAnimation (needed for restart operation). */
     private final WrappableAnimation wrappableAnimation;
@@ -106,7 +105,7 @@ public class ControlPanel extends JPanel
     private final TimeEdit timeEdit;
 
     /** The currently registered stop at event. */
-    private SimEvent<SimTimeUnit> stopAtEvent = null;
+    private SimEvent<SimTimeDoubleUnit> stopAtEvent = null;
 
     /** Has the window close handler been registered? */
     protected boolean closeHandlerRegistered = false;
@@ -120,7 +119,7 @@ public class ControlPanel extends JPanel
      * @param wrappableAnimation WrappableAnimation; if non-null, the restart button should work
      * @throws RemoteException when simulator cannot be accessed for listener attachment
      */
-    public ControlPanel(final DEVSSimulatorInterfaceUnit simulator, final WrappableAnimation wrappableAnimation)
+    public ControlPanel(final DEVSSimulatorInterface.TimeDoubleUnit simulator, final WrappableAnimation wrappableAnimation)
             throws RemoteException
     {
         this.simulator = simulator;
@@ -228,7 +227,7 @@ public class ControlPanel extends JPanel
         {
             return new ImageIcon(URLResource.getResource(iconPath));
         }
-        catch (@SuppressWarnings("unused") NullPointerException npe)
+        catch (NullPointerException npe)
         {
             System.err.println("Could not load icon from path " + iconPath);
             return null;
@@ -246,7 +245,7 @@ public class ControlPanel extends JPanel
         {
             return new ImageIcon(GrayFilter.createDisabledImage(ImageIO.read(URLResource.getResource(iconPath))));
         }
-        catch (@SuppressWarnings("unused") NullPointerException | IOException e)
+        catch (NullPointerException | IOException e)
         {
             System.err.println("Could not load icon from path " + iconPath);
             return null;
@@ -263,15 +262,15 @@ public class ControlPanel extends JPanel
      * @param eventTarget Object; the object that must execute the event
      * @param method String; the name of the method of <code>target</code> that must execute the event
      * @param args Object[]; the arguments of the <code>method</code> that must execute the event
-     * @return SimEvent&lt;SimTimeUnit&gt;; the event that was scheduled (the caller should save this if a need to cancel
+     * @return SimEvent&lt;SimTimeDoubleUnit&gt;; the event that was scheduled (the caller should save this if a need to cancel
      *         the event may arise later)
      * @throws SimRuntimeException when the <code>executionTime</code> is in the past
      */
-    private SimEvent<SimTimeUnit> scheduleEvent(final Time executionTime, final short priority, final Object source,
+    private SimEvent<SimTimeDoubleUnit> scheduleEvent(final Time executionTime, final short priority, final Object source,
             final Object eventTarget, final String method, final Object[] args) throws SimRuntimeException
     {
-        SimEvent<SimTimeUnit> simEvent =
-                new SimEvent<>(new SimTimeUnit(new Time(executionTime.getSI(), TimeUnit.BASE)), priority, source,
+        SimEvent<SimTimeDoubleUnit> simEvent =
+                new SimEvent<>(new SimTimeDoubleUnit(new Time(executionTime.getSI(), TimeUnit.BASE)), priority, source,
                         eventTarget, method, args);
         this.simulator.scheduleEvent(simEvent);
         return simEvent;
@@ -317,7 +316,7 @@ public class ControlPanel extends JPanel
                 {
                     Thread.sleep(10);
                 }
-                catch (@SuppressWarnings("unused") InterruptedException exception)
+                catch (InterruptedException exception)
                 {
                     // nothing to do
                 }
@@ -376,14 +375,14 @@ public class ControlPanel extends JPanel
                 {
                     getSimulator().stop();
                 }
-                double now = getSimulator().getSimulatorTime().getTime().getSI();
+                double now = getSimulator().getSimulatorTime().getSI();
                 // System.out.println("now is " + now);
                 try
                 {
                     this.stopAtEvent = scheduleEvent(new Time(now, TimeUnit.BASE), SimEventInterface.MIN_PRIORITY, this, this,
                             "autoPauseSimulator", null);
                 }
-                catch (@SuppressWarnings("unused") SimRuntimeException exception)
+                catch (SimRuntimeException exception)
                 {
                     this.logger.logp(Level.SEVERE, "ControlPanel", "autoPauseSimulator", "Caught an exception "
                             + "while trying to schedule an autoPauseSimulator event at the current simulator time");
@@ -522,7 +521,7 @@ public class ControlPanel extends JPanel
         if (getSimulator().isRunning())
         {
             getSimulator().stop();
-            double currentTick = getSimulator().getSimulatorTime().getTime().getSI();
+            double currentTick = getSimulator().getSimulatorTime().getSI();
             double nextTick = getSimulator().getEventList().first().getAbsoluteExecutionTime().get().getSI();
             // System.out.println("currentTick is " + currentTick);
             // System.out.println("nextTick is " + nextTick);
@@ -538,7 +537,7 @@ public class ControlPanel extends JPanel
                             this, "autoPauseSimulator", null);
                     getSimulator().start();
                 }
-                catch (@SuppressWarnings("unused") SimRuntimeException exception)
+                catch (SimRuntimeException exception)
                 {
                     this.logger.logp(Level.SEVERE, "ControlPanel", "autoPauseSimulator",
                             "Caught an exception while trying to re-schedule an autoPauseEvent at the next real event");
@@ -602,7 +601,7 @@ public class ControlPanel extends JPanel
         int seconds = Integer.parseInt(fields[2]);
         int fraction = Integer.parseInt(fields[3]);
         double stopTime = hours * 3600 + minutes * 60 + seconds + fraction / 1000d;
-        if (stopTime < getSimulator().getSimulatorTime().getTime().getSI())
+        if (stopTime < getSimulator().getSimulatorTime().getSI())
         {
             return;
         }
@@ -613,7 +612,7 @@ public class ControlPanel extends JPanel
                 this.stopAtEvent = scheduleEvent(new Time(stopTime, TimeUnit.BASE), SimEventInterface.MAX_PRIORITY, this, this,
                         "autoPauseSimulator", null);
             }
-            catch (@SuppressWarnings("unused") SimRuntimeException exception)
+            catch (SimRuntimeException exception)
             {
                 this.logger.logp(Level.SEVERE, "ControlPanel", "propertyChange",
                         "Caught an exception while trying to schedule an autoPauseSimulator event");
@@ -625,9 +624,9 @@ public class ControlPanel extends JPanel
      * @return simulator.
      */
     @SuppressWarnings("unchecked")
-    public final DEVSSimulator<Time, Duration, SimTimeUnit> getSimulator()
+    public final DEVSSimulator<Time, Duration, SimTimeDoubleUnit> getSimulator()
     {
-        return (DEVSSimulator<Time, Duration, SimTimeUnit>) this.simulator;
+        return (DEVSSimulator<Time, Duration, SimTimeDoubleUnit>) this.simulator;
     }
 
     /** {@inheritDoc} */
@@ -964,7 +963,7 @@ public class ControlPanel extends JPanel
             @Override
             public void run()
             {
-                double now = Math.round(getSimulator().getSimulatorTime().getTime().getSI() * 1000) / 1000d;
+                double now = Math.round(getSimulator().getSimulatorTime().getSI() * 1000) / 1000d;
                 int seconds = (int) Math.floor(now);
                 int fractionalSeconds = (int) Math.floor(1000 * (now - seconds));
                 ClockLabel.this.setText(String.format("  %02d:%02d:%02d.%03d  ", seconds / 3600, seconds / 60 % 60,
@@ -1147,7 +1146,7 @@ public class ControlPanel extends JPanel
     @Override
     public final String toString()
     {
-        return "OTSControlPanel [simulatorTime=" + this.simulator.getSimulatorTime().getTime() + ", timeWarp="
+        return "OTSControlPanel [simulatorTime=" + this.simulator.getSimulatorTime() + ", timeWarp="
                 + this.timeWarpPanel.getFactor() + ", stopAtEvent=" + this.stopAtEvent + "]";
     }
 

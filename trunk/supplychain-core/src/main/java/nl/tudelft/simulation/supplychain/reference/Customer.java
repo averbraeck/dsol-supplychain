@@ -6,12 +6,12 @@ import javax.vecmath.Point3d;
 
 import org.djunits.value.vdouble.scalar.Money;
 
+import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.roles.BuyingRole;
 import nl.tudelft.simulation.supplychain.roles.DemandGenerationRole;
 import nl.tudelft.simulation.supplychain.roles.Role;
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 
 /**
  * A Customer is an actor which usually orders (pull) products from a Distributor. However, its behavior depends on the type of
@@ -40,7 +40,7 @@ public class Customer extends SupplyChainActor
      * @param bank the bank
      * @param initialBankAccount the initial bank account
      */
-    public Customer(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position, final Bank bank,
+    public Customer(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position, final Bank bank,
             final Money initialBankAccount)
     {
         super(name, simulator, position, new Role[] {}, bank, initialBankAccount);

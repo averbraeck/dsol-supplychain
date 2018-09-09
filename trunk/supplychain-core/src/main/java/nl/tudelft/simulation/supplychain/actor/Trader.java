@@ -10,11 +10,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.djunits.value.vdouble.scalar.Money;
 
+import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.roles.Role;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 
 /**
  * A Trader is a SupplyChainActor that maintains a Stock of products. The stock is not implemented with the Role, because
@@ -47,7 +47,7 @@ public abstract class Trader extends SupplyChainActor
      * @param roles the roles of the supply chain actor, might be null
      * @param bank the bank
      */
-    public Trader(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position,
+    public Trader(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
             final Role[] roles, final Bank bank)
     {
         super(name, simulator, position, roles, bank);
@@ -62,7 +62,7 @@ public abstract class Trader extends SupplyChainActor
      * @param bank the bank
      * @param initialBankBalance the initial bank balance
      */
-    public Trader(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position,
+    public Trader(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
             final Role[] roles, final Bank bank, final Money initialBankBalance)
     {
         super(name, simulator, position, roles, bank, initialBankBalance);

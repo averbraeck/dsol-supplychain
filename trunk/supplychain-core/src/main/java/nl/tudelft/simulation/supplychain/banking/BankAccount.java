@@ -8,11 +8,11 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
 
+import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.event.EventProducer;
 import nl.tudelft.simulation.event.EventType;
 import nl.tudelft.simulation.event.TimedEvent;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 
 /**
  * The BackAccount keeps track of the balance of a SupplyChainActor. This simple implementation just has one number as the
@@ -35,7 +35,7 @@ public class BankAccount extends EventProducer
     private Bank bank;
 
     /** the simulator for the interest rate */
-    private DEVSSimulatorInterfaceUnit simulator;
+    private DEVSSimulatorInterface.TimeDoubleUnit simulator;
 
     /** the balance of the actor */
     private Money balance;

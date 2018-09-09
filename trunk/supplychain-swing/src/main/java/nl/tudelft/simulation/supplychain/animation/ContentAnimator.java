@@ -5,11 +5,11 @@ import java.rmi.RemoteException;
 import org.djunits.value.vdouble.scalar.Duration;
 
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
+import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.event.EventInterface;
 import nl.tudelft.simulation.event.EventListenerInterface;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.Content;
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 
 /**
  * ContentAnimator.java. <br>
@@ -22,13 +22,13 @@ import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 public class ContentAnimator implements EventListenerInterface
 {
     /** the simulator. */
-    private DEVSSimulatorInterfaceUnit simulator;
+    private DEVSSimulatorInterface.TimeDoubleUnit simulator;
 
     /**
      * Create an animator for the moving content that listens to the SupplyChainActor.SEND_CONTENT_EVENT
      * @param simulator the simulator
      */
-    public ContentAnimator(final DEVSSimulatorInterfaceUnit simulator)
+    public ContentAnimator(final DEVSSimulatorInterface.TimeDoubleUnit simulator)
     {
         this.simulator = simulator;
     }

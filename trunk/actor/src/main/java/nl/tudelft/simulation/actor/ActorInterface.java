@@ -6,11 +6,11 @@ import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.content.HandlerInterface;
 import nl.tudelft.simulation.dsol.animation.Locatable;
+import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.messaging.Message;
 import nl.tudelft.simulation.messaging.devices.components.ReceivingDeviceInterface;
 import nl.tudelft.simulation.messaging.devices.components.SendingDeviceInterface;
 import nl.tudelft.simulation.messaging.devices.types.DeviceType;
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 
 /**
  * ActorInterface defines the necessary methods for the 'communicating simulation object' aka actor. <br>
@@ -66,7 +66,7 @@ public interface ActorInterface extends Locatable, HandlerInterface, Serializabl
      * @return Returns the simulator.
      * @uml.associationEnd
      */
-    DEVSSimulatorInterfaceUnit getSimulator();
+    DEVSSimulatorInterface.TimeDoubleUnit getSimulator();
 
     /**
      * Get the time of the simulator on which this actor schedules. This getSimulatorTime method does <i>not</i> throw a

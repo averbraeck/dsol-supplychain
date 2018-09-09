@@ -9,9 +9,9 @@ import org.djunits.unit.MoneyUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Money;
 
+import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.supplychain.actor.Trader;
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 
 /**
  * A StockRecord keeps the information about products, such as actual, ordered and claimed amounts of products. It assists the
@@ -31,7 +31,7 @@ public class StockRecord implements Serializable
     private Trader owner = null;
 
     /** the simulator to schedule the depriciation */
-    private DEVSSimulatorInterfaceUnit simulator = null;
+    private DEVSSimulatorInterface.TimeDoubleUnit simulator = null;
 
     /** the product for which to keep information */
     private Product product;
@@ -59,7 +59,7 @@ public class StockRecord implements Serializable
      * @param simulator the simulator
      * @param product the product
      */
-    public StockRecord(final Trader owner, final DEVSSimulatorInterfaceUnit simulator, final Product product)
+    public StockRecord(final Trader owner, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Product product)
     {
         super();
         this.owner = owner;

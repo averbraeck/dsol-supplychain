@@ -6,10 +6,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import nl.tudelft.simulation.actor.Actor;
+import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.messaging.Message;
 import nl.tudelft.simulation.messaging.devices.types.DeviceType;
 import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 
 /**
  * The DelaySendingDevice device is a device that sends out a message, which will arrive after a certain delay. There is no
@@ -26,7 +26,7 @@ public class DelaySendingDevice extends SendingDevice
     private static final long serialVersionUID = 12L;
 
     /** the simulator to schedule on */
-    protected DEVSSimulatorInterfaceUnit simulator = null;
+    protected DEVSSimulatorInterface.TimeDoubleUnit simulator = null;
 
     /** the delay of the sender */
     protected DistContinuousDurationUnit delay = null;
@@ -41,7 +41,7 @@ public class DelaySendingDevice extends SendingDevice
      * @param simulator the simulator
      * @param delay the delay
      */
-    public DelaySendingDevice(final String name, final DeviceType deviceType, final DEVSSimulatorInterfaceUnit simulator,
+    public DelaySendingDevice(final String name, final DeviceType deviceType, final DEVSSimulatorInterface.TimeDoubleUnit simulator,
             final DistContinuousDurationUnit delay)
     {
         super(name, deviceType);
@@ -59,7 +59,7 @@ public class DelaySendingDevice extends SendingDevice
      * @param delay the delay
      */
     public DelaySendingDevice(final String name, final DeviceType deviceType, final int transmissionDelay,
-            final double transmissionFrequency, final DEVSSimulatorInterfaceUnit simulator,
+            final double transmissionFrequency, final DEVSSimulatorInterface.TimeDoubleUnit simulator,
             final DistContinuousDurationUnit delay)
     {
         super(name, deviceType, transmissionDelay, transmissionFrequency);

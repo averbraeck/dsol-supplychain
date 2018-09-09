@@ -16,6 +16,7 @@ import nl.tudelft.simulation.actor.messagehandlers.MessageHandlerInterface;
 import nl.tudelft.simulation.content.HandlerInterface;
 import nl.tudelft.simulation.dsol.animation.D2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
+import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.jstats.charts.xy.XYChart;
 import nl.tudelft.simulation.language.d3.BoundingBox;
 import nl.tudelft.simulation.messaging.devices.reference.FaxDevice;
@@ -33,7 +34,6 @@ import nl.tudelft.simulation.supplychain.roles.Role;
 import nl.tudelft.simulation.supplychain.stock.Stock;
 import nl.tudelft.simulation.supplychain.transport.TransportMode;
 import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 
 /**
  * The ComputerShop named Factory. <br>
@@ -59,7 +59,7 @@ public class Factory extends Manufacturer
      * @throws RemoteException remote simulator error
      * @throws NamingException
      */
-    public Factory(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position, final Role[] roles,
+    public Factory(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position, final Role[] roles,
             final Bank bank, final Product product, final double amount) throws RemoteException, NamingException
     {
         this(name, simulator, position, roles, bank, new Money(0.0, MoneyUnit.USD), product, amount);
@@ -77,7 +77,7 @@ public class Factory extends Manufacturer
      * @throws RemoteException remote simulator error
      * @throws NamingException
      */
-    public Factory(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position, final Role[] roles,
+    public Factory(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position, final Role[] roles,
             final Bank bank, final Money initialBankAccount, final Product product, final double amount)
             throws RemoteException, NamingException
     {

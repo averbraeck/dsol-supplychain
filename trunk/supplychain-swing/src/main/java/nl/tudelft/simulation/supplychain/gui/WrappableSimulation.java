@@ -6,7 +6,7 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.dsol.SimRuntimeException;
-import nl.tudelft.simulation.unit.simulator.SimulatorInterfaceUnit;
+import nl.tudelft.simulation.dsol.simulators.SimulatorInterface;
 
 /**
  * Requirements for demonstration that can be shown in the SuperDemo.
@@ -30,7 +30,7 @@ public interface WrappableSimulation
      * @throws SimRuntimeException on ???
      * @throws NamingException when context for the animation cannot be created
      */
-    SimulatorInterfaceUnit buildSimulator(Time startTime, Duration warmupPeriod, Duration runLength)
+    SimulatorInterface.TimeDoubleUnit buildSimulator(Time startTime, Duration warmupPeriod, Duration runLength)
             throws SimRuntimeException, NamingException;
 
     /**

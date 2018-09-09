@@ -29,12 +29,12 @@ import nl.javel.gisbeans.map.MapInterface;
 import nl.tudelft.simulation.dsol.animation.Locatable;
 import nl.tudelft.simulation.dsol.animation.D2.AnimationPanel;
 import nl.tudelft.simulation.dsol.animation.D2.GisRenderable2D;
+import nl.tudelft.simulation.dsol.simulators.DEVSAnimator;
 import nl.tudelft.simulation.dsol.simulators.SimulatorInterface;
 import nl.tudelft.simulation.event.Event;
 import nl.tudelft.simulation.event.EventInterface;
 import nl.tudelft.simulation.event.EventListenerInterface;
 import nl.tudelft.simulation.language.reflection.ClassUtil;
-import nl.tudelft.simulation.unit.simulator.DEVSAnimatorUnit;
 
 /**
  * Animation panel with various controls.
@@ -104,7 +104,7 @@ public class SCAnimationPanel extends SCSimulationPanel implements ActionListene
      * @param wrappableAnimation the builder and rebuilder of the simulation, based on properties.
      * @throws RemoteException when notification of the animation panel fails
      */
-    public SCAnimationPanel(final Rectangle2D extent, final Dimension size, final DEVSAnimatorUnit simulator,
+    public SCAnimationPanel(final Rectangle2D extent, final Dimension size, final DEVSAnimator.TimeDoubleUnit simulator,
             final WrappableAnimation wrappableAnimation) throws RemoteException
     {
         super(simulator, wrappableAnimation);
@@ -527,7 +527,7 @@ public class SCAnimationPanel extends SCSimulationPanel implements ActionListene
                 {
                     Thread.sleep(10);
                 }
-                catch (@SuppressWarnings("unused") InterruptedException exception)
+                catch (InterruptedException exception)
                 {
                     // nothing to do
                 }
@@ -627,7 +627,7 @@ public class SCAnimationPanel extends SCSimulationPanel implements ActionListene
                 {
                     Thread.sleep(50); // 20 times per second
                 }
-                catch (@SuppressWarnings("unused") InterruptedException exception)
+                catch (InterruptedException exception)
                 {
                     // do nothing
                 }

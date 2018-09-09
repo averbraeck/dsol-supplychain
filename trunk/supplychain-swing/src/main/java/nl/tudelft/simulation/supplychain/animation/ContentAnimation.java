@@ -13,10 +13,10 @@ import org.djunits.value.vdouble.scalar.Duration;
 import nl.tudelft.simulation.dsol.animation.Locatable;
 import nl.tudelft.simulation.dsol.animation.D2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.animation.interpolation.LinearInterpolation;
+import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.language.d3.BoundingBox;
 import nl.tudelft.simulation.language.d3.DirectedPoint;
 import nl.tudelft.simulation.supplychain.content.Content;
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 
 /**
  * This class implements the animation of the content of a message that is sent from one Actor to another Actor. Actually, the
@@ -37,7 +37,7 @@ public class ContentAnimation implements Locatable, Serializable
     private static final long serialVersionUID = 12L;
 
     /** the simulator on which to schedule */
-    private DEVSSimulatorInterfaceUnit simulator;
+    private DEVSSimulatorInterface.TimeDoubleUnit simulator;
 
     /** a helper instance for linear interpolation */
     private LinearInterpolation linearInterpolation = null;
@@ -104,8 +104,8 @@ public class ContentAnimation implements Locatable, Serializable
             this.simulator = content.getSender().getSimulator();
 
             // We define its location
-            this.linearInterpolation = new LinearInterpolation(this.simulator.getSimulatorTime().get().si,
-                    this.simulator.getSimulatorTime().get().si + delay.si, content.getSender().getLocation(),
+            this.linearInterpolation = new LinearInterpolation(this.simulator.getSimulatorTime().si,
+                    this.simulator.getSimulatorTime().si + delay.si, content.getSender().getLocation(),
                     content.getReceiver().getLocation());
 
             // We load the image
@@ -131,7 +131,7 @@ public class ContentAnimation implements Locatable, Serializable
     @Override
     public DirectedPoint getLocation() throws RemoteException
     {
-        DirectedPoint dp = this.linearInterpolation.getLocation(this.simulator.getSimulatorTime().get().si);
+        DirectedPoint dp = this.linearInterpolation.getLocation(this.simulator.getSimulatorTime().si);
         return new DirectedPoint(dp.x, dp.y, 100.0);
     }
 

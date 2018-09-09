@@ -17,6 +17,7 @@ import java.rmi.RemoteException;
 
 import org.djunits.unit.DurationUnit;
 
+import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.jstats.distributions.DistTriangular;
 import nl.tudelft.simulation.messaging.comparators.FiFo;
 import nl.tudelft.simulation.messaging.devices.components.DelaySendingDevice;
@@ -25,7 +26,6 @@ import nl.tudelft.simulation.messaging.devices.components.SendingReceivingDevice
 import nl.tudelft.simulation.messaging.devices.types.DeviceType;
 import nl.tudelft.simulation.messaging.queues.MessageQueue;
 import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 
 /**
  * A reference implementation of a FaxDevice. <br>
@@ -46,7 +46,7 @@ public class FaxDevice extends SendingReceivingDevice
      * @param simulator the simulator to use
      * @throws RemoteException on network failure
      */
-    public FaxDevice(final String name, final DEVSSimulatorInterfaceUnit simulator) throws RemoteException
+    public FaxDevice(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator) throws RemoteException
     {
         super(name, new ReceivingDevice(name + "-R", DeviceType.EMAIL, new MessageQueue(new FiFo())),
                 new DelaySendingDevice(name + "-S", DeviceType.EMAIL, simulator,

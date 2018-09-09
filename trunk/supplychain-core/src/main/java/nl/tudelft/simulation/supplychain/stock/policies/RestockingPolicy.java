@@ -6,13 +6,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.djunits.value.vdouble.scalar.Duration;
 
+import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.supplychain.actor.Trader;
 import nl.tudelft.simulation.supplychain.content.InternalDemand;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
 import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
 import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 
 /**
  * <br>
@@ -27,7 +27,7 @@ public abstract class RestockingPolicy implements Serializable
     private static final long serialVersionUID = 12L;
 
     /** the simulator on which to schedule */
-    protected DEVSSimulatorInterfaceUnit simulator;
+    protected DEVSSimulatorInterface.TimeDoubleUnit simulator;
 
     /** the stock for which the policy holds */
     protected StockInterface stock;

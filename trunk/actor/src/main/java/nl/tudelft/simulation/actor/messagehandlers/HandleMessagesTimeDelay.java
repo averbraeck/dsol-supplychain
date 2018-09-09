@@ -4,10 +4,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import nl.tudelft.simulation.actor.ActorInterface;
+import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.messaging.Message;
 import nl.tudelft.simulation.messaging.queues.MessageQueueInterface;
 import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 
 /**
  * The MessageHandlerTimeDelay takes messages one by one and only looks at the next message after a certain time delay. A busy
@@ -28,7 +28,7 @@ public class HandleMessagesTimeDelay implements MessageHandlerInterface
     private ActorInterface owner;
 
     /** the simulator to schedule on */
-    private DEVSSimulatorInterfaceUnit simulator;
+    private DEVSSimulatorInterface.TimeDoubleUnit simulator;
 
     /** the time distribution for handling the message */
     private DistContinuousDurationUnit handlingTime;
@@ -46,7 +46,7 @@ public class HandleMessagesTimeDelay implements MessageHandlerInterface
      * @param simulator to schedule on
      * @param handlingTime distribution for handling the message
      */
-    public HandleMessagesTimeDelay(final ActorInterface owner, final DEVSSimulatorInterfaceUnit simulator,
+    public HandleMessagesTimeDelay(final ActorInterface owner, final DEVSSimulatorInterface.TimeDoubleUnit simulator,
             final DistContinuousDurationUnit handlingTime)
     {
         super();

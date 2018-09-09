@@ -1,11 +1,9 @@
-package nl.tudelft.simulation.supplychain.test;
+package nl.tudelft.simulation.supplychain.demo.mtsmto;
 
 import java.awt.Dimension;
-import java.io.Serializable;
 
 import javax.vecmath.Point3d;
 
-import org.djunits.unit.DurationUnit;
 import org.djunits.unit.MassUnit;
 import org.djunits.unit.MoneyUnit;
 import org.djunits.value.vdouble.scalar.Duration;
@@ -19,29 +17,33 @@ import nl.tudelft.simulation.dsol.simtime.SimTimeDoubleUnit;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.dsol.simulators.SimulatorInterface;
+import nl.tudelft.simulation.jstats.streams.MersenneTwister;
+import nl.tudelft.simulation.jstats.streams.StreamInterface;
 import nl.tudelft.simulation.language.d3.DirectedPoint;
 import nl.tudelft.simulation.supplychain.animation.ContentAnimator;
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.content.LeanContentStore;
+import nl.tudelft.simulation.supplychain.product.BillOfMaterials;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.product.Unit;
 import nl.tudelft.simulation.supplychain.roles.Role;
+import nl.tudelft.simulation.supplychain.test.Client;
+import nl.tudelft.simulation.supplychain.test.Factory;
+import nl.tudelft.simulation.supplychain.test.PCShop;
+import nl.tudelft.simulation.supplychain.test.TestModel;
 
 /**
- * The TestModel for the supplychain package. <br>
+ * MTSMTO.java. <br>
  * <br>
  * Copyright (c) 2003-2018 Delft University of Technology, Jaffalaan 5, 2628 BX Delft, the Netherlands. All rights reserved. See
  * for project information <a href="https://www.simulation.tudelft.nl/" target="_blank">www.simulation.tudelft.nl</a>. The
  * source code and binary code of this software is proprietary information of Delft University of Technology.
  * @author <a href="https://www.tudelft.nl/averbraeck" target="_blank">Alexander Verbraeck</a>
  */
-public class TestModel implements DSOLModel.TimeDoubleUnit
+public class MTSMTOModel implements DSOLModel.TimeDoubleUnit
 {
     /** the serial version uid */
     private static final long serialVersionUID = 12L;
-
-    /** timing run-time */
-    private long startTimeMs = 0;
 
     /** the simulator. */
     private DEVSSimulatorInterface.TimeDoubleUnit devsSimulator;
@@ -49,7 +51,7 @@ public class TestModel implements DSOLModel.TimeDoubleUnit
     /**
      * constructs a new TestModel
      */
-    public TestModel()
+    public MTSMTOModel()
     {
         super();
         // We don't do anything to prevent state-based replications.
@@ -61,16 +63,36 @@ public class TestModel implements DSOLModel.TimeDoubleUnit
     {
         try
         {
-            this.startTimeMs = System.currentTimeMillis();
             this.devsSimulator = (DEVSSimulatorInterface.TimeDoubleUnit) simulator;
             if (this.devsSimulator instanceof AnimatorInterface)
             {
                 // First we create some background. We set the zValue to -Double.Min value to ensure that it is actually drawn
                 // "below" our actors and messages.
-                new SingleImageRenderable(new DirectedPoint(0.0, 0.0, -Double.MIN_VALUE), new Dimension(1618, 716),
+                new SingleImageRenderable(new DirectedPoint(0.0, 0.0, -Double.MIN_VALUE), new Dimension(800, 600),
                         this.devsSimulator,
-                        TestModel.class.getResource("/nl/tudelft/simulation/supplychain/images/worldmap.gif"));
+                        TestModel.class.getResource("/nl/tudelft/simulation/supplychain/demo/mtsmto/images/background.gif"));
             }
+
+            // basics
+            StreamInterface streamMTS = new MersenneTwister();
+            StreamInterface streamMTO = new MersenneTwister();
+
+            // Products and BOM
+            Product keyboard =
+                    new Product("keyboard", Unit.PIECE, new Money(15.0, MoneyUnit.USD), new Mass(0.5, MassUnit.KILOGRAM), 0.0);
+            Product casing =
+                    new Product("casing", Unit.PIECE, new Money(400.0, MoneyUnit.USD), new Mass(10.0, MassUnit.KILOGRAM), 0.02);
+            Product mouse =
+                    new Product("mouse", Unit.PIECE, new Money(10.0, MoneyUnit.USD), new Mass(0.1, MassUnit.KILOGRAM), 0.0);
+            Product monitor =
+                    new Product("monitor", Unit.PIECE, new Money(200.0, MoneyUnit.USD), new Mass(5.0, MassUnit.KILOGRAM), 0.01);
+            Product pc =
+                    new Product("PC", Unit.PIECE, new Money(1100.0, MoneyUnit.USD), new Mass(16.0, MassUnit.KILOGRAM), 0.02);
+            BillOfMaterials pcBOM = new BillOfMaterials(pc);
+            pcBOM.add(keyboard, 1.0);
+            pcBOM.add(casing, 1.0);
+            pcBOM.add(mouse, 1.0);
+            pcBOM.add(monitor, 1.0);
 
             // create the bank
             Bank ing = new Bank("ING", this.devsSimulator, new Point3d(0, 0, 0));
@@ -96,11 +118,6 @@ public class TestModel implements DSOLModel.TimeDoubleUnit
                     new Money(1500000.0, MoneyUnit.USD), laptop, pcShop);
             Client.setContentStore(new LeanContentStore(Client, this.devsSimulator));
 
-            // schedule a remark that the simulation is ready
-            Duration endTime = new Duration(simulator.getReplication().getTreatment().getRunLength().doubleValue() - 0.001,
-                    DurationUnit.SI);
-            this.devsSimulator.scheduleEventRel(endTime, this, this, "endSimulation", new Serializable[] {});
-
             // Create the animation.
             ContentAnimator contentAnimator = new ContentAnimator(this.devsSimulator);
             contentAnimator.subscribe(Factory);
@@ -111,16 +128,6 @@ public class TestModel implements DSOLModel.TimeDoubleUnit
         {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * end of simulation -- display a message
-     */
-    protected void endSimulation()
-    {
-        System.err.println("End of TestModel replication");
-        System.err.println("Runtime = " + ((System.currentTimeMillis() - this.startTimeMs) / 1000) + " seconds.");
-        System.err.println("Simulation time = " + this.devsSimulator.getSimulatorTime());
     }
 
     /** {@inheritDoc} */

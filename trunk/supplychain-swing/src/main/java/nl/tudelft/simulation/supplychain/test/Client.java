@@ -9,14 +9,13 @@ import javax.vecmath.Point3d;
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Money;
-import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.actor.messagehandlers.HandleAllMessages;
 import nl.tudelft.simulation.actor.messagehandlers.MessageHandlerInterface;
 import nl.tudelft.simulation.content.HandlerInterface;
 import nl.tudelft.simulation.dsol.animation.D2.SingleImageRenderable;
-import nl.tudelft.simulation.dsol.experiment.Replication;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
+import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.jstats.charts.xy.XYChart;
 import nl.tudelft.simulation.jstats.distributions.DistConstant;
 import nl.tudelft.simulation.jstats.distributions.DistExponential;
@@ -44,8 +43,6 @@ import nl.tudelft.simulation.supplychain.roles.BuyingRole;
 import nl.tudelft.simulation.supplychain.roles.DemandGenerationRole;
 import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
 import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
-import nl.tudelft.simulation.unit.simulator.SimTimeUnit;
 
 /**
  * Customer. <br>
@@ -77,8 +74,8 @@ public class Client extends Customer
      * @throws RemoteException remote simulator error
      * @throws NamingException
      */
-    public Client(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position, final Bank bank,
-            final Money initialBankAccount, final Product product, final Retailer retailer)
+    public Client(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
+            final Bank bank, final Money initialBankAccount, final Product product, final Retailer retailer)
             throws RemoteException, NamingException
     {
         super(name, simulator, position, bank, initialBankAccount);
@@ -98,10 +95,8 @@ public class Client extends Customer
      */
     public void init() throws RemoteException
     {
-        Replication<Time, Duration, SimTimeUnit> r = this.simulator.getReplication();
         StreamInterface stream = this.simulator.getReplication().getStream("default");
         Duration hour = new Duration(1.0, DurationUnit.HOUR);
-        Time current = this.simulator.getSimulatorTime().get();
         //
         // give the actor a fax device which is checked every hour
         FaxDevice fax = new FaxDevice("ClientFax", this.simulator);

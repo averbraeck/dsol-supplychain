@@ -1,21 +1,7 @@
-/*
- * @(#)TestModelCentralDatabase.java Mar 4, 2004
- * 
- * Copyright (c) 2003-2006 Delft University of Technology, Jaffalaan 5, 2628 BX
- * Delft, the Netherlands. All rights reserved.
- * 
- * See for project information <a href="http://www.simulation.tudelft.nl/">
- * www.simulation.tudelft.nl </a>.
- * 
- * The source code and binary code of this software is proprietary information
- * of Delft University of Technology.
- */
-
 package nl.tudelft.simulation.supplychain.test;
 
 import java.awt.Dimension;
 import java.io.Serializable;
-import java.rmi.RemoteException;
 
 import javax.vecmath.Point3d;
 
@@ -27,8 +13,11 @@ import org.djunits.value.vdouble.scalar.Mass;
 import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
 
+import nl.tudelft.simulation.dsol.DSOLModel;
 import nl.tudelft.simulation.dsol.animation.D2.SingleImageRenderable;
+import nl.tudelft.simulation.dsol.simtime.SimTimeDoubleUnit;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
+import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.dsol.simulators.SimulatorInterface;
 import nl.tudelft.simulation.language.d3.DirectedPoint;
 import nl.tudelft.simulation.supplychain.banking.Bank;
@@ -38,21 +27,16 @@ import nl.tudelft.simulation.supplychain.content.database.DatabaseWorkerInterfac
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.product.Unit;
 import nl.tudelft.simulation.supplychain.roles.Role;
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
-import nl.tudelft.simulation.unit.simulator.ModelInterfaceUnit;
-import nl.tudelft.simulation.unit.simulator.SimTimeUnit;
 
 /**
- * The TestModel for the supplychain package.
- * <p>
- * Copyright (c) 2003-2006 Delft University of Technology, Jaffalaan 5, 2628 BX Delft, the Netherlands. All rights reserved. See
- * for project information <a href="http://www.simulation.tudelft.nl/"> www.simulation.tudelft.nl </a>. The source code and
- * binary code of this software is proprietary information of Delft University of Technology.
- * @author <a href="http://www.tbm.tudelft.nl/webstaf/peterja/index.htm">Peter Jacobs </a>,
- *         <a href="http://www.tbm.tudelft.nl/webstaf/alexandv/index.htm">Alexander Verbraeck </a>
- * @version $$Revision: 1.1 $$ $$Date: 2009/03/10 22:54:03 $$
+ * The TestModel for the supplychain package. <br>
+ * <br>
+ * Copyright (c) 2003-2018 Delft University of Technology, Jaffalaan 5, 2628 BX Delft, the Netherlands. All rights reserved. See
+ * for project information <a href="https://www.simulation.tudelft.nl/" target="_blank">www.simulation.tudelft.nl</a>. The
+ * source code and binary code of this software is proprietary information of Delft University of Technology.
+ * @author <a href="https://www.tudelft.nl/averbraeck" target="_blank">Alexander Verbraeck</a>
  */
-public class TestModelCentralDatabase implements ModelInterfaceUnit
+public class TestModelCentralDatabase implements DSOLModel.TimeDoubleUnit
 {
     /** the serial version uid */
     private static final long serialVersionUID = 12L;
@@ -61,7 +45,7 @@ public class TestModelCentralDatabase implements ModelInterfaceUnit
     private long startTimeMs = 0;
 
     /** the simulator. */
-    private DEVSSimulatorInterfaceUnit devsSimulator;
+    private DEVSSimulatorInterface.TimeDoubleUnit devsSimulator;
 
     /**
      * constructs a new TestModel
@@ -74,12 +58,12 @@ public class TestModelCentralDatabase implements ModelInterfaceUnit
 
     /** {@inheritDoc} */
     @Override
-    public void constructModel(final SimulatorInterface simulator) throws RemoteException
+    public void constructModel(final SimulatorInterface<Time, Duration, SimTimeDoubleUnit> simulator)
     {
         try
         {
             this.startTimeMs = System.currentTimeMillis();
-            this.devsSimulator = (DEVSSimulatorInterfaceUnit) simulator;
+            this.devsSimulator = (DEVSSimulatorInterface.TimeDoubleUnit) simulator;
             if (this.devsSimulator instanceof AnimatorInterface)
             {
                 // First we create some background. We set the zValue to
@@ -143,7 +127,7 @@ public class TestModelCentralDatabase implements ModelInterfaceUnit
 
     /** {@inheritDoc} */
     @Override
-    public SimulatorInterface<Time, Duration, SimTimeUnit> getSimulator() throws RemoteException
+    public SimulatorInterface<Time, Duration, SimTimeDoubleUnit> getSimulator()
     {
         return null;
     }

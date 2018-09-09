@@ -23,7 +23,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
-    <dsol.version>3.01.06</dsol.version>
+    <dsol.version>3.02.00</dsol.version>
     <djunits.version>3.00.07</djunits.version>
     <maven-jar-plugin.version>2.5</maven-jar-plugin.version>
     <maven.compiler.version>3.7.0</maven.compiler.version>

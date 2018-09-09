@@ -19,6 +19,7 @@ import org.djunits.value.vdouble.scalar.Money;
 
 import nl.tudelft.simulation.actor.Actor;
 import nl.tudelft.simulation.content.HandlerInterface;
+import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.event.EventType;
 import nl.tudelft.simulation.messaging.Message;
 import nl.tudelft.simulation.messaging.devices.components.SendingDeviceInterface;
@@ -30,7 +31,6 @@ import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.content.Shipment;
 import nl.tudelft.simulation.supplychain.roles.Role;
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 
 /**
  * A SupplyChainActor is an Actor from the Actor package with a bank account, and a way to keep track of its messages. It can
@@ -76,7 +76,7 @@ public abstract class SupplyChainActor extends Actor
      * @param roles the roles of the supply chain actor, might be null
      * @param bank the bank
      */
-    public SupplyChainActor(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position,
+    public SupplyChainActor(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
             final Role[] roles, final Bank bank)
     {
         super(name, simulator, position);
@@ -99,7 +99,7 @@ public abstract class SupplyChainActor extends Actor
      * @param bank the bank
      * @param initialBankBalance the initial bank balance
      */
-    public SupplyChainActor(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position,
+    public SupplyChainActor(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
             final Role[] roles, final Bank bank, final Money initialBankBalance)
     {
         this(name, simulator, position, roles, bank);
@@ -294,9 +294,9 @@ public abstract class SupplyChainActor extends Actor
     /**
      * @return the simulator without throwing an exception
      */
-    public DEVSSimulatorInterfaceUnit getDEVSSimulator()
+    public DEVSSimulatorInterface.TimeDoubleUnit getDEVSSimulator()
     {
-        DEVSSimulatorInterfaceUnit _simulator = null;
+        DEVSSimulatorInterface.TimeDoubleUnit _simulator = null;
         try
         {
             _simulator = super.getSimulator();

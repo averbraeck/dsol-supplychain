@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.test;
+package nl.tudelft.simulation.supplychain.demo.mtsmto;
 
 import java.awt.Dimension;
 import java.awt.geom.Rectangle2D;
@@ -36,7 +36,7 @@ import nl.tudelft.simulation.jstats.streams.MersenneTwister;
  * source code and binary code of this software is proprietary information of Delft University of Technology.
  * @author <a href="https://www.tudelft.nl/averbraeck" target="_blank">Alexander Verbraeck</a>
  */
-public class TestModelApp extends DSOLApplication
+public class MTSMTOApp extends DSOLApplication
 {
     /** */
     private static final long serialVersionUID = 1L;
@@ -45,7 +45,7 @@ public class TestModelApp extends DSOLApplication
      * @param title
      * @param panel
      */
-    public TestModelApp(String title, DSOLPanel<Time, Duration, SimTimeDoubleUnit> panel)
+    public MTSMTOApp(String title, DSOLPanel<Time, Duration, SimTimeDoubleUnit> panel)
     {
         super(title, panel);
     }
@@ -64,11 +64,11 @@ public class TestModelApp extends DSOLApplication
         rootLoggerConfig.setLevel(Level.WARN);
         ctx.updateLoggers();
 
-        DSOLModel.TimeDoubleUnit model = new TestModel();
+        DSOLModel.TimeDoubleUnit model = new MTSMTOModel();
         // DEVSAnimator.TimeDoubleUnit animator = new DEVSAnimator.TimeDoubleUnit();
         DEVSRealTimeClock.TimeDoubleUnit animator = new DEVSRealTimeClock.TimeDoubleUnit();
         Replication.TimeDoubleUnit replication = new Replication.TimeDoubleUnit("rep1", Time.ZERO, Duration.ZERO,
-                new Duration(1800.0, DurationUnit.HOUR), model);
+                new Duration(3000.0, DurationUnit.HOUR), model);
         animator.setPauseOnError(true);
         animator.setAnimationDelay(20); // 50 Hz animation update
         replication.getStreams().put("default", new MersenneTwister(1L));
@@ -77,7 +77,7 @@ public class TestModelApp extends DSOLApplication
 
         DSOLPanel<Time, Duration, SimTimeDoubleUnit> panel = new DSOLPanel<Time, Duration, SimTimeDoubleUnit>(model, animator);
 
-        Rectangle2D extent = new Rectangle2D.Double(-100, 50, 400, 200);
+        Rectangle2D extent = new Rectangle2D.Double(-400, -300, 800, 600);
         Dimension size = new Dimension(1024, 768);
         AnimationPanel animationPanel = new AnimationPanel(extent, size, animator);
         panel.getTabbedPane().addTab(0, "animation", animationPanel);
@@ -85,7 +85,7 @@ public class TestModelApp extends DSOLApplication
         // tell the animation panel to update its statistics
         animationPanel.notify(new Event(SimulatorInterface.START_REPLICATION_EVENT, animator, null));
 
-        new TestModelApp("TestModelApp", panel);
+        new MTSMTOApp("MTSMTO", panel);
     }
 
 }

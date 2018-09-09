@@ -5,11 +5,11 @@ import javax.vecmath.Point3d;
 import org.djunits.unit.MoneyUnit;
 import org.djunits.value.vdouble.scalar.Money;
 
+import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.supplychain.actor.Trader;
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.roles.Role;
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 
 /**
  * Reference implementation for a Retailer. <br>
@@ -31,7 +31,7 @@ public class Retailer extends Trader
      * @param roles the initial roles (if any)
      * @param bank the bank
      */
-    public Retailer(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position, final Role[] roles,
+    public Retailer(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position, final Role[] roles,
             final Bank bank)
     {
         this(name, simulator, position, roles, bank, new Money(0.0, MoneyUnit.USD));
@@ -45,7 +45,7 @@ public class Retailer extends Trader
      * @param bank the bank
      * @param initialBankAccount the initial bank balance
      */
-    public Retailer(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position, final Role[] roles,
+    public Retailer(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position, final Role[] roles,
             final Bank bank, final Money initialBankAccount)
     {
         super(name, simulator, position, roles, bank, initialBankAccount);

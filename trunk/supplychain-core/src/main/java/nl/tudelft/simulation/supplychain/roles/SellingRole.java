@@ -1,8 +1,8 @@
 package nl.tudelft.simulation.supplychain.roles;
 
+import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 
 /**
  * <br>
@@ -21,7 +21,7 @@ public class SellingRole extends Role
      * @param owner the owner of the role
      * @param simulator the simulator to schedule on
      */
-    public SellingRole(final SupplyChainActor owner, final DEVSSimulatorInterfaceUnit simulator)
+    public SellingRole(final SupplyChainActor owner, final DEVSSimulatorInterface.TimeDoubleUnit simulator)
     {
         super(owner, simulator);
         // add necessary handlers for this role

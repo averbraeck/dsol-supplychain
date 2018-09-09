@@ -19,6 +19,7 @@ import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.actor.messagehandlers.MessageHandlerInterface;
 import nl.tudelft.simulation.content.HandlerInterface;
+import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.event.EventProducer;
 import nl.tudelft.simulation.language.d3.BoundingBox;
 import nl.tudelft.simulation.language.d3.DirectedPoint;
@@ -27,7 +28,6 @@ import nl.tudelft.simulation.messaging.devices.components.ReceivingDeviceInterfa
 import nl.tudelft.simulation.messaging.devices.components.SendingDeviceInterface;
 import nl.tudelft.simulation.messaging.devices.types.DeviceType;
 import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 
 /**
  * The actor is the basic entity in the nl.tudelft.simulation.actor package. It implements the behavior of a 'communicating'
@@ -59,7 +59,7 @@ public abstract class Actor extends EventProducer implements ActorInterface
     protected Map<ReceivingDeviceInterface, MessageHandlerInterface> receivingDevices;
 
     /** the simulator to schedule on */
-    protected DEVSSimulatorInterfaceUnit simulator;
+    protected DEVSSimulatorInterface.TimeDoubleUnit simulator;
 
     /** the location of the actor */
     protected DirectedPoint location;
@@ -76,7 +76,7 @@ public abstract class Actor extends EventProducer implements ActorInterface
      * @param simulator the simulator to use
      * @param position the location of the actor
      */
-    public Actor(final String name, final DEVSSimulatorInterfaceUnit simulator, final Point3d position)
+    public Actor(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position)
     {
         super();
         this.name = name;
@@ -331,7 +331,7 @@ public abstract class Actor extends EventProducer implements ActorInterface
 
     /** {@inheritDoc} */
     @Override
-    public DEVSSimulatorInterfaceUnit getSimulator()
+    public DEVSSimulatorInterface.TimeDoubleUnit getSimulator()
     {
         return this.simulator;
     }
@@ -343,7 +343,7 @@ public abstract class Actor extends EventProducer implements ActorInterface
         Time time = Time.ZERO;
         try
         {
-            time = this.simulator.getSimulatorTime().get();
+            time = this.simulator.getSimulatorTime();
         }
         catch (Exception e)
         {

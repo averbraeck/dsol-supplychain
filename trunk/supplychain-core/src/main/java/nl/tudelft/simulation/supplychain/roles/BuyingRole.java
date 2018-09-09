@@ -2,9 +2,9 @@ package nl.tudelft.simulation.supplychain.roles;
 
 import java.io.Serializable;
 
+import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.banking.BankAccount;
-import nl.tudelft.simulation.unit.simulator.DEVSSimulatorInterfaceUnit;
 
 /**
  * The (abstract) buying role is a role that can handle several types of message content: internal demand, order confirmation,
@@ -32,7 +32,7 @@ public class BuyingRole extends Role
      * @param simulator the simulator to schedule on
      * @param bankAccount the bank account to use
      */
-    public BuyingRole(final SupplyChainActor owner, final DEVSSimulatorInterfaceUnit simulator, final BankAccount bankAccount)
+    public BuyingRole(final SupplyChainActor owner, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final BankAccount bankAccount)
     {
         super(owner, simulator);
         this.bankAccount = bankAccount;
