@@ -147,7 +147,7 @@ public class PCShop extends Retailer
         while (stockIter.hasNext())
         {
             Product product = stockIter.next();
-            new RestockingPolicySafety(super.stock, product, new Duration(24.0, DurationUnit.HOUR), false, 5.0, true, 50.0,
+            new RestockingPolicySafety(super.stock, product, new Duration(24.0, DurationUnit.HOUR), false, 5.0, true, 10.0,
                     new Duration(14.0, DurationUnit.DAY));
             // order 100 PCs when actual+claimed < 100
             // policy will schedule itself

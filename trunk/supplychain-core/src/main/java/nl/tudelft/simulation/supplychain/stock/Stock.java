@@ -82,6 +82,7 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
             this.changeFutureClaimedAmount(product, initialStock.getClaimedAmount(product), owner.getSimulatorTime());
             this.changeOrderedAmount(product, initialStock.getOrderedAmount(product));
             this.changeFutureOrderedAmount(product, initialStock.getOrderedAmount(product), owner.getSimulatorTime());
+            sendStockUpdateEvent(product);
         }
     }
 

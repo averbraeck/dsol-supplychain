@@ -45,6 +45,18 @@ public class TestModel implements DSOLModel.TimeDoubleUnit
     /** the simulator. */
     private DEVSSimulatorInterface.TimeDoubleUnit devsSimulator;
 
+    /** */
+    Product laptop;
+
+    /** */
+    Factory factory;
+
+    /** */
+    PCShop pcShop;
+
+    /** */
+    Client client;
+
     /**
      * constructs a new TestModel
      */
@@ -77,20 +89,20 @@ public class TestModel implements DSOLModel.TimeDoubleUnit
             ing.setAnnualInterestRatePos(0.025);
 
             // create a product
-            Product laptop =
+            this.laptop =
                     new Product("Laptop", Unit.PIECE, new Money(1400.0, MoneyUnit.USD), new Mass(6.5, MassUnit.KILOGRAM), 0.0);
 
             // create a manufacturer
-            Factory factory = new Factory("Factory", this.devsSimulator, new Point3d(200, 200, 0), ing,
-                    new Money(50000.0, MoneyUnit.USD), laptop, 1000, new LeanContentStore(this.devsSimulator));
+            this.factory = new Factory("Factory", this.devsSimulator, new Point3d(200, 200, 0), ing,
+                    new Money(50000.0, MoneyUnit.USD), this.laptop, 1000, new LeanContentStore(this.devsSimulator));
 
             // create a retailer
-            PCShop pcShop = new PCShop("PCshop", this.devsSimulator, new Point3d(20, 200, 0), ing,
-                    new Money(50000.0, MoneyUnit.USD), laptop, 10, factory, new LeanContentStore(this.devsSimulator));
+            this.pcShop = new PCShop("PCshop", this.devsSimulator, new Point3d(20, 200, 0), ing,
+                    new Money(50000.0, MoneyUnit.USD), this.laptop, 10, this.factory, new LeanContentStore(this.devsSimulator));
 
             // create a customer
-            Client client = new Client("Client", this.devsSimulator, new Point3d(100, 100, 0), ing,
-                    new Money(1500000.0, MoneyUnit.USD), laptop, pcShop, new LeanContentStore(this.devsSimulator));
+            this.client = new Client("Client", this.devsSimulator, new Point3d(100, 100, 0), ing,
+                    new Money(1500000.0, MoneyUnit.USD), this.laptop, this.pcShop, new LeanContentStore(this.devsSimulator));
 
             // schedule a remark that the simulation is ready
             Duration endTime = new Duration(simulator.getReplication().getTreatment().getRunLength().doubleValue() - 0.001,
@@ -99,9 +111,9 @@ public class TestModel implements DSOLModel.TimeDoubleUnit
 
             // Create the animation.
             ContentAnimator contentAnimator = new ContentAnimator(this.devsSimulator);
-            contentAnimator.subscribe(factory);
-            contentAnimator.subscribe(pcShop);
-            contentAnimator.subscribe(client);
+            contentAnimator.subscribe(this.factory);
+            contentAnimator.subscribe(this.pcShop);
+            contentAnimator.subscribe(this.client);
         }
         catch (Exception e)
         {

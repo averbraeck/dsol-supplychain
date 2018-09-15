@@ -9,10 +9,8 @@ import javax.naming.NamingException;
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
-import org.pmw.tinylog.Configurator;
 import org.pmw.tinylog.Level;
 
-import nl.tudelft.simulation.dsol.DSOLModel;
 import nl.tudelft.simulation.dsol.SimRuntimeException;
 import nl.tudelft.simulation.dsol.animation.D2.AnimationPanel;
 import nl.tudelft.simulation.dsol.experiment.Replication;
@@ -24,6 +22,7 @@ import nl.tudelft.simulation.dsol.simulators.DEVSRealTimeClock;
 import nl.tudelft.simulation.dsol.simulators.SimulatorInterface;
 import nl.tudelft.simulation.event.Event;
 import nl.tudelft.simulation.jstats.streams.MersenneTwister;
+import nl.tudelft.simulation.logger.ConsoleLogger;
 
 /**
  * TestModelApp.java. <br>
@@ -55,9 +54,10 @@ public class TestModelApp extends DSOLApplication
      */
     public static void main(final String[] args) throws SimRuntimeException, NamingException, RemoteException
     {
-        Configurator.defaultConfig().level(Level.INFO).activate();
+        ConsoleLogger.create();
+        ConsoleLogger.setLevel(Level.INFO);
 
-        DSOLModel.TimeDoubleUnit model = new TestModel();
+        TestModel model = new TestModel();
         // DEVSAnimator.TimeDoubleUnit animator = new DEVSAnimator.TimeDoubleUnit();
         DEVSRealTimeClock.TimeDoubleUnit animator = new DEVSRealTimeClock.TimeDoubleUnit();
         Replication.TimeDoubleUnit replication = new Replication.TimeDoubleUnit("rep1", Time.ZERO, Duration.ZERO,
@@ -68,7 +68,7 @@ public class TestModelApp extends DSOLApplication
         animator.initialize(replication, ReplicationMode.TERMINATING);
         animator.setSpeedFactor(10000.0);
 
-        DSOLPanel<Time, Duration, SimTimeDoubleUnit> panel = new DSOLPanel<Time, Duration, SimTimeDoubleUnit>(model, animator);
+        TestModelPanel panel = new TestModelPanel(model, animator);
 
         Rectangle2D extent = new Rectangle2D.Double(-100, 50, 400, 200);
         Dimension size = new Dimension(1024, 768);
