@@ -20,10 +20,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.event.EventProducer;
 import nl.tudelft.simulation.event.TimedEvent;
@@ -51,9 +50,6 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
 
     /** record keeping of the stock */
     protected Hashtable<Product, StockRecord> stockRecords = new Hashtable<Product, StockRecord>();
-
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(Stock.class);
 
     /**
      * <Product, <time moment, ArrayList<values for time moment>>> future changes
@@ -117,7 +113,7 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
         catch (Exception exception)
         {
             exception.printStackTrace();
-            logger.fatal("addStock", exception);
+            Logger.error(exception, "addStock");
         }
         this.sendStockUpdateEvent(stockRecord);
     }
@@ -210,16 +206,14 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
     {
         if (time.lt(this.owner.getSimulatorTime()))
         {
-            logger.fatal("changeFutureClaimedAmount",
-                    new IllegalArgumentException("Time for the change is smaller than current simulator time (" + time + "<"
-                            + this.owner.getSimulatorTime() + ")."));
+            Logger.error("changeFutureClaimedAmount - Time for the change is smaller than current simulator time (" + time + "<"
+                    + this.owner.getSimulatorTime() + ").");
             return false;
         }
 
         if (delta < 0)
         {
-            logger.fatal("changeFutureOrderedAmount",
-                    new IllegalArgumentException("The delta may not be smaller than 0 (" + delta + "<" + 0 + ")."));
+            Logger.error("changeFutureOrderedAmount - The delta may not be smaller than 0 (" + delta + "<" + 0 + ").");
             return false;
         }
 
@@ -260,15 +254,13 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
     {
         if (time.lt(this.owner.getSimulatorTime()))
         {
-            logger.fatal("changeFutureOrderedAmount",
-                    new IllegalArgumentException("Time for the change is smaller than current simulator time (" + time + "<"
-                            + this.owner.getSimulatorTime() + ")."));
+            Logger.error("changeFutureOrderedAmount - Time for the change is smaller than current simulator time (" + time + "<"
+                    + this.owner.getSimulatorTime() + ").");
             return false;
         }
         if (delta < 0)
         {
-            logger.fatal("changeFutureOrderedAmount",
-                    new IllegalArgumentException("The delta may not be smaller than 0 (" + delta + "<" + 0 + ")."));
+            Logger.error("changeFutureOrderedAmount - The delta may not be smaller than 0 (" + delta + "<" + 0 + ").");
             return false;
         }
 

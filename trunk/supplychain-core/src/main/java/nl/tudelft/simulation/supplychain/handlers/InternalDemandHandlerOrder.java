@@ -4,10 +4,9 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Money;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.InternalDemand;
@@ -35,9 +34,6 @@ public class InternalDemandHandlerOrder extends InternalDemandHandler
 
     /** a table to map the products onto a unique supplier */
     private Map<Product, SupplierRecord> suppliers = new HashMap<Product, SupplierRecord>();
-
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(InternalDemandHandlerOrder.class);
 
     /**
      * Constructs a new InternalDemandHandlerOrder
@@ -76,16 +72,16 @@ public class InternalDemandHandlerOrder extends InternalDemandHandler
     @Override
     public boolean handleContent(final Serializable content)
     {
-        InternalDemand internalDemand = (InternalDemand) checkContent(content);
-        if (!isValidContent(internalDemand))
+        if (!isValidContent(content))
         {
             return false;
         }
+        InternalDemand internalDemand = (InternalDemand) content;
         // resolve the suplier
         SupplierRecord supplierRecord = this.suppliers.get(internalDemand.getProduct());
         if (supplierRecord == null)
         {
-            logger.warn("checkContent", "InternalDemand for actor " + getOwner() + " contains product "
+            Logger.warn("checkContent", "InternalDemand for actor " + getOwner() + " contains product "
                     + internalDemand.getProduct().toString() + " without a supplier");
             return false;
         }

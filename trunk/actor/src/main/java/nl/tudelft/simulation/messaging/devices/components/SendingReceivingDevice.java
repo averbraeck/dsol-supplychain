@@ -3,10 +3,8 @@ package nl.tudelft.simulation.messaging.devices.components;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.pmw.tinylog.Logger;
 
-import nl.tudelft.simulation.actor.Actor;
 import nl.tudelft.simulation.event.EventInterface;
 import nl.tudelft.simulation.event.EventListenerInterface;
 import nl.tudelft.simulation.messaging.Message;
@@ -32,9 +30,6 @@ public abstract class SendingReceivingDevice extends AbstractDevice
     /** the receiver */
     private ReceivingDeviceInterface receiver = null;
 
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(Actor.class);
-
     /**
      * constructs a new SendingReceivingDevice
      * @param name the name of the device
@@ -55,7 +50,7 @@ public abstract class SendingReceivingDevice extends AbstractDevice
         }
         catch (RemoteException e)
         {
-            logger.warn("<init>", e);
+            Logger.warn(e, "<init>");
         }
     }
 

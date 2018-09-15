@@ -2,15 +2,16 @@ package nl.tudelft.simulation.supplychain.handlers;
 
 import java.io.Serializable;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
+import org.pmw.tinylog.Logger;
 
+import nl.tudelft.simulation.dsol.SimRuntimeException;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.banking.BankAccount;
 import nl.tudelft.simulation.supplychain.content.Bill;
+import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.Payment;
 import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
@@ -28,30 +29,14 @@ public class BillHandler extends SupplyChainHandler
     /** the serial version uid */
     private static final long serialVersionUID = 12L;
 
-    // the different payment policies that this BillHandler class can use
-    /** The payment policy to for payment at the exact right date */
-    public static final int PAYMENT_ON_TIME = 0;
+    /** the bank account to use. */
+    protected BankAccount bankAccount;
 
-    /** The payment policy to indicate the payment will be done late */
-    public static final int PAYMENT_EARLY = 1;
+    /** the payment policy to use. */
+    private PaymentPolicyEnum paymentPolicy;
 
-    /** The payment policy to indicate the payment will be done early */
-    public static final int PAYMENT_LATE = 2;
-
-    /** The payment policy for payment right now, without waiting */
-    public static final int PAYMENT_IMMEDIATE = 3;
-
-    /** the bank account to use */
-    protected BankAccount bankAccount = null;
-
-    /** the payment policy to use */
-    private int paymentPolicy = 0;
-
-    /** the delay distribution to use with certain policies */
-    private DistContinuousDurationUnit paymentDelay = null;
-
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(BillHandler.class);
+    /** the delay distribution to use with certain policies, to be added or subtracted. */
+    private DistContinuousDurationUnit paymentDelay;
 
     /**
      * Constructs a new BillHandler with possibilities to pay early or late.
@@ -60,7 +45,7 @@ public class BillHandler extends SupplyChainHandler
      * @param paymentPolicy the payment policy to use (early, late, etc.).
      * @param paymentDelay the delay to use in early or late payment
      */
-    public BillHandler(final SupplyChainActor owner, final BankAccount bankAccount, final int paymentPolicy,
+    public BillHandler(final SupplyChainActor owner, final BankAccount bankAccount, final PaymentPolicyEnum paymentPolicy,
             final DistContinuousDurationUnit paymentDelay)
     {
         super(owner);
@@ -76,38 +61,38 @@ public class BillHandler extends SupplyChainHandler
      */
     public BillHandler(final SupplyChainActor owner, final BankAccount bankAccount)
     {
-        this(owner, bankAccount, 0, null);
+        this(owner, bankAccount, PaymentPolicyEnum.PAYMENT_ON_TIME, null);
     }
 
     /** {@inheritDoc} */
     @Override
     public boolean handleContent(final Serializable content)
     {
-        Bill bill = (Bill) checkContent(content);
-        if (!isValidContent(bill))
+        if (!isValidContent(content))
         {
             return false;
         }
+        Bill bill = (Bill) content;
         // schedule the payment
         Time currentTime = Time.ZERO;
         currentTime = getOwner().getSimulator().getSimulatorTime();
         Time paymentTime = bill.getFinalPaymentDate();
         switch (this.paymentPolicy)
         {
-            case BillHandler.PAYMENT_ON_TIME:
+            case PAYMENT_ON_TIME:
                 // do nothing, we pay on the requested date
                 break;
-            case BillHandler.PAYMENT_EARLY:
+            case PAYMENT_EARLY:
                 paymentTime = paymentTime.minus(this.paymentDelay.draw());
                 break;
-            case BillHandler.PAYMENT_LATE:
+            case PAYMENT_LATE:
                 paymentTime = paymentTime.plus(this.paymentDelay.draw());
                 break;
-            case BillHandler.PAYMENT_IMMEDIATE:
+            case PAYMENT_IMMEDIATE:
                 paymentTime = currentTime;
                 break;
             default:
-                logger.warn("handleContant - unknown paymentPolicy: " + this.paymentPolicy);
+                Logger.warn("handleContant - unknown paymentPolicy: {}", this.paymentPolicy);
                 break;
         }
         // check if payment is still possible, if it already should have taken
@@ -118,9 +103,9 @@ public class BillHandler extends SupplyChainHandler
             Serializable[] args = new Serializable[] { bill };
             getOwner().getSimulator().scheduleEventAbs(paymentTime, this, this, "pay", args);
         }
-        catch (Exception exception)
+        catch (SimRuntimeException exception)
         {
-            logger.fatal("handleContent", exception);
+            Logger.error(exception, "handleContent");
             return false;
         }
         return true;
@@ -140,9 +125,9 @@ public class BillHandler extends SupplyChainHandler
                 Serializable[] args = new Serializable[] { bill };
                 getOwner().getSimulator().scheduleEventRel(new Duration(1.0, DurationUnit.DAY), this, this, "pay", args);
             }
-            catch (Exception exception)
+            catch (SimRuntimeException exception)
             {
-                logger.fatal("handleContent", exception);
+                Logger.error(exception, "handleContent");
             }
             return;
         }
@@ -163,15 +148,16 @@ public class BillHandler extends SupplyChainHandler
     /**
      * @param paymentPolicy The paymentPolicy to set.
      */
-    public void setPaymentPolicy(final int paymentPolicy)
+    public void setPaymentPolicy(final PaymentPolicyEnum paymentPolicy)
     {
         this.paymentPolicy = paymentPolicy;
     }
 
     /** {@inheritDoc} */
     @Override
-    protected boolean checkContentClass(final Serializable content)
+    public Class<? extends Content> getContentClass()
     {
-        return (content instanceof Bill);
+        return Bill.class;
     }
+
 }

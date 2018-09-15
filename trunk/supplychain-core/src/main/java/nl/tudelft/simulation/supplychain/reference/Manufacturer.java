@@ -24,10 +24,10 @@ import org.djunits.value.vdouble.scalar.Money;
 
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.supplychain.banking.Bank;
+import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.production.Production;
 import nl.tudelft.simulation.supplychain.production.ProductionService;
-import nl.tudelft.simulation.supplychain.roles.Role;
 
 /**
  * Reference implementation for a manufacturer. <br>
@@ -49,27 +49,27 @@ public class Manufacturer extends DistributionCenter
      * @param name the name of the manufacturer
      * @param simulator the simulator to use
      * @param position the position on the map
-     * @param roles the initial roles (if any)
      * @param bank the bank
+     * @param contentStore the contentStore for the messages
      */
     public Manufacturer(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
-            final Role[] roles, final Bank bank)
+            final Bank bank, final ContentStoreInterface contentStore)
     {
-        this(name, simulator, position, roles, bank, new Money(0.0, MoneyUnit.USD));
+        this(name, simulator, position, bank, new Money(0.0, MoneyUnit.USD), contentStore);
     }
 
     /**
      * @param name the name of the manufacturer
      * @param simulator the simulator to use
      * @param position the position on the map
-     * @param roles the initial roles (if any)
      * @param bank the bank
      * @param initialBankAccount the initial bank balance
+     * @param contentStore the contentStore for the messages
      */
     public Manufacturer(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
-            final Role[] roles, final Bank bank, final Money initialBankAccount)
+            final Bank bank, final Money initialBankAccount, final ContentStoreInterface contentStore)
     {
-        super(name, simulator, position, roles, bank, initialBankAccount);
+        super(name, simulator, position, bank, initialBankAccount, contentStore);
         this.production = new Production(this);
     }
 

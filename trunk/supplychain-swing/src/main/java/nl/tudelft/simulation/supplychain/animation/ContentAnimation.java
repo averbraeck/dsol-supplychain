@@ -6,9 +6,8 @@ import java.rmi.RemoteException;
 
 import javax.media.j3d.Bounds;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.djunits.value.vdouble.scalar.Duration;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.animation.Locatable;
 import nl.tudelft.simulation.dsol.animation.D2.SingleImageRenderable;
@@ -53,9 +52,6 @@ public class ContentAnimation implements Locatable, Serializable
 
     /** the animation delay for the content */
     private Duration delay = Duration.ZERO;
-
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(ContentAnimation.class);
 
     /**
      * Constructs a new animation for any type of content. This constructor will try to find a default URL of a picture to
@@ -123,7 +119,7 @@ public class ContentAnimation implements Locatable, Serializable
         }
         catch (Exception remoteException)
         {
-            logger.warn("<init>", remoteException);
+            Logger.warn(remoteException, "<init>");
         }
     }
 

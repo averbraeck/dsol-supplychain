@@ -2,20 +2,19 @@ package nl.tudelft.simulation.supplychain.actor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.vecmath.Point3d;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.djunits.unit.DurationUnit;
 import org.djunits.unit.LengthUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Length;
 import org.djunits.value.vdouble.scalar.Money;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.actor.Actor;
 import nl.tudelft.simulation.content.HandlerInterface;
@@ -48,46 +47,37 @@ public abstract class SupplyChainActor extends Actor
     private static final long serialVersionUID = 1L;
 
     /** the bank account of the actor */
-    protected BankAccount bankAccount = null;
+    protected final BankAccount bankAccount;
 
     /** the store for the content to use */
-    private ContentStoreInterface contentStore = null;
+    private final ContentStoreInterface contentStore;
 
-    /** the roles for this actor */
-    private List<Role> roles = new ArrayList<Role>();
+    /** the roles for this actor; avoid roles to be registered multiple times (Set). */
+    private Set<Role> roles = new HashSet<Role>();
 
     /** the fixed costs for this supply chain actor */
     private List<FixedCost> fixedCosts = new ArrayList<FixedCost>();
-    
+
     /** the event to indicate that information has been sent. E.g., for animation. */
     public static EventType SEND_CONTENT_EVENT = new EventType("SEND_CONTENT_EVENT");
 
     /** DEBUG messages? */
     public static boolean DEBUG = false;
-    
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(SupplyChainActor.class);
 
     /**
      * Constructs a new SupplyChainActor
      * @param name the name to display for this supply chain actor
      * @param simulator the simulator on which to schedule
      * @param position the location for transportation calculations, which can also be used for animation purposes
-     * @param roles the roles of the supply chain actor, might be null
      * @param bank the bank
+     * @param contentStore the contentStore for the messages
      */
     public SupplyChainActor(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
-            final Role[] roles, final Bank bank)
+            final Bank bank, final ContentStoreInterface contentStore)
     {
         super(name, simulator, position);
         this.bankAccount = new BankAccount(this, bank);
-        if (roles != null)
-        {
-            for (int i = 0; i < roles.length; i++)
-            {
-                this.roles.add(roles[i]);
-            }
-        }
+        this.contentStore = contentStore;
     }
 
     /**
@@ -95,14 +85,14 @@ public abstract class SupplyChainActor extends Actor
      * @param name the name to display for this supply chain actor
      * @param simulator the simulator on which to schedule
      * @param position the location for transportation calculations, which can also be used for animation purposes
-     * @param roles the roles of the supply chain actor, might be null
      * @param bank the bank
      * @param initialBankBalance the initial bank balance
+     * @param contentStore the contentStore for the messages
      */
     public SupplyChainActor(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
-            final Role[] roles, final Bank bank, final Money initialBankBalance)
+            final Bank bank, final Money initialBankBalance, final ContentStoreInterface contentStore)
     {
-        this(name, simulator, position, roles, bank);
+        this(name, simulator, position, bank, contentStore);
         this.bankAccount.addToBalance(initialBankBalance);
     }
 
@@ -130,23 +120,23 @@ public abstract class SupplyChainActor extends Actor
     @Override
     public boolean handleContent(final Serializable content)
     {
-        logger.info(getName() + ".handleContent: " + content.toString());
-        System.out.println(
-                this.simulator.getSimulatorTime().toString() + "  " + getName() + ".handleContent: " + content.toString());
+        Logger.info(getName() + ".handleContent. id=" + ((Content) content).getInternalDemandID() + ": " + content.toString());
         // save content in the content store
         this.contentStore.addContent((Content) content, false);
-        Iterator<Role> roleIterator = this.roles.iterator();
         boolean success = false;
-        while (roleIterator.hasNext())
+        for (Role role : this.roles)
         {
-            success |= ((HandlerInterface) roleIterator.next()).handleContent(content);
+            success |= role.handleContent(content, false);
         }
-        // send content also to actor itself for possible handling
-        success |= super.handleContent(content);
+        for (HandlerInterface handler : this.resolveContentHandlers(content.getClass()))
+        {
+            success |= handler.handleContent(content);
+        }
         if (!success)
         {
-            logger.warn("handleContent", "No supply chain content handler, or one of its roles "
-                    + "successfully handled content type " + content.getClass() + ", actor " + this.getName());
+            Logger.warn(
+                    "handleContent - No supply chain content handler, or one of its roles successfully handled content type {}, actor {}",
+                    content.getClass(), this.getName());
         }
         return success;
     }
@@ -191,7 +181,7 @@ public abstract class SupplyChainActor extends Actor
             }
             catch (Exception e)
             {
-                logger.warn("sendContent", e);
+                Logger.error(e, "sendContent");
             }
         }
         // save content
@@ -206,7 +196,7 @@ public abstract class SupplyChainActor extends Actor
     protected void scheduledSendContent(final Message message, final SendingDeviceInterface sendingDevice)
     {
         sendingDevice.send(message); // ignore success or failure
-        fireEvent(SEND_CONTENT_EVENT, new Object[] {message.getBody(), new Duration(1.0, DurationUnit.HOUR)});
+        fireEvent(SEND_CONTENT_EVENT, new Object[] { message.getBody(), new Duration(1.0, DurationUnit.HOUR) });
     }
 
     /**
@@ -217,7 +207,7 @@ public abstract class SupplyChainActor extends Actor
      */
     protected void scheduledSendContent(final Message message, final SendingDeviceInterface sendingDevice, final Duration delay)
     {
-        fireEvent(SEND_CONTENT_EVENT, new Object[] {message.getBody(), delay});
+        fireEvent(SEND_CONTENT_EVENT, new Object[] { message.getBody(), delay });
         if (SupplyChainActor.DEBUG)
         {
             System.out.println("SupplyChainActor: scheduledSendContent: delay in days for content: " + message.getBody()
@@ -232,7 +222,7 @@ public abstract class SupplyChainActor extends Actor
         }
         catch (Exception exception)
         {
-            logger.fatal("scheduledSendContent", exception);
+            Logger.error(exception, "scheduledSendContent");
         }
     }
 
@@ -254,14 +244,6 @@ public abstract class SupplyChainActor extends Actor
     public ContentStoreInterface getContentStore()
     {
         return this.contentStore;
-    }
-
-    /**
-     * @param contentStore The contentStore to set.
-     */
-    public void setContentStore(final ContentStoreInterface contentStore)
-    {
-        this.contentStore = contentStore;
     }
 
     /**
@@ -303,7 +285,7 @@ public abstract class SupplyChainActor extends Actor
         }
         catch (Exception exception)
         {
-            logger.fatal("getSimulator", exception);
+            Logger.error(exception, "getSimulator");
         }
         return _simulator;
     }

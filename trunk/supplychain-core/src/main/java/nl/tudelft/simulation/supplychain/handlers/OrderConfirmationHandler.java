@@ -2,11 +2,11 @@ package nl.tudelft.simulation.supplychain.handlers;
 
 import java.io.Serializable;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.djunits.value.vdouble.scalar.Duration;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
+import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.InternalDemand;
 import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
 
@@ -29,9 +29,6 @@ public class OrderConfirmationHandler extends SupplyChainHandler
     /** for debugging */
     private static final boolean DEBUG = false;
 
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(OrderConfirmationHandler.class);
-
     /**
      * Constructs a new OrderConfirmationHandler.
      * @param owner the owner of the handler.
@@ -48,11 +45,11 @@ public class OrderConfirmationHandler extends SupplyChainHandler
     @Override
     public boolean handleContent(final Serializable content)
     {
-        OrderConfirmation orderConfirmation = (OrderConfirmation) checkContent(content);
-        if (!isValidContent(orderConfirmation))
+        if (!isValidContent(content))
         {
             return false;
         }
+        OrderConfirmation orderConfirmation = (OrderConfirmation) content;
         if (!orderConfirmation.isAccepted())
         {
             if (OrderConfirmationHandler.DEBUG)
@@ -69,14 +66,14 @@ public class OrderConfirmationHandler extends SupplyChainHandler
 
                 if (oldID == null)
                 {
-                    logger.warn("handleContent",
+                    Logger.warn("handleContent",
                             "Could not find InternalDemand for OrderConfirmation " + orderConfirmation.toString());
                     return false;
                 }
             }
             catch (Exception exception)
             {
-                logger.warn("handleContent",
+                Logger.warn("handleContent",
                         "Could not find InternalDemand for OrderConfirmation " + orderConfirmation.toString());
                 return false;
             }
@@ -93,8 +90,9 @@ public class OrderConfirmationHandler extends SupplyChainHandler
 
     /** {@inheritDoc} */
     @Override
-    protected boolean checkContentClass(final Serializable content)
+    public Class<? extends Content> getContentClass()
     {
-        return (content instanceof OrderConfirmation);
+        return OrderConfirmation.class;
     }
+
 }

@@ -6,9 +6,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.djunits.value.vdouble.scalar.Duration;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.InternalDemand;
@@ -36,9 +35,6 @@ public class InternalDemandHandlerRFQ extends InternalDemandHandler
 
     /** a table to map the products onto a list of possible suppliers */
     private Map<Product, HashSet<SupplyChainActor>> suppliers = new HashMap<Product, HashSet<SupplyChainActor>>();
-
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(InternalDemandHandlerRFQ.class);
 
     /**
      * Constructs a new InternalDemandHandlerRFQ
@@ -97,18 +93,18 @@ public class InternalDemandHandlerRFQ extends InternalDemandHandler
     @Override
     public boolean handleContent(final Serializable content)
     {
-        InternalDemand internalDemand = (InternalDemand) checkContent(content);
-        if (!isValidContent(internalDemand))
+        if (!isValidContent(content))
         {
-            logger.warn("handleContent", "InternalDemand for actor " + getOwner() + " contains product "
-                    + internalDemand.getProduct().toString() + ", but handler not considered valid.");
+            Logger.warn("handleContent",
+                    "InternalDemand " + content.toString() + " for actor " + getOwner() + " not considered valid.");
             return false;
         }
+        InternalDemand internalDemand = (InternalDemand) content;
         // resolve the suplier
         HashSet<SupplyChainActor> supplierSet = this.suppliers.get(internalDemand.getProduct());
         if (supplierSet == null)
         {
-            logger.warn("handleContent", "InternalDemand for actor " + getOwner() + " contains product "
+            Logger.warn("handleContent", "InternalDemand for actor " + getOwner() + " contains product "
                     + internalDemand.getProduct().toString() + " without any suppliers.");
             return false;
         }

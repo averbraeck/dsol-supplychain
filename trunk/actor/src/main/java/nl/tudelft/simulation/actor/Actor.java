@@ -12,18 +12,13 @@ import java.util.TreeMap;
 import javax.media.j3d.Bounds;
 import javax.vecmath.Point3d;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.djunits.value.vdouble.scalar.Duration;
-import org.djunits.value.vdouble.scalar.Time;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.actor.messagehandlers.MessageHandlerInterface;
-import nl.tudelft.simulation.content.HandlerInterface;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
-import nl.tudelft.simulation.event.EventProducer;
 import nl.tudelft.simulation.language.d3.BoundingBox;
 import nl.tudelft.simulation.language.d3.DirectedPoint;
-import nl.tudelft.simulation.messaging.Message;
 import nl.tudelft.simulation.messaging.devices.components.ReceivingDeviceInterface;
 import nl.tudelft.simulation.messaging.devices.components.SendingDeviceInterface;
 import nl.tudelft.simulation.messaging.devices.types.DeviceType;
@@ -41,16 +36,10 @@ import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
  * source code and binary code of this software is proprietary information of Delft University of Technology.
  * @author <a href="https://www.tudelft.nl/averbraeck" target="_blank">Alexander Verbraeck</a>
  */
-public abstract class Actor extends EventProducer implements ActorInterface
+public abstract class Actor extends InternalActor implements ActorInterface
 {
     /** the serial version uid */
     private static final long serialVersionUID = 12L;
-
-    /** the content handlers for this actor */
-    protected Map<Class<?>, Set<HandlerInterface>> contentHandlers = new HashMap<Class<?>, Set<HandlerInterface>>();
-
-    /** the name of an actor */
-    protected String name;
 
     /** the sending devices */
     protected Set<SendingDeviceInterface> sendingDevices;
@@ -58,17 +47,11 @@ public abstract class Actor extends EventProducer implements ActorInterface
     /** the receiving devices with their messageHandler */
     protected Map<ReceivingDeviceInterface, MessageHandlerInterface> receivingDevices;
 
-    /** the simulator to schedule on */
-    protected DEVSSimulatorInterface.TimeDoubleUnit simulator;
-
     /** the location of the actor */
     protected DirectedPoint location;
 
     /** the description of the location of an actor */
     protected String locationDescription = "";
-
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(Actor.class);
 
     /**
      * Constructs a new Actor
@@ -78,11 +61,9 @@ public abstract class Actor extends EventProducer implements ActorInterface
      */
     public Actor(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position)
     {
-        super();
-        this.name = name;
-        this.sendingDevices = new HashSet<SendingDeviceInterface>();
-        this.receivingDevices = new HashMap<ReceivingDeviceInterface, MessageHandlerInterface>();
-        this.simulator = simulator;
+        super(name, simulator);
+        this.sendingDevices = new HashSet<>();
+        this.receivingDevices = new HashMap<>();
         this.location = new DirectedPoint(position);
     }
 
@@ -139,7 +120,7 @@ public abstract class Actor extends EventProducer implements ActorInterface
         }
         catch (Exception e)
         {
-            logger.warn("setCheckInterval", e);
+            Logger.warn(e, "setCheckInterval");
         }
     }
 
@@ -200,95 +181,6 @@ public abstract class Actor extends EventProducer implements ActorInterface
         return result.toArray(new SendingDeviceInterface[result.size()]);
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public boolean handleMessage(final Message message)
-    {
-        return this.handleContent(message.getBody());
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public boolean handleContent(final Serializable content)
-    {
-        Set<HandlerInterface> handlers = this.resolveContentHandlers(content.getClass());
-        if (handlers.size() == 0)
-        {
-            logger.warn("handleContent - No actor content handler available for content type " + content.getClass() + ", actor "
-                    + this.getName());
-        }
-        boolean success = false; // no correct handling yet
-        for (HandlerInterface handler : handlers)
-        {
-            // Now we invoke the business logic on the handler
-            success |= handler.handleContent(content);
-        }
-        if (!success)
-        {
-            logger.warn("handleContent - No actor content handler successfully handled content type " + content.getClass()
-                    + ", actor " + this.getName());
-        }
-        return success;
-    }
-
-    /**
-     * adds a handler for message content
-     * @param contentClass the content class to add
-     * @param handler the handler for the content class
-     */
-    public void addContentHandler(final Class<?> contentClass, final HandlerInterface handler)
-    {
-        Set<HandlerInterface> handlers = this.contentHandlers.get(contentClass);
-        if (handlers == null)
-        {
-            handlers = new HashSet<HandlerInterface>();
-            this.contentHandlers.put(contentClass, handlers);
-        }
-        handlers.add(handler);
-    }
-
-    /**
-     * removes a handler for message content
-     * @param contentClass the content class to add
-     * @param handler the handler for the content class
-     */
-    public void removeContentHandler(final Class<?> contentClass, final HandlerInterface handler)
-    {
-        Set<HandlerInterface> handlers = this.contentHandlers.get(contentClass);
-        if (handlers != null)
-        {
-            handlers.remove(handler);
-        }
-    }
-
-    /**
-     * Resolves the contentHandler for a specific content type. It also looks for a handler that handles any of the
-     * superclasses. All matching handlers will be added to the Set that is returned.
-     * @param contentClass the type expressed by the content
-     * @return a handler
-     */
-    private Set<HandlerInterface> resolveContentHandlers(final Class<?> contentClass)
-    {
-        Class<?> classIterator = contentClass;
-        Set<HandlerInterface> handlers = new HashSet<HandlerInterface>();
-        try
-        {
-            while (classIterator != null)
-            {
-                if (this.contentHandlers.containsKey(classIterator))
-                {
-                    handlers.addAll(this.contentHandlers.get(classIterator));
-                }
-                classIterator = classIterator.getSuperclass();
-            }
-        }
-        catch (Exception e)
-        {
-            logger.fatal("resolveContentHandlers", e);
-        }
-        return handlers;
-    }
-
     /**
      * removes a device to the actor
      * @param device device
@@ -310,13 +202,6 @@ public abstract class Actor extends EventProducer implements ActorInterface
 
     /** {@inheritDoc} */
     @Override
-    public String getName()
-    {
-        return this.name;
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public DirectedPoint getLocation()
     {
         return this.location;
@@ -327,29 +212,6 @@ public abstract class Actor extends EventProducer implements ActorInterface
     public Bounds getBounds()
     {
         return new BoundingBox(1.0, 1.0, 2.0);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public DEVSSimulatorInterface.TimeDoubleUnit getSimulator()
-    {
-        return this.simulator;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Time getSimulatorTime()
-    {
-        Time time = Time.ZERO;
-        try
-        {
-            time = this.simulator.getSimulatorTime();
-        }
-        catch (Exception e)
-        {
-            logger.warn("getSimulatorTime", e);
-        }
-        return time;
     }
 
     /**
@@ -377,19 +239,12 @@ public abstract class Actor extends EventProducer implements ActorInterface
         }
         if (possibleDevices.size() == 0)
         {
-            logger.warn("resolveFastestDevice - No appropriate device(s) found between actor " + sender.getName() + " and "
-                    + receiver.getName());
+            Logger.warn("resolveFastestDevice - No appropriate device(s) found between actor {} and {}", sender.getName(),
+                    receiver.getName());
             return null;
         }
         // return the key with the highest value (speed or priority)
         return possibleDevices.get(possibleDevices.lastKey());
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public String toString()
-    {
-        return this.name;
     }
 
     /**

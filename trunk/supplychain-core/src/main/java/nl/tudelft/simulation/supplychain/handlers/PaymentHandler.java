@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.banking.BankAccount;
+import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.Payment;
 
 /**
@@ -37,12 +38,12 @@ public class PaymentHandler extends SupplyChainHandler
     @Override
     public boolean handleContent(final Serializable content)
     {
-        Payment payment = (Payment) checkContent(content);
-        if (!isValidContent(payment))
+        if (!isValidContent(content))
         {
             return false;
         }
-        // later, a check for the exact amount could be built in.
+        Payment payment = (Payment) content;
+        // TODO: later, a check for the exact amount could be built in.
         this.bankAccount.addToBalance(payment.getPayment());
         payment.getBill().setPaid(true);
 
@@ -51,8 +52,9 @@ public class PaymentHandler extends SupplyChainHandler
 
     /** {@inheritDoc} */
     @Override
-    protected boolean checkContentClass(final Serializable content)
+    public Class<? extends Content> getContentClass()
     {
-        return (content instanceof Payment);
+        return Payment.class;
     }
+
 }

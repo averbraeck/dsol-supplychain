@@ -2,11 +2,10 @@ package nl.tudelft.simulation.supplychain.banking;
 
 import java.io.Serializable;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.djunits.unit.MoneyUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Money;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.formalisms.eventscheduling.SimEvent;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
@@ -43,9 +42,6 @@ public class FixedCost implements Serializable
 
     /** the event for the next period -- stored to be able to remove it */
     private SimEvent.TimeDoubleUnit fixedAmountEvent = null;
-
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(FixedCost.class);
 
     /**
      * The constructor for the Fixed cost of an actor
@@ -85,7 +81,7 @@ public class FixedCost implements Serializable
         }
         catch (Exception exception)
         {
-            logger.fatal("changeInterval", exception);
+            Logger.error(exception, "changeInterval");
         }
     }
 
@@ -111,7 +107,7 @@ public class FixedCost implements Serializable
         }
         catch (Exception exception)
         {
-            logger.fatal("changeInterval", exception);
+            Logger.error(exception, "changeInterval");
         }
     }
 

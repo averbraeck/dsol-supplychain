@@ -1,26 +1,33 @@
 package nl.tudelft.simulation.supplychain.roles;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 
-import nl.tudelft.simulation.content.HandlerInterface;
+import nl.tudelft.simulation.actor.InternalActor;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
-import nl.tudelft.simulation.event.EventProducer;
 import nl.tudelft.simulation.jstats.streams.StreamInterface;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 
 /**
+ * A Role is a bundled set of Handlers that belong together. A Role takes care of the "consistent" implementation of a number of
+ * handlers. The typical usage is as follows:
+ * 
+ * <pre>
+ * / Customer customer = new Customer(name, simulator, position, bank);
+ * / InternalDemandHandler demandHandler = new InternalDemandHandler(customer, args);
+ * / OrderConfirmationHandler confirmationHandler = new OrderConfirmationHandler(customer, args);
+ * / ShipmentHandler shipmentHandler = new ShipmentHandler(customer, args);
+ * / BillHandler billHandler = new BillHandler(customer, args);
+ * / BuyingRole buyingRole = new BuyingRole(customer, simulator, demandHandler, confirmationHandler, shipmentHandler, billHandler);
+ * </pre>
+ * 
+ * Note: customer.addRole(buyingRole); will be executed automatically!<br>
  * <br>
  * Copyright (c) 2003-2018 Delft University of Technology, Jaffalaan 5, 2628 BX Delft, the Netherlands. All rights reserved. See
  * for project information <a href="https://www.simulation.tudelft.nl/" target="_blank">www.simulation.tudelft.nl</a>. The
  * source code and binary code of this software is proprietary information of Delft University of Technology.
  * @author <a href="https://www.tudelft.nl/averbraeck" target="_blank">Alexander Verbraeck</a>
  */
-public class Role extends EventProducer implements HandlerInterface
+public abstract class Role extends InternalActor
 {
     /** the serial version uid */
     private static final long serialVersionUID = 12L;
@@ -28,26 +35,24 @@ public class Role extends EventProducer implements HandlerInterface
     /** the owner of the role */
     protected SupplyChainActor owner = null;
 
-    /** the handlers for this role */
-    protected Map<Class<?>, Set<HandlerInterface>> contentHandlers = new HashMap<>();
-
     /** the default stream to use for the time delays */
     protected StreamInterface stream = null;
-
-    /** the simulator to schedule on */
-    protected DEVSSimulatorInterface.TimeDoubleUnit simulator;
 
     /**
      * Constructs a new Role
      * @param owner the owner of this role
+     * @param name the role name
      * @param simulator the simulator to schedule on
      */
-    public Role(final SupplyChainActor owner, final DEVSSimulatorInterface.TimeDoubleUnit simulator)
+    public Role(final SupplyChainActor owner, final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator)
     {
-        super();
+        super(name, simulator);
         this.owner = owner;
         this.simulator = simulator;
         this.stream = this.simulator.getReplication().getStream("default");
+        
+        // register the role with the owner
+        owner.addRole(this);
     }
 
     /**
@@ -60,69 +65,10 @@ public class Role extends EventProducer implements HandlerInterface
 
     /** {@inheritDoc} */
     @Override
-    public boolean handleContent(final Serializable content)
+    public boolean handleContent(Serializable content)
     {
-        Set<HandlerInterface> handlers = resolveContentHandlers(content.getClass());
-        boolean success = false; // no correct handling yet
-        Iterator<HandlerInterface> handlerIterator = handlers.iterator();
-        while (handlerIterator.hasNext())
-        {
-            HandlerInterface handler = handlerIterator.next();
-            // Now we invoke the business logic on the handler
-            success |= handler.handleContent(content);
-        }
-        return success;
+        return super.handleContent(content, false);
     }
-
-    /**
-     * adds a handler for message content
-     * @param contentClass the content class to add
-     * @param handler the handler for the content class
-     */
-    public void addContentHandler(final Class<?> contentClass, final HandlerInterface handler)
-    {
-        Set<HandlerInterface> handlers = this.contentHandlers.get(contentClass);
-        if (handlers == null)
-        {
-            handlers = new HashSet<HandlerInterface>();
-            this.contentHandlers.put(contentClass, handlers);
-        }
-        handlers.add(handler);
-    }
-
-    /**
-     * removes a handler for message content
-     * @param contentClass the content class to add
-     * @param handler the handler for the content class
-     */
-    public void removeContentHandler(final Class<?> contentClass, final HandlerInterface handler)
-    {
-        Set<HandlerInterface> handlers = this.contentHandlers.get(contentClass);
-        if (handlers != null)
-        {
-            handlers.remove(handler);
-        }
-    }
-
-    /**
-     * Resolves the contentHandler for a specific content type. It also looks for a handler that handles any of the
-     * superclasses. All matching handlers will be added to the Set that is returned.
-     * @param contentClass the type expressed by the content
-     * @return a handler
-     */
-    protected Set<HandlerInterface> resolveContentHandlers(final Class<?> contentClass)
-    {
-        Class<?> classIterator = contentClass;
-        Set<HandlerInterface> handlers = new HashSet<HandlerInterface>();
-        while (classIterator != null)
-        {
-            if (this.contentHandlers.get(classIterator) != null)
-            {
-                handlers.addAll(this.contentHandlers.get(classIterator));
-            }
-            classIterator = classIterator.getSuperclass();
-        }
-        return handlers;
-    }
-
+    
+    
 }

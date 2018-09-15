@@ -5,14 +5,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
-import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 
 /**
  * <br>
@@ -32,16 +30,12 @@ public class LeanContentStore extends ContentStore
     /** the map of unanswered content */
     private Map<Serializable, Content> unansweredContentMap = Collections.synchronizedMap(new HashMap<Serializable, Content>());
 
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(LeanContentStore.class);
-
     /**
-     * @param owner the owner
      * @param simulator the simulator
      */
-    public LeanContentStore(final SupplyChainActor owner, final DEVSSimulatorInterface.TimeDoubleUnit simulator)
+    public LeanContentStore(final DEVSSimulatorInterface.TimeDoubleUnit simulator)
     {
-        super(owner);
+        super();
         this.simulator = simulator;
     }
 
@@ -53,8 +47,7 @@ public class LeanContentStore extends ContentStore
         Class<?> contentClass = content.getClass();
         try
         {
-            // schedule the removal after the 'lifetime' of the content is
-            // unanswered
+            // schedule the removal after the 'lifetime' of the content is unanswered
             if (InternalDemand.class.isAssignableFrom(contentClass))
             {
                 InternalDemand internalDemand = (InternalDemand) content;
@@ -126,12 +119,12 @@ public class LeanContentStore extends ContentStore
             }
             else
             {
-                logger.warn("addContent - could not find content class " + contentClass);
+                Logger.warn("addContent - could not find content class {}", contentClass);
             }
         }
         catch (Exception e)
         {
-            logger.warn("addContent", e);
+            Logger.warn(e, "addContent");
         }
     }
 

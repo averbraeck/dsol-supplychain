@@ -1,8 +1,7 @@
 package nl.tudelft.simulation.supplychain.stock.policies;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.djunits.value.vdouble.scalar.Duration;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
@@ -21,9 +20,6 @@ public abstract class RestockingPolicyEOQ extends RestockingPolicy
 {
     /** the serial version uid */
     private static final long serialVersionUID = 12L;
-
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(RestockingPolicyEOQ.class);
 
     /**
      * @param stock the stock for which the policy holds
@@ -54,6 +50,6 @@ public abstract class RestockingPolicyEOQ extends RestockingPolicy
     protected void checkStockLevel()
     {
         // TODO: EOQ
-        logger.warn("checkStockLevel", "EOQ not yet implemented...");
+        Logger.warn("checkStockLevel - EOQ not yet implemented...");
     }
 }

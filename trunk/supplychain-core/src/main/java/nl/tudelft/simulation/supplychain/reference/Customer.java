@@ -9,9 +9,9 @@ import org.djunits.value.vdouble.scalar.Money;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.banking.Bank;
+import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
+import nl.tudelft.simulation.supplychain.demand.DemandGeneration;
 import nl.tudelft.simulation.supplychain.roles.BuyingRole;
-import nl.tudelft.simulation.supplychain.roles.DemandGenerationRole;
-import nl.tudelft.simulation.supplychain.roles.Role;
 
 /**
  * A Customer is an actor which usually orders (pull) products from a Distributor. However, its behavior depends on the type of
@@ -28,7 +28,7 @@ public class Customer extends SupplyChainActor
     private static final long serialVersionUID = 12L;
 
     /** The role instance to generate demand */
-    private DemandGenerationRole demandGenerationRole = null;
+    private DemandGeneration demandGeneration = null;
 
     /** The role to buy */
     private BuyingRole buyingRole = null;
@@ -39,11 +39,25 @@ public class Customer extends SupplyChainActor
      * @param position the position
      * @param bank the bank
      * @param initialBankAccount the initial bank account
+     * @param contentStore the contentStore for the messages
      */
-    public Customer(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position, final Bank bank,
-            final Money initialBankAccount)
+    public Customer(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
+            final Bank bank, final Money initialBankAccount, final ContentStoreInterface contentStore)
     {
-        super(name, simulator, position, new Role[] {}, bank, initialBankAccount);
+        super(name, simulator, position, bank, initialBankAccount, contentStore);
+    }
+
+    /**
+     * @param name the name
+     * @param simulator the simulator
+     * @param position the position
+     * @param bank the bank
+     * @param contentStore the contentStore for the messages
+     */
+    public Customer(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
+            final Bank bank, final ContentStoreInterface contentStore)
+    {
+        super(name, simulator, position, bank, contentStore);
     }
 
     /**
@@ -71,32 +85,26 @@ public class Customer extends SupplyChainActor
     /**
      * @return Returns the demandGenerationRole.
      */
-    public DemandGenerationRole getDemandGenerationRole()
+    public DemandGeneration getDemandGeneration()
     {
-        return this.demandGenerationRole;
+        return this.demandGeneration;
     }
 
     /**
      * @param demandGenerationRole The demandGenerationRole to set.
      */
-    public void setDemandGenerationRole(final DemandGenerationRole demandGenerationRole)
+    public void setDemandGeneration(final DemandGeneration demandGenerationRole)
     {
-        // remove the previous demand generation role
-        if (this.demandGenerationRole != null)
-        {
-            super.removeRole(this.demandGenerationRole);
-        }
-        super.addRole(demandGenerationRole);
-        this.demandGenerationRole = demandGenerationRole;
+        this.demandGeneration = demandGenerationRole;
     }
 
     /** {@inheritDoc} */
     @Override
     public boolean handleContent(final Serializable content)
     {
-        if (this.demandGenerationRole == null || this.buyingRole == null)
+        if (this.demandGeneration == null || this.buyingRole == null)
         {
-            throw new RuntimeException("DemandGenerationRole or buyingRole not initialized for Customer: " + this.getName());
+            throw new RuntimeException("DemandGeneration or buyingRole not initialized for Customer: " + this.getName());
         }
         return super.handleContent(content);
     }

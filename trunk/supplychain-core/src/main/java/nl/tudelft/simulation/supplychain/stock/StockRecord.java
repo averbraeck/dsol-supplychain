@@ -2,12 +2,11 @@ package nl.tudelft.simulation.supplychain.stock;
 
 import java.io.Serializable;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.djunits.unit.DurationUnit;
 import org.djunits.unit.MoneyUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Money;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.supplychain.actor.Trader;
@@ -51,9 +50,6 @@ public class StockRecord implements Serializable
     /** the depreciation factor per day */
     private double dailyDepreciation = 0.0;
 
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(StockRecord.class);
-
     /**
      * @param owner the trader
      * @param simulator the simulator
@@ -73,7 +69,7 @@ public class StockRecord implements Serializable
         }
         catch (Exception exception)
         {
-            logger.fatal("<init>", exception);
+            Logger.error(exception, "<init>");
         }
     }
 
@@ -224,7 +220,7 @@ public class StockRecord implements Serializable
         }
         catch (Exception exception)
         {
-            logger.fatal("depreciate", exception);
+            Logger.error(exception, "depreciate");
         }
     }
 }

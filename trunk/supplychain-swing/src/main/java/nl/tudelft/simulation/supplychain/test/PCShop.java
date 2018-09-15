@@ -14,7 +14,6 @@ import org.djunits.value.vdouble.scalar.Money;
 
 import nl.tudelft.simulation.actor.messagehandlers.HandleAllMessages;
 import nl.tudelft.simulation.actor.messagehandlers.MessageHandlerInterface;
-import nl.tudelft.simulation.content.HandlerInterface;
 import nl.tudelft.simulation.dsol.animation.D2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
@@ -24,26 +23,24 @@ import nl.tudelft.simulation.messaging.devices.reference.FaxDevice;
 import nl.tudelft.simulation.supplychain.actor.Trader;
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.banking.BankAccount;
-import nl.tudelft.simulation.supplychain.content.Bill;
-import nl.tudelft.simulation.supplychain.content.InternalDemand;
-import nl.tudelft.simulation.supplychain.content.Order;
-import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
-import nl.tudelft.simulation.supplychain.content.Payment;
-import nl.tudelft.simulation.supplychain.content.Quote;
-import nl.tudelft.simulation.supplychain.content.RequestForQuote;
-import nl.tudelft.simulation.supplychain.content.Shipment;
+import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.handlers.BillHandler;
 import nl.tudelft.simulation.supplychain.handlers.InternalDemandHandlerRFQ;
 import nl.tudelft.simulation.supplychain.handlers.OrderConfirmationHandler;
+import nl.tudelft.simulation.supplychain.handlers.OrderHandler;
 import nl.tudelft.simulation.supplychain.handlers.OrderHandlerStock;
 import nl.tudelft.simulation.supplychain.handlers.PaymentHandler;
+import nl.tudelft.simulation.supplychain.handlers.PaymentPolicyEnum;
+import nl.tudelft.simulation.supplychain.handlers.QuoteComparatorEnum;
 import nl.tudelft.simulation.supplychain.handlers.QuoteHandler;
 import nl.tudelft.simulation.supplychain.handlers.QuoteHandlerAll;
 import nl.tudelft.simulation.supplychain.handlers.RequestForQuoteHandler;
+import nl.tudelft.simulation.supplychain.handlers.ShipmentHandler;
 import nl.tudelft.simulation.supplychain.handlers.ShipmentHandlerStock;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Retailer;
-import nl.tudelft.simulation.supplychain.roles.Role;
+import nl.tudelft.simulation.supplychain.roles.BuyingRole;
+import nl.tudelft.simulation.supplychain.roles.SellingRole;
 import nl.tudelft.simulation.supplychain.stock.Stock;
 import nl.tudelft.simulation.supplychain.stock.policies.RestockingPolicySafety;
 import nl.tudelft.simulation.supplychain.transport.TransportMode;
@@ -69,39 +66,40 @@ public class PCShop extends Retailer
      * @param name the name of the manufacturer
      * @param simulator the simulator to use
      * @param position the position on the map
-     * @param roles the initial roles (if any)
      * @param bank the bank
      * @param product initial stock product
      * @param amount amount of initial stock
      * @param manufacturer fixed manufacturer to use
+     * @param contentStore the contentStore to store the messages
      * @throws RemoteException remote simulator error
      * @throws NamingException
      */
-    public PCShop(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position, final Role[] roles,
-            final Bank bank, final Product product, final double amount, final Trader manufacturer)
-            throws RemoteException, NamingException
+    public PCShop(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
+            final Bank bank, final Product product, final double amount, final Trader manufacturer,
+            final ContentStoreInterface contentStore) throws RemoteException, NamingException
     {
-        this(name, simulator, position, roles, bank, new Money(0.0, MoneyUnit.USD), product, amount, manufacturer);
+        this(name, simulator, position, bank, new Money(0.0, MoneyUnit.USD), product, amount, manufacturer, contentStore);
     }
 
     /**
      * @param name the name of the manufacturer
      * @param simulator the simulator to use
      * @param position the position on the map
-     * @param roles the initial roles (if any)
      * @param bank the bank
      * @param initialBankAccount the initial bank balance
      * @param product initial stock product
      * @param amount amount of initial stock
      * @param manufacturer fixed manufacturer to use
+     * @param contentStore the contentStore to store the messages
      * @throws RemoteException remote simulator error
      * @throws NamingException
      */
-    public PCShop(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position, final Role[] roles,
+    public PCShop(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
             final Bank bank, final Money initialBankAccount, final Product product, final double amount,
-            final Trader manufacturer) throws RemoteException, NamingException
+            final Trader manufacturer, final ContentStoreInterface contentStore) throws RemoteException, NamingException
     {
-        super(name, simulator, position, roles, bank, initialBankAccount);
+        super(name, simulator, position, bank, initialBankAccount, contentStore);
+        getContentStore().setOwner(this);
         this.manufacturer = manufacturer;
         // give the retailer some stock
         Stock _stock = new Stock(this);
@@ -130,17 +128,18 @@ public class PCShop extends Retailer
         super.addReceivingDevice(fax, secretary, new DistConstantDurationUnit(new Duration(1.0, DurationUnit.HOUR)));
         //
         // tell PCshop to use the RFQhandler to handle RFQs
-        HandlerInterface rfqHandler = new RequestForQuoteHandler(this, super.stock, 1.2,
+        RequestForQuoteHandler rfqHandler = new RequestForQuoteHandler(this, super.stock, 1.2,
                 new DistConstantDurationUnit(new Duration(1.23, DurationUnit.HOUR)), TransportMode.PLANE);
-        super.addContentHandler(RequestForQuote.class, rfqHandler);
         //
         // create an order handler
-        HandlerInterface orderHandler = new OrderHandlerStock(this, super.stock);
-        super.addContentHandler(Order.class, orderHandler);
+        OrderHandler orderHandler = new OrderHandlerStock(this, super.stock);
         //
         // hopefully, the PCShop will get payments in the end
-        HandlerInterface paymentHandler = new PaymentHandler(this, super.bankAccount);
-        super.addContentHandler(Payment.class, paymentHandler);
+        PaymentHandler paymentHandler = new PaymentHandler(this, super.bankAccount);
+        //
+        // add the handlers to the buying role for PCShop
+        SellingRole sellingRole = new SellingRole(this, this.simulator, rfqHandler, orderHandler, paymentHandler);
+        super.setSellingRole(sellingRole);
         //
         // After a while, the PC Shop needs to restock and order
         // do this for every product we have initially in stock
@@ -165,25 +164,25 @@ public class PCShop extends Retailer
             Product product = productIter.next();
             internalDemandHandler.addSupplier(product, this.manufacturer);
         }
-        super.addContentHandler(InternalDemand.class, internalDemandHandler);
         //
         // tell PCShop to use the Quotehandler to handle quotes
-        HandlerInterface quoteHandler = new QuoteHandlerAll(this, QuoteHandler.SORT_DATE_PRICE_DISTANCE,
+        QuoteHandler quoteHandler = new QuoteHandlerAll(this, QuoteComparatorEnum.SORT_DATE_PRICE_DISTANCE,
                 new Duration(1.0, DurationUnit.HOUR), 0.4, 0.1);
-        super.addContentHandler(Quote.class, quoteHandler);
         //
         // PCShop has the standard order confirmation handler
-        HandlerInterface confirmationHandler = new OrderConfirmationHandler(this);
-        super.addContentHandler(OrderConfirmation.class, confirmationHandler);
+        OrderConfirmationHandler confirmationHandler = new OrderConfirmationHandler(this);
         //
         // PCShop will get a bill in the end
-        HandlerInterface billHandler = new BillHandler(this, super.bankAccount, BillHandler.PAYMENT_IMMEDIATE,
+        BillHandler billHandler = new BillHandler(this, super.bankAccount, PaymentPolicyEnum.PAYMENT_IMMEDIATE,
                 new DistConstantDurationUnit(Duration.ZERO));
-        super.addContentHandler(Bill.class, billHandler);
         //
         // hopefully, PCShop will get laptop shipments, put them in stock
-        HandlerInterface shipmentHandler = new ShipmentHandlerStock(this, super.stock);
-        super.addContentHandler(Shipment.class, shipmentHandler);
+        ShipmentHandler shipmentHandler = new ShipmentHandlerStock(this, super.stock);
+        //
+        // add the handlers to the buying role for PCShop
+        BuyingRole buyingRole = new BuyingRole(this, this.simulator, internalDemandHandler, quoteHandler, confirmationHandler,
+                shipmentHandler, billHandler);
+        super.setBuyingRole(buyingRole);
         //
         // CHARTS
         //

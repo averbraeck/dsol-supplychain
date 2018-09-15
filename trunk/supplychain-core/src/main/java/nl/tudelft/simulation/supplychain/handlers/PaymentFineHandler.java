@@ -2,12 +2,11 @@ package nl.tudelft.simulation.supplychain.handlers;
 
 import java.io.Serializable;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.djunits.unit.DurationUnit;
 import org.djunits.unit.MoneyUnit;
 import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.banking.BankAccount;
@@ -34,9 +33,6 @@ public class PaymentFineHandler extends PaymentHandler
 
     /** the fixed fine */
     private Money fixedFinePerDay = new Money(0.0, MoneyUnit.USD);
-
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(PaymentFineHandler.class);
 
     /**
      * constructs a new PaymentFineHandler
@@ -91,7 +87,7 @@ public class PaymentFineHandler extends PaymentHandler
         }
         catch (Exception exception)
         {
-            logger.fatal("handleContent", exception);
+            Logger.error(exception, "handleContent");
             return false;
         }
     }

@@ -6,14 +6,13 @@ import java.util.List;
 
 import javax.vecmath.Point3d;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.djunits.value.vdouble.scalar.Money;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.supplychain.banking.Bank;
+import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.supplychain.roles.Role;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
 
 /**
@@ -31,9 +30,6 @@ public abstract class Trader extends SupplyChainActor
     /** */
     private static final long serialVersionUID = 1L;
 
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(Trader.class);
-
     /**
      * the stock of the trader
      */
@@ -44,13 +40,13 @@ public abstract class Trader extends SupplyChainActor
      * @param name the name to display for this supply chain actor
      * @param simulator the simulator on which to schedule
      * @param position the location for transportation calculations, which can also be used for animation purposes
-     * @param roles the roles of the supply chain actor, might be null
      * @param bank the bank
+     * @param contentStore the contentStore for the messages
      */
     public Trader(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
-            final Role[] roles, final Bank bank)
+            final Bank bank, final ContentStoreInterface contentStore)
     {
-        super(name, simulator, position, roles, bank);
+        super(name, simulator, position, bank, contentStore);
     }
 
     /**
@@ -58,14 +54,14 @@ public abstract class Trader extends SupplyChainActor
      * @param name the name to display for this supply chain actor
      * @param simulator the simulator on which to schedule
      * @param position the location for transportation calculations, which can also be used for animation purposes
-     * @param roles the roles of the supply chain actor, might be null
      * @param bank the bank
      * @param initialBankBalance the initial bank balance
+     * @param contentStore the contentStore for the messages
      */
     public Trader(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
-            final Role[] roles, final Bank bank, final Money initialBankBalance)
+            final Bank bank, final Money initialBankBalance, final ContentStoreInterface contentStore)
     {
-        super(name, simulator, position, roles, bank, initialBankBalance);
+        super(name, simulator, position, bank, initialBankBalance, contentStore);
     }
 
     /**
@@ -81,7 +77,7 @@ public abstract class Trader extends SupplyChainActor
         }
         else
         {
-            logger.warn("setInitialStock", "Stock initialized when not empty, initialization ignored");
+            Logger.warn("setInitialStock - Stock initialized when not empty, initialization ignored");
         }
     }
 

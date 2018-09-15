@@ -10,6 +10,7 @@ import java.util.TreeSet;
 import org.djunits.value.vdouble.scalar.Duration;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
+import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
 import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
@@ -32,25 +33,6 @@ public abstract class QuoteHandler extends SupplyChainHandler
     /** for debugging */
     private static final boolean DEBUG = false;
 
-    // predefined comparator types for initialization
-    /** Comparator type for quotes, sort on price, distance, date */
-    public static final int SORT_PRICE_DISTANCE_DATE = 1;
-
-    /** Comparator type for quotes, sort on price, date, distance */
-    public static final int SORT_PRICE_DATE_DISTANCE = 2;
-
-    /** Comparator type for quotes, sort on distance, price, date */
-    public static final int SORT_DISTANCE_PRICE_DATE = 3;
-
-    /** Comparator type for quotes, sort on distance, date, price */
-    public static final int SORT_DISTANCE_DATE_PRICE = 4;
-
-    /** Comparator type for quotes, sort on date, price, distance */
-    public static final int SORT_DATE_PRICE_DISTANCE = 5;
-
-    /** Comparator type for quotes, sort on date, distance, price */
-    public static final int SORT_DATE_DISTANCE_PRICE = 6;
-
     /** the time to handle quotes when they are in and to place an order */
     protected DistContinuousDurationUnit handlingTime;
 
@@ -71,8 +53,8 @@ public abstract class QuoteHandler extends SupplyChainHandler
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the margin within which the offered amount may differ from the requested amount.
      */
-    public QuoteHandler(final SupplyChainActor owner, final int comparatorType, final DistContinuousDurationUnit handlingTime,
-            final double maximumPriceMargin, final double minimumAmountMargin)
+    public QuoteHandler(final SupplyChainActor owner, final QuoteComparatorEnum comparatorType,
+            final DistContinuousDurationUnit handlingTime, final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super(owner);
         this.quoteComparator = new QuoteComparator(owner, comparatorType);
@@ -89,7 +71,7 @@ public abstract class QuoteHandler extends SupplyChainHandler
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the margin within which the offered amount may differ from the requested amount.
      */
-    public QuoteHandler(final SupplyChainActor owner, final int comparatorType, final Duration handlingTime,
+    public QuoteHandler(final SupplyChainActor owner, final QuoteComparatorEnum comparatorType, final Duration handlingTime,
             final double maximumPriceMargin, final double minimumAmountMargin)
     {
         this(owner, comparatorType, new DistConstantDurationUnit(handlingTime), maximumPriceMargin, minimumAmountMargin);
@@ -131,13 +113,6 @@ public abstract class QuoteHandler extends SupplyChainHandler
     @Override
     public abstract boolean handleContent(final Serializable content);
 
-    /** {@inheritDoc} */
-    @Override
-    protected boolean checkContentClass(final Serializable content)
-    {
-        return (content instanceof Quote);
-    }
-
     /**
      * Method getQuoteComparator
      * @return returns the quote comparator
@@ -154,6 +129,13 @@ public abstract class QuoteHandler extends SupplyChainHandler
     protected void setQuoteComparator(Comparator<Quote> quoteComparator)
     {
         this.quoteComparator = quoteComparator;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Class<? extends Content> getContentClass()
+    {
+        return Quote.class;
     }
 
     /**

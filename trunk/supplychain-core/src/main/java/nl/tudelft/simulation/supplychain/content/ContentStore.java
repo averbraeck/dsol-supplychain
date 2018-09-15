@@ -8,10 +8,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.event.EventProducer;
+import nl.tudelft.simulation.language.Throw;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 
 /**
@@ -50,16 +50,20 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
     /** true for debug */
     private static final boolean DEBUG = false;
 
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(ContentStore.class);
-
     /**
      * Constructs a new ContentStore
-     * @param owner the owner
      */
-    public ContentStore(final SupplyChainActor owner)
+    public ContentStore()
     {
         super();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setOwner(final SupplyChainActor owner)
+    {
+        Throw.when(this.owner != null, RuntimeException.class,
+                "ContentStore - setting owner for %s while it has been set before", owner.toString());
         this.owner = owner;
     }
 
@@ -70,6 +74,7 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
      */
     public synchronized void addContent(final Content content, final boolean sent)
     {
+        Throw.whenNull(this.owner, "ContentStore - owner has not been initialized");
         if (ContentStore.DEBUG)
         {
             System.err.println("t=" + this.owner.getSimulatorTime() + " DEBUG -- CONTENTSTORE of actor " + this.owner
@@ -125,6 +130,7 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
      */
     public synchronized void removeContent(final Content content, final boolean sent)
     {
+        Throw.whenNull(this.owner, "ContentStore - owner has not been initialized");
         if (ContentStore.DEBUG)
         {
             System.err.println("t=" + this.owner.getSimulatorTime() + " DEBUG -- CONTENTSTORE of actor " + this.owner
@@ -153,6 +159,7 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
      */
     public synchronized void removeSentReceivedContent(final Content content, final boolean sent)
     {
+        Throw.whenNull(this.owner, "ContentStore - owner has not been initialized");
         Class<?> contentClass = foldExtendedContentClass(content);
         Map<Class<?>, List<Content>> srMap;
         if (sent)
@@ -177,6 +184,7 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
      */
     public void removeAllContent(final Serializable internalDemandID)
     {
+        Throw.whenNull(this.owner, "ContentStore - owner has not been initialized");
         Map<?, ?> contentMap = this.internalDemandMap.get(internalDemandID);
         if (contentMap != null)
         {
@@ -215,7 +223,7 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
                 this.removeContent(content, false);
                 if (oldSize == contentList.size())
                 {
-                    logger.fatal("removeAllContent", "object not removed from list for " + clazz);
+                    Logger.error("removeAllContent - object not removed from list for {}", clazz);
                     break;
                 }
                 oldSize = contentList.size();
@@ -230,6 +238,7 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
      */
     protected void removeInternalDemand(final Serializable internalDemandID)
     {
+        Throw.whenNull(this.owner, "ContentStore - owner has not been initialized");
         Map<?, ?> idMap = null;
         idMap = this.internalDemandMap.remove(internalDemandID);
 
@@ -327,9 +336,9 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
                 {
                     // only do this when debugging, otherwise during
                     // testing the error files grow extremely large
-                    logger.warn("t=" + this.owner.getSimulatorTime() + " removeOldStateContent",
-                            "could not find RFQ for quote uniqueId=" + content.getUniqueID() + ", IDid="
-                                    + content.getInternalDemandID() + " " + content.toString());
+                    Logger.warn("t=" + this.owner.getSimulatorTime()
+                            + " removeOldStateContent - could not find RFQ for quote uniqueId=" + content.getUniqueID()
+                            + ", IDid=" + content.getInternalDemandID() + " " + content.toString());
                 }
             }
             else
@@ -346,9 +355,9 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
             List<?> quoteList = getContentList(internalDemandId, Quote.class, false);
             if (quoteList.size() == 0)
             {
-                logger.warn("t=" + this.owner.getSimulatorTime() + " removeOldStateContent",
-                        "could not find quote for order uniqueId=" + content.getUniqueID() + ", IDid="
-                                + content.getInternalDemandID() + " " + content.toString());
+                Logger.warn("t=" + this.owner.getSimulatorTime()
+                        + " removeOldStateContent - could not find quote for order uniqueId=" + content.getUniqueID()
+                        + ", IDid=" + content.getInternalDemandID() + " " + content.toString());
             }
             else
             {
@@ -364,9 +373,9 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
             List<?> orderList = getContentList(internalDemandId, Order.class, true);
             if (orderList.size() == 0)
             {
-                logger.warn("t=" + this.owner.getSimulatorTime() + " removeOldStateContent",
-                        "could not find order for order confirmation uniqueId=" + content.getUniqueID() + ", IDid="
-                                + content.getInternalDemandID() + " " + content.toString());
+                Logger.warn("t=" + this.owner.getSimulatorTime()
+                        + " removeOldStateContent - could not find order for order confirmation uniqueId="
+                        + content.getUniqueID() + ", IDid=" + content.getInternalDemandID() + " " + content.toString());
             }
             else
             {
@@ -382,9 +391,9 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
             List<?> orderConfirmationList = getContentList(internalDemandId, OrderConfirmation.class, false);
             if (orderConfirmationList.size() == 0)
             {
-                logger.warn("t=" + this.owner.getSimulatorTime() + " removeOldStateContent",
-                        "could not find order confirmation for shipment uniqueId=" + content.getUniqueID() + ", IDid="
-                                + content.getInternalDemandID() + " " + content.toString());
+                Logger.warn("t=" + this.owner.getSimulatorTime()
+                        + " removeOldStateContent - could not find order confirmation for shipment uniqueId="
+                        + content.getUniqueID() + ", IDid=" + content.getInternalDemandID() + " " + content.toString());
             }
             else
             {
@@ -406,9 +415,9 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
             List<?> billList = getContentList(internalDemandId, Bill.class, false);
             if (billList.size() == 0)
             {
-                logger.warn("t=" + this.owner.getSimulatorTime() + " removeOldStateContent",
-                        "could not find bill for payment uniqueId=" + content.getUniqueID() + ", IDid="
-                                + content.getInternalDemandID() + " " + content.toString());
+                Logger.warn("t=" + this.owner.getSimulatorTime()
+                        + " removeOldStateContent - could not find bill for payment uniqueId=" + content.getUniqueID()
+                        + ", IDid=" + content.getInternalDemandID() + " " + content.toString());
             }
             else
             {
@@ -431,9 +440,9 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
                     // only do this when debugging, otherwise during
                     // testing the error files grow extremely large
 
-                    logger.warn("t=" + this.owner.getSimulatorTime() + " removeOldStateContent2",
-                            "could not find RFQ for quote uniqueId=" + content.getUniqueID() + ", IDid="
-                                    + content.getInternalDemandID() + " " + content.toString());
+                    Logger.warn("t=" + this.owner.getSimulatorTime()
+                            + " removeOldStateContent2 - could not find RFQ for quote uniqueId=" + content.getUniqueID()
+                            + ", IDid=" + content.getInternalDemandID() + " " + content.toString());
                 }
             }
             else
@@ -450,9 +459,9 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
             List<?> quoteList = getContentList(internalDemandId, Quote.class, true);
             if (quoteList.size() == 0)
             {
-                logger.warn("t=" + this.owner.getSimulatorTime() + " removeOldStateContent2",
-                        "could not find quote for order uniqueId=" + content.getUniqueID() + ", IDid="
-                                + content.getInternalDemandID() + " " + content.toString());
+                Logger.warn("t=" + this.owner.getSimulatorTime()
+                        + " removeOldStateContent2 - could not find quote for order uniqueId=" + content.getUniqueID()
+                        + ", IDid=" + content.getInternalDemandID() + " " + content.toString());
             }
             else
             {
@@ -468,9 +477,9 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
             List<?> orderList = getContentList(internalDemandId, Order.class, false);
             if (orderList.size() == 0)
             {
-                logger.warn("t=" + this.owner.getSimulatorTime() + " removeOldStateContent2",
-                        "could not find order for order confirmation uniqueId=" + content.getUniqueID() + ", IDid="
-                                + content.getInternalDemandID() + " " + content.toString());
+                Logger.warn("t=" + this.owner.getSimulatorTime()
+                        + " removeOldStateContent2 - could not find order for order confirmation uniqueId="
+                        + content.getUniqueID() + ", IDid=" + content.getInternalDemandID() + " " + content.toString());
             }
             else
             {
@@ -486,9 +495,9 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
             List<?> orderConfirmationList = getContentList(internalDemandId, OrderConfirmation.class, true);
             if (orderConfirmationList.size() == 0)
             {
-                logger.warn("t=" + this.owner.getSimulatorTime() + " removeOldStateContent2",
-                        "could not find order confirmation for shipment uniqueId=" + content.getUniqueID() + ", IDid="
-                                + content.getInternalDemandID() + " " + content.toString());
+                Logger.warn("t=" + this.owner.getSimulatorTime()
+                        + " removeOldStateContent2 - could not find order confirmation for shipment uniqueId="
+                        + content.getUniqueID() + ", IDid=" + content.getInternalDemandID() + " " + content.toString());
             }
             else
             {
@@ -510,9 +519,9 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
             List<?> billList = getContentList(internalDemandId, Bill.class, true);
             if (billList.size() == 0)
             {
-                logger.warn("t=" + this.owner.getSimulatorTime() + " removeOldStateContent",
-                        "could not find bill for payment uniqueId=" + content.getUniqueID() + ", IDid="
-                                + content.getInternalDemandID() + " " + content.toString());
+                Logger.warn("t=" + this.owner.getSimulatorTime()
+                        + " removeOldStateContent - could not find bill for payment uniqueId=" + content.getUniqueID()
+                        + ", IDid=" + content.getInternalDemandID() + " " + content.toString());
             }
             else
             {

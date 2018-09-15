@@ -6,11 +6,6 @@ import java.rmi.RemoteException;
 
 import javax.naming.NamingException;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.config.Configuration;
-import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
@@ -58,12 +53,6 @@ public class MTSMTOApp extends DSOLApplication
      */
     public static void main(final String[] args) throws SimRuntimeException, NamingException, RemoteException
     {
-        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
-        Configuration config = ctx.getConfiguration();
-        LoggerConfig rootLoggerConfig = config.getLoggers().get("");
-        rootLoggerConfig.setLevel(Level.WARN);
-        ctx.updateLoggers();
-
         DSOLModel.TimeDoubleUnit model = new MTSMTOModel();
         // DEVSAnimator.TimeDoubleUnit animator = new DEVSAnimator.TimeDoubleUnit();
         DEVSRealTimeClock.TimeDoubleUnit animator = new DEVSRealTimeClock.TimeDoubleUnit();

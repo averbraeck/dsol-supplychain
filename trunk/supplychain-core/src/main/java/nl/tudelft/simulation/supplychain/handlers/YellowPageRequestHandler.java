@@ -14,6 +14,7 @@ import org.djunits.value.vdouble.scalar.Length;
 
 import nl.tudelft.simulation.language.d3.DirectedPoint;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
+import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.YellowPageAnswer;
 import nl.tudelft.simulation.supplychain.content.YellowPageRequest;
 import nl.tudelft.simulation.supplychain.product.Product;
@@ -96,11 +97,11 @@ public class YellowPageRequestHandler extends SupplyChainHandler
     @Override
     public boolean handleContent(final Serializable content)
     {
-        YellowPageRequest ypRequest = (YellowPageRequest) checkContent(content);
-        if (!isValidContent(ypRequest))
+        if (!isValidContent(content))
         {
             return false;
         }
+        YellowPageRequest ypRequest = (YellowPageRequest) content;
         HashSet<SupplyChainActor> supplierSet = this.dictionary.get(ypRequest.getProduct());
         SortedMap<Length, SupplyChainActor> suppliers =
                 pruneDistance(supplierSet, ypRequest.getMaximumDistance(), ypRequest.getSender().getLocation());
@@ -158,8 +159,10 @@ public class YellowPageRequestHandler extends SupplyChainHandler
 
     /** {@inheritDoc} */
     @Override
-    protected boolean checkContentClass(final Serializable content)
+    public Class<? extends Content> getContentClass()
     {
-        return (content instanceof YellowPageRequest);
+        return YellowPageRequest.class;
     }
+
+
 }

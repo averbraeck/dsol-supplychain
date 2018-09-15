@@ -72,11 +72,11 @@ public class InternalDemandHandlerYP extends InternalDemandHandler
     @Override
     public boolean handleContent(final Serializable content)
     {
-        InternalDemand internalDemand = (InternalDemand) checkContent(content);
-        if (!isValidContent(internalDemand))
+        if (!isValidContent(content))
         {
             return false;
         }
+        InternalDemand internalDemand = (InternalDemand) content;
         if (super.stock != null)
         {
             super.stock.changeOrderedAmount(internalDemand.getProduct(), internalDemand.getAmount());

@@ -2,9 +2,8 @@ package nl.tudelft.simulation.supplychain.handlers;
 
 import java.io.Serializable;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.djunits.value.vdouble.scalar.Duration;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.banking.BankAccount;
@@ -31,9 +30,6 @@ public class BillTimeOutHandler extends BillHandler
     /** true for debug */
     private boolean debug = true;
 
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(BillTimeOutHandler.class);
-
     /**
      * constructs a new BillTimeOutHandler
      * @param owner the owner
@@ -42,7 +38,7 @@ public class BillTimeOutHandler extends BillHandler
      * @param paymentDelay the payment delay
      * @param maximumTimeOut the maximum time out for a bill
      */
-    public BillTimeOutHandler(final SupplyChainActor owner, final BankAccount bankAccount, final int paymentPolicy,
+    public BillTimeOutHandler(final SupplyChainActor owner, final BankAccount bankAccount, final PaymentPolicyEnum paymentPolicy,
             final DistContinuousDurationUnit paymentDelay, final Duration maximumTimeOut)
     {
         super(owner, bankAccount, paymentPolicy, paymentDelay);
@@ -57,7 +53,7 @@ public class BillTimeOutHandler extends BillHandler
      */
     public BillTimeOutHandler(final SupplyChainActor owner, final BankAccount bankAccount, final Duration maximumTimeOut)
     {
-        this(owner, bankAccount, 0, null, maximumTimeOut);
+        this(owner, bankAccount, PaymentPolicyEnum.PAYMENT_ON_TIME, null, maximumTimeOut);
     }
 
     /** {@inheritDoc} */
@@ -74,7 +70,7 @@ public class BillTimeOutHandler extends BillHandler
             }
             catch (Exception exception)
             {
-                logger.fatal("handleContent", exception);
+                Logger.error(exception, "handleContent");
             }
             return true;
         }

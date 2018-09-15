@@ -9,6 +9,7 @@ import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.supplychain.actor.Trader;
+import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.product.Product;
@@ -85,11 +86,11 @@ public class RequestForQuoteHandler extends SupplyChainHandler
     @Override
     public boolean handleContent(final Serializable content)
     {
-        RequestForQuote rfq = (RequestForQuote) checkContent(content);
-        if (!isValidContent(rfq))
+        if (!isValidContent(content))
         {
             return false;
         }
+        RequestForQuote rfq = (RequestForQuote) content;
         Product product = rfq.getProduct();
         // calculate the expected transportation time (in hours)
         // add half a day for handling to be sure it arrives on time
@@ -109,11 +110,12 @@ public class RequestForQuoteHandler extends SupplyChainHandler
         return true;
     }
 
+
     /** {@inheritDoc} */
     @Override
-    protected boolean checkContentClass(final Serializable content)
+    public Class<? extends Content> getContentClass()
     {
-        return (content instanceof RequestForQuote);
+        return RequestForQuote.class;
     }
 
     /**

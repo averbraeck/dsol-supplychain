@@ -13,6 +13,8 @@
 
 package nl.tudelft.simulation.supplychain.reference;
 
+import java.io.Serializable;
+
 import javax.vecmath.Point3d;
 
 import org.djunits.unit.MoneyUnit;
@@ -21,8 +23,9 @@ import org.djunits.value.vdouble.scalar.Money;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.supplychain.actor.Trader;
 import nl.tudelft.simulation.supplychain.banking.Bank;
+import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.supplychain.roles.Role;
+import nl.tudelft.simulation.supplychain.roles.SellingRole;
 
 /**
  * Reference implementation for a Supplier. <br>
@@ -37,31 +40,34 @@ public class Supplier extends Trader
     /** the serial version uid */
     private static final long serialVersionUID = 12L;
 
+    /** The role to sell */
+    private SellingRole sellingRole = null;
+
     /**
      * @param name the name of the supplier
      * @param simulator the simulator to use
      * @param position the position on the map
-     * @param roles the initial roles (if any)
      * @param bank the bank
+     * @param contentStore the contentStore for the messages
      */
     public Supplier(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
-            final Role[] roles, final Bank bank)
+            final Bank bank, final ContentStoreInterface contentStore)
     {
-        this(name, simulator, position, roles, bank, new Money(0.0, MoneyUnit.USD));
+        this(name, simulator, position, bank, new Money(0.0, MoneyUnit.USD), contentStore);
     }
 
     /**
      * @param name the name of the supplier
      * @param simulator the simulator to use
      * @param position the position on the map
-     * @param roles the initial roles (if any)
      * @param bank the bank
      * @param initialBankAccount the initial bank balance
+     * @param contentStore the contentStore for the messages
      */
-    public Supplier(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position, final Role[] roles,
-            final Bank bank, final Money initialBankAccount)
+    public Supplier(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
+            final Bank bank, final Money initialBankAccount, final ContentStoreInterface contentStore)
     {
-        super(name, simulator, position, roles, bank, initialBankAccount);
+        super(name, simulator, position, bank, initialBankAccount, contentStore);
     }
 
     /** {@inheritDoc} */
@@ -69,5 +75,38 @@ public class Supplier extends Trader
     public void checkStock(final Product product)
     {
         // TODO: implement checkStock
+    }
+
+    /**
+     * @return Returns the sellingRole.
+     */
+    public SellingRole getSellingRole()
+    {
+        return this.sellingRole;
+    }
+
+    /**
+     * @param sellingRole The sellingRole to set.
+     */
+    public void setSellingRole(final SellingRole sellingRole)
+    {
+        // remove the previous selling role
+        if (this.sellingRole != null)
+        {
+            super.removeRole(this.sellingRole);
+        }
+        super.addRole(sellingRole);
+        this.sellingRole = sellingRole;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean handleContent(final Serializable content)
+    {
+        if (this.sellingRole == null)
+        {
+            throw new RuntimeException("SuyingRole not initialized for Supplier: " + this.getName());
+        }
+        return super.handleContent(content);
     }
 }

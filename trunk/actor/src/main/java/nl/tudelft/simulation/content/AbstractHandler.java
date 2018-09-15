@@ -19,7 +19,7 @@ public abstract class AbstractHandler implements HandlerInterface
     /** the owner of this handler */
     private final ActorInterface owner;
 
-    /** the default stream to use for the time delays */
+    /** the default stream to use for the default time delays */
     private StreamInterface stream = null;
 
     /**

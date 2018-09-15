@@ -6,14 +6,11 @@ import java.rmi.RemoteException;
 
 import javax.naming.NamingException;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.config.Configuration;
-import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
+import org.pmw.tinylog.Configurator;
+import org.pmw.tinylog.Level;
 
 import nl.tudelft.simulation.dsol.DSOLModel;
 import nl.tudelft.simulation.dsol.SimRuntimeException;
@@ -58,11 +55,7 @@ public class TestModelApp extends DSOLApplication
      */
     public static void main(final String[] args) throws SimRuntimeException, NamingException, RemoteException
     {
-        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
-        Configuration config = ctx.getConfiguration();
-        LoggerConfig rootLoggerConfig = config.getLoggers().get("");
-        rootLoggerConfig.setLevel(Level.WARN);
-        ctx.updateLoggers();
+        Configurator.defaultConfig().level(Level.INFO).activate();
 
         DSOLModel.TimeDoubleUnit model = new TestModel();
         // DEVSAnimator.TimeDoubleUnit animator = new DEVSAnimator.TimeDoubleUnit();

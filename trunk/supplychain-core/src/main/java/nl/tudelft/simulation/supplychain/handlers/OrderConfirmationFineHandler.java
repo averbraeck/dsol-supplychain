@@ -2,11 +2,10 @@ package nl.tudelft.simulation.supplychain.handlers;
 
 import java.io.Serializable;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.djunits.unit.MoneyUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Money;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
@@ -34,9 +33,6 @@ public class OrderConfirmationFineHandler extends OrderConfirmationHandler
 
     /** the fixed fine */
     private Money fixedFine = new Money(0.0, MoneyUnit.USD);
-
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(OrderConfirmationFineHandler.class);
 
     /**
      * constructs a new OrderConfirmationFineHandler
@@ -72,7 +68,7 @@ public class OrderConfirmationFineHandler extends OrderConfirmationHandler
                 }
                 catch (Exception exception)
                 {
-                    logger.fatal("handleContent", exception);
+                    Logger.error(exception, "handleContent");
                 }
             }
             return true;

@@ -2,10 +2,8 @@ package nl.tudelft.simulation.messaging.devices.components;
 
 import java.io.Serializable;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.pmw.tinylog.Logger;
 
-import nl.tudelft.simulation.actor.Actor;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.messaging.Message;
 import nl.tudelft.simulation.messaging.devices.types.DeviceType;
@@ -30,9 +28,6 @@ public class DelaySendingDevice extends SendingDevice
 
     /** the delay of the sender */
     protected DistContinuousDurationUnit delay = null;
-
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(Actor.class);
 
     /**
      * constructs a new DelaySendingDevice, take the transmission delay and frequency from the DeviceType.
@@ -78,7 +73,7 @@ public class DelaySendingDevice extends SendingDevice
         }
         catch (Exception exception)
         {
-            logger.warn("send", exception);
+            Logger.warn(exception, "send");
         }
         return Boolean.TRUE;
     }

@@ -3,6 +3,7 @@ package nl.tudelft.simulation.supplychain.handlers;
 import java.io.Serializable;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
+import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.ProductionOrder;
 import nl.tudelft.simulation.supplychain.production.Production;
 
@@ -42,13 +43,6 @@ public class ProductionOrderHandler extends SupplyChainHandler
 
     /** {@inheritDoc} */
     @Override
-    protected boolean checkContentClass(final Serializable content)
-    {
-        return (content instanceof ProductionOrder);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public boolean handleContent(final Serializable content)
     {
         return this.production.acceptProductionOrder((ProductionOrder) content);
@@ -62,4 +56,13 @@ public class ProductionOrderHandler extends SupplyChainHandler
     {
         return this.production;
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public Class<? extends Content> getContentClass()
+    {
+        return ProductionOrder.class;
+    }
+    
+    
 }

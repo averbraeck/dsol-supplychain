@@ -1,8 +1,7 @@
 package nl.tudelft.simulation.supplychain.handlers;
 
-import java.io.Serializable;
-
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
+import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
 
@@ -35,15 +34,6 @@ public abstract class OrderHandler extends SupplyChainHandler
     /** access to the owner's stock to look at availability of products */
     protected StockInterface stock;
 
-    /** Mode of operation for an shipping and paying: paying at delivery */
-    public static final int SHIPMENT_WITH_PAYMENT = 1;
-
-    /** Mode of operation for an shipping and paying: paying before delivery */
-    public static final int SHIPMENT_AFTER_PAYMENT = 2;
-
-    /** Mode of operation for an shipping and paying: paying after delivery */
-    public static final int SHIPMENT_BEFORE_PAYMENT = 3;
-
     /**
      * Construct a new OrderHandler. The OrderHandler is abstract, so this constructor can not be called directly.
      * @param owner the owner of the handler
@@ -57,9 +47,8 @@ public abstract class OrderHandler extends SupplyChainHandler
 
     /** {@inheritDoc} */
     @Override
-    protected boolean checkContentClass(final Serializable content)
+    public Class<? extends Content> getContentClass()
     {
-        return (content instanceof Order);
+        return Order.class;
     }
-
 }

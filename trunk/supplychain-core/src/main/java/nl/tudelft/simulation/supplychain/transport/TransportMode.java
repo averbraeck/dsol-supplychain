@@ -2,8 +2,6 @@ package nl.tudelft.simulation.supplychain.transport;
 
 import java.io.Serializable;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.djunits.unit.DurationUnit;
 import org.djunits.unit.LengthUnit;
 import org.djunits.unit.MassUnit;
@@ -14,6 +12,7 @@ import org.djunits.value.vdouble.scalar.Length;
 import org.djunits.value.vdouble.scalar.Mass;
 import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Speed;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.animation.Locatable;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
@@ -45,15 +44,19 @@ public class TransportMode implements Serializable
     /** the cost per km per kg */
     protected Money costKmKg;
 
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(TransportMode.class);
-
     /**
      * predefined transport mode: plane including transport to/from the airport 250 dollar handling costs, taxes, and transport
      * to/from airport. For the price of 0.0007 per kg per km, see conf/data/AirRates.xls
      */
     public static final TransportMode PLANE = new TransportMode("Plane", new Duration(8.0, DurationUnit.HOUR),
             new Speed(800.0, SpeedUnit.KM_PER_HOUR), new Money(250.0, MoneyUnit.USD), new Money(0.0007, MoneyUnit.USD));
+
+    /**
+     * predefined transport mode: truck including transport to/from the airport 50 dollar handling costs, taxes
+     * The price is $1.50 per km, with 10000 kg on board -> 0.00015 $/km/kg.
+     */
+    public static final TransportMode TRUCK = new TransportMode("Truck", new Duration(2.0, DurationUnit.HOUR),
+            new Speed(80.0, SpeedUnit.KM_PER_HOUR), new Money(50.0, MoneyUnit.USD), new Money(0.00015, MoneyUnit.USD));
 
     /**
      * Constructor for TransportMode.
@@ -89,7 +92,7 @@ public class TransportMode implements Serializable
         }
         catch (Exception exception)
         {
-            logger.fatal("transportTime", exception);
+            Logger.error(exception, "transportTime");
             return Duration.ZERO;
         }
         return this.transportTime(distance);

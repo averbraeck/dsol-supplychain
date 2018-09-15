@@ -23,8 +23,6 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,6 +48,7 @@ import javax.swing.text.MaskFormatter;
 import org.djunits.unit.TimeUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.SimRuntimeException;
 import nl.tudelft.simulation.dsol.formalisms.eventscheduling.SimEvent;
@@ -86,9 +85,6 @@ public class ControlPanel extends JPanel
     /** The WrappableAnimation (needed for restart operation). */
     private final WrappableAnimation wrappableAnimation;
 
-    /** Logger. */
-    private final Logger logger;
-
     /** The clock. */
     private final ClockLabel clockPanel;
 
@@ -124,7 +120,6 @@ public class ControlPanel extends JPanel
     {
         this.simulator = simulator;
         this.wrappableAnimation = wrappableAnimation;
-        this.logger = Logger.getLogger("nl.tudelft.opentrafficsim");
 
         this.setLayout(new FlowLayout(FlowLayout.LEFT));
         JPanel buttonPanel = new JPanel();
@@ -384,7 +379,7 @@ public class ControlPanel extends JPanel
                 }
                 catch (SimRuntimeException exception)
                 {
-                    this.logger.logp(Level.SEVERE, "ControlPanel", "autoPauseSimulator", "Caught an exception "
+                    Logger.error("ControlPanel - autoPauseSimulator: Caught an exception "
                             + "while trying to schedule an autoPauseSimulator event at the current simulator time");
                 }
                 this.simulator.start();
@@ -507,7 +502,7 @@ public class ControlPanel extends JPanel
             }
             else
             {
-                this.logger.logp(Level.SEVERE, "ControlPanel", "fixButtons", "", new Exception("Unknown button?"));
+                Logger.error("ControlPanel - fixButtons: Unknown button?");
             }
         }
         // System.out.println("FixButtons finishing");
@@ -539,8 +534,8 @@ public class ControlPanel extends JPanel
                 }
                 catch (SimRuntimeException exception)
                 {
-                    this.logger.logp(Level.SEVERE, "ControlPanel", "autoPauseSimulator",
-                            "Caught an exception while trying to re-schedule an autoPauseEvent at the next real event");
+                    Logger.error("ControlPanel - autoPauseSimulator: "
+                            + "Caught an exception while trying to re-schedule an autoPauseEvent at the next real event");
                 }
             }
             else
@@ -614,8 +609,8 @@ public class ControlPanel extends JPanel
             }
             catch (SimRuntimeException exception)
             {
-                this.logger.logp(Level.SEVERE, "ControlPanel", "propertyChange",
-                        "Caught an exception while trying to schedule an autoPauseSimulator event");
+                Logger.error("ControlPanel - propertyChange: "
+                        + "Caught an exception while trying to schedule an autoPauseSimulator event");
             }
         }
     }

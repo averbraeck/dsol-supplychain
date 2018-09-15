@@ -5,11 +5,11 @@ import java.util.Comparator;
 
 import javax.vecmath.Point3d;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
+import org.pmw.tinylog.Logger;
 
+import nl.tudelft.simulation.language.Throw;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.Quote;
 
@@ -27,21 +27,20 @@ public class QuoteComparator implements Comparator<Quote>, Serializable
     private static final long serialVersionUID = 12L;
 
     /** comparatorType indicates the sorting order for the comparator */
-    private int comparatorType = 0;
+    private QuoteComparatorEnum comparatorType;
 
     /** ownerPosition stores the position of the owner */
     private Point3d ownerPosition;
-
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(QuoteComparator.class);
 
     /**
      * @param owner the supply chain actor
      * @param comparatorType the type of comparator to use
      */
-    public QuoteComparator(final SupplyChainActor owner, final int comparatorType)
+    public QuoteComparator(final SupplyChainActor owner, final QuoteComparatorEnum comparatorType)
     {
         super();
+        Throw.whenNull(owner, "owner cannot be null");
+        Throw.whenNull(comparatorType, "comparatorType cannot be null");
         this.comparatorType = comparatorType;
         this.ownerPosition = owner.getLocation();
     }
@@ -61,7 +60,7 @@ public class QuoteComparator implements Comparator<Quote>, Serializable
         int distanceCompare = Double.compare(distance0, distance1);
         switch (this.comparatorType)
         {
-            case QuoteHandler.SORT_DATE_DISTANCE_PRICE:
+            case SORT_DATE_DISTANCE_PRICE:
                 if (dateCompare != 0)
                 {
                     return dateCompare;
@@ -74,7 +73,7 @@ public class QuoteComparator implements Comparator<Quote>, Serializable
                 {
                     return priceCompare;
                 }
-            case QuoteHandler.SORT_DATE_PRICE_DISTANCE:
+            case SORT_DATE_PRICE_DISTANCE:
                 if (dateCompare != 0)
                 {
                     return dateCompare;
@@ -87,7 +86,7 @@ public class QuoteComparator implements Comparator<Quote>, Serializable
                 {
                     return distanceCompare;
                 }
-            case QuoteHandler.SORT_DISTANCE_DATE_PRICE:
+            case SORT_DISTANCE_DATE_PRICE:
                 if (distanceCompare != 0)
                 {
                     return distanceCompare;
@@ -100,7 +99,7 @@ public class QuoteComparator implements Comparator<Quote>, Serializable
                 {
                     return priceCompare;
                 }
-            case QuoteHandler.SORT_DISTANCE_PRICE_DATE:
+            case SORT_DISTANCE_PRICE_DATE:
                 if (distanceCompare != 0)
                 {
                     return distanceCompare;
@@ -113,7 +112,7 @@ public class QuoteComparator implements Comparator<Quote>, Serializable
                 {
                     return dateCompare;
                 }
-            case QuoteHandler.SORT_PRICE_DATE_DISTANCE:
+            case SORT_PRICE_DATE_DISTANCE:
                 if (priceCompare != 0)
                 {
                     return priceCompare;
@@ -126,7 +125,7 @@ public class QuoteComparator implements Comparator<Quote>, Serializable
                 {
                     return distanceCompare;
                 }
-            case QuoteHandler.SORT_PRICE_DISTANCE_DATE:
+            case SORT_PRICE_DISTANCE_DATE:
                 if (priceCompare != 0)
                 {
                     return priceCompare;
@@ -140,7 +139,7 @@ public class QuoteComparator implements Comparator<Quote>, Serializable
                     return dateCompare;
                 }
             default:
-                logger.fatal("QuoteHandler$compare", "Illegal comparator type=" + this.comparatorType);
+                Logger.error("QuoteHandler$compare - Illegal comparator type=" + this.comparatorType);
                 break;
         }
         return 0;
@@ -150,30 +149,6 @@ public class QuoteComparator implements Comparator<Quote>, Serializable
     @Override
     public String toString()
     {
-        if (this.comparatorType == QuoteHandler.SORT_DATE_DISTANCE_PRICE)
-        {
-            return "SORT_DATE_DISTANCE_PRICE";
-        }
-        if (this.comparatorType == QuoteHandler.SORT_DATE_PRICE_DISTANCE)
-        {
-            return "SORT_DATE_PRICE_DISTANCE";
-        }
-        if (this.comparatorType == QuoteHandler.SORT_DISTANCE_DATE_PRICE)
-        {
-            return "SORT_DISTANCE_DATE_PRICE";
-        }
-        if (this.comparatorType == QuoteHandler.SORT_DISTANCE_PRICE_DATE)
-        {
-            return "SORT_DISTANCE_PRICE_DATE";
-        }
-        if (this.comparatorType == QuoteHandler.SORT_PRICE_DATE_DISTANCE)
-        {
-            return "SORT_PRICE_DATE_DISTANCE";
-        }
-        if (this.comparatorType == QuoteHandler.SORT_PRICE_DISTANCE_DATE)
-        {
-            return "SORT_PRICE_DISTANCE_DATE";
-        }
-        return "Unknown comparator type: " + this.comparatorType;
+        return this.comparatorType.toString();
     }
 }

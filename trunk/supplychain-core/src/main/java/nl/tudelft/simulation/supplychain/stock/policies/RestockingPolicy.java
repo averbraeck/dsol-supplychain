@@ -2,9 +2,8 @@ package nl.tudelft.simulation.supplychain.stock.policies;
 
 import java.io.Serializable;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.djunits.value.vdouble.scalar.Duration;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.supplychain.actor.Trader;
@@ -35,15 +34,12 @@ public abstract class RestockingPolicy implements Serializable
     /** the product that has to be restocked */
     protected Product product;
 
-    // TODO: See if this should be a Duration ot a Frequency
+    // TODO: See if this should be a Duration or a Frequency
     /** the frequency distribution for restocking or checking the stock */
     protected DistContinuousDurationUnit frequency;
 
     /** the maximum delivery time */
     protected Duration maxDeliveryDuration = Duration.ZERO;
-
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(RestockingPolicy.class);
 
     /**
      * Construct a new restocking policy, with the basic parameters that every restocking policy has.
@@ -67,7 +63,7 @@ public abstract class RestockingPolicy implements Serializable
         }
         catch (Exception e)
         {
-            logger.fatal("RestockingPolicy", e);
+            Logger.error(e, "RestockingPolicy");
         }
     }
 
@@ -96,7 +92,7 @@ public abstract class RestockingPolicy implements Serializable
         }
         catch (Exception e)
         {
-            logger.fatal("checkLoop", e);
+            Logger.error(e, "checkLoop");
         }
     }
 

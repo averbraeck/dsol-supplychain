@@ -19,32 +19,40 @@ import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 public interface ContentStoreInterface extends Serializable
 {
     /**
+     * Set the owner for the content store after is has been created. The reason for explicitly having to set the owner and
+     * not include the owner in the constructor is that the SupplyChainActor needs a ContentStore in its constructor, so the
+     * ContentStore cannot be constructed with the owner. 
+     * @param owner the owner
+     */
+    void setOwner(SupplyChainActor owner);
+    
+    /**
      * Method addContent stores a new Content object into the store.
      * @param content the content to add
      * @param sent sent or not
      */
-    void addContent(final Content content, final boolean sent);
+    void addContent(Content content, boolean sent);
 
     /**
      * Method removeContent removes a Content object from the store.
      * @param content the content to remove
      * @param sent indicates whether the content was sent or received
      */
-    void removeContent(final Content content, final boolean sent);
+    void removeContent(Content content, boolean sent);
 
     /**
      * Method removeSentReceivedContent removes a Content object from the sent / received store.
      * @param content the content to remove
      * @param sent indicates whether the content was sent or received
      */
-    void removeSentReceivedContent(final Content content, final boolean sent);
+    void removeSentReceivedContent(Content content, boolean sent);
 
     /**
      * Method removeAllContent removes an exisiting Content object from the store. No error message is given when the content
      * was not there; this is just ignored.
      * @param internalDemandID the identifier of the internal demand
      */
-    void removeAllContent(final Serializable internalDemandID);
+    void removeAllContent(Serializable internalDemandID);
 
     /**
      * Method getContentList returns a list of Content objects of type clazz based on the internalDemandID.
@@ -52,7 +60,7 @@ public interface ContentStoreInterface extends Serializable
      * @param clazz the content class to look for
      * @return returns a list of content of type class based on the internalDemandID
      */
-    <C extends Content> List<C> getContentList(final Serializable internalDemandID, final Class<C> clazz);
+    <C extends Content> List<C> getContentList(Serializable internalDemandID, Class<C> clazz);
 
     /**
      * Method getContentList returns the Content object of type clazz based on the internalDemandID, for either sent or received
@@ -62,7 +70,7 @@ public interface ContentStoreInterface extends Serializable
      * @param sent indicates whether the content was sent or received
      * @return returns a list of content of type class based on the internalDemandID
      */
-    <C extends Content> List<C> getContentList(final Serializable internalDemandID, final Class<C> clazz, final boolean sent);
+    <C extends Content> List<C> getContentList(Serializable internalDemandID, Class<C> clazz, boolean sent);
 
     /**
      * @return Returns the owner.

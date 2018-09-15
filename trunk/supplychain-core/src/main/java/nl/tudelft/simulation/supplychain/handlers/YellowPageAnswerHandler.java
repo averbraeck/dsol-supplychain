@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.djunits.value.vdouble.scalar.Duration;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
+import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.content.InternalDemand;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
@@ -56,11 +57,11 @@ public class YellowPageAnswerHandler extends SupplyChainHandler
     @Override
     public boolean handleContent(final Serializable content)
     {
-        YellowPageAnswer ypAnswer = (YellowPageAnswer) checkContent(content);
-        if (!isValidContent(ypAnswer))
+        if (!isValidContent(content))
         {
             return false;
         }
+        YellowPageAnswer ypAnswer = (YellowPageAnswer) content;
         ContentStoreInterface contentStore = getOwner().getContentStore();
         YellowPageRequest ypRequest = ypAnswer.getYellowPageRequest();
         InternalDemand internalDemand =
@@ -79,8 +80,10 @@ public class YellowPageAnswerHandler extends SupplyChainHandler
 
     /** {@inheritDoc} */
     @Override
-    protected boolean checkContentClass(final Serializable content)
+    public Class<? extends Content> getContentClass()
     {
-        return (content instanceof YellowPageAnswer);
+        return YellowPageAnswer.class;
     }
+
+
 }

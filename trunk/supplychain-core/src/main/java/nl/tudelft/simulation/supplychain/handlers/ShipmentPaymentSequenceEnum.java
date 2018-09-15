@@ -1,23 +1,22 @@
-package nl.tudelft.simulation.content;
-
-import java.io.Serializable;
+package nl.tudelft.simulation.supplychain.handlers;
 
 /**
- * The HandlerInterface defines what any Handler should be able to do: handle some Serializable content. <br>
+ * ShipmentPaymentSequence.java. <br>
  * <br>
  * Copyright (c) 2003-2018 Delft University of Technology, Jaffalaan 5, 2628 BX Delft, the Netherlands. All rights reserved. See
  * for project information <a href="https://www.simulation.tudelft.nl/" target="_blank">www.simulation.tudelft.nl</a>. The
  * source code and binary code of this software is proprietary information of Delft University of Technology.
  * @author <a href="https://www.tudelft.nl/averbraeck" target="_blank">Alexander Verbraeck</a>
  */
-public interface HandlerInterface extends Serializable
+public enum ShipmentPaymentSequenceEnum
 {
-    /**
-     * Handle the content of the message.
-     * @param content the content to be handled, can be of any type
-     * @return a boolean acknowledgement; true or false
-     */
-    boolean handleContent(Serializable content);
+    /** Mode of operation for an shipping and paying: paying at delivery */
+    SHIPMENT_WITH_PAYMENT,
 
+    /** Mode of operation for an shipping and paying: paying before delivery */
+    SHIPMENT_AFTER_PAYMENT,
 
+    /** Mode of operation for an shipping and paying: paying after delivery */
+    SHIPMENT_BEFORE_PAYMENT;
 }
+

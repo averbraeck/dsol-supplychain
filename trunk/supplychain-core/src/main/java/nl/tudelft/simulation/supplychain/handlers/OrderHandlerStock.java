@@ -2,12 +2,11 @@ package nl.tudelft.simulation.supplychain.handlers;
 
 import java.io.Serializable;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.Bill;
@@ -36,9 +35,6 @@ public class OrderHandlerStock extends OrderHandler
 
     /** for debugging */
     private static final boolean DEBUG = false;
-
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(OrderHandlerStock.class);
 
     /**
      * Construct a new OrderHandler that takes the goods from stock when ordered.
@@ -94,7 +90,7 @@ public class OrderHandlerStock extends OrderHandler
         }
         catch (Exception e)
         {
-            logger.fatal("handleContent", e);
+            Logger.error(e, "handleContent");
             return false;
         }
         return true;
@@ -151,7 +147,7 @@ public class OrderHandlerStock extends OrderHandler
         }
         catch (Exception e)
         {
-            logger.fatal("ship", e);
+            Logger.error(e, "ship");
             return;
         }
     }

@@ -67,7 +67,7 @@ public class QuoteHandlerAll extends QuoteHandler
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the minimal amount margin
      */
-    public QuoteHandlerAll(final SupplyChainActor owner, final int comparatorType,
+    public QuoteHandlerAll(final SupplyChainActor owner, final QuoteComparatorEnum comparatorType,
             final DistContinuousDurationUnit handlingTime, final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super(owner, comparatorType, handlingTime, maximumPriceMargin, minimumAmountMargin);
@@ -81,7 +81,7 @@ public class QuoteHandlerAll extends QuoteHandler
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the minimal amount margin
      */
-    public QuoteHandlerAll(final SupplyChainActor owner, final int comparatorType, final Duration handlingTime,
+    public QuoteHandlerAll(final SupplyChainActor owner, final QuoteComparatorEnum comparatorType, final Duration handlingTime,
             final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super(owner, comparatorType, handlingTime, maximumPriceMargin, minimumAmountMargin);
@@ -91,11 +91,11 @@ public class QuoteHandlerAll extends QuoteHandler
     @Override
     public boolean handleContent(final Serializable content)
     {
-        Quote quote = (Quote) checkContent(content);
-        if (!isValidContent(quote))
+        if (!isValidContent(content))
         {
             return false;
         }
+        Quote quote = (Quote) content;
         // look if all quotes are there for the RFQs that we sent out
         Serializable id = quote.getInternalDemandID();
         ContentStoreInterface contentStore = getOwner().getContentStore();

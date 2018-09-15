@@ -5,8 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.content.AbstractHandler;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
@@ -38,9 +37,6 @@ public abstract class SupplyChainHandler extends AbstractHandler
     /** the partner actors for which this handler is valid */
     protected Set<SupplyChainActor> validPartners = new HashSet<SupplyChainActor>();
 
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(SupplyChainHandler.class);
-
     /**
      * @param owner the a that 'owns' the handler
      */
@@ -50,32 +46,31 @@ public abstract class SupplyChainHandler extends AbstractHandler
     }
 
     /**
-     * Check whether the content is of the right type for this handler
-     * @param content the content to check
-     * @return whether type is right or not
+     * Get the content class that this handler is able to handle.
+     * @return the content class that this
      */
-    protected abstract boolean checkContentClass(final Serializable content);
+    public abstract Class<? extends Content> getContentClass();
 
     /**
-     * Method checkContent.
-     * @param serContent the content to check
-     * @return returns a bill
+     * Check Content in terms of class and owner.
+     * @param content the content to check
+     * @return returns whether the content is okay, and we are the one supposed to handle it
      */
-    protected Content checkContent(final Serializable serContent)
+    protected boolean checkContent(final Content content)
     {
-        if (!checkContentClass(serContent))
+        // e.g., PaymentHandler is assignable from PaymentFineHandler
+        if (!getContentClass().isAssignableFrom(content.getClass()))
         {
-            logger.warn("checkConten - Wrong content type for actor " + getOwner() + ", handler " + this.getClass() + ": "
-                    + serContent.getClass());
-            return null;
+            Logger.warn("checkContent - Wrong content type for actor " + getOwner() + ", handler " + this.getClass() + ": "
+                    + content.getClass());
+            return false;
         }
-        Content content = (Content) serContent;
         if (!content.getReceiver().equals(getOwner()))
         {
-            logger.warn("checkContent - Bill for actor " + content.getSender() + " sent to actor " + getOwner());
-            return null;
+            Logger.warn("checkContent - Wrong receiver for content " + content.toString() + " sent to actor " + getOwner());
+            return false;
         }
-        return content;
+        return true;
     }
 
     /**
@@ -187,16 +182,17 @@ public abstract class SupplyChainHandler extends AbstractHandler
 
     /**
      * Check partner and content for validity for this handler.
-     * @param content the content to check
+     * @param serContent the content to check
      * @return boolean indicating whether the content can be handled by this handler
      */
-    protected boolean isValidContent(final Content content)
+    protected boolean isValidContent(final Serializable serContent)
     {
-        if (content == null)
+        if (serContent == null || !(serContent instanceof Content))
         {
-            logger.warn("isValidContent", "Content = null");
+            Logger.warn("isValidContent", "Serializable content = null, or not of type Content");
             return false;
         }
-        return (checkValidProduct(content) & checkValidPartner(content));
+        Content content = (Content) serContent;
+        return checkContent(content) && checkValidProduct(content) && checkValidPartner(content);
     }
 }

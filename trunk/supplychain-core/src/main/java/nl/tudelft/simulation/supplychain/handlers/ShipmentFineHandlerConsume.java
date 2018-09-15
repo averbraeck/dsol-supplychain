@@ -12,7 +12,7 @@ import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.Shipment;
 
 /**
- * * When a Shipment comes in, consume it. In other words and in terms of the supply chain simulation: do nothing... <br>
+ * When a Shipment comes in, consume it. In other words and in terms of the supply chain simulation: do nothing... <br>
  * However a check is performed whether the shipment was delivered on time. If not,a fine is imposed. <br>
  * <br>
  * Copyright (c) 2003-2018 Delft University of Technology, Jaffalaan 5, 2628 BX Delft, the Netherlands. All rights reserved. See

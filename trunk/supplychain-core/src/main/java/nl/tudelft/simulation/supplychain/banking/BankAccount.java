@@ -1,12 +1,11 @@
 package nl.tudelft.simulation.supplychain.banking;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.djunits.unit.DurationUnit;
 import org.djunits.unit.MoneyUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.event.EventProducer;
@@ -43,9 +42,6 @@ public class BankAccount extends EventProducer
     /** for who is interested, the BankAccount can send updates of changes */
     public static final EventType BANK_ACCOUNT_CHANGED_EVENT = new EventType("BANK_ACCOUNT_CHANGED_EVENT");
 
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(BankAccount.class);
-
     /**
      * Constructor for BankAccount.
      * @param owner the owner of the bank account
@@ -81,7 +77,7 @@ public class BankAccount extends EventProducer
         }
         catch (Exception e)
         {
-            logger.warn("<init>", e);
+            Logger.warn(e, "<init>");
         }
     }
 
@@ -162,7 +158,7 @@ public class BankAccount extends EventProducer
         }
         catch (Exception exception)
         {
-            logger.fatal("interest", exception);
+            Logger.error(exception, "interest");
         }
 
     }

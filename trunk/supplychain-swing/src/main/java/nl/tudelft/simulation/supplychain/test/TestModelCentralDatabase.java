@@ -26,7 +26,6 @@ import nl.tudelft.simulation.supplychain.content.database.CentralDatabaseContent
 import nl.tudelft.simulation.supplychain.content.database.DatabaseWorkerInterface;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.product.Unit;
-import nl.tudelft.simulation.supplychain.roles.Role;
 
 /**
  * The TestModel for the supplychain package. <br>
@@ -86,19 +85,16 @@ public class TestModelCentralDatabase implements DSOLModel.TimeDoubleUnit
             DatabaseWorkerInterface dbw = new CachingDatabaseWorker("TestModel_simulation");
 
             // create a manufacturer
-            Factory Factory = new Factory("Factory", this.devsSimulator, new Point3d(200, 200, 0), new Role[] {}, ing,
-                    new Money(50000.0, MoneyUnit.USD), laptop, 1000);
-            Factory.setContentStore(new CentralDatabaseContentStore(Factory, dbw));
+            Factory Factory = new Factory("Factory", this.devsSimulator, new Point3d(200, 200, 0), ing,
+                    new Money(50000.0, MoneyUnit.USD), laptop, 1000, new CentralDatabaseContentStore(dbw));
 
             // create a retailer
-            PCShop pcShop = new PCShop("PCshop", this.devsSimulator, new Point3d(20, 200, 0), new Role[] {}, ing,
-                    new Money(50000.0, MoneyUnit.USD), laptop, 10, Factory);
-            pcShop.setContentStore(new CentralDatabaseContentStore(pcShop, dbw));
+            PCShop pcShop = new PCShop("PCshop", this.devsSimulator, new Point3d(20, 200, 0), ing,
+                    new Money(50000.0, MoneyUnit.USD), laptop, 10, Factory, new CentralDatabaseContentStore(dbw));
 
             // create a customer
             Client Client = new Client("Client", this.devsSimulator, new Point3d(100, 100, 0), ing,
-                    new Money(1500000.0, MoneyUnit.USD), laptop, pcShop);
-            Client.setContentStore(new CentralDatabaseContentStore(Client, dbw));
+                    new Money(1500000.0, MoneyUnit.USD), laptop, pcShop, new CentralDatabaseContentStore(dbw));
 
             // schedule a remark that the simulation is ready
             Duration endTime = new Duration(simulator.getReplication().getTreatment().getRunLength().doubleValue() - 0.001,

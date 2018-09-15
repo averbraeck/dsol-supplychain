@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import nl.tudelft.simulation.event.EventProducer;
+import nl.tudelft.simulation.language.Throw;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
@@ -28,20 +29,28 @@ public class CentralDatabaseContentStore extends EventProducer implements Conten
 
     /**
      * Constructs a new ContentStore
-     * @param owner the owner
      * @param databaseWorker the ERP system for the game
      */
-    public CentralDatabaseContentStore(final SupplyChainActor owner, final DatabaseWorkerInterface databaseWorker)
+    public CentralDatabaseContentStore(final DatabaseWorkerInterface databaseWorker)
     {
         super();
-        this.owner = owner;
         this.databaseWorker = databaseWorker;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setOwner(final SupplyChainActor owner)
+    {
+        Throw.when(this.owner != null, RuntimeException.class,
+                "ContentStore - setting owner for %s while it has been set before", owner.toString());
+        this.owner = owner;
     }
 
     /** {@inheritDoc} */
     @Override
     public void addContent(Content content, boolean sent)
     {
+        Throw.whenNull(this.owner, "CentralDatabaseContentStore - owner has not been initialized");
         this.databaseWorker.addContent(content, sent);
     }
 
@@ -49,6 +58,7 @@ public class CentralDatabaseContentStore extends EventProducer implements Conten
     @Override
     public void removeContent(Content content, boolean sent)
     {
+        Throw.whenNull(this.owner, "CentralDatabaseContentStore - owner has not been initialized");
         this.databaseWorker.removeContent(content, sent);
     }
 
@@ -56,6 +66,7 @@ public class CentralDatabaseContentStore extends EventProducer implements Conten
     @Override
     public void removeSentReceivedContent(Content content, boolean sent)
     {
+        Throw.whenNull(this.owner, "CentralDatabaseContentStore - owner has not been initialized");
         this.databaseWorker.removeSentReceivedContent(content, sent);
     }
 
@@ -63,6 +74,7 @@ public class CentralDatabaseContentStore extends EventProducer implements Conten
     @Override
     public void removeAllContent(Serializable internalDemandID)
     {
+        Throw.whenNull(this.owner, "CentralDatabaseContentStore - owner has not been initialized");
         this.databaseWorker.removeAllContent(internalDemandID);
     }
 

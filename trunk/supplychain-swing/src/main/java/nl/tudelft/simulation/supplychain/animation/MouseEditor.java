@@ -1,24 +1,10 @@
-/*
- * @(#) MouseEditor.java May 4, 2004
- * 
- * Copyright (c) 2003-2006 Delft University of Technology, Jaffalaan 5, 2628 BX
- * Delft, the Netherlands. All rights reserved.
- * 
- * See for project information <a href="http://www.simulation.tudelft.nl/">
- * www.simulation.tudelft.nl </a>.
- * 
- * The source code and binary code of this software is proprietary information
- * of Delft University of Technology.
- */
-
 package nl.tudelft.simulation.supplychain.animation;
 
 import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.animation.D2.AnimationPanel;
 import nl.tudelft.simulation.dsol.animation.D2.Renderable2DInterface;
@@ -35,9 +21,6 @@ import nl.tudelft.simulation.introspection.gui.IntroSpectionDialog;
  */
 public class MouseEditor extends InputListener
 {
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(MouseEditor.class);
-
     /**
      * constructs a new MouseEditor
      * @param panel the animation panel
@@ -75,7 +58,7 @@ public class MouseEditor extends InputListener
         }
         catch (RemoteException exception)
         {
-            logger.warn("edit", exception);
+            Logger.warn(exception, "edit");
         }
     }
 }

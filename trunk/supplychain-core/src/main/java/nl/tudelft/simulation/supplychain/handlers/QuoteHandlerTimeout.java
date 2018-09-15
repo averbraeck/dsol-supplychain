@@ -6,10 +6,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
@@ -36,9 +35,6 @@ public class QuoteHandlerTimeout extends QuoteHandler
 
     /** a set of internal demand IDs for which we did not yet answer */
     private Set<Serializable> unansweredIDs = new HashSet<Serializable>();
-
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(QuoteHandlerTimeout.class);
 
     /**
      * Constructor of the QuoteHandlerTimeout with a user defined comparator for quotes
@@ -76,7 +72,7 @@ public class QuoteHandlerTimeout extends QuoteHandler
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the minimal amount margin
      */
-    public QuoteHandlerTimeout(final SupplyChainActor owner, final int comparatorType,
+    public QuoteHandlerTimeout(final SupplyChainActor owner, final QuoteComparatorEnum comparatorType,
             final DistContinuousDurationUnit handlingTime, final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super(owner, comparatorType, handlingTime, maximumPriceMargin, minimumAmountMargin);
@@ -90,8 +86,8 @@ public class QuoteHandlerTimeout extends QuoteHandler
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the minimal amount margin
      */
-    public QuoteHandlerTimeout(final SupplyChainActor owner, final int comparatorType, final Duration handlingTime,
-            final double maximumPriceMargin, final double minimumAmountMargin)
+    public QuoteHandlerTimeout(final SupplyChainActor owner, final QuoteComparatorEnum comparatorType,
+            final Duration handlingTime, final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super(owner, comparatorType, handlingTime, maximumPriceMargin, minimumAmountMargin);
     }
@@ -100,11 +96,11 @@ public class QuoteHandlerTimeout extends QuoteHandler
     @Override
     public boolean handleContent(final Serializable content)
     {
-        Quote quote = (Quote) checkContent(content);
-        if (!isValidContent(quote))
+        if (!isValidContent(content))
         {
             return false;
         }
+        Quote quote = (Quote) content;
         Serializable internalDemandID = quote.getInternalDemandID();
         ContentStoreInterface contentStore = getOwner().getContentStore();
         int numberQuotes = contentStore.getContentList(internalDemandID, Quote.class).size();
@@ -123,7 +119,7 @@ public class QuoteHandlerTimeout extends QuoteHandler
             }
             catch (Exception exception)
             {
-                logger.fatal("handleContent", exception);
+                Logger.error(exception, "handleContent");
                 return false;
             }
         }

@@ -7,6 +7,7 @@ import javax.vecmath.Point3d;
 import org.djunits.unit.MassUnit;
 import org.djunits.unit.MoneyUnit;
 import org.djunits.value.vdouble.scalar.Duration;
+import org.djunits.value.vdouble.scalar.Length;
 import org.djunits.value.vdouble.scalar.Mass;
 import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
@@ -31,6 +32,9 @@ import nl.tudelft.simulation.supplychain.test.Client;
 import nl.tudelft.simulation.supplychain.test.Factory;
 import nl.tudelft.simulation.supplychain.test.PCShop;
 import nl.tudelft.simulation.supplychain.test.TestModel;
+import nl.tudelft.simulation.supplychain.transport.TransportMode;
+import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
+import nl.tudelft.simulation.yellowpage.YellowPageInterface;
 
 /**
  * MTSMTO.java. <br>
@@ -99,30 +103,20 @@ public class MTSMTOModel implements DSOLModel.TimeDoubleUnit
             ing.setAnnualInterestRateNeg(0.080);
             ing.setAnnualInterestRatePos(0.025);
 
-            // create a product
-            Product laptop =
-                    new Product("Laptop", Unit.PIECE, new Money(1400.0, MoneyUnit.USD), new Mass(6.5, MassUnit.KILOGRAM), 0.0);
+            
+            
+            
+            
+            
+            
+            
 
-            // create a manufacturer
-            Factory Factory = new Factory("Factory", this.devsSimulator, new Point3d(200, 200, 0), new Role[] {}, ing,
-                    new Money(50000.0, MoneyUnit.USD), laptop, 1000);
-            Factory.setContentStore(new LeanContentStore(Factory, this.devsSimulator));
-
-            // create a retailer
-            PCShop pcShop = new PCShop("PCshop", this.devsSimulator, new Point3d(20, 200, 0), new Role[] {}, ing,
-                    new Money(50000.0, MoneyUnit.USD), laptop, 10, Factory);
-            pcShop.setContentStore(new LeanContentStore(pcShop, this.devsSimulator));
-
-            // create a customer
-            Client Client = new Client("Client", this.devsSimulator, new Point3d(100, 100, 0), ing,
-                    new Money(1500000.0, MoneyUnit.USD), laptop, pcShop);
-            Client.setContentStore(new LeanContentStore(Client, this.devsSimulator));
 
             // Create the animation.
             ContentAnimator contentAnimator = new ContentAnimator(this.devsSimulator);
-            contentAnimator.subscribe(Factory);
-            contentAnimator.subscribe(pcShop);
-            contentAnimator.subscribe(Client);
+            // contentAnimator.subscribe(Factory);
+            // contentAnimator.subscribe(pcShop);
+            // contentAnimator.subscribe(Client);
         }
         catch (Exception e)
         {

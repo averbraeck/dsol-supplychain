@@ -12,7 +12,6 @@ import org.djunits.value.vdouble.scalar.Money;
 
 import nl.tudelft.simulation.actor.messagehandlers.HandleAllMessages;
 import nl.tudelft.simulation.actor.messagehandlers.MessageHandlerInterface;
-import nl.tudelft.simulation.content.HandlerInterface;
 import nl.tudelft.simulation.dsol.animation.D2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
@@ -24,23 +23,22 @@ import nl.tudelft.simulation.language.d3.BoundingBox;
 import nl.tudelft.simulation.messaging.devices.reference.FaxDevice;
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.banking.BankAccount;
-import nl.tudelft.simulation.supplychain.content.Bill;
-import nl.tudelft.simulation.supplychain.content.InternalDemand;
-import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
-import nl.tudelft.simulation.supplychain.content.Quote;
-import nl.tudelft.simulation.supplychain.content.Shipment;
+import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.demand.Demand;
+import nl.tudelft.simulation.supplychain.demand.DemandGeneration;
 import nl.tudelft.simulation.supplychain.handlers.BillHandler;
 import nl.tudelft.simulation.supplychain.handlers.InternalDemandHandlerRFQ;
 import nl.tudelft.simulation.supplychain.handlers.OrderConfirmationHandler;
+import nl.tudelft.simulation.supplychain.handlers.PaymentPolicyEnum;
+import nl.tudelft.simulation.supplychain.handlers.QuoteComparatorEnum;
 import nl.tudelft.simulation.supplychain.handlers.QuoteHandler;
 import nl.tudelft.simulation.supplychain.handlers.QuoteHandlerAll;
+import nl.tudelft.simulation.supplychain.handlers.ShipmentHandler;
 import nl.tudelft.simulation.supplychain.handlers.ShipmentHandlerConsume;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Customer;
 import nl.tudelft.simulation.supplychain.reference.Retailer;
 import nl.tudelft.simulation.supplychain.roles.BuyingRole;
-import nl.tudelft.simulation.supplychain.roles.DemandGenerationRole;
 import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
 import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
@@ -71,14 +69,16 @@ public class Client extends Customer
      * @param initialBankAccount the initial bank balance
      * @param product product to order
      * @param retailer fixed retailer to use
+     * @param contentStore the contentStore to store the messages
      * @throws RemoteException remote simulator error
      * @throws NamingException
      */
     public Client(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
-            final Bank bank, final Money initialBankAccount, final Product product, final Retailer retailer)
-            throws RemoteException, NamingException
+            final Bank bank, final Money initialBankAccount, final Product product, final Retailer retailer,
+            final ContentStoreInterface contentStore) throws RemoteException, NamingException
     {
-        super(name, simulator, position, bank, initialBankAccount);
+        super(name, simulator, position, bank, initialBankAccount, contentStore);
+        getContentStore().setOwner(this);
         this.product = product;
         this.retailer = retailer;
         this.init();
@@ -109,38 +109,35 @@ public class Client extends Customer
                 new Demand(this.product, new DistContinuousDurationUnit(new DistExponential(stream, 24.0), DurationUnit.HOUR),
                         new DistConstant(stream, 1.0), new DistConstantDurationUnit(Duration.ZERO),
                         new DistConstantDurationUnit(new Duration(14.0, DurationUnit.DAY)));
-        DemandGenerationRole dgRole = new DemandGenerationRole(this, super.simulator,
+        DemandGeneration dg = new DemandGeneration(this, super.simulator,
                 new DistContinuousDurationUnit(new DistExponential(stream, 2.0), DurationUnit.MINUTE));
-        dgRole.addDemandGenerator(this.product, demand);
-        super.setDemandGenerationRole(dgRole);
-        //
-        // create the buying role for Client
-        BuyingRole buyingRole = new BuyingRole(this, super.simulator, super.bankAccount);
-        super.setBuyingRole(buyingRole);
+        dg.addDemandGenerator(this.product, demand);
+        super.setDemandGeneration(dg);
         //
         // tell Client to use the InternalDemandHandler
         InternalDemandHandlerRFQ internalDemandHandler =
                 new InternalDemandHandlerRFQ(this, new Duration(24.0, DurationUnit.HOUR), null); // XXX: Why does it need stock?
         internalDemandHandler.addSupplier(this.product, this.retailer);
-        super.addContentHandler(InternalDemand.class, internalDemandHandler);
         //
         // tell Client to use the Quotehandler to handle quotes
-        HandlerInterface quoteHandler = new QuoteHandlerAll(this, QuoteHandler.SORT_PRICE_DATE_DISTANCE,
+        QuoteHandler quoteHandler = new QuoteHandlerAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE,
                 new DistConstantDurationUnit(new Duration(2.0, DurationUnit.HOUR)), 0.4, 0.1);
-        super.addContentHandler(Quote.class, quoteHandler);
         //
         // Client has the standard order confirmation handler
-        HandlerInterface confirmationHandler = new OrderConfirmationHandler(this);
-        super.addContentHandler(OrderConfirmation.class, confirmationHandler);
+        OrderConfirmationHandler confirmationHandler = new OrderConfirmationHandler(this);
         //
         // Client will get a bill in the end
-        HandlerInterface billHandler = new BillHandler(this, super.bankAccount, BillHandler.PAYMENT_IMMEDIATE,
+        BillHandler billHandler = new BillHandler(this, super.bankAccount, PaymentPolicyEnum.PAYMENT_IMMEDIATE,
                 new DistConstantDurationUnit(Duration.ZERO));
-        super.addContentHandler(Bill.class, billHandler);
         //
         // hopefully, Client will get laptop shipments
-        HandlerInterface shipmentHandler = new ShipmentHandlerConsume(this);
-        super.addContentHandler(Shipment.class, shipmentHandler);
+        ShipmentHandler shipmentHandler = new ShipmentHandlerConsume(this);
+        //
+        // add the handlers to the buying role for Client
+        BuyingRole buyingRole = new BuyingRole(this, super.simulator, internalDemandHandler, quoteHandler, confirmationHandler,
+                shipmentHandler, billHandler);
+        super.setBuyingRole(buyingRole);
+
         //
         // CHARTS
         //

@@ -1,13 +1,6 @@
 package nl.tudelft.simulation.actor;
 
-import java.io.Serializable;
-
-import org.djunits.value.vdouble.scalar.Time;
-
-import nl.tudelft.simulation.content.HandlerInterface;
 import nl.tudelft.simulation.dsol.animation.Locatable;
-import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
-import nl.tudelft.simulation.messaging.Message;
 import nl.tudelft.simulation.messaging.devices.components.ReceivingDeviceInterface;
 import nl.tudelft.simulation.messaging.devices.components.SendingDeviceInterface;
 import nl.tudelft.simulation.messaging.devices.types.DeviceType;
@@ -20,7 +13,7 @@ import nl.tudelft.simulation.messaging.devices.types.DeviceType;
  * source code and binary code of this software is proprietary information of Delft University of Technology.
  * @author <a href="https://www.tudelft.nl/averbraeck" target="_blank">Alexander Verbraeck</a>
  */
-public interface ActorInterface extends Locatable, HandlerInterface, Serializable
+public interface ActorInterface extends InternalActorInterface, Locatable
 {
     /**
      * Retrieve the sending devices of the actor.
@@ -47,31 +40,4 @@ public interface ActorInterface extends Locatable, HandlerInterface, Serializabl
      * @return all receiving devices
      */
     ReceivingDeviceInterface[] getReceivingDevices();
-
-    /**
-     * Get the name of the actor.
-     * @return the name of the actor
-     */
-    String getName();
-
-    /**
-     * Handles a message and returns an ackowledgement.
-     * @param message the message to be handled
-     * @return a boolean acknowledgement
-     */
-    boolean handleMessage(final Message message);
-
-    /**
-     * Get the simulator on which this actor schedules. This getSimulator method does <i>not </i> throw a RemoteException.
-     * @return Returns the simulator.
-     * @uml.associationEnd
-     */
-    DEVSSimulatorInterface.TimeDoubleUnit getSimulator();
-
-    /**
-     * Get the time of the simulator on which this actor schedules. This getSimulatorTime method does <i>not</i> throw a
-     * RemoteException.
-     * @return Returns the simulator time.
-     */
-    Time getSimulatorTime();
 }

@@ -13,7 +13,6 @@ import org.djunits.value.vdouble.scalar.Money;
 
 import nl.tudelft.simulation.actor.messagehandlers.HandleAllMessages;
 import nl.tudelft.simulation.actor.messagehandlers.MessageHandlerInterface;
-import nl.tudelft.simulation.content.HandlerInterface;
 import nl.tudelft.simulation.dsol.animation.D2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
@@ -22,15 +21,14 @@ import nl.tudelft.simulation.language.d3.BoundingBox;
 import nl.tudelft.simulation.messaging.devices.reference.FaxDevice;
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.banking.BankAccount;
-import nl.tudelft.simulation.supplychain.content.Order;
-import nl.tudelft.simulation.supplychain.content.Payment;
-import nl.tudelft.simulation.supplychain.content.RequestForQuote;
+import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
+import nl.tudelft.simulation.supplychain.handlers.OrderHandler;
 import nl.tudelft.simulation.supplychain.handlers.OrderHandlerStock;
 import nl.tudelft.simulation.supplychain.handlers.PaymentHandler;
 import nl.tudelft.simulation.supplychain.handlers.RequestForQuoteHandler;
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.supplychain.reference.Manufacturer;
-import nl.tudelft.simulation.supplychain.roles.Role;
+import nl.tudelft.simulation.supplychain.reference.Supplier;
+import nl.tudelft.simulation.supplychain.roles.SellingRole;
 import nl.tudelft.simulation.supplychain.stock.Stock;
 import nl.tudelft.simulation.supplychain.transport.TransportMode;
 import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
@@ -43,7 +41,7 @@ import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
  * source code and binary code of this software is proprietary information of Delft University of Technology.
  * @author <a href="https://www.tudelft.nl/averbraeck" target="_blank">Alexander Verbraeck</a>
  */
-public class Factory extends Manufacturer
+public class Factory extends Supplier
 {
     /** the serial version uid */
     private static final long serialVersionUID = 12L;
@@ -52,36 +50,38 @@ public class Factory extends Manufacturer
      * @param name the name of the manufacturer
      * @param simulator the simulator to use
      * @param position the position on the map
-     * @param roles the initial roles (if any)
      * @param bank the bank
      * @param product initial stock product
      * @param amount amount of initial stock
+     * @param contentStore the contentStore to store the messages
      * @throws RemoteException remote simulator error
      * @throws NamingException
      */
-    public Factory(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position, final Role[] roles,
-            final Bank bank, final Product product, final double amount) throws RemoteException, NamingException
+    public Factory(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
+            final Bank bank, final Product product, final double amount, final ContentStoreInterface contentStore)
+            throws RemoteException, NamingException
     {
-        this(name, simulator, position, roles, bank, new Money(0.0, MoneyUnit.USD), product, amount);
+        this(name, simulator, position, bank, new Money(0.0, MoneyUnit.USD), product, amount, contentStore);
     }
 
     /**
      * @param name the name of the manufacturer
      * @param simulator the simulator to use
      * @param position the position on the map
-     * @param roles the initial roles (if any)
      * @param bank the bank
      * @param initialBankAccount the initial bank balance
      * @param product initial stock product
      * @param amount amount of initial stock
+     * @param contentStore the contentStore to store the messages
      * @throws RemoteException remote simulator error
      * @throws NamingException
      */
-    public Factory(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position, final Role[] roles,
-            final Bank bank, final Money initialBankAccount, final Product product, final double amount)
-            throws RemoteException, NamingException
+    public Factory(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
+            final Bank bank, final Money initialBankAccount, final Product product, final double amount,
+            final ContentStoreInterface contentStore) throws RemoteException, NamingException
     {
-        super(name, simulator, position, roles, bank, initialBankAccount);
+        super(name, simulator, position, bank, initialBankAccount, contentStore);
+        getContentStore().setOwner(this);
         // give the retailer some stock
         Stock _stock = new Stock(this);
         if (product != null)
@@ -111,17 +111,18 @@ public class Factory extends Manufacturer
         super.addReceivingDevice(fax, secretary, new DistConstantDurationUnit(new Duration(1.0, DurationUnit.HOUR)));
         //
         // tell Factory to use the RFQhandler to handle RFQs
-        HandlerInterface rfqHandler = new RequestForQuoteHandler(this, super.stock, 1.2,
+        RequestForQuoteHandler rfqHandler = new RequestForQuoteHandler(this, super.stock, 1.2,
                 new DistConstantDurationUnit(new Duration(1.23, DurationUnit.HOUR)), TransportMode.PLANE);
-        super.addContentHandler(RequestForQuote.class, rfqHandler);
         //
         // create an order handler
-        HandlerInterface orderHandler = new OrderHandlerStock(this, super.stock);
-        super.addContentHandler(Order.class, orderHandler);
+        OrderHandler orderHandler = new OrderHandlerStock(this, super.stock);
         //
         // hopefully, Factory will get payments in the end
-        HandlerInterface paymentHandler = new PaymentHandler(this, super.bankAccount);
-        super.addContentHandler(Payment.class, paymentHandler);
+        PaymentHandler paymentHandler = new PaymentHandler(this, super.bankAccount);
+        //
+        // add the handlers to the SellingRole
+        SellingRole sellingRole = new SellingRole(this, this.simulator, rfqHandler, orderHandler, paymentHandler);
+        super.setSellingRole(sellingRole);
         //
         // CHARTS
         //

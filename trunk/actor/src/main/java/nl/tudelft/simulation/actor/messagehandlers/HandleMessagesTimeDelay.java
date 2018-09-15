@@ -1,7 +1,6 @@
 package nl.tudelft.simulation.actor.messagehandlers;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.actor.ActorInterface;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
@@ -35,9 +34,6 @@ public class HandleMessagesTimeDelay implements MessageHandlerInterface
 
     /** a flag to indicate that the message handler is already busy */
     private boolean busy;
-
-    /** the logger. */
-    private static Logger logger = LogManager.getLogger(HandleMessagesTimeDelay.class);
 
     /**
      * Create a Messagehandler that takes a stochastic time to handle messages, and that is only able to handle messages one by
@@ -91,7 +87,7 @@ public class HandleMessagesTimeDelay implements MessageHandlerInterface
             }
             catch (Exception e)
             {
-                logger.warn("check", e);
+                Logger.error(e, "check");
             }
         }
         this.busy = false;
