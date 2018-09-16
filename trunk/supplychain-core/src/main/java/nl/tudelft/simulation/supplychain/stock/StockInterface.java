@@ -7,7 +7,7 @@ import org.djunits.value.vdouble.scalar.Money;
 
 import nl.tudelft.simulation.event.EventProducerInterface;
 import nl.tudelft.simulation.event.EventType;
-import nl.tudelft.simulation.supplychain.actor.Trader;
+import nl.tudelft.simulation.supplychain.actor.StockKeepingActor;
 import nl.tudelft.simulation.supplychain.content.Shipment;
 import nl.tudelft.simulation.supplychain.product.Product;
 
@@ -30,7 +30,7 @@ public interface StockInterface extends Serializable, EventProducerInterface
     /**
      * @return the trader who owns this stock
      */
-    Trader getOwner();
+    StockKeepingActor getOwner();
 
     /**
      * Method addStock.

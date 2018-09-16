@@ -23,8 +23,9 @@ import org.djunits.unit.MoneyUnit;
 import org.djunits.value.vdouble.scalar.Money;
 
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
+import nl.tudelft.simulation.supplychain.actor.capabilities.ProducerInterface;
 import nl.tudelft.simulation.supplychain.banking.Bank;
-import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
+import nl.tudelft.simulation.supplychain.contentstore.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.production.Production;
 import nl.tudelft.simulation.supplychain.production.ProductionService;
@@ -37,7 +38,7 @@ import nl.tudelft.simulation.supplychain.production.ProductionService;
  * source code and binary code of this software is proprietary information of Delft University of Technology.
  * @author <a href="https://www.tudelft.nl/averbraeck" target="_blank">Alexander Verbraeck</a>
  */
-public class Manufacturer extends DistributionCenter
+public class Manufacturer extends DistributionCenter implements ProducerInterface
 {
     /** the serial version uid */
     private static final long serialVersionUID = 12L;
@@ -71,6 +72,13 @@ public class Manufacturer extends DistributionCenter
     {
         super(name, simulator, position, bank, initialBankAccount, contentStore);
         this.production = new Production(this);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Production getProduction()
+    {
+        return this.production;
     }
 
     /**

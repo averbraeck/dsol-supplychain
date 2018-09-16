@@ -1,5 +1,7 @@
 package nl.tudelft.simulation.yellowpage;
 
+import java.io.Serializable;
+
 /**
  * A Category to be used in storing and finding 'topics' in the YellowPage. <br>
  * <br>
@@ -8,16 +10,19 @@ package nl.tudelft.simulation.yellowpage;
  * source code and binary code of this software is proprietary information of Delft University of Technology.
  * @author <a href="https://www.tudelft.nl/averbraeck" target="_blank">Alexander Verbraeck</a>
  */
-public class Category
+public class Category implements Serializable
 {
-    /** the serial version uid */
-    public static final long serialVersionUID = 12L;
+    /** */
+    private static final long serialVersionUID = 1L;
 
     /** the parent category */
     private Category parent = null;
 
     /** the description of the category */
-    private String description = null;
+    private final String description;
+    
+    /** a quick-and-dirty default category for simple models. */
+    public static Category DEFAULT = new Category("Default");
 
     /**
      * constructs a new Category

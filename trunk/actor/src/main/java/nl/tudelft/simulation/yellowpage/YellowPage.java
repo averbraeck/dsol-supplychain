@@ -29,14 +29,14 @@ public class YellowPage implements YellowPageInterface
     /**
      * constructs a new YellowPage
      */
-    protected YellowPage()
+    public YellowPage()
     {
         super();
     }
 
     /** {@inheritDoc} */
     @Override
-    public ActorInterface[] findActor(final String regex)
+    public List<ActorInterface> findActor(final String regex)
     {
         List<ActorInterface> result = new ArrayList<ActorInterface>();
         for (List<ActorInterface> actors : this.entries.values())
@@ -49,12 +49,12 @@ public class YellowPage implements YellowPageInterface
                 }
             }
         }
-        return result.toArray(new ActorInterface[result.size()]);
+        return result;
     }
 
     /** {@inheritDoc} */
     @Override
-    public ActorInterface[] findActor(final String regex, final Category category)
+    public List<ActorInterface> findActor(final String regex, final Category category)
     {
         List<ActorInterface> result = new ArrayList<ActorInterface>();
         for (Category cat : this.entries.keySet())
@@ -71,12 +71,12 @@ public class YellowPage implements YellowPageInterface
                 }
             }
         }
-        return result.toArray(new ActorInterface[result.size()]);
+        return result;
     }
 
     /** {@inheritDoc} */
     @Override
-    public ActorInterface[] findActor(final Category category)
+    public List<ActorInterface> findActor(final Category category)
     {
         List<ActorInterface> actors = new ArrayList<ActorInterface>();
         for (Category cat : this.entries.keySet())
@@ -86,7 +86,7 @@ public class YellowPage implements YellowPageInterface
                 actors = this.entries.get(cat);
             }
         }
-        return actors.toArray(new ActorInterface[actors.size()]);
+        return actors;
     }
 
     /** {@inheritDoc} */

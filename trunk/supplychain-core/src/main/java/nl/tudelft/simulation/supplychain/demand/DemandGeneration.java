@@ -18,8 +18,8 @@ import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
- * Demand generation. Not really a role, so should be moved elsewhere.<br>
- * TODO: Change the type and location of this Role, as it does not handle any messages. <br>
+ * Demand generation.<br>
+ * <br>
  * Copyright (c) 2003-2018 Delft University of Technology, Jaffalaan 5, 2628 BX Delft, the Netherlands. All rights reserved. See
  * for project information <a href="https://www.simulation.tudelft.nl/" target="_blank">www.simulation.tudelft.nl</a>. The
  * source code and binary code of this software is proprietary information of Delft University of Technology.

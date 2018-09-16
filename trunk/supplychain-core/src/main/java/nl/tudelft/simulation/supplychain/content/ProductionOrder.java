@@ -6,7 +6,7 @@ import org.djunits.unit.MoneyUnit;
 import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
 
-import nl.tudelft.simulation.supplychain.actor.Trader;
+import nl.tudelft.simulation.supplychain.actor.StockKeepingActor;
 import nl.tudelft.simulation.supplychain.product.Product;
 
 /**
@@ -44,7 +44,7 @@ public class ProductionOrder extends Content
      * @param product the product that has to be produced
      * @param amount the amount of products to be produced, in the product's units
      */
-    public ProductionOrder(final Trader owner, final Serializable internalDemandID, final Time dateReady, final Product product,
+    public ProductionOrder(final StockKeepingActor owner, final Serializable internalDemandID, final Time dateReady, final Product product,
             final double amount)
     {
         super(owner, owner, internalDemandID);

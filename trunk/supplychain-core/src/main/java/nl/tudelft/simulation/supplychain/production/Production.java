@@ -4,8 +4,11 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import nl.tudelft.simulation.supplychain.actor.Trader;
+import org.pmw.tinylog.Logger;
+
+import nl.tudelft.simulation.supplychain.actor.StockKeepingActor;
 import nl.tudelft.simulation.supplychain.content.ProductionOrder;
+import nl.tudelft.simulation.supplychain.product.Product;
 
 /**
  * Production is a basic production unit for a producing Trader. It accepts a ProductionOrder, and searches for the right
@@ -22,20 +25,17 @@ public class Production implements Serializable
     /** the serial version uid */
     private static final long serialVersionUID = 12L;
 
-    /** for debugging */
-    private static final boolean DEBUG = false;
-
     /** the owner of production */
-    protected Trader owner = null;
+    protected StockKeepingActor owner = null;
 
     /** the handlers for this role */
-    protected Map<String, ProductionService> productionServices = new HashMap<>();
+    protected Map<Product, ProductionService> productionServices = new HashMap<>();
 
     /**
      * Constructor for a production department of a Trader.
      * @param owner the owner of production.
      */
-    public Production(final Trader owner)
+    public Production(final StockKeepingActor owner)
     {
         super();
         this.owner = owner;
@@ -47,7 +47,7 @@ public class Production implements Serializable
      */
     public void addProductionService(final ProductionService productionService)
     {
-        this.productionServices.put(productionService.getProduct().getName(), productionService);
+        this.productionServices.put(productionService.getProduct(), productionService);
     }
 
     /**
@@ -57,22 +57,15 @@ public class Production implements Serializable
      */
     public boolean acceptProductionOrder(final ProductionOrder productionOrder)
     {
-        if (this.productionServices.containsKey(productionOrder.getProduct().getName()))
+        if (this.productionServices.containsKey(productionOrder.getProduct()))
         {
-            if (Production.DEBUG)
-            {
-                System.out.println("DEBUG -- Production: acceptProductionOrder: production service found for product: "
-                        + productionOrder.getProduct());
-            }
-            this.productionServices.get(productionOrder.getProduct().getName()).acceptProductionOrder(productionOrder);
+            Logger.trace("Production for actor '{}': acceptProductionOrder: production service found for product: {}",
+                    this.owner.getName(), productionOrder.getProduct().getName());
+            this.productionServices.get(productionOrder.getProduct()).acceptProductionOrder(productionOrder);
             return true;
         }
-        if (Production.DEBUG)
-        {
-
-            System.out.println("DEBUG -- Production: acceptProductionOrder: could not find production service for product: "
-                    + productionOrder.getProduct());
-        }
+        Logger.trace("Production for actor '{}': acceptProductionOrder: could not find production service for product: {}",
+                this.owner.getName(), productionOrder.getProduct().getName());
         return false;
     }
 
@@ -80,7 +73,7 @@ public class Production implements Serializable
      * Method getProductionServices
      * @return returns the production services
      */
-    public Map<String, ProductionService> getProductionServices()
+    public Map<Product, ProductionService> getProductionServices()
     {
         return this.productionServices;
     }

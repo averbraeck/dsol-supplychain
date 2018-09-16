@@ -11,7 +11,7 @@ import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
 import org.pmw.tinylog.Logger;
 
-import nl.tudelft.simulation.supplychain.actor.Trader;
+import nl.tudelft.simulation.supplychain.actor.StockKeepingActor;
 import nl.tudelft.simulation.supplychain.content.ProductionOrder;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
@@ -55,7 +55,7 @@ public class DelayProductionService extends ProductionService
      * @param greedy if true, immediately start picking raw materials when production has to start.
      * @param profitMargin the fraction that is added to the cost of the materials.
      */
-    public DelayProductionService(final Trader owner, final StockInterface stock, final Product product,
+    public DelayProductionService(final StockKeepingActor owner, final StockInterface stock, final Product product,
             final DistContinuousDurationUnit productionTime, final boolean fixedTime, final boolean greedy,
             final double profitMargin)
     {

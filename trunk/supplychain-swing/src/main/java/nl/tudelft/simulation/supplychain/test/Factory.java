@@ -21,7 +21,7 @@ import nl.tudelft.simulation.language.d3.BoundingBox;
 import nl.tudelft.simulation.messaging.devices.reference.FaxDevice;
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.banking.BankAccount;
-import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
+import nl.tudelft.simulation.supplychain.contentstore.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.handlers.OrderHandler;
 import nl.tudelft.simulation.supplychain.handlers.OrderHandlerStock;
 import nl.tudelft.simulation.supplychain.handlers.PaymentHandler;
@@ -81,7 +81,6 @@ public class Factory extends Supplier
             final ContentStoreInterface contentStore) throws RemoteException, NamingException
     {
         super(name, simulator, position, bank, initialBankAccount, contentStore);
-        getContentStore().setOwner(this);
         // give the retailer some stock
         Stock _stock = new Stock(this);
         if (product != null)

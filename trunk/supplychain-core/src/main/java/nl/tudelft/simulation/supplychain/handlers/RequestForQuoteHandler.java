@@ -8,7 +8,7 @@ import org.djunits.value.vdouble.scalar.Mass;
 import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
 
-import nl.tudelft.simulation.supplychain.actor.Trader;
+import nl.tudelft.simulation.supplychain.actor.StockKeepingActor;
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
@@ -53,7 +53,7 @@ public class RequestForQuoteHandler extends SupplyChainHandler
      * @param handlingTime the distribution of the time to react on the RFQ
      * @param transportMode the default transport mode
      */
-    public RequestForQuoteHandler(final Trader owner, final StockInterface stock, final double profitMargin,
+    public RequestForQuoteHandler(final StockKeepingActor owner, final StockInterface stock, final double profitMargin,
             final DistContinuousDurationUnit handlingTime, final TransportMode transportMode)
     {
         super(owner);
@@ -71,7 +71,7 @@ public class RequestForQuoteHandler extends SupplyChainHandler
      * @param handlingTime the constant time to react on the RFQ
      * @param transportMode the default transport mode
      */
-    public RequestForQuoteHandler(final Trader owner, final StockInterface stock, final double profitMargin,
+    public RequestForQuoteHandler(final StockKeepingActor owner, final StockInterface stock, final double profitMargin,
             final Duration handlingTime, final TransportMode transportMode)
     {
         this(owner, stock, profitMargin, new DistConstantDurationUnit(handlingTime), transportMode);

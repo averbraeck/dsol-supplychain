@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.content;
+package nl.tudelft.simulation.supplychain.contentstore.memory;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -11,6 +11,19 @@ import org.djunits.value.vdouble.scalar.Time;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
+import nl.tudelft.simulation.supplychain.content.Bill;
+import nl.tudelft.simulation.supplychain.content.Content;
+import nl.tudelft.simulation.supplychain.content.InternalDemand;
+import nl.tudelft.simulation.supplychain.content.OrderBasedOnQuote;
+import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
+import nl.tudelft.simulation.supplychain.content.OrderStandAlone;
+import nl.tudelft.simulation.supplychain.content.Payment;
+import nl.tudelft.simulation.supplychain.content.ProductionOrder;
+import nl.tudelft.simulation.supplychain.content.Quote;
+import nl.tudelft.simulation.supplychain.content.RequestForQuote;
+import nl.tudelft.simulation.supplychain.content.Shipment;
+import nl.tudelft.simulation.supplychain.content.YellowPageAnswer;
+import nl.tudelft.simulation.supplychain.content.YellowPageRequest;
 
 /**
  * <br>
@@ -113,7 +126,9 @@ public class LeanContentStore extends ContentStore
                 this.unansweredContentMap.remove(orderConfirmation.getOrder().getUniqueID());
             }
             else if (ProductionOrder.class.isAssignableFrom(contentClass) || Shipment.class.isAssignableFrom(contentClass)
-                    || Bill.class.isAssignableFrom(contentClass) || Payment.class.isAssignableFrom(contentClass))
+                    || Bill.class.isAssignableFrom(contentClass) || Payment.class.isAssignableFrom(contentClass)
+                    || YellowPageRequest.class.isAssignableFrom(contentClass)
+                    || YellowPageAnswer.class.isAssignableFrom(contentClass))
             {
                 // nothing to do
             }

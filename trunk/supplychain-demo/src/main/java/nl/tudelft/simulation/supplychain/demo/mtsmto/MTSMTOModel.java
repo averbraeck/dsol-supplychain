@@ -7,7 +7,6 @@ import javax.vecmath.Point3d;
 import org.djunits.unit.MassUnit;
 import org.djunits.unit.MoneyUnit;
 import org.djunits.value.vdouble.scalar.Duration;
-import org.djunits.value.vdouble.scalar.Length;
 import org.djunits.value.vdouble.scalar.Mass;
 import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
@@ -23,18 +22,15 @@ import nl.tudelft.simulation.jstats.streams.StreamInterface;
 import nl.tudelft.simulation.language.d3.DirectedPoint;
 import nl.tudelft.simulation.supplychain.animation.ContentAnimator;
 import nl.tudelft.simulation.supplychain.banking.Bank;
-import nl.tudelft.simulation.supplychain.content.LeanContentStore;
+import nl.tudelft.simulation.supplychain.demo.reference.DemoManufacturer;
+import nl.tudelft.simulation.supplychain.demo.reference.DemoMarket;
+import nl.tudelft.simulation.supplychain.demo.reference.DemoRetailer;
+import nl.tudelft.simulation.supplychain.demo.reference.DemoSupplier;
+import nl.tudelft.simulation.supplychain.demo.reference.DemoYP;
 import nl.tudelft.simulation.supplychain.product.BillOfMaterials;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.product.Unit;
-import nl.tudelft.simulation.supplychain.roles.Role;
-import nl.tudelft.simulation.supplychain.test.Client;
-import nl.tudelft.simulation.supplychain.test.Factory;
-import nl.tudelft.simulation.supplychain.test.PCShop;
 import nl.tudelft.simulation.supplychain.test.TestModel;
-import nl.tudelft.simulation.supplychain.transport.TransportMode;
-import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
-import nl.tudelft.simulation.yellowpage.YellowPageInterface;
 
 /**
  * MTSMTO.java. <br>
@@ -103,20 +99,59 @@ public class MTSMTOModel implements DSOLModel.TimeDoubleUnit
             ing.setAnnualInterestRateNeg(0.080);
             ing.setAnnualInterestRatePos(0.025);
 
-            
-            
-            
-            
-            
-            
-            
+            // we create two yellow page 'domains', one between the customers and the retailers,
+            // and one between the retailers, manufacturers, and suppliers
+            DemoYP ypCustomerMTS = new DemoYP("YP_customer_MTS", this.devsSimulator, new Point3d(-300, -270, 1), ing);
+            DemoYP ypCustomerMTO = new DemoYP("YP_customer_MTO", this.devsSimulator, new Point3d(-300, 30, 1), ing);
+            DemoYP ypProductionMTS = new DemoYP("YP_production_MTS", this.devsSimulator, new Point3d(100, -270, 1), ing);
+            DemoYP ypProductionMTO = new DemoYP("YP_production_MTO", this.devsSimulator, new Point3d(100, 30, 1), ing);
 
+            // Markets
+            DemoMarket marketMTS = new DemoMarket("Market_MTS", this.devsSimulator, new Point3d(-360, -150, 1), ing,
+                    new Money(10000.0, MoneyUnit.USD), pc, ypCustomerMTS, streamMTS);
+            DemoMarket marketMTO = new DemoMarket("Market_MTO", this.devsSimulator, new Point3d(-360, 150, 1), ing,
+                    new Money(10000.0, MoneyUnit.USD), pc, ypCustomerMTO, streamMTO);
+
+            // Retailers
+            DemoRetailer mtsRet1 = new DemoRetailer("Seattle_MTS", this.devsSimulator, new Point3d(-200, -270, 1), ing,
+                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTS, ypProductionMTS, streamMTS, true);
+            DemoRetailer mtsRet2 = new DemoRetailer("LosAngeles_MTS", this.devsSimulator, new Point3d(-200, -210, 1), ing,
+                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTS, ypProductionMTS, streamMTS, true);
+            DemoRetailer mtsRet3 = new DemoRetailer("NewYork_MTS", this.devsSimulator, new Point3d(-200, -150, 1), ing,
+                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTS, ypProductionMTS, streamMTS, true);
+            DemoRetailer mtsRet4 = new DemoRetailer("Washington_MTS", this.devsSimulator, new Point3d(-200, -90, 1), ing,
+                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTS, ypProductionMTS, streamMTS, true);
+            DemoRetailer mtsRet5 = new DemoRetailer("Miami_MTS", this.devsSimulator, new Point3d(-200, -30, 1), ing,
+                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTS, ypProductionMTS, streamMTS, true);
+
+            DemoRetailer mtoRet1 = new DemoRetailer("Seattle_MTO", this.devsSimulator, new Point3d(-200, 30, 1), ing,
+                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTO, ypProductionMTO, streamMTO, false);
+            DemoRetailer mtoRet2 = new DemoRetailer("LosAngeles_MTO", this.devsSimulator, new Point3d(-200, 90, 1), ing,
+                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTO, ypProductionMTO, streamMTO, false);
+            DemoRetailer mtoRet3 = new DemoRetailer("NewYork_MTO", this.devsSimulator, new Point3d(-200, 150, 1), ing,
+                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTO, ypProductionMTO, streamMTO, false);
+            DemoRetailer mtoRet4 = new DemoRetailer("Washington_MTO", this.devsSimulator, new Point3d(-200, 210, 1), ing,
+                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTO, ypProductionMTO, streamMTO, false);
+            DemoRetailer mtoRet5 = new DemoRetailer("Miami_MTO", this.devsSimulator, new Point3d(-200, 270, 1), ing,
+                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTO, ypProductionMTO, streamMTO, false);
+
+            // Manufacturers
+            DemoManufacturer mtsMan = new DemoManufacturer("MexicoCity_MTS", this.devsSimulator, new Point3d(0, -150, 1), ing,
+                    new Money(1000000, MoneyUnit.USD), pc, 50, ypCustomerMTS, ypProductionMTS, streamMTS, true);
+            DemoManufacturer mtoMan = new DemoManufacturer("MexicoCity_MTO", this.devsSimulator, new Point3d(0, 150, 1), ing,
+                    new Money(1000000, MoneyUnit.USD), pc, 50, ypCustomerMTO, ypProductionMTO, streamMTO, false);
+
+            // Suppliers
 
             // Create the animation.
             ContentAnimator contentAnimator = new ContentAnimator(this.devsSimulator);
-            // contentAnimator.subscribe(Factory);
-            // contentAnimator.subscribe(pcShop);
-            // contentAnimator.subscribe(Client);
+
+            contentAnimator.subscribe(ypCustomerMTS);
+            contentAnimator.subscribe(ypCustomerMTO);
+            contentAnimator.subscribe(ypProductionMTS);
+            contentAnimator.subscribe(ypProductionMTO);
+            contentAnimator.subscribe(marketMTS);
+            contentAnimator.subscribe(marketMTO);
         }
         catch (Exception e)
         {

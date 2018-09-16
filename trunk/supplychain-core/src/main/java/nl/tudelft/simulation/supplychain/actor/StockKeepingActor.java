@@ -10,8 +10,9 @@ import org.djunits.value.vdouble.scalar.Money;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
+import nl.tudelft.simulation.supplychain.actor.capabilities.StockKeeperInterface;
 import nl.tudelft.simulation.supplychain.banking.Bank;
-import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
+import nl.tudelft.simulation.supplychain.contentstore.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
 
@@ -25,7 +26,7 @@ import nl.tudelft.simulation.supplychain.stock.StockInterface;
  * source code and binary code of this software is proprietary information of Delft University of Technology.
  * @author <a href="https://www.tudelft.nl/averbraeck" target="_blank">Alexander Verbraeck</a>
  */
-public abstract class Trader extends SupplyChainActor
+public abstract class StockKeepingActor extends SupplyChainActor implements StockKeeperInterface
 {
     /** */
     private static final long serialVersionUID = 1L;
@@ -43,7 +44,7 @@ public abstract class Trader extends SupplyChainActor
      * @param bank the bank
      * @param contentStore the contentStore for the messages
      */
-    public Trader(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
+    public StockKeepingActor(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
             final Bank bank, final ContentStoreInterface contentStore)
     {
         super(name, simulator, position, bank, contentStore);
@@ -58,7 +59,7 @@ public abstract class Trader extends SupplyChainActor
      * @param initialBankBalance the initial bank balance
      * @param contentStore the contentStore for the messages
      */
-    public Trader(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
+    public StockKeepingActor(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
             final Bank bank, final Money initialBankBalance, final ContentStoreInterface contentStore)
     {
         super(name, simulator, position, bank, initialBankBalance, contentStore);
@@ -102,9 +103,8 @@ public abstract class Trader extends SupplyChainActor
         return products;
     }
 
-    /**
-     * @return Returns the stock.
-     */
+    /** {@inheritDoc} */
+    @Override
     public StockInterface getStock()
     {
         return this.stock;

@@ -21,9 +21,9 @@ import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.dsol.simulators.SimulatorInterface;
 import nl.tudelft.simulation.language.d3.DirectedPoint;
 import nl.tudelft.simulation.supplychain.banking.Bank;
-import nl.tudelft.simulation.supplychain.content.database.CachingDatabaseWorker;
-import nl.tudelft.simulation.supplychain.content.database.CentralDatabaseContentStore;
-import nl.tudelft.simulation.supplychain.content.database.DatabaseWorkerInterface;
+import nl.tudelft.simulation.supplychain.contentstore.database.CachingDatabaseWorker;
+import nl.tudelft.simulation.supplychain.contentstore.database.CentralDatabaseContentStore;
+import nl.tudelft.simulation.supplychain.contentstore.database.DatabaseWorkerInterface;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.product.Unit;
 

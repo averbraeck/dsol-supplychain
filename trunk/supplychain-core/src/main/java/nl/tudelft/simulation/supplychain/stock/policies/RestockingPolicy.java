@@ -6,7 +6,7 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
-import nl.tudelft.simulation.supplychain.actor.Trader;
+import nl.tudelft.simulation.supplychain.actor.StockKeepingActor;
 import nl.tudelft.simulation.supplychain.content.InternalDemand;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
@@ -107,7 +107,7 @@ public abstract class RestockingPolicy implements Serializable
      */
     protected void createInternalDemand(final double orderAmount)
     {
-        Trader owner = this.stock.getOwner();
+        StockKeepingActor owner = this.stock.getOwner();
         InternalDemand internalDemand = new InternalDemand(owner, this.product, orderAmount, owner.getSimulatorTime(),
                 owner.getSimulatorTime().plus(this.maxDeliveryDuration));
         owner.sendContent(internalDemand, Duration.ZERO);

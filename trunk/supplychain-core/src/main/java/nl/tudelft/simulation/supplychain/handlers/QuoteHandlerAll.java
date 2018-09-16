@@ -5,13 +5,14 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.djunits.value.vdouble.scalar.Duration;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
-import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.content.OrderBasedOnQuote;
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
+import nl.tudelft.simulation.supplychain.contentstore.ContentStoreInterface;
 import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
@@ -112,6 +113,12 @@ public class QuoteHandlerAll extends QuoteHandler
 
             List<Quote> quotes = contentStore.getContentList(id, Quote.class);
             Quote bestQuote = selectBestQuote(quotes);
+            if (bestQuote == null)
+            {
+                Logger.warn("{}.QuoteHandlerAll could not find best quote within margins while quoteList.size was {}",
+                        getOwner().getName(), quotes.size());
+                return false;
+            }
 
             if (QuoteHandlerAll.DEBUG)
             {

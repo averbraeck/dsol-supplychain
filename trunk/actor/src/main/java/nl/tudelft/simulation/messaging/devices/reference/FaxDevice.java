@@ -1,19 +1,4 @@
-/*
- * @(#) FaxDevice.java Feb 18, 2004
- * 
- * Copyright (c) 2003-2006 Delft University of Technology, Jaffalaan 5, 2628 BX
- * Delft, the Netherlands. All rights reserved.
- * 
- * See for project information <a href="http://www.simulation.tudelft.nl/">
- * www.simulation.tudelft.nl </a>.
- * 
- * The source code and binary code of this software is proprietary information
- * of Delft University of Technology.
- */
-
 package nl.tudelft.simulation.messaging.devices.reference;
-
-import java.rmi.RemoteException;
 
 import org.djunits.unit.DurationUnit;
 
@@ -44,9 +29,8 @@ public class FaxDevice extends SendingReceivingDevice
      * Constructs a new FaxDevice.
      * @param name the name or number of the fax
      * @param simulator the simulator to use
-     * @throws RemoteException on network failure
      */
-    public FaxDevice(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator) throws RemoteException
+    public FaxDevice(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator)
     {
         super(name, new ReceivingDevice(name + "-R", DeviceType.EMAIL, new MessageQueue(new FiFo())),
                 new DelaySendingDevice(name + "-S", DeviceType.EMAIL, simulator,

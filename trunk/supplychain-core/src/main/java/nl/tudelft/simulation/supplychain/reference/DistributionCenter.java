@@ -7,7 +7,7 @@ import org.djunits.value.vdouble.scalar.Money;
 
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.supplychain.banking.Bank;
-import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
+import nl.tudelft.simulation.supplychain.contentstore.ContentStoreInterface;
 
 /**
  * Reference implementation for a DC. <br>

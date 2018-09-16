@@ -20,10 +20,10 @@ import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.jstats.charts.xy.XYChart;
 import nl.tudelft.simulation.language.d3.BoundingBox;
 import nl.tudelft.simulation.messaging.devices.reference.FaxDevice;
-import nl.tudelft.simulation.supplychain.actor.Trader;
+import nl.tudelft.simulation.supplychain.actor.StockKeepingActor;
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.banking.BankAccount;
-import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
+import nl.tudelft.simulation.supplychain.contentstore.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.handlers.BillHandler;
 import nl.tudelft.simulation.supplychain.handlers.InternalDemandHandlerRFQ;
 import nl.tudelft.simulation.supplychain.handlers.OrderConfirmationHandler;
@@ -60,7 +60,7 @@ public class PCShop extends Retailer
     private static final long serialVersionUID = 12L;
 
     /** the manufacturer where the PCShop buys */
-    private Trader manufacturer;
+    private StockKeepingActor manufacturer;
 
     /**
      * @param name the name of the manufacturer
@@ -75,7 +75,7 @@ public class PCShop extends Retailer
      * @throws NamingException
      */
     public PCShop(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
-            final Bank bank, final Product product, final double amount, final Trader manufacturer,
+            final Bank bank, final Product product, final double amount, final StockKeepingActor manufacturer,
             final ContentStoreInterface contentStore) throws RemoteException, NamingException
     {
         this(name, simulator, position, bank, new Money(0.0, MoneyUnit.USD), product, amount, manufacturer, contentStore);
@@ -96,10 +96,9 @@ public class PCShop extends Retailer
      */
     public PCShop(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
             final Bank bank, final Money initialBankAccount, final Product product, final double amount,
-            final Trader manufacturer, final ContentStoreInterface contentStore) throws RemoteException, NamingException
+            final StockKeepingActor manufacturer, final ContentStoreInterface contentStore) throws RemoteException, NamingException
     {
         super(name, simulator, position, bank, initialBankAccount, contentStore);
-        getContentStore().setOwner(this);
         this.manufacturer = manufacturer;
         // give the retailer some stock
         Stock _stock = new Stock(this);

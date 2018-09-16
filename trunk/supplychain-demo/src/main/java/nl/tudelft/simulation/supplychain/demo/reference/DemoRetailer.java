@@ -1,5 +1,10 @@
 package nl.tudelft.simulation.supplychain.demo.reference;
 
+import java.rmi.RemoteException;
+import java.util.Iterator;
+
+import javax.media.j3d.Bounds;
+import javax.naming.NamingException;
 import javax.vecmath.Point3d;
 
 import org.djunits.unit.DurationUnit;
@@ -8,21 +13,48 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Length;
 import org.djunits.value.vdouble.scalar.Money;
 
+import nl.tudelft.simulation.actor.messagehandlers.HandleAllMessages;
+import nl.tudelft.simulation.actor.messagehandlers.MessageHandlerInterface;
+import nl.tudelft.simulation.dsol.animation.D2.SingleImageRenderable;
+import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface.TimeDoubleUnit;
-import nl.tudelft.simulation.dsol.simulators.SimulatorInterface;
 import nl.tudelft.simulation.jstats.distributions.DistConstant;
 import nl.tudelft.simulation.jstats.distributions.DistTriangular;
 import nl.tudelft.simulation.jstats.streams.StreamInterface;
+import nl.tudelft.simulation.language.d3.BoundingBox;
+import nl.tudelft.simulation.messaging.devices.reference.FaxDevice;
+import nl.tudelft.simulation.messaging.devices.reference.WebApplication;
 import nl.tudelft.simulation.supplychain.banking.Bank;
-import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
+import nl.tudelft.simulation.supplychain.contentstore.memory.LeanContentStore;
+import nl.tudelft.simulation.supplychain.handlers.BillHandler;
+import nl.tudelft.simulation.supplychain.handlers.InternalDemandHandlerYP;
+import nl.tudelft.simulation.supplychain.handlers.OrderConfirmationHandler;
+import nl.tudelft.simulation.supplychain.handlers.OrderHandler;
+import nl.tudelft.simulation.supplychain.handlers.OrderHandlerNoStock;
+import nl.tudelft.simulation.supplychain.handlers.OrderHandlerStock;
+import nl.tudelft.simulation.supplychain.handlers.PaymentHandler;
+import nl.tudelft.simulation.supplychain.handlers.PaymentPolicyEnum;
+import nl.tudelft.simulation.supplychain.handlers.QuoteComparatorEnum;
+import nl.tudelft.simulation.supplychain.handlers.QuoteHandler;
+import nl.tudelft.simulation.supplychain.handlers.QuoteHandlerAll;
+import nl.tudelft.simulation.supplychain.handlers.RequestForQuoteHandler;
+import nl.tudelft.simulation.supplychain.handlers.ShipmentHandler;
+import nl.tudelft.simulation.supplychain.handlers.ShipmentHandlerConsume;
+import nl.tudelft.simulation.supplychain.handlers.YellowPageAnswerHandler;
+import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Retailer;
+import nl.tudelft.simulation.supplychain.reference.YellowPage;
+import nl.tudelft.simulation.supplychain.roles.BuyingRole;
+import nl.tudelft.simulation.supplychain.roles.SellingRole;
 import nl.tudelft.simulation.supplychain.stock.Stock;
+import nl.tudelft.simulation.supplychain.stock.policies.RestockingPolicySafety;
 import nl.tudelft.simulation.supplychain.transport.TransportMode;
+import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
 import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
-import nl.tudelft.simulation.yellowpage.YellowPageInterface;
+import nl.tudelft.simulation.yellowpage.Category;
 
 /**
- * Retailer.java. <br>
+ * MtsMtomarket.java. <br>
  * <br>
  * Copyright (c) 2003-2018 Delft University of Technology, Jaffalaan 5, 2628 BX Delft, the Netherlands. All rights reserved. See
  * for project information <a href="https://www.simulation.tudelft.nl/" target="_blank">www.simulation.tudelft.nl</a>. The
@@ -31,93 +63,126 @@ import nl.tudelft.simulation.yellowpage.YellowPageInterface;
  */
 public class DemoRetailer extends Retailer
 {
-    protected DistContinuousDurationUnit administrativeDelayInternalDemand;
-
-    protected DistContinuousDurationUnit routeDelayInternalDemand;
-
-    protected DistContinuousDurationUnit administrativeDelayYellowPageAnswer;
-
-    protected DistContinuousDurationUnit routeDelayYellowPageAnswer;
-
-    protected DistContinuousDurationUnit administrativeDelayQuote;
-
-    protected DistContinuousDurationUnit routeDelayQuote;
-
-    protected DistContinuousDurationUnit administrativeDelayBill;
-
-    protected DistContinuousDurationUnit routeDelayBill;
-
-    protected DistContinuousDurationUnit administrativeDelayRFQ;
-
-    protected DistContinuousDurationUnit routeDelayRFQ;
-
-    protected DistContinuousDurationUnit administrativeDelayOrder;
-
-    protected DistContinuousDurationUnit routeDelayOrder;
-
-    protected YellowPageInterface yellowPage;
-
-    protected Length maxDistanceSuppliers;
-
-    protected int maxNumberRFQs;
-
-    protected Duration paymentTime;
-
-    protected TransportMode transportMode;
-
-    protected DistTriangular profitDist;
+    /** */
+    private static final long serialVersionUID = 1L;
 
     /**
      * @param name
      * @param simulator
      * @param position
      * @param bank
-     * @param initialBankBalance
-     * @param contentStore 
+     * @param initialBankAccount
+     * @param product
+     * @param initialStock
+     * @param ypCustomer 
+     * @param ypProduction 
+     * @param stream
+     * @param mts true if MTS, false if MTO
      */
-    public DemoRetailer(String name, TimeDoubleUnit simulator, Point3d position, Bank bank, Money initialBankBalance, ContentStoreInterface contentStore)
+    public DemoRetailer(String name, TimeDoubleUnit simulator, Point3d position, Bank bank, Money initialBankAccount,
+            Product product, double initialStock, YellowPage ypCustomer, YellowPage ypProduction, StreamInterface stream, boolean mts)
     {
-        super(name, simulator, position, bank, initialBankBalance, contentStore);
+        super(name, simulator, position, bank, initialBankAccount, new LeanContentStore(simulator));
+
+        // COMMUNICATION
+
+        WebApplication www = new WebApplication("Web-" + name, this.simulator);
+        super.addSendingDevice(www);
+        MessageHandlerInterface webSystem = new HandleAllMessages(this);
+        super.addReceivingDevice(www, webSystem, new DistConstantDurationUnit(new Duration(10.0, DurationUnit.SECOND)));
+
+        FaxDevice fax = new FaxDevice("fax-" + name, this.simulator);
+        super.addSendingDevice(fax);
+        MessageHandlerInterface faxChecker = new HandleAllMessages(this);
+        super.addReceivingDevice(fax, faxChecker, new DistConstantDurationUnit(new Duration(1.0, DurationUnit.HOUR)));
+
+        // REGISTER IN YP
+        
+        ypCustomer.register(this, Category.DEFAULT);
+        ypCustomer.addSupplier(product, this);
+        
+        // STOCK
+
+        Stock _stock = new Stock(this);
+        _stock.addStock(product, initialStock, product.getUnitMarketPrice().multiplyBy(initialStock));
+        super.setInitialStock(_stock);
+
+        // BUYING HANDLERS
+
+        DistContinuousDurationUnit administrativeDelayInternalDemand =
+                new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
+        InternalDemandHandlerYP internalDemandHandler = new InternalDemandHandlerYP(this, administrativeDelayInternalDemand, ypProduction,
+                new Length(1E6, LengthUnit.METER), 1000, null);
+
+        DistContinuousDurationUnit administrativeDelayYellowPageAnswer =
+                new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
+        YellowPageAnswerHandler ypAnswerHandler = new YellowPageAnswerHandler(this, administrativeDelayYellowPageAnswer);
+
+        DistContinuousDurationUnit administrativeDelayQuote =
+                new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
+        QuoteHandler quoteHandler =
+                new QuoteHandlerAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE, administrativeDelayQuote, 0.4, 0);
+
+        OrderConfirmationHandler orderConfirmationHandler = new OrderConfirmationHandler(this);
+
+        ShipmentHandler shipmentHandler = new ShipmentHandlerConsume(this);
+
+        DistContinuousDurationUnit paymentDelay =
+                new DistContinuousDurationUnit(new DistConstant(stream, 0.0), DurationUnit.HOUR);
+        BillHandler billHandler = new BillHandler(this, this.getBankAccount(), PaymentPolicyEnum.PAYMENT_ON_TIME, paymentDelay);
+
+        BuyingRole buyingRole = new BuyingRole(this, simulator, internalDemandHandler, ypAnswerHandler, quoteHandler,
+                orderConfirmationHandler, shipmentHandler, billHandler);
+        this.setBuyingRole(buyingRole);
+
+        // SELLING HANDLERS
+
+        RequestForQuoteHandler rfqHandler = new RequestForQuoteHandler(this, super.stock, 1.2,
+                new DistConstantDurationUnit(new Duration(1.23, DurationUnit.HOUR)), TransportMode.PLANE);
+
+        OrderHandler orderHandler;
+        if (mts)
+            orderHandler = new OrderHandlerStock(this, super.stock);
+        else
+            orderHandler = new OrderHandlerNoStock(this, super.stock);
+
+        PaymentHandler paymentHandler = new PaymentHandler(this, super.bankAccount);
+
+        SellingRole sellingRole = new SellingRole(this, this.simulator, rfqHandler, orderHandler, paymentHandler);
+        super.setSellingRole(sellingRole);
+
+        // RESTOCKING
+
+        Iterator<Product> stockIter = super.stock.iterator();
+        while (stockIter.hasNext())
+        {
+            Product stockProduct = stockIter.next();
+            // the restocking policy will generate InternalDemand, handled by the BuyingRole
+            new RestockingPolicySafety(super.stock, stockProduct, new Duration(24.0, DurationUnit.HOUR), false, initialStock,
+                    true, 2.0 * initialStock, new Duration(14.0, DurationUnit.DAY));
+        }
+
+        // ANIMATION
+
+        if (simulator instanceof AnimatorInterface)
+        {
+            try
+            {
+                new SingleImageRenderable(this, simulator,
+                        DemoRetailer.class.getResource("/nl/tudelft/simulation/supplychain/images/Retailer.gif"));
+            }
+            catch (RemoteException | NamingException exception)
+            {
+                exception.printStackTrace();
+            }
+        }
     }
 
-    /**
-     * @param name
-     * @param simulator
-     * @param position
-     * @param bank
-     * @param contentStore 
-     */
-    public DemoRetailer(String name, TimeDoubleUnit simulator, Point3d position, Bank bank, ContentStoreInterface contentStore)
+    /** {@inheritDoc} */
+    @Override
+    public Bounds getBounds()
     {
-        super(name, simulator, position, bank, contentStore);
+        return new BoundingBox(25.0, 25.0, 1.0);
     }
 
-    public void init(SimulatorInterface simulator, StreamInterface stream, String name, Point3d location, 
-            Stock initialStock, YellowPageInterface yellowPage)
-    {
-        this.yellowPage = yellowPage;
-
-        this.administrativeDelayInternalDemand =
-                new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-        this.routeDelayInternalDemand = new DistContinuousDurationUnit(new DistConstant(stream, 5), DurationUnit.HOUR);
-        this.administrativeDelayYellowPageAnswer =
-                new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-        this.routeDelayYellowPageAnswer = new DistContinuousDurationUnit(new DistConstant(stream, 5), DurationUnit.HOUR);
-        this.administrativeDelayQuote =
-                new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-        this.routeDelayQuote = new DistContinuousDurationUnit(new DistConstant(stream, 5), DurationUnit.HOUR);
-        this.administrativeDelayBill = new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-        this.routeDelayBill = new DistContinuousDurationUnit(new DistConstant(stream, 5), DurationUnit.HOUR);
-        this.administrativeDelayRFQ = new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-        this.routeDelayRFQ = new DistContinuousDurationUnit(new DistConstant(stream, 5), DurationUnit.HOUR);
-        this.administrativeDelayOrder =
-                new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-        this.routeDelayOrder = new DistContinuousDurationUnit(new DistConstant(stream, 5), DurationUnit.HOUR);
-        this.profitDist = new DistTriangular(stream, 0.9, 1.0, 1.2);
-
-        this.maxDistanceSuppliers = new Length(1E6, LengthUnit.KILOMETER);
-        this.maxNumberRFQs = Integer.MAX_VALUE;
-        this.paymentTime = new Duration(14.0 * 24.0, DurationUnit.HOUR);
-        this.transportMode = TransportMode.TRUCK;
-    }
 }

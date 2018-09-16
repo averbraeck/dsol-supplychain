@@ -9,7 +9,7 @@ import org.djunits.value.vdouble.scalar.Money;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
-import nl.tudelft.simulation.supplychain.actor.Trader;
+import nl.tudelft.simulation.supplychain.actor.StockKeepingActor;
 import nl.tudelft.simulation.supplychain.product.Product;
 
 /**
@@ -27,7 +27,7 @@ public class StockRecord implements Serializable
     private static final long serialVersionUID = 12L;
 
     /** the owner */
-    private Trader owner = null;
+    private StockKeepingActor owner = null;
 
     /** the simulator to schedule the depriciation */
     private DEVSSimulatorInterface.TimeDoubleUnit simulator = null;
@@ -55,7 +55,7 @@ public class StockRecord implements Serializable
      * @param simulator the simulator
      * @param product the product
      */
-    public StockRecord(final Trader owner, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Product product)
+    public StockRecord(final StockKeepingActor owner, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Product product)
     {
         super();
         this.owner = owner;

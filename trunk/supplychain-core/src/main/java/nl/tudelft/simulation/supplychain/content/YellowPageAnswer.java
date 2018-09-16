@@ -1,6 +1,7 @@
 package nl.tudelft.simulation.supplychain.content;
 
 import java.io.Serializable;
+import java.util.List;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.product.Product;
@@ -20,10 +21,10 @@ public class YellowPageAnswer extends Content
     private static final long serialVersionUID = 12L;
 
     /** the suppliers of the requested product */
-    private SupplyChainActor[] suppliers = null;
+    private final List<SupplyChainActor> suppliers;
 
     /** the request that triggered this yellow page anawer */
-    private YellowPageRequest ypRequest = null;
+    private final YellowPageRequest ypRequest;
 
     /**
      * Constructs a new YellowPageAnswer.
@@ -34,7 +35,7 @@ public class YellowPageAnswer extends Content
      * @param ypRequest the request that triggered this YP answer
      */
     public YellowPageAnswer(final SupplyChainActor sender, final SupplyChainActor receiver, final Serializable internalDemandID,
-            final SupplyChainActor[] suppliers, final YellowPageRequest ypRequest)
+            final List<SupplyChainActor> suppliers, final YellowPageRequest ypRequest)
     {
         super(sender, receiver, internalDemandID);
         this.suppliers = suppliers;
@@ -44,7 +45,7 @@ public class YellowPageAnswer extends Content
     /**
      * @return Returns the suppliers.
      */
-    public SupplyChainActor[] getSuppliers()
+    public List<SupplyChainActor> getSuppliers()
     {
         return this.suppliers;
     }

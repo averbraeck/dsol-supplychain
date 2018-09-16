@@ -2,7 +2,7 @@ package nl.tudelft.simulation.supplychain.production;
 
 import org.djunits.value.vdouble.scalar.Duration;
 
-import nl.tudelft.simulation.supplychain.actor.Trader;
+import nl.tudelft.simulation.supplychain.actor.StockKeepingActor;
 import nl.tudelft.simulation.supplychain.content.ProductionOrder;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
@@ -22,7 +22,7 @@ public abstract class ProductionService implements ProductionServiceInterface
     private static final long serialVersionUID = 1L;
 
     /** The actor that owns the production service */
-    protected Trader owner;
+    protected StockKeepingActor owner;
 
     /** the stock for getting and storing materials */
     protected StockInterface stock;
@@ -36,7 +36,7 @@ public abstract class ProductionService implements ProductionServiceInterface
      * @param stock the stock for getting and storing materials.
      * @param product the product of the production service.
      */
-    public ProductionService(final Trader owner, final StockInterface stock, final Product product)
+    public ProductionService(final StockKeepingActor owner, final StockInterface stock, final Product product)
     {
         super();
         this.owner = owner;

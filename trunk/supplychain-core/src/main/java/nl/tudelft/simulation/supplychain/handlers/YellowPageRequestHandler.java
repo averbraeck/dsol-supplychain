@@ -1,23 +1,24 @@
 package nl.tudelft.simulation.supplychain.handlers;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.djunits.unit.LengthUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Length;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.language.d3.DirectedPoint;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.YellowPageAnswer;
 import nl.tudelft.simulation.supplychain.content.YellowPageRequest;
-import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.supplychain.yellowpage.SupplyChainYellowPage;
 import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
 import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
@@ -39,15 +40,12 @@ public class YellowPageRequestHandler extends SupplyChainHandler
     /** the handling time of the handler in simulation time units */
     private DistContinuousDurationUnit handlingTime;
 
-    /** the dictionary of product-actor combinations */
-    private Map<Product, HashSet<SupplyChainActor>> dictionary = new HashMap<>();
-
     /**
      * Constructs a new YellowPageRequestHandler.
      * @param owner the owner of the handler
      * @param handlingTime the distribution of the time to react on the YP request
      */
-    public YellowPageRequestHandler(final SupplyChainActor owner, final DistContinuousDurationUnit handlingTime)
+    public YellowPageRequestHandler(final SupplyChainYellowPage owner, final DistContinuousDurationUnit handlingTime)
     {
         super(owner);
         this.handlingTime = handlingTime;
@@ -58,39 +56,9 @@ public class YellowPageRequestHandler extends SupplyChainHandler
      * @param owner the owner of the handler
      * @param handlingTime the constant time to react on the YP request
      */
-    public YellowPageRequestHandler(final SupplyChainActor owner, final Duration handlingTime)
+    public YellowPageRequestHandler(final SupplyChainYellowPage owner, final Duration handlingTime)
     {
         this(owner, new DistConstantDurationUnit(handlingTime));
-    }
-
-    /**
-     * Add a supplier to for a certain product
-     * @param product the product with a set of suppliers.
-     * @param supplier a supplier for that product.
-     */
-    public void addSupplier(final Product product, final SupplyChainActor supplier)
-    {
-        HashSet<SupplyChainActor> supplierSet = this.dictionary.get(product);
-        if (supplierSet == null)
-        {
-            supplierSet = new HashSet<SupplyChainActor>();
-            this.dictionary.put(product, supplierSet);
-        }
-        supplierSet.add(supplier);
-    }
-
-    /**
-     * Remove a supplier for a certain product
-     * @param product the product.
-     * @param supplier the supplier for that product to be removed.
-     */
-    public void removeSupplier(final Product product, final SupplyChainActor supplier)
-    {
-        HashSet<SupplyChainActor> supplierSet = this.dictionary.get(product);
-        if (supplierSet != null)
-        {
-            supplierSet.remove(supplier);
-        }
     }
 
     /** {@inheritDoc} */
@@ -102,11 +70,17 @@ public class YellowPageRequestHandler extends SupplyChainHandler
             return false;
         }
         YellowPageRequest ypRequest = (YellowPageRequest) content;
-        HashSet<SupplyChainActor> supplierSet = this.dictionary.get(ypRequest.getProduct());
+        Set<SupplyChainActor> supplierSet = ((SupplyChainYellowPage) getOwner()).getSuppliers(ypRequest.getProduct());
+        if (supplierSet == null)
+        {
+            Logger.warn("YellowPage '{}' has no supplier map for product {}", getOwner().getName(),
+                    ypRequest.getProduct().getName());
+            return false;
+        }
         SortedMap<Length, SupplyChainActor> suppliers =
                 pruneDistance(supplierSet, ypRequest.getMaximumDistance(), ypRequest.getSender().getLocation());
         pruneNumber(suppliers, ypRequest.getMaximumNumber());
-        SupplyChainActor[] potentialSuppliers = (SupplyChainActor[]) suppliers.values().toArray();
+        List<SupplyChainActor> potentialSuppliers = new ArrayList<>(suppliers.values());
         YellowPageAnswer ypAnswer = new YellowPageAnswer(getOwner(), ypRequest.getSender(), ypRequest.getInternalDemandID(),
                 potentialSuppliers, ypRequest);
         getOwner().sendContent(ypAnswer, this.handlingTime.draw());
@@ -120,8 +94,8 @@ public class YellowPageRequestHandler extends SupplyChainHandler
      * @param location the location to compare the supplier locations with
      * @return a map of suppliers, sorted on distance
      */
-    private SortedMap<Length, SupplyChainActor> pruneDistance(final HashSet<SupplyChainActor> supplierSet,
-            final Length maxDistance, final DirectedPoint location)
+    private SortedMap<Length, SupplyChainActor> pruneDistance(final Set<SupplyChainActor> supplierSet, final Length maxDistance,
+            final DirectedPoint location)
     {
         SortedMap<Length, SupplyChainActor> sortedSuppliers = new TreeMap<>();
         Iterator<SupplyChainActor> i = supplierSet.iterator();
@@ -163,6 +137,5 @@ public class YellowPageRequestHandler extends SupplyChainHandler
     {
         return YellowPageRequest.class;
     }
-
 
 }

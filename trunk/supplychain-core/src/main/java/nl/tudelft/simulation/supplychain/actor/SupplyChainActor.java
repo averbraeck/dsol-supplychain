@@ -27,8 +27,8 @@ import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.banking.BankAccount;
 import nl.tudelft.simulation.supplychain.banking.FixedCost;
 import nl.tudelft.simulation.supplychain.content.Content;
-import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.content.Shipment;
+import nl.tudelft.simulation.supplychain.contentstore.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.roles.Role;
 
 /**
@@ -61,9 +61,6 @@ public abstract class SupplyChainActor extends Actor
     /** the event to indicate that information has been sent. E.g., for animation. */
     public static EventType SEND_CONTENT_EVENT = new EventType("SEND_CONTENT_EVENT");
 
-    /** DEBUG messages? */
-    public static boolean DEBUG = false;
-
     /**
      * Constructs a new SupplyChainActor
      * @param name the name to display for this supply chain actor
@@ -78,6 +75,7 @@ public abstract class SupplyChainActor extends Actor
         super(name, simulator, position);
         this.bankAccount = new BankAccount(this, bank);
         this.contentStore = contentStore;
+        this.contentStore.setOwner(this);
     }
 
     /**
@@ -135,8 +133,8 @@ public abstract class SupplyChainActor extends Actor
         if (!success)
         {
             Logger.warn(
-                    "handleContent - No supply chain content handler, or one of its roles successfully handled content type {}, actor {}",
-                    content.getClass(), this.getName());
+                    "handleContent - No supply chain content handler of '{}', or one of its roles successfully handled content type {}",
+                    this.getName(), content.getClass().getSimpleName());
         }
         return success;
     }
@@ -208,11 +206,8 @@ public abstract class SupplyChainActor extends Actor
     protected void scheduledSendContent(final Message message, final SendingDeviceInterface sendingDevice, final Duration delay)
     {
         fireEvent(SEND_CONTENT_EVENT, new Object[] { message.getBody(), delay });
-        if (SupplyChainActor.DEBUG)
-        {
-            System.out.println("SupplyChainActor: scheduledSendContent: delay in days for content: " + message.getBody()
-                    + " delay: " + delay);
-        }
+        Logger.trace("SupplyChainActor: scheduledSendContent: delay in days for content: '{}', delay: {}", message.getBody(),
+                delay);
 
         // we schedule the delayed invocation of the send content
         try

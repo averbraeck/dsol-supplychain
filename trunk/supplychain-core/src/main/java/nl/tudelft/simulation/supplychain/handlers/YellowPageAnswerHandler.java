@@ -1,16 +1,18 @@
 package nl.tudelft.simulation.supplychain.handlers;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.djunits.value.vdouble.scalar.Duration;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.Content;
-import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.content.InternalDemand;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.content.YellowPageAnswer;
 import nl.tudelft.simulation.supplychain.content.YellowPageRequest;
+import nl.tudelft.simulation.supplychain.contentstore.ContentStoreInterface;
 import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
 import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
@@ -64,14 +66,21 @@ public class YellowPageAnswerHandler extends SupplyChainHandler
         YellowPageAnswer ypAnswer = (YellowPageAnswer) content;
         ContentStoreInterface contentStore = getOwner().getContentStore();
         YellowPageRequest ypRequest = ypAnswer.getYellowPageRequest();
-        InternalDemand internalDemand =
-                (InternalDemand) contentStore.getContentList(ypRequest.getInternalDemandID(), InternalDemand.class);
-        SupplyChainActor[] potentialSuppliers = ypAnswer.getSuppliers();
-        Duration delay = this.handlingTime.draw();
-        for (int i = 0; i < potentialSuppliers.length; i++)
+        List<InternalDemand> internalDemandList =
+                contentStore.getContentList(ypRequest.getInternalDemandID(), InternalDemand.class);
+        if (internalDemandList.size() == 0) // we send it to ourselves, so it is 2x in the content store
         {
-            RequestForQuote rfq = new RequestForQuote(getOwner(), potentialSuppliers[i], internalDemand,
-                    internalDemand.getProduct(), internalDemand.getAmount(), internalDemand.getEarliestDeliveryDate(),
+            Logger.warn("YPAnswerHandler - Actor '{}' could not find InternalDemandID '{}' for YPAnswer '{}'", getOwner().getName(),
+                    ypRequest.getInternalDemandID(), ypAnswer.toString());
+            return false;
+        }
+        InternalDemand internalDemand = internalDemandList.get(0);
+        List<SupplyChainActor> potentialSuppliers = ypAnswer.getSuppliers();
+        Duration delay = this.handlingTime.draw();
+        for (SupplyChainActor supplier : potentialSuppliers)
+        {
+            RequestForQuote rfq = new RequestForQuote(getOwner(), supplier, internalDemand, internalDemand.getProduct(),
+                    internalDemand.getAmount(), internalDemand.getEarliestDeliveryDate(),
                     internalDemand.getLatestDeliveryDate());
             getOwner().sendContent(rfq, delay);
         }
@@ -84,6 +93,5 @@ public class YellowPageAnswerHandler extends SupplyChainHandler
     {
         return YellowPageAnswer.class;
     }
-
 
 }

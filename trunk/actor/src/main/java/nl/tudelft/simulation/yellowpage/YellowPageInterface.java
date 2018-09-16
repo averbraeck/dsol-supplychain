@@ -1,6 +1,6 @@
 package nl.tudelft.simulation.yellowpage;
 
-import java.rmi.RemoteException;
+import java.util.List;
 
 import nl.tudelft.simulation.actor.ActorInterface;
 
@@ -15,36 +15,32 @@ import nl.tudelft.simulation.actor.ActorInterface;
 public interface YellowPageInterface
 {
     /**
-     * finds an actor based on the regex
+     * finds actors based on the regex
      * @param regex the name of the actor as regular expression
      * @return ActorInterface[] the result
-     * @throws RemoteException on network failure
      */
-    ActorInterface[] findActor(final String regex) throws RemoteException;
+    List<ActorInterface> findActor(final String regex);
 
     /**
      * finds an actor based on the regex
      * @param regex the name of the actor as regular expression
      * @param category the category for this actor
      * @return ActorInterface[] the result
-     * @throws RemoteException on network failure
      */
-    ActorInterface[] findActor(final String regex, final Category category) throws RemoteException;
+    List<ActorInterface> findActor(final String regex, final Category category);
 
     /**
      * finds an actor based on the category
      * @param category the category for this actor
      * @return ActorInterface[] the result
-     * @throws RemoteException on network failure
      */
-    ActorInterface[] findActor(final Category category) throws RemoteException;
+    List<ActorInterface> findActor(final Category category);
 
     /**
      * registers an actor
      * @param actor the actor
      * @param category the category
      * @return success
-     * @throws RemoteException on network failure
      */
-    boolean register(final ActorInterface actor, final Category category) throws RemoteException;
+    boolean register(final ActorInterface actor, final Category category);
 }

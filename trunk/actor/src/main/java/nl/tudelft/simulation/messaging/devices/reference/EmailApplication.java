@@ -1,7 +1,5 @@
 package nl.tudelft.simulation.messaging.devices.reference;
 
-import java.rmi.RemoteException;
-
 import org.djunits.unit.DurationUnit;
 
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
@@ -31,9 +29,8 @@ public class EmailApplication extends SendingReceivingDevice
      * Constructs a new EmailApplication.
      * @param name the name of the email application
      * @param simulator the simulator to use
-     * @throws RemoteException on network failure
      */
-    public EmailApplication(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator) throws RemoteException
+    public EmailApplication(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator)
     {
         super(name, new ReceivingDevice(name + "-R", DeviceType.EMAIL, new MessageQueue(new FiFo())),
                 new DelaySendingDevice(name + "-S", DeviceType.EMAIL, simulator,

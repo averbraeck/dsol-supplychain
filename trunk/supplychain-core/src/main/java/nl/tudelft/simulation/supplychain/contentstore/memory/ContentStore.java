@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.content;
+package nl.tudelft.simulation.supplychain.contentstore.memory;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,6 +13,21 @@ import org.pmw.tinylog.Logger;
 import nl.tudelft.simulation.event.EventProducer;
 import nl.tudelft.simulation.language.Throw;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
+import nl.tudelft.simulation.supplychain.content.Bill;
+import nl.tudelft.simulation.supplychain.content.Content;
+import nl.tudelft.simulation.supplychain.content.InternalDemand;
+import nl.tudelft.simulation.supplychain.content.Order;
+import nl.tudelft.simulation.supplychain.content.OrderBasedOnQuote;
+import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
+import nl.tudelft.simulation.supplychain.content.OrderStandAlone;
+import nl.tudelft.simulation.supplychain.content.Payment;
+import nl.tudelft.simulation.supplychain.content.Quote;
+import nl.tudelft.simulation.supplychain.content.RequestForQuote;
+import nl.tudelft.simulation.supplychain.content.Shipment;
+import nl.tudelft.simulation.supplychain.content.ShipmentQuality;
+import nl.tudelft.simulation.supplychain.content.YellowPageAnswer;
+import nl.tudelft.simulation.supplychain.content.YellowPageRequest;
+import nl.tudelft.simulation.supplychain.contentstore.ContentStoreInterface;
 
 /**
  * The ContentStore is taking care of storing content for later use, for instance for matching purposes. It acts as a kind of
@@ -320,7 +335,7 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
 
     /**
      * @param content the content to remove
-     * @param sent indicates wheter the content is sent or received
+     * @param sent indicates whether the content is sent or received
      * @param internalDemandId the internal demand id
      */
     private void removeOldStateContent(final Content content, final boolean sent, final Serializable internalDemandId)
@@ -548,6 +563,10 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
         if (contentClass.equals(OrderBasedOnQuote.class) || contentClass.equals(OrderStandAlone.class))
         {
             contentClass = Order.class;
+        }
+        if (contentClass.equals(ShipmentQuality.class))
+        {
+            contentClass = Shipment.class;
         }
         return contentClass;
     }

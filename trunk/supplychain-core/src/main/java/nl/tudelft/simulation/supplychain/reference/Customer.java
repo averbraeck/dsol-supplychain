@@ -8,21 +8,22 @@ import org.djunits.value.vdouble.scalar.Money;
 
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
+import nl.tudelft.simulation.supplychain.actor.capabilities.BuyerInterface;
 import nl.tudelft.simulation.supplychain.banking.Bank;
-import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
+import nl.tudelft.simulation.supplychain.contentstore.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.demand.DemandGeneration;
 import nl.tudelft.simulation.supplychain.roles.BuyingRole;
 
 /**
- * A Customer is an actor which usually orders (pull) products from a Distributor. However, its behavior depends on the type of
- * supply chain. Is it push or pull? <br>
+ * A Customer is an actor which usually orders (pulls) products from a Distributor. <br>
+ * TODO: implement push processes, such as when VMI (Vendor Managed Inventory) is used. <br>
  * <br>
  * Copyright (c) 2003-2018 Delft University of Technology, Jaffalaan 5, 2628 BX Delft, the Netherlands. All rights reserved. See
  * for project information <a href="https://www.simulation.tudelft.nl/" target="_blank">www.simulation.tudelft.nl</a>. The
  * source code and binary code of this software is proprietary information of Delft University of Technology.
  * @author <a href="https://www.tudelft.nl/averbraeck" target="_blank">Alexander Verbraeck</a>
  */
-public class Customer extends SupplyChainActor
+public class Customer extends SupplyChainActor implements BuyerInterface
 {
     /** the serial version uid */
     private static final long serialVersionUID = 12L;
@@ -60,9 +61,8 @@ public class Customer extends SupplyChainActor
         super(name, simulator, position, bank, contentStore);
     }
 
-    /**
-     * @return Returns the buyingRole.
-     */
+    /** {@inheritDoc} */
+    @Override
     public BuyingRole getBuyingRole()
     {
         return this.buyingRole;

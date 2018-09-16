@@ -1,9 +1,10 @@
-package nl.tudelft.simulation.supplychain.content;
+package nl.tudelft.simulation.supplychain.contentstore;
 
 import java.io.Serializable;
 import java.util.List;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
+import nl.tudelft.simulation.supplychain.content.Content;
 
 /**
  * A ContentStore is taking care of storing content for later use, for instance for matching purposes. It acts as an ERP or

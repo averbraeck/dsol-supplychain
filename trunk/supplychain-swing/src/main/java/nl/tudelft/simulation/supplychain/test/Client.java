@@ -23,7 +23,7 @@ import nl.tudelft.simulation.language.d3.BoundingBox;
 import nl.tudelft.simulation.messaging.devices.reference.FaxDevice;
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.banking.BankAccount;
-import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
+import nl.tudelft.simulation.supplychain.contentstore.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.demand.Demand;
 import nl.tudelft.simulation.supplychain.demand.DemandGeneration;
 import nl.tudelft.simulation.supplychain.handlers.BillHandler;
@@ -78,7 +78,6 @@ public class Client extends Customer
             final ContentStoreInterface contentStore) throws RemoteException, NamingException
     {
         super(name, simulator, position, bank, initialBankAccount, contentStore);
-        getContentStore().setOwner(this);
         this.product = product;
         this.retailer = retailer;
         this.init();

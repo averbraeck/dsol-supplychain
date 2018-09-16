@@ -8,9 +8,11 @@ import org.djunits.unit.MoneyUnit;
 import org.djunits.value.vdouble.scalar.Money;
 
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
-import nl.tudelft.simulation.supplychain.actor.Trader;
+import nl.tudelft.simulation.supplychain.actor.StockKeepingActor;
+import nl.tudelft.simulation.supplychain.actor.capabilities.BuyerInterface;
+import nl.tudelft.simulation.supplychain.actor.capabilities.SellerInterface;
 import nl.tudelft.simulation.supplychain.banking.Bank;
-import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
+import nl.tudelft.simulation.supplychain.contentstore.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.roles.BuyingRole;
 import nl.tudelft.simulation.supplychain.roles.SellingRole;
@@ -23,7 +25,7 @@ import nl.tudelft.simulation.supplychain.roles.SellingRole;
  * source code and binary code of this software is proprietary information of Delft University of Technology.
  * @author <a href="https://www.tudelft.nl/averbraeck" target="_blank">Alexander Verbraeck</a>
  */
-public class Retailer extends Trader
+public class Retailer extends StockKeepingActor implements BuyerInterface, SellerInterface
 {
     /** the serial version uid */
     private static final long serialVersionUID = 12L;
@@ -68,9 +70,8 @@ public class Retailer extends Trader
         // TODO: to implement...
     }
 
-    /**
-     * @return Returns the buyingRole.
-     */
+    /** {@inheritDoc} */
+    @Override
     public BuyingRole getBuyingRole()
     {
         return this.buyingRole;
@@ -90,9 +91,8 @@ public class Retailer extends Trader
         this.buyingRole = buyingRole;
     }
 
-    /**
-     * @return Returns the sellingRole.
-     */
+    /** {@inheritDoc} */
+    @Override
     public SellingRole getSellingRole()
     {
         return this.sellingRole;

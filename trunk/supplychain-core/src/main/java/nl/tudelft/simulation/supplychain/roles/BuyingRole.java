@@ -12,6 +12,7 @@ import nl.tudelft.simulation.supplychain.handlers.BillHandler;
 import nl.tudelft.simulation.supplychain.handlers.InternalDemandHandler;
 import nl.tudelft.simulation.supplychain.handlers.InternalDemandHandlerOrder;
 import nl.tudelft.simulation.supplychain.handlers.InternalDemandHandlerRFQ;
+import nl.tudelft.simulation.supplychain.handlers.InternalDemandHandlerYP;
 import nl.tudelft.simulation.supplychain.handlers.OrderConfirmationHandler;
 import nl.tudelft.simulation.supplychain.handlers.QuoteHandler;
 import nl.tudelft.simulation.supplychain.handlers.ShipmentHandler;
@@ -29,7 +30,7 @@ import nl.tudelft.simulation.supplychain.handlers.YellowPageAnswerHandler;
  * source code and binary code of this software is proprietary information of Delft University of Technology.
  * @author <a href="https://www.tudelft.nl/averbraeck" target="_blank">Alexander Verbraeck</a>
  */
-public class BuyingRole extends Role
+public class BuyingRole extends Role implements BuyingRoleInterface
 {
     /** the serial version uid */
     private static final long serialVersionUID = 12L;
@@ -79,19 +80,19 @@ public class BuyingRole extends Role
      * @param owner the owner this role
      * @param simulator the simulator to schedule on
      * @param internalDemandHandler the internal demand handler, results in ending out an RFQ
-     * @param quotehandler the quote handler
+     * @param quoteHandler the quote handler
      * @param orderConfirmationHandler the order confirmation handler
      * @param shipmentHandler the shipment handler
      * @param billHandler the bill handler
      */
     public BuyingRole(final SupplyChainActor owner, final DEVSSimulatorInterface.TimeDoubleUnit simulator,
-            final InternalDemandHandlerRFQ internalDemandHandler, final QuoteHandler quotehandler,
+            final InternalDemandHandlerRFQ internalDemandHandler, final QuoteHandler quoteHandler,
             final OrderConfirmationHandler orderConfirmationHandler, final ShipmentHandler shipmentHandler,
             final BillHandler billHandler)
     {
         super(owner, owner.getName() + "-BUYING", simulator);
         addContentHandler(InternalDemand.class, internalDemandHandler);
-        addContentHandler(Quote.class, quotehandler);
+        addContentHandler(Quote.class, quoteHandler);
         addContentHandler(OrderConfirmation.class, orderConfirmationHandler);
         addContentHandler(Shipment.class, shipmentHandler);
         addContentHandler(Bill.class, billHandler);
@@ -103,20 +104,20 @@ public class BuyingRole extends Role
      * @param simulator the simulator to schedule on
      * @param internalDemandHandler the internal demand handler, results in ending out an RFQ
      * @param ypAnswerHandler the yellow page answer handler
-     * @param quotehandler the quote handler
+     * @param quoteHandler the quote handler
      * @param orderConfirmationHandler the order confirmation handler
      * @param shipmentHandler the shipment handler
      * @param billHandler the bill handler
      */
     public BuyingRole(final SupplyChainActor owner, final DEVSSimulatorInterface.TimeDoubleUnit simulator,
-            final InternalDemandHandlerRFQ internalDemandHandler, final YellowPageAnswerHandler ypAnswerHandler,
-            final QuoteHandler quotehandler, final OrderConfirmationHandler orderConfirmationHandler,
+            final InternalDemandHandlerYP internalDemandHandler, final YellowPageAnswerHandler ypAnswerHandler,
+            final QuoteHandler quoteHandler, final OrderConfirmationHandler orderConfirmationHandler,
             final ShipmentHandler shipmentHandler, final BillHandler billHandler)
     {
         super(owner, owner.getName() + "-BUYING", simulator);
         addContentHandler(InternalDemand.class, internalDemandHandler);
         addContentHandler(YellowPageAnswer.class, ypAnswerHandler);
-        addContentHandler(Quote.class, quotehandler);
+        addContentHandler(Quote.class, quoteHandler);
         addContentHandler(OrderConfirmation.class, orderConfirmationHandler);
         addContentHandler(Shipment.class, shipmentHandler);
         addContentHandler(Bill.class, billHandler);

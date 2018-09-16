@@ -21,9 +21,10 @@ import org.djunits.unit.MoneyUnit;
 import org.djunits.value.vdouble.scalar.Money;
 
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
-import nl.tudelft.simulation.supplychain.actor.Trader;
+import nl.tudelft.simulation.supplychain.actor.StockKeepingActor;
+import nl.tudelft.simulation.supplychain.actor.capabilities.SellerInterface;
 import nl.tudelft.simulation.supplychain.banking.Bank;
-import nl.tudelft.simulation.supplychain.content.ContentStoreInterface;
+import nl.tudelft.simulation.supplychain.contentstore.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.roles.SellingRole;
 
@@ -35,7 +36,7 @@ import nl.tudelft.simulation.supplychain.roles.SellingRole;
  * source code and binary code of this software is proprietary information of Delft University of Technology.
  * @author <a href="https://www.tudelft.nl/averbraeck" target="_blank">Alexander Verbraeck</a>
  */
-public class Supplier extends Trader
+public class Supplier extends StockKeepingActor implements SellerInterface
 {
     /** the serial version uid */
     private static final long serialVersionUID = 12L;
@@ -77,9 +78,8 @@ public class Supplier extends Trader
         // TODO: implement checkStock
     }
 
-    /**
-     * @return Returns the sellingRole.
-     */
+    /** {@inheritDoc} */
+    @Override
     public SellingRole getSellingRole()
     {
         return this.sellingRole;

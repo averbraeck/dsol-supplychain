@@ -26,7 +26,7 @@ import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.event.EventProducer;
 import nl.tudelft.simulation.event.TimedEvent;
-import nl.tudelft.simulation.supplychain.actor.Trader;
+import nl.tudelft.simulation.supplychain.actor.StockKeepingActor;
 import nl.tudelft.simulation.supplychain.content.Shipment;
 import nl.tudelft.simulation.supplychain.product.Product;
 
@@ -46,7 +46,7 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
     private static final long serialVersionUID = 12L;
 
     /** the actow that owns of the stock */
-    protected Trader owner;
+    protected StockKeepingActor owner;
 
     /** record keeping of the stock */
     protected Hashtable<Product, StockRecord> stockRecords = new Hashtable<Product, StockRecord>();
@@ -60,7 +60,7 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
      * Create a new Stock for an actor.
      * @param owner the Trader that physically owns the stock.
      */
-    public Stock(final Trader owner)
+    public Stock(final StockKeepingActor owner)
     {
         super();
         this.owner = owner;
@@ -71,7 +71,7 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
      * @param owner the trader for which this is the stock
      * @param initialStock the initial stock
      */
-    public Stock(final Trader owner, final Stock initialStock)
+    public Stock(final StockKeepingActor owner, final Stock initialStock)
     {
         this(owner);
         for (Iterator<Product> productIterator = initialStock.iterator(); productIterator.hasNext();)
@@ -88,7 +88,7 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
 
     /** {@inheritDoc} */
     @Override
-    public Trader getOwner()
+    public StockKeepingActor getOwner()
     {
         return this.owner;
     }
