@@ -24,6 +24,7 @@ import nl.tudelft.simulation.jstats.distributions.DistUniform;
 import nl.tudelft.simulation.jstats.streams.StreamInterface;
 import nl.tudelft.simulation.language.d3.BoundingBox;
 import nl.tudelft.simulation.messaging.devices.reference.FaxDevice;
+import nl.tudelft.simulation.messaging.devices.reference.WebApplication;
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.contentstore.memory.LeanContentStore;
 import nl.tudelft.simulation.supplychain.handlers.BillHandler;
@@ -90,6 +91,11 @@ public class DemoManufacturer extends Manufacturer
 
         // COMMUNICATION
 
+        WebApplication www = new WebApplication("Web-" + name, this.simulator);
+        super.addSendingDevice(www);
+        MessageHandlerInterface webSystem = new HandleAllMessages(this);
+        super.addReceivingDevice(www, webSystem, new DistConstantDurationUnit(new Duration(10.0, DurationUnit.SECOND)));
+
         FaxDevice fax = new FaxDevice("fax-" + name, this.simulator);
         super.addSendingDevice(fax);
         MessageHandlerInterface faxChecker = new HandleAllMessages(this);
@@ -116,7 +122,7 @@ public class DemoManufacturer extends Manufacturer
         DistContinuousDurationUnit administrativeDelayInternalDemand =
                 new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
         InternalDemandHandlerYP internalDemandHandler = new InternalDemandHandlerYP(this, administrativeDelayInternalDemand,
-                ypProduction, new Length(1E6, LengthUnit.METER), 1000, null);
+                ypProduction, new Length(1E6, LengthUnit.METER), 1000, super.stock);
 
         DistContinuousDurationUnit administrativeDelayYellowPageAnswer =
                 new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);

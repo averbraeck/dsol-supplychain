@@ -112,7 +112,7 @@ public class DemoRetailer extends Retailer
         DistContinuousDurationUnit administrativeDelayInternalDemand =
                 new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
         InternalDemandHandlerYP internalDemandHandler = new InternalDemandHandlerYP(this, administrativeDelayInternalDemand, ypProduction,
-                new Length(1E6, LengthUnit.METER), 1000, null);
+                new Length(1E6, LengthUnit.METER), 1000, super.stock);
 
         DistContinuousDurationUnit administrativeDelayYellowPageAnswer =
                 new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
