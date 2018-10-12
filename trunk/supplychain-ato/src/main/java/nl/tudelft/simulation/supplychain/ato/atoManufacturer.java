@@ -187,7 +187,7 @@ public class atoManufacturer extends Manufacturer
             try
             {
                 new SingleImageRenderable(this, simulator,
-                        atoManufacturer.class.getResource("/nl/tudelft/simulation/supplychain/images/Manufacturer.gif"));
+                        ATOManufacturer.class.getResource("/nl/tudelft/simulation/supplychain/images/Manufacturer.gif"));
             }
             catch (RemoteException | NamingException exception)
             {
