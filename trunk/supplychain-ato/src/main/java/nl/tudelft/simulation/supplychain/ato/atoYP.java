@@ -1,4 +1,4 @@
-package Bahareh;
+package nl.tudelft.simulation.supplychain.ato;
 
 import java.rmi.RemoteException;
 
@@ -66,7 +66,7 @@ public class atoYP extends YellowPage
             try
             {
                 new SingleImageRenderable(this, simulator,
-                        atoYP.class.getResource("/nl/tudelft/simulation/supplychain/images/YellowPage.gif"));
+                        ATOYP.class.getResource("/nl/tudelft/simulation/supplychain/images/YellowPage.gif"));
             }
             catch (RemoteException | NamingException exception)
             {

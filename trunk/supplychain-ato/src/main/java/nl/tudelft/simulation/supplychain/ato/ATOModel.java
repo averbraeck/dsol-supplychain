@@ -1,4 +1,4 @@
-package Bahareh;
+package nl.tudelft.simulation.supplychain.ato;
 
 import java.awt.Dimension;
 
@@ -107,8 +107,8 @@ public class ATOModel  implements DSOLModel.TimeDoubleUnit
         
 
         // Yellow page 
-            atoYP ypCustomer = new atoYP("yellow-page-customer", this.devsSimulator, new Point3d(-300, -270, 1), ing);
-            atoYP ypSupplier = new atoYP("yellow-page-supplier", this.devsSimulator, new Point3d(-300, -270, 1), ing);
+            ATOYP ypCustomer = new ATOYP("yellow-page-customer", this.devsSimulator, new Point3d(-300, -270, 1), ing);
+            ATOYP ypSupplier = new ATOYP("yellow-page-supplier", this.devsSimulator, new Point3d(-300, -270, 1), ing);
             
             
          // customer-pc
