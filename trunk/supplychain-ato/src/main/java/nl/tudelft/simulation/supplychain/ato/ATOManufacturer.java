@@ -1,6 +1,7 @@
 package nl.tudelft.simulation.supplychain.ato;
 
 import java.rmi.RemoteException;
+import java.util.Iterator;
 
 import javax.media.j3d.Bounds;
 import javax.naming.NamingException;
@@ -18,32 +19,43 @@ import nl.tudelft.simulation.dsol.animation.D2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface.TimeDoubleUnit;
 import nl.tudelft.simulation.jstats.distributions.DistConstant;
-import nl.tudelft.simulation.jstats.distributions.DistExponential;
 import nl.tudelft.simulation.jstats.distributions.DistTriangular;
+import nl.tudelft.simulation.jstats.distributions.DistUniform;
 import nl.tudelft.simulation.jstats.streams.StreamInterface;
 import nl.tudelft.simulation.language.d3.BoundingBox;
+import nl.tudelft.simulation.messaging.devices.reference.FaxDevice;
 import nl.tudelft.simulation.messaging.devices.reference.WebApplication;
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.contentstore.memory.LeanContentStore;
-import nl.tudelft.simulation.supplychain.demand.Demand;
-import nl.tudelft.simulation.supplychain.demand.DemandGeneration;
 
 import nl.tudelft.simulation.supplychain.handlers.BillHandler;
 import nl.tudelft.simulation.supplychain.handlers.InternalDemandHandlerYP;
 import nl.tudelft.simulation.supplychain.handlers.OrderConfirmationHandler;
+import nl.tudelft.simulation.supplychain.handlers.OrderHandler;
+import nl.tudelft.simulation.supplychain.handlers.OrderHandlerMake;
+import nl.tudelft.simulation.supplychain.handlers.OrderHandlerStock;
+import nl.tudelft.simulation.supplychain.handlers.PaymentHandler;
 import nl.tudelft.simulation.supplychain.handlers.PaymentPolicyEnum;
 import nl.tudelft.simulation.supplychain.handlers.QuoteComparatorEnum;
 import nl.tudelft.simulation.supplychain.handlers.QuoteHandler;
 import nl.tudelft.simulation.supplychain.handlers.QuoteHandlerAll;
+import nl.tudelft.simulation.supplychain.handlers.RequestForQuoteHandler;
 import nl.tudelft.simulation.supplychain.handlers.ShipmentHandler;
 import nl.tudelft.simulation.supplychain.handlers.ShipmentHandlerConsume;
 import nl.tudelft.simulation.supplychain.handlers.YellowPageAnswerHandler;
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.supplychain.reference.Customer;
+import nl.tudelft.simulation.supplychain.production.DelayProductionService;
+import nl.tudelft.simulation.supplychain.production.ProductionService;
+import nl.tudelft.simulation.supplychain.reference.Manufacturer;
 import nl.tudelft.simulation.supplychain.reference.YellowPage;
 import nl.tudelft.simulation.supplychain.roles.BuyingRole;
+import nl.tudelft.simulation.supplychain.roles.SellingRole;
+import nl.tudelft.simulation.supplychain.stock.Stock;
+import nl.tudelft.simulation.supplychain.stock.policies.RestockingPolicySafety;
+import nl.tudelft.simulation.supplychain.transport.TransportMode;
 import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
 import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
+import nl.tudelft.simulation.yellowpage.Category;
 
 /**
  * <p>
@@ -55,7 +67,7 @@ import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
  * @author <a href="http://www.tbm.tudelft.nl/averbraeck">Alexander Verbraeck</a> 
  * @author <a href="http://https://www.tudelft.nl/tbm/over-de-faculteit/afdelingen/multi-actor-systems/people/phd-candidates/b-bahareh-zohoori/">Bahareh Zohoori</a> 
  */
-public class atoMarket extends Customer
+public class ATOManufacturer extends Manufacturer
 {
     /** */
     private static final long serialVersionUID = 1L;
@@ -65,13 +77,17 @@ public class atoMarket extends Customer
      * @param simulator
      * @param position
      * @param bank
-     * @param initialBankAccount 
-     * @param product 
-     * @param ypCustomre 
-     * @param stream 
+     * @param initialBankAccount
+     * @param product
+     * @param initialStock
+     * @param ypCustomer
+     * @param ypProduction
+     * @param stream
+     * @param mts true if MTS, false if MTO
      */
-    public atoMarket(String name, TimeDoubleUnit simulator, Point3d position, Bank bank, Money initialBankAccount,
-            Product product, YellowPage ypCustomre, StreamInterface stream)
+    public ATOManufacturer(String name, TimeDoubleUnit simulator, Point3d position, Bank bank, Money initialBankAccount,
+            Product product, double initialStock, YellowPage ypCustomer, YellowPage ypProduction, StreamInterface stream,
+            boolean mts)
     {
         super(name, simulator, position, bank, initialBankAccount, new LeanContentStore(simulator));
 
@@ -82,22 +98,33 @@ public class atoMarket extends Customer
         MessageHandlerInterface webSystem = new HandleAllMessages(this);
         super.addReceivingDevice(www, webSystem, new DistConstantDurationUnit(new Duration(10.0, DurationUnit.SECOND)));
 
-        // DEMAND GENERATION
+        FaxDevice fax = new FaxDevice("fax-" + name, this.simulator);
+        super.addSendingDevice(fax);
+        MessageHandlerInterface faxChecker = new HandleAllMessages(this);
+        super.addReceivingDevice(fax, faxChecker, new DistConstantDurationUnit(new Duration(1.0, DurationUnit.HOUR)));
 
-        Demand demand = new Demand(product, new DistContinuousDurationUnit(new DistExponential(stream, 8.0), DurationUnit.HOUR),
-                new DistConstant(stream, 1.0), new DistConstantDurationUnit(Duration.ZERO),
-                new DistConstantDurationUnit(new Duration(14.0, DurationUnit.DAY)));
-        DemandGeneration dg = new DemandGeneration(this, simulator,
-                new DistContinuousDurationUnit(new DistExponential(stream, 2.0), DurationUnit.MINUTE));
-        dg.addDemandGenerator(product, demand);
-        this.setDemandGeneration(dg);
+        // REGISTER IN YP
 
-        // MESSAGE HANDLING
+        ypProduction.register(this, Category.DEFAULT);
+        ypProduction.addSupplier(product, this);
+
+        // STOCK, ALSO FOR BOM ENTRIES
+
+        Stock _stock = new Stock(this);
+        _stock.addStock(product, initialStock, product.getUnitMarketPrice().multiplyBy(initialStock));
+        for (Product p : product.getBillOfMaterials().getMaterials().keySet())
+        {
+            double amount = initialStock * product.getBillOfMaterials().getMaterials().get(p);
+            _stock.addStock(p, amount, p.getUnitMarketPrice().multiplyBy(amount));
+        }
+        super.setInitialStock(_stock);
+
+        // BUYING HANDLERS
 
         DistContinuousDurationUnit administrativeDelayInternalDemand =
                 new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-        InternalDemandHandlerYP internalDemandHandler = new InternalDemandHandlerYP(this, administrativeDelayInternalDemand, ypCustomre,
-                new Length(1E6, LengthUnit.METER), 1000, null);
+        InternalDemandHandlerYP internalDemandHandler = new InternalDemandHandlerYP(this, administrativeDelayInternalDemand,
+                ypProduction, new Length(1E6, LengthUnit.METER), 1000, super.stock);
 
         DistContinuousDurationUnit administrativeDelayYellowPageAnswer =
                 new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
@@ -106,7 +133,7 @@ public class atoMarket extends Customer
         DistContinuousDurationUnit administrativeDelayQuote =
                 new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
         QuoteHandler quoteHandler =
-                new QuoteHandlerAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE, administrativeDelayQuote, 0.5, 0);
+                new QuoteHandlerAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE, administrativeDelayQuote, 0.4, 0);
 
         OrderConfirmationHandler orderConfirmationHandler = new OrderConfirmationHandler(this);
 
@@ -120,14 +147,47 @@ public class atoMarket extends Customer
                 orderConfirmationHandler, shipmentHandler, billHandler);
         this.setBuyingRole(buyingRole);
 
+        // SELLING HANDLERS
+
+        RequestForQuoteHandler rfqHandler = new RequestForQuoteHandler(this, super.stock, 1.2,
+                new DistConstantDurationUnit(new Duration(1.23, DurationUnit.HOUR)), TransportMode.PLANE);
+
+        OrderHandler orderHandler;
+        if (mts)
+            orderHandler = new OrderHandlerStock(this, super.stock);
+        else
+            orderHandler = new OrderHandlerMake(this, super.stock);
+
+        PaymentHandler paymentHandler = new PaymentHandler(this, super.bankAccount);
+
+        SellingRole sellingRole = new SellingRole(this, this.simulator, rfqHandler, orderHandler, paymentHandler);
+        super.setSellingRole(sellingRole);
+
+        // RESTOCKING
+
+        Iterator<Product> stockIter = super.stock.iterator();
+        while (stockIter.hasNext())
+        {
+            Product stockProduct = stockIter.next();
+            // the restocking policy will generate InternalDemand, handled by the BuyingRole
+            new RestockingPolicySafety(super.stock, stockProduct, new Duration(24.0, DurationUnit.HOUR), false, initialStock,
+                    true, 2.0 * initialStock, new Duration(14.0, DurationUnit.DAY));
+        }
+
+        // MANUFACTURING
+
+        ProductionService productionService = new DelayProductionService(this, super.getStock(), product,
+                new DistContinuousDurationUnit(new DistUniform(stream, 5.0, 10.0), DurationUnit.DAY), true, true, 0.2);
+        getProduction().addProductionService(productionService);
+
         // ANIMATION
-        
+
         if (simulator instanceof AnimatorInterface)
         {
             try
             {
                 new SingleImageRenderable(this, simulator,
-                        atoMarket.class.getResource("/nl/tudelft/simulation/supplychain/images/Market.gif"));
+                        ATOManufacturer.class.getResource("/nl/tudelft/simulation/supplychain/images/Manufacturer.gif"));
             }
             catch (RemoteException | NamingException exception)
             {
@@ -143,7 +203,6 @@ public class atoMarket extends Customer
         return new BoundingBox(25.0, 25.0, 1.0);
     }
 
+
 }
-
-
 

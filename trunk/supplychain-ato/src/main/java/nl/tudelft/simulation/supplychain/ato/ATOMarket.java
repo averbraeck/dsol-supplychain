@@ -1,7 +1,6 @@
 package nl.tudelft.simulation.supplychain.ato;
 
 import java.rmi.RemoteException;
-import java.util.Iterator;
 
 import javax.media.j3d.Bounds;
 import javax.naming.NamingException;
@@ -19,39 +18,32 @@ import nl.tudelft.simulation.dsol.animation.D2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface.TimeDoubleUnit;
 import nl.tudelft.simulation.jstats.distributions.DistConstant;
+import nl.tudelft.simulation.jstats.distributions.DistExponential;
 import nl.tudelft.simulation.jstats.distributions.DistTriangular;
 import nl.tudelft.simulation.jstats.streams.StreamInterface;
 import nl.tudelft.simulation.language.d3.BoundingBox;
-import nl.tudelft.simulation.messaging.devices.reference.FaxDevice;
 import nl.tudelft.simulation.messaging.devices.reference.WebApplication;
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.contentstore.memory.LeanContentStore;
+import nl.tudelft.simulation.supplychain.demand.Demand;
+import nl.tudelft.simulation.supplychain.demand.DemandGeneration;
+
 import nl.tudelft.simulation.supplychain.handlers.BillHandler;
 import nl.tudelft.simulation.supplychain.handlers.InternalDemandHandlerYP;
 import nl.tudelft.simulation.supplychain.handlers.OrderConfirmationHandler;
-import nl.tudelft.simulation.supplychain.handlers.OrderHandler;
-import nl.tudelft.simulation.supplychain.handlers.OrderHandlerNoStock;
-import nl.tudelft.simulation.supplychain.handlers.OrderHandlerStock;
-import nl.tudelft.simulation.supplychain.handlers.PaymentHandler;
 import nl.tudelft.simulation.supplychain.handlers.PaymentPolicyEnum;
 import nl.tudelft.simulation.supplychain.handlers.QuoteComparatorEnum;
 import nl.tudelft.simulation.supplychain.handlers.QuoteHandler;
 import nl.tudelft.simulation.supplychain.handlers.QuoteHandlerAll;
-import nl.tudelft.simulation.supplychain.handlers.RequestForQuoteHandler;
 import nl.tudelft.simulation.supplychain.handlers.ShipmentHandler;
 import nl.tudelft.simulation.supplychain.handlers.ShipmentHandlerConsume;
 import nl.tudelft.simulation.supplychain.handlers.YellowPageAnswerHandler;
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.supplychain.reference.Retailer;
+import nl.tudelft.simulation.supplychain.reference.Customer;
 import nl.tudelft.simulation.supplychain.reference.YellowPage;
 import nl.tudelft.simulation.supplychain.roles.BuyingRole;
-import nl.tudelft.simulation.supplychain.roles.SellingRole;
-import nl.tudelft.simulation.supplychain.stock.Stock;
-import nl.tudelft.simulation.supplychain.stock.policies.RestockingPolicySafety;
-import nl.tudelft.simulation.supplychain.transport.TransportMode;
 import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
 import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
-import nl.tudelft.simulation.yellowpage.Category;
 
 /**
  * <p>
@@ -63,7 +55,7 @@ import nl.tudelft.simulation.yellowpage.Category;
  * @author <a href="http://www.tbm.tudelft.nl/averbraeck">Alexander Verbraeck</a> 
  * @author <a href="http://https://www.tudelft.nl/tbm/over-de-faculteit/afdelingen/multi-actor-systems/people/phd-candidates/b-bahareh-zohoori/">Bahareh Zohoori</a> 
  */
-public class atoRetailer extends Retailer
+public class ATOMarket extends Customer
 {
     /** */
     private static final long serialVersionUID = 1L;
@@ -73,16 +65,13 @@ public class atoRetailer extends Retailer
      * @param simulator
      * @param position
      * @param bank
-     * @param initialBankAccount
-     * @param product
-     * @param initialStock
-     * @param ypCustomer 
-     * @param ypProduction 
-     * @param stream
-     * @param mts true if MTS, false if MTO
+     * @param initialBankAccount 
+     * @param product 
+     * @param ypCustomre 
+     * @param stream 
      */
-    public atoRetailer (String name, TimeDoubleUnit simulator, Point3d position, Bank bank, Money initialBankAccount,
-            Product product, double initialStock, YellowPage ypCustomer, YellowPage ypProduction, StreamInterface stream, boolean mts)
+    public ATOMarket(String name, TimeDoubleUnit simulator, Point3d position, Bank bank, Money initialBankAccount,
+            Product product, YellowPage ypCustomre, StreamInterface stream)
     {
         super(name, simulator, position, bank, initialBankAccount, new LeanContentStore(simulator));
 
@@ -93,28 +82,22 @@ public class atoRetailer extends Retailer
         MessageHandlerInterface webSystem = new HandleAllMessages(this);
         super.addReceivingDevice(www, webSystem, new DistConstantDurationUnit(new Duration(10.0, DurationUnit.SECOND)));
 
-        FaxDevice fax = new FaxDevice("fax-" + name, this.simulator);
-        super.addSendingDevice(fax);
-        MessageHandlerInterface faxChecker = new HandleAllMessages(this);
-        super.addReceivingDevice(fax, faxChecker, new DistConstantDurationUnit(new Duration(1.0, DurationUnit.HOUR)));
+        // DEMAND GENERATION
 
-        // REGISTER IN YP
-        
-        ypCustomer.register(this, Category.DEFAULT);
-        ypCustomer.addSupplier(product, this);
-        
-        // STOCK
+        Demand demand = new Demand(product, new DistContinuousDurationUnit(new DistExponential(stream, 8.0), DurationUnit.HOUR),
+                new DistConstant(stream, 1.0), new DistConstantDurationUnit(Duration.ZERO),
+                new DistConstantDurationUnit(new Duration(14.0, DurationUnit.DAY)));
+        DemandGeneration dg = new DemandGeneration(this, simulator,
+                new DistContinuousDurationUnit(new DistExponential(stream, 2.0), DurationUnit.MINUTE));
+        dg.addDemandGenerator(product, demand);
+        this.setDemandGeneration(dg);
 
-        Stock _stock = new Stock(this);
-        _stock.addStock(product, initialStock, product.getUnitMarketPrice().multiplyBy(initialStock));
-        super.setInitialStock(_stock);
-
-        // BUYING HANDLERS
+        // MESSAGE HANDLING
 
         DistContinuousDurationUnit administrativeDelayInternalDemand =
                 new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-        InternalDemandHandlerYP internalDemandHandler = new InternalDemandHandlerYP(this, administrativeDelayInternalDemand, ypProduction,
-                new Length(1E6, LengthUnit.METER), 1000, super.stock);
+        InternalDemandHandlerYP internalDemandHandler = new InternalDemandHandlerYP(this, administrativeDelayInternalDemand, ypCustomre,
+                new Length(1E6, LengthUnit.METER), 1000, null);
 
         DistContinuousDurationUnit administrativeDelayYellowPageAnswer =
                 new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
@@ -123,7 +106,7 @@ public class atoRetailer extends Retailer
         DistContinuousDurationUnit administrativeDelayQuote =
                 new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
         QuoteHandler quoteHandler =
-                new QuoteHandlerAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE, administrativeDelayQuote, 0.4, 0);
+                new QuoteHandlerAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE, administrativeDelayQuote, 0.5, 0);
 
         OrderConfirmationHandler orderConfirmationHandler = new OrderConfirmationHandler(this);
 
@@ -137,41 +120,14 @@ public class atoRetailer extends Retailer
                 orderConfirmationHandler, shipmentHandler, billHandler);
         this.setBuyingRole(buyingRole);
 
-        // SELLING HANDLERS
-
-        RequestForQuoteHandler rfqHandler = new RequestForQuoteHandler(this, super.stock, 1.2,
-                new DistConstantDurationUnit(new Duration(1.23, DurationUnit.HOUR)), TransportMode.PLANE);
-
-        OrderHandler orderHandler;
-        if (mts)
-            orderHandler = new OrderHandlerStock(this, super.stock);
-        else
-            orderHandler = new OrderHandlerNoStock(this, super.stock);
-
-        PaymentHandler paymentHandler = new PaymentHandler(this, super.bankAccount);
-
-        SellingRole sellingRole = new SellingRole(this, this.simulator, rfqHandler, orderHandler, paymentHandler);
-        super.setSellingRole(sellingRole);
-
-        // RESTOCKING
-
-        Iterator<Product> stockIter = super.stock.iterator();
-        while (stockIter.hasNext())
-        {
-            Product stockProduct = stockIter.next();
-            // the restocking policy will generate InternalDemand, handled by the BuyingRole
-            new RestockingPolicySafety(super.stock, stockProduct, new Duration(24.0, DurationUnit.HOUR), false, initialStock,
-                    true, 2.0 * initialStock, new Duration(14.0, DurationUnit.DAY));
-        }
-
         // ANIMATION
-
+        
         if (simulator instanceof AnimatorInterface)
         {
             try
             {
                 new SingleImageRenderable(this, simulator,
-                        atoRetailer.class.getResource("/nl/tudelft/simulation/supplychain/images/Retailer.gif"));
+                        ATOMarket.class.getResource("/nl/tudelft/simulation/supplychain/images/Market.gif"));
             }
             catch (RemoteException | NamingException exception)
             {
@@ -188,8 +144,6 @@ public class atoRetailer extends Retailer
     }
 
 }
-
-
 
 
 

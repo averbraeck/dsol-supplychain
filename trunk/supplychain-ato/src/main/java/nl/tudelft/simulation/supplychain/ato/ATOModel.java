@@ -112,31 +112,31 @@ public class ATOModel  implements DSOLModel.TimeDoubleUnit
             
             
          // customer-pc
-          atoMarket CusUK = new atoMarket("customer-UK", this.devsSimulator, new Point3d(-360, -150, 1), ing,
+          ATOMarket CusUK = new ATOMarket("customer-UK", this.devsSimulator, new Point3d(-360, -150, 1), ing,
                     new Money(10000.0, MoneyUnit.USD), pc, ypCustomer, streamATO);
-          atoMarket CusTurkey = new atoMarket("customer-Turkey", this.devsSimulator, new Point3d(-360, 150, 1), ing,
+          ATOMarket CusTurkey = new ATOMarket("customer-Turkey", this.devsSimulator, new Point3d(-360, 150, 1), ing,
                     new Money(10000.0, MoneyUnit.USD), pc, ypSupplier, streamATO);
             
 
          // Manufacturers ATO-pc
-          atoManufacturer manNL = new atoManufacturer("manufacturer-NL", this.devsSimulator, new Point3d(0, -150, 1), ing,
+          ATOManufacturer manNL = new ATOManufacturer("manufacturer-NL", this.devsSimulator, new Point3d(0, -150, 1), ing,
                     new Money(1000000, MoneyUnit.USD), pc, 50, ypCustomer, ypSupplier, streamATO, false);
-          atoManufacturer manDE = new atoManufacturer("Manufacturer_DE", this.devsSimulator, new Point3d(0, 150, 1), ing,
+          ATOManufacturer manDE = new ATOManufacturer("Manufacturer_DE", this.devsSimulator, new Point3d(0, 150, 1), ing,
                     new Money(1000000, MoneyUnit.USD), pc, 50, ypCustomer,ypSupplier, streamATO, false);
             
          // Manufacturers MTS-monitor
-            atoManufacturer manSpain = new atoManufacturer("Manufacturer-DE", this.devsSimulator, new Point3d(0, 150, 1), ing,
+            ATOManufacturer manSpain = new ATOManufacturer("Manufacturer-DE", this.devsSimulator, new Point3d(0, 150, 1), ing,
                     new Money(1000000, MoneyUnit.USD), monitor, 50, ypCustomer,ypSupplier, streamMTS, true);
             
          // Supplier MTS-mouse,casing
-            atoSupplier SupDenmark= new atoSupplier("supplier-Denmark", this.devsSimulator, new Point3d(0, 150, 1), ing,
+            ATOSupplier SupDenmark= new ATOSupplier("supplier-Denmark", this.devsSimulator, new Point3d(0, 150, 1), ing,
                     new Money(1000000, MoneyUnit.USD), mouse, 50, ypSupplier, streamATO, true);
        
-            atoSupplier SupAustria= new atoSupplier("supplier-Austria", this.devsSimulator, new Point3d(0, 150, 1), ing,
+            ATOSupplier SupAustria= new ATOSupplier("supplier-Austria", this.devsSimulator, new Point3d(0, 150, 1), ing,
                     new Money(1000000, MoneyUnit.USD), casing, 50, ypSupplier, streamATO, true);
 
          // supplier ATO-keyboard
-            atoSupplier SupSpain= new atoSupplier("supplier spain", this.devsSimulator, new Point3d(0, 150, 1), ing,
+            ATOSupplier SupSpain= new ATOSupplier("supplier spain", this.devsSimulator, new Point3d(0, 150, 1), ing,
                     new Money(1000000, MoneyUnit.USD), keyboard, 50, ypSupplier, streamATO, false);
 
         }        

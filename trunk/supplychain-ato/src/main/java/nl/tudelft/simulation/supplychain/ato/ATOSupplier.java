@@ -47,7 +47,7 @@ import nl.tudelft.simulation.yellowpage.Category;
  * @author <a href="http://www.tbm.tudelft.nl/averbraeck">Alexander Verbraeck</a> 
  * @author <a href="http://https://www.tudelft.nl/tbm/over-de-faculteit/afdelingen/multi-actor-systems/people/phd-candidates/b-bahareh-zohoori/">Bahareh Zohoori</a> 
  */
-public class atoSupplier extends Supplier
+public class ATOSupplier extends Supplier
 {
     /** */
     private static final long serialVersionUID = 1L;
@@ -64,7 +64,7 @@ public class atoSupplier extends Supplier
      * @param stream
      * @param mts true if MTS, false if MTO
      */
-    public atoSupplier(String name, TimeDoubleUnit simulator, Point3d position, Bank bank, Money initialBankAccount,
+    public ATOSupplier(String name, TimeDoubleUnit simulator, Point3d position, Bank bank, Money initialBankAccount,
             Product product, double initialStock, YellowPage ypProduction, StreamInterface stream, boolean mts)
     {
         super(name, simulator, position, bank, initialBankAccount, new LeanContentStore(simulator));
@@ -120,7 +120,7 @@ public class atoSupplier extends Supplier
             try
             {
                 new SingleImageRenderable(this, simulator,
-                        atoSupplier.class.getResource("/nl/tudelft/simulation/supplychain/images/Supplier.gif"));
+                        ATOSupplier.class.getResource("/nl/tudelft/simulation/supplychain/images/Supplier.gif"));
             }
             catch (RemoteException | NamingException exception)
             {

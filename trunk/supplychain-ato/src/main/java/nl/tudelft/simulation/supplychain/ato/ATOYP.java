@@ -33,7 +33,7 @@ import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
  * @author <a href="http://www.tbm.tudelft.nl/averbraeck">Alexander Verbraeck</a> 
  * @author <a href="http://https://www.tudelft.nl/tbm/over-de-faculteit/afdelingen/multi-actor-systems/people/phd-candidates/b-bahareh-zohoori/">Bahareh Zohoori</a> 
  */
-public class atoYP extends YellowPage
+public class ATOYP extends YellowPage
 {
     /** */
     private static final long serialVersionUID = 1L;
@@ -44,7 +44,7 @@ public class atoYP extends YellowPage
      * @param position
      * @param bank
      */
-    public atoYP(String name, TimeDoubleUnit simulator, Point3d position, Bank bank)
+    public ATOYP(String name, TimeDoubleUnit simulator, Point3d position, Bank bank)
     {
         super(name, simulator, position, bank, new EmptyContentStore());
 
