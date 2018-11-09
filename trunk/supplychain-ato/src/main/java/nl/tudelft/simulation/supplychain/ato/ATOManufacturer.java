@@ -81,12 +81,14 @@ public class ATOManufacturer extends Manufacturer
      * @param product
      * @param initialStock
      * @param ypCustomer
-     * @param ypProduction
+     * @param ypManufacturer
      * @param stream
      * @param mts true if MTS, false if MTO
      */
+    // another constructor not using yellowPage
+    //lean contentstrore create empty content store?
     public ATOManufacturer(String name, TimeDoubleUnit simulator, Point3d position, Bank bank, Money initialBankAccount,
-            Product product, double initialStock, YellowPage ypCustomer, YellowPage ypProduction, StreamInterface stream,
+            Product product, double initialStock, YellowPage ypCustomer, YellowPage ypManufacturer, StreamInterface stream,
             boolean mts)
     {
         super(name, simulator, position, bank, initialBankAccount, new LeanContentStore(simulator));
@@ -103,12 +105,12 @@ public class ATOManufacturer extends Manufacturer
         MessageHandlerInterface faxChecker = new HandleAllMessages(this);
         super.addReceivingDevice(fax, faxChecker, new DistConstantDurationUnit(new Duration(1.0, DurationUnit.HOUR)));
 
-        // REGISTER IN YP
+        // REGISTER IN YP- should we do the same for customer and supplier? do we need instance of argument first?
 
-        ypProduction.register(this, Category.DEFAULT);
-        ypProduction.addSupplier(product, this);
+        ypManufacturer.register(this, Category.DEFAULT);
+        ypManufacturer.addSupplier(product, this);
 
-        // STOCK, ALSO FOR BOM ENTRIES
+        // STOCK, ALSO FOR BOM ENTRIES- what is the underScore before stock?
 
         Stock _stock = new Stock(this);
         _stock.addStock(product, initialStock, product.getUnitMarketPrice().multiplyBy(initialStock));
@@ -124,8 +126,8 @@ public class ATOManufacturer extends Manufacturer
         DistContinuousDurationUnit administrativeDelayInternalDemand =
                 new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
         InternalDemandHandlerYP internalDemandHandler = new InternalDemandHandlerYP(this, administrativeDelayInternalDemand,
-                ypProduction, new Length(1E6, LengthUnit.METER), 1000, super.stock);
-
+                ypManufacturer, new Length(1E6, LengthUnit.METER), 1000, super.stock);
+// InternalDemandHandlerOrder
         DistContinuousDurationUnit administrativeDelayYellowPageAnswer =
                 new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
         YellowPageAnswerHandler ypAnswerHandler = new YellowPageAnswerHandler(this, administrativeDelayYellowPageAnswer);
@@ -164,12 +166,13 @@ public class ATOManufacturer extends Manufacturer
         super.setSellingRole(sellingRole);
 
         // RESTOCKING
-
+//which product stock it gives?
         Iterator<Product> stockIter = super.stock.iterator();
         while (stockIter.hasNext())
         {
             Product stockProduct = stockIter.next();
             // the restocking policy will generate InternalDemand, handled by the BuyingRole
+           // if (mts)
             new RestockingPolicySafety(super.stock, stockProduct, new Duration(24.0, DurationUnit.HOUR), false, initialStock,
                     true, 2.0 * initialStock, new Duration(14.0, DurationUnit.DAY));
         }
