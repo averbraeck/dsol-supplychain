@@ -76,28 +76,55 @@ public class ATOModel  implements DSOLModel.TimeDoubleUnit
                     this.devsSimulator,
                     ATOModel.class.getResource("/supplychain-ato/src/main/resources/images/europe-osm.png"));
          // basics
+            //do we need 2 streams?
             StreamInterface streamATO = new MersenneTwister();
-            StreamInterface streamMTS = new MersenneTwister();
-        // Product & BOM
             
-            //MTS
-            Product keyboard =
-                    new Product("keyboard", Unit.PIECE, new Money(15.0, MoneyUnit.USD), new Mass(0.5, MassUnit.KILOGRAM), 0.0);
-            Product casing =
-                    new Product("casing", Unit.PIECE, new Money(400.0, MoneyUnit.USD), new Mass(10.0, MassUnit.KILOGRAM), 0.02);
-            Product mouse =
-                    new Product("mouse", Unit.PIECE, new Money(10.0, MoneyUnit.USD), new Mass(0.1, MassUnit.KILOGRAM), 0.0);
-            Product monitor =
-                    new Product("monitor", Unit.PIECE, new Money(200.0, MoneyUnit.USD), new Mass(5.0, MassUnit.KILOGRAM), 0.01);
+       
+            // Product 
+            // we should define a new attribute for product as well to show mts and mto for restocking policy!
            
-            //ATO
-            Product pc = new Product("PC", Unit.PIECE, new Money(1100.0, MoneyUnit.USD), new Mass(16.0, MassUnit.KILOGRAM), 0.02);
+            Product partA =
+                    new Product("partA", Unit.PIECE, new Money(10.0, MoneyUnit.USD), new Mass(0.5, MassUnit.KILOGRAM), 0.0);
+            Product partB =
+                    new Product("PartB", Unit.PIECE, new Money(20.0, MoneyUnit.USD), new Mass(10.0, MassUnit.KILOGRAM), 0.02);
+            Product partC =
+                    new Product("partC", Unit.PIECE, new Money(100.0, MoneyUnit.USD), new Mass(0.1, MassUnit.KILOGRAM), 0.0);
+            Product partD =
+                    new Product("partD", Unit.PIECE, new Money(200.0, MoneyUnit.USD), new Mass(5.0, MassUnit.KILOGRAM), 0.01);
+            Product partCa = 
+                    new Product("partCa", Unit.PIECE, new Money(50.0, MoneyUnit.USD), new Mass(5.0, MassUnit.KILOGRAM), 0.01);
+            Product partCb = 
+                    new Product("partCb", Unit.PIECE, new Money(30.0, MoneyUnit.USD), new Mass(5.0, MassUnit.KILOGRAM), 0.01);
+            Product partCc = 
+                    new Product("partCc", Unit.PIECE, new Money(10.0, MoneyUnit.USD), new Mass(5.0, MassUnit.KILOGRAM), 0.01); 
+            Product partDa = 
+                    new Product("partDa", Unit.PIECE, new Money(100.0, MoneyUnit.USD), new Mass(5.0, MassUnit.KILOGRAM), 0.01);
+            Product partDb = 
+                    new Product("partDb", Unit.PIECE, new Money(80.0, MoneyUnit.USD), new Mass(5.0, MassUnit.KILOGRAM), 0.01); 
+            Product subAssembly = 
+                    new Product("Sub-Assembly", Unit.PIECE, new Money(50.0, MoneyUnit.USD), new Mass(5.0, MassUnit.KILOGRAM), 0.01);
+            Product finalProduct = 
+                    new Product("finalProduct", Unit.PIECE, new Money(1000.0, MoneyUnit.USD), new Mass(5.0, MassUnit.KILOGRAM), 0.01);
            
-            BillOfMaterials pcBOM = new BillOfMaterials(pc);
-            pcBOM.add(keyboard, 1.0);
-            pcBOM.add(casing, 1.0);
-            pcBOM.add(mouse, 1.0);
-            pcBOM.add(monitor, 1.0);
+            //BOM
+                       
+            BillOfMaterials partCbom = new BillOfMaterials(partC);
+            partCbom.add(partCa, 1);
+            partCbom.add(partCb, 1);
+            partCbom.add(partCc, 1);
+            
+            BillOfMaterials partDbom = new BillOfMaterials(partD);
+            partDbom.add(partDa, 1);
+            partDbom.add(partDb, 1);
+            
+            BillOfMaterials subAssemblyBom = new BillOfMaterials(subAssembly);
+            subAssemblyBom.add(partA, 1);
+            subAssemblyBom.add(partB, 1);
+          
+            BillOfMaterials finalProductBom = new BillOfMaterials(finalProduct);
+            finalProductBom.add(subAssembly, 1);
+            finalProductBom.add(partC, 1);
+            finalProductBom.add(partD, 1);
             
           
           // create the bank
@@ -106,39 +133,53 @@ public class ATOModel  implements DSOLModel.TimeDoubleUnit
             ing.setAnnualInterestRatePos(0.025);
         
 
-        // Yellow page (to be deleted...)
+        // Yellow page 
             ATOYP ypCustomer = new ATOYP("yellow-page-customer", this.devsSimulator, new Point3d(-300, -270, 1), ing);
+            ATOYP ypManufacturer = new ATOYP("yellow-page-manufacturer", this.devsSimulator, new Point3d(-300, -270, 1), ing);
             ATOYP ypSupplier = new ATOYP("yellow-page-supplier", this.devsSimulator, new Point3d(-300, -270, 1), ing);
             
             
-         // customer-pc
-          ATOMarket CusUK = new ATOMarket("customer-UK", this.devsSimulator, new Point3d(-360, -150, 1), ing,
-                    new Money(10000.0, MoneyUnit.USD), pc, streamATO);
-          ATOMarket CusTurkey = new ATOMarket("customer-Turkey", this.devsSimulator, new Point3d(-360, 150, 1), ing,
-                    new Money(10000.0, MoneyUnit.USD), pc, streamATO);
+         // customer
+            //do we need to define order amount?
+          ATOMarket CustomerUK = new ATOMarket("customer-UK", this.devsSimulator, new Point3d(-360, -150, 1), ing,
+                    new Money(10000.0, MoneyUnit.USD), finalProduct, ypCustomer, streamATO);
+          ATOMarket CustomerTurkey = new ATOMarket("customer-Turkey", this.devsSimulator, new Point3d(-360, 150, 1), ing,
+                    new Money(10000.0, MoneyUnit.USD), finalProduct, ypCustomer, streamATO);
             
-
-         // Manufacturers ATO-pc
-          ATOManufacturer manNL = new ATOManufacturer("manufacturer-NL", this.devsSimulator, new Point3d(0, -150, 1), ing,
-                    new Money(1000000, MoneyUnit.USD), pc, 50, ypCustomer, ypSupplier, streamATO, false);
-          ATOManufacturer manDE = new ATOManufacturer("Manufacturer_DE", this.devsSimulator, new Point3d(0, 150, 1), ing,
-                    new Money(1000000, MoneyUnit.USD), pc, 50, ypCustomer,ypSupplier, streamATO, false);
-            
-         // Manufacturers MTS-monitor
-            ATOManufacturer manSpain = new ATOManufacturer("Manufacturer-DE", this.devsSimulator, new Point3d(0, 150, 1), ing,
-                    new Money(1000000, MoneyUnit.USD), monitor, 50, ypCustomer,ypSupplier, streamMTS, true);
-            
-         // Supplier MTS-mouse,casing
-            ATOSupplier SupDenmark= new ATOSupplier("supplier-Denmark", this.devsSimulator, new Point3d(0, 150, 1), ing,
-                    new Money(1000000, MoneyUnit.USD), mouse, 50, ypSupplier, streamATO, true);
+         // Manufacturer-fianlProduct
+          //why manufacturer need yp-customer? and why it does not need yp supplier?
+        // how to deal with sub-assembly?
+          ATOManufacturer manufacturerFNNL = new ATOManufacturer("manufacturer-finalProduct-NL", this.devsSimulator, new Point3d(0, -150, 1), ing,
+                    new Money(1000000, MoneyUnit.USD), finalProduct, 0, ypCustomer, ypManufacturer, streamATO, false);
+       // Manufacturer-subAssembly
+          ATOManufacturer manufacturerSANL = new ATOManufacturer("manufacturer-subAssembly-NL", this.devsSimulator, new Point3d(0, -150, 1), ing,
+                  new Money(1000000, MoneyUnit.USD), subAssembly, 10, ypCustomer, ypManufacturer, streamATO, true);
+           
+            //how to create internalDemand for MTO suppliers who dont have restocking policy for creating internal demand?
+         // Supplier-1st tier-MTS
+            ATOSupplier SupPartA= new ATOSupplier("supplier-partA-Germany", this.devsSimulator, new Point3d(0, 150, 1), ing,
+                    new Money(1000000, MoneyUnit.USD), partA, 20, ypSupplier, streamATO, true);
        
-            ATOSupplier SupAustria= new ATOSupplier("supplier-Austria", this.devsSimulator, new Point3d(0, 150, 1), ing,
-                    new Money(1000000, MoneyUnit.USD), casing, 50, ypSupplier, streamATO, true);
+            ATOSupplier SupPartB= new ATOSupplier("supplier-partB-Italy", this.devsSimulator, new Point3d(0, 150, 1), ing,
+                    new Money(1000000, MoneyUnit.USD), partB, 30, ypSupplier, streamATO, true);
 
-         // supplier ATO-keyboard
-            ATOSupplier SupSpain= new ATOSupplier("supplier spain", this.devsSimulator, new Point3d(0, 150, 1), ing,
-                    new Money(1000000, MoneyUnit.USD), keyboard, 50, ypSupplier, streamATO, false);
-
+         // Supplier-1st tier-MTo
+            ATOSupplier SupPartC= new ATOSupplier("supplier-partC-France", this.devsSimulator, new Point3d(0, 150, 1), ing,
+                    new Money(1000000, MoneyUnit.USD), partC, 0, ypSupplier, streamATO, false);
+            ATOSupplier SupPartD= new ATOSupplier("supplier-partD-NL", this.devsSimulator, new Point3d(0, 150, 1), ing,
+                    new Money(1000000, MoneyUnit.USD), partD, 0, ypSupplier, streamATO, false);
+        
+            // Supplier-2nd tier-MTS
+            ATOSupplier SupPartCa= new ATOSupplier("supplier-partCa-Poland", this.devsSimulator, new Point3d(0, 150, 1), ing,
+                    new Money(1000000, MoneyUnit.USD), partCa, 10, ypSupplier, streamATO, true);
+            ATOSupplier SupPartCb= new ATOSupplier("supplier-partCb-Denmark", this.devsSimulator, new Point3d(0, 150, 1), ing,
+                    new Money(1000000, MoneyUnit.USD), partCb, 20, ypSupplier, streamATO, true);
+            ATOSupplier SupPartCc= new ATOSupplier("supplier-partCb-Austria", this.devsSimulator, new Point3d(0, 150, 1), ing,
+                    new Money(1000000, MoneyUnit.USD), partCc, 25, ypSupplier, streamATO, true);
+            ATOSupplier SupPartDa= new ATOSupplier("supplier-partDa-UK", this.devsSimulator, new Point3d(0, 150, 1), ing,
+                    new Money(1000000, MoneyUnit.USD), partDa, 30, ypSupplier, streamATO, true);
+            ATOSupplier SupPartDb= new ATOSupplier("supplier-partDb-Spain", this.devsSimulator, new Point3d(0, 150, 1), ing,
+                    new Money(1000000, MoneyUnit.USD), partDb, 50, ypSupplier, streamATO, true);
         }        
         }
         catch (Exception e)
