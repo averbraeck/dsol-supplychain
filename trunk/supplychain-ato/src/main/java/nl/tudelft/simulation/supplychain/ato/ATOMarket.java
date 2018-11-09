@@ -7,9 +7,7 @@ import javax.naming.NamingException;
 import javax.vecmath.Point3d;
 
 import org.djunits.unit.DurationUnit;
-import org.djunits.unit.LengthUnit;
 import org.djunits.value.vdouble.scalar.Duration;
-import org.djunits.value.vdouble.scalar.Length;
 import org.djunits.value.vdouble.scalar.Money;
 
 import nl.tudelft.simulation.actor.messagehandlers.HandleAllMessages;
@@ -27,9 +25,8 @@ import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.contentstore.memory.LeanContentStore;
 import nl.tudelft.simulation.supplychain.demand.Demand;
 import nl.tudelft.simulation.supplychain.demand.DemandGeneration;
-
 import nl.tudelft.simulation.supplychain.handlers.BillHandler;
-import nl.tudelft.simulation.supplychain.handlers.InternalDemandHandlerYP;
+import nl.tudelft.simulation.supplychain.handlers.InternalDemandHandlerRFQ;
 import nl.tudelft.simulation.supplychain.handlers.OrderConfirmationHandler;
 import nl.tudelft.simulation.supplychain.handlers.PaymentPolicyEnum;
 import nl.tudelft.simulation.supplychain.handlers.QuoteComparatorEnum;
@@ -37,10 +34,8 @@ import nl.tudelft.simulation.supplychain.handlers.QuoteHandler;
 import nl.tudelft.simulation.supplychain.handlers.QuoteHandlerAll;
 import nl.tudelft.simulation.supplychain.handlers.ShipmentHandler;
 import nl.tudelft.simulation.supplychain.handlers.ShipmentHandlerConsume;
-import nl.tudelft.simulation.supplychain.handlers.YellowPageAnswerHandler;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Customer;
-import nl.tudelft.simulation.supplychain.reference.YellowPage;
 import nl.tudelft.simulation.supplychain.roles.BuyingRole;
 import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
 import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
@@ -52,8 +47,10 @@ import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
  * </p>
  * $LastChangedDate: 2015-07-24 02:58:59 +0200 (Fri, 24 Jul 2015) $, @version $Revision: 1147 $, by $Author: averbraeck $,
  * initial version Oct 12, 2018 <br>
- * @author <a href="http://www.tbm.tudelft.nl/averbraeck">Alexander Verbraeck</a> 
- * @author <a href="http://https://www.tudelft.nl/tbm/over-de-faculteit/afdelingen/multi-actor-systems/people/phd-candidates/b-bahareh-zohoori/">Bahareh Zohoori</a> 
+ * @author <a href="http://www.tbm.tudelft.nl/averbraeck">Alexander Verbraeck</a>
+ * @author <a href=
+ *         "http://https://www.tudelft.nl/tbm/over-de-faculteit/afdelingen/multi-actor-systems/people/phd-candidates/b-bahareh-zohoori/">Bahareh
+ *         Zohoori</a>
  */
 public class ATOMarket extends Customer
 {
@@ -65,13 +62,12 @@ public class ATOMarket extends Customer
      * @param simulator
      * @param position
      * @param bank
-     * @param initialBankAccount 
-     * @param product 
-     * @param ypCustomre 
-     * @param stream 
+     * @param initialBankAccount
+     * @param product
+     * @param stream
      */
     public ATOMarket(String name, TimeDoubleUnit simulator, Point3d position, Bank bank, Money initialBankAccount,
-            Product product, YellowPage ypCustomre, StreamInterface stream)
+            Product product, StreamInterface stream)
     {
         super(name, simulator, position, bank, initialBankAccount, new LeanContentStore(simulator));
 
@@ -96,12 +92,8 @@ public class ATOMarket extends Customer
 
         DistContinuousDurationUnit administrativeDelayInternalDemand =
                 new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-        InternalDemandHandlerYP internalDemandHandler = new InternalDemandHandlerYP(this, administrativeDelayInternalDemand, ypCustomre,
-                new Length(1E6, LengthUnit.METER), 1000, null);
-
-        DistContinuousDurationUnit administrativeDelayYellowPageAnswer =
-                new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-        YellowPageAnswerHandler ypAnswerHandler = new YellowPageAnswerHandler(this, administrativeDelayYellowPageAnswer);
+        InternalDemandHandlerRFQ internalDemandHandler =
+                new InternalDemandHandlerRFQ(this, administrativeDelayInternalDemand, null);
 
         DistContinuousDurationUnit administrativeDelayQuote =
                 new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
@@ -116,12 +108,12 @@ public class ATOMarket extends Customer
                 new DistContinuousDurationUnit(new DistConstant(stream, 0.0), DurationUnit.HOUR);
         BillHandler billHandler = new BillHandler(this, this.getBankAccount(), PaymentPolicyEnum.PAYMENT_ON_TIME, paymentDelay);
 
-        BuyingRole buyingRole = new BuyingRole(this, simulator, internalDemandHandler, ypAnswerHandler, quoteHandler,
-                orderConfirmationHandler, shipmentHandler, billHandler);
+        BuyingRole buyingRole = new BuyingRole(this, simulator, internalDemandHandler, quoteHandler, orderConfirmationHandler,
+                shipmentHandler, billHandler);
         this.setBuyingRole(buyingRole);
 
         // ANIMATION
-        
+
         if (simulator instanceof AnimatorInterface)
         {
             try
@@ -144,6 +136,3 @@ public class ATOMarket extends Customer
     }
 
 }
-
-
-

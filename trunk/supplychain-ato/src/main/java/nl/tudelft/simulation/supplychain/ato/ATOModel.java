@@ -106,16 +106,16 @@ public class ATOModel  implements DSOLModel.TimeDoubleUnit
             ing.setAnnualInterestRatePos(0.025);
         
 
-        // Yellow page 
+        // Yellow page (to be deleted...)
             ATOYP ypCustomer = new ATOYP("yellow-page-customer", this.devsSimulator, new Point3d(-300, -270, 1), ing);
             ATOYP ypSupplier = new ATOYP("yellow-page-supplier", this.devsSimulator, new Point3d(-300, -270, 1), ing);
             
             
          // customer-pc
           ATOMarket CusUK = new ATOMarket("customer-UK", this.devsSimulator, new Point3d(-360, -150, 1), ing,
-                    new Money(10000.0, MoneyUnit.USD), pc, ypCustomer, streamATO);
+                    new Money(10000.0, MoneyUnit.USD), pc, streamATO);
           ATOMarket CusTurkey = new ATOMarket("customer-Turkey", this.devsSimulator, new Point3d(-360, 150, 1), ing,
-                    new Money(10000.0, MoneyUnit.USD), pc, ypSupplier, streamATO);
+                    new Money(10000.0, MoneyUnit.USD), pc, streamATO);
             
 
          // Manufacturers ATO-pc
