@@ -60,12 +60,12 @@ public class ATOSupplier extends Supplier
      * @param initialBankAccount
      * @param product
      * @param initialStock
-     * @param ypProduction
+     * @param ypSupplier
      * @param stream
      * @param mts true if MTS, false if MTO
      */
     public ATOSupplier(String name, TimeDoubleUnit simulator, Point3d position, Bank bank, Money initialBankAccount,
-            Product product, double initialStock, YellowPage ypProduction, StreamInterface stream, boolean mts)
+            Product product, double initialStock, YellowPage ypSupplier, StreamInterface stream, boolean mts)
     {
         super(name, simulator, position, bank, initialBankAccount, new LeanContentStore(simulator));
 
@@ -78,7 +78,8 @@ public class ATOSupplier extends Supplier
 
         // REGISTER IN YP
 
-        ypProduction.register(this, Category.DEFAULT);
+        ypSupplier.register(this, Category.DEFAULT);
+        ypSupplier.addSupplier(product, this);
 
         // STOCK
 
@@ -107,6 +108,7 @@ public class ATOSupplier extends Supplier
         Iterator<Product> stockIter = super.stock.iterator();
         while (stockIter.hasNext())
         {
+          //which list of products are considered here?  
             Product stockProduct = stockIter.next();
             // the restocking policy will generate InternalDemand, handled by the BuyingRole
             new RestockingPolicySafety(super.stock, stockProduct, new Duration(24.0, DurationUnit.HOUR), false, initialStock,
