@@ -4,7 +4,8 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Comparator;
 
-import nl.tudelft.simulation.language.reflection.ClassUtil;
+import org.djutils.reflection.ClassUtil;
+
 import nl.tudelft.simulation.messaging.Message;
 
 /**

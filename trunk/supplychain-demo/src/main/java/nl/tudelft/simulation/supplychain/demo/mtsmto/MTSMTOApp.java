@@ -11,19 +11,19 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
 import org.pmw.tinylog.Level;
 
-import nl.tudelft.simulation.dsol.DSOLModel;
 import nl.tudelft.simulation.dsol.SimRuntimeException;
-import nl.tudelft.simulation.dsol.animation.D2.AnimationPanel;
 import nl.tudelft.simulation.dsol.experiment.Replication;
 import nl.tudelft.simulation.dsol.experiment.ReplicationMode;
-import nl.tudelft.simulation.dsol.gui.swing.DSOLApplication;
-import nl.tudelft.simulation.dsol.gui.swing.DSOLPanel;
+import nl.tudelft.simulation.dsol.logger.SimLogger;
+import nl.tudelft.simulation.dsol.model.DSOLModel;
 import nl.tudelft.simulation.dsol.simtime.SimTimeDoubleUnit;
 import nl.tudelft.simulation.dsol.simulators.DEVSRealTimeClock;
 import nl.tudelft.simulation.dsol.simulators.SimulatorInterface;
+import nl.tudelft.simulation.dsol.swing.animation.D2.AnimationPanel;
+import nl.tudelft.simulation.dsol.swing.gui.DSOLApplication;
+import nl.tudelft.simulation.dsol.swing.gui.DSOLPanel;
 import nl.tudelft.simulation.event.Event;
 import nl.tudelft.simulation.jstats.streams.MersenneTwister;
-import nl.tudelft.simulation.logger.ConsoleLogger;
 
 /**
  * TestModelApp.java. <br>
@@ -55,14 +55,13 @@ public class MTSMTOApp extends DSOLApplication
      */
     public static void main(final String[] args) throws SimRuntimeException, NamingException, RemoteException
     {
-        ConsoleLogger.create();
-        ConsoleLogger.setLevel(Level.TRACE);
-        ConsoleLogger.setMessageFormat("{level} - {class_name}.{method}:{line}  {message}");
+        SimLogger.setAllLogLevel(Level.TRACE);
+        SimLogger.setAllLogMessageFormat("{level} - {class_name}.{method}:{line}  {message}");
 
-        DSOLModel.TimeDoubleUnit model = new MTSMTOModel();
         // DEVSAnimator.TimeDoubleUnit animator = new DEVSAnimator.TimeDoubleUnit();
         DEVSRealTimeClock.TimeDoubleUnit animator = new DEVSRealTimeClock.TimeDoubleUnit();
-        Replication.TimeDoubleUnit replication = new Replication.TimeDoubleUnit("rep1", Time.ZERO, Duration.ZERO,
+        DSOLModel.TimeDoubleUnit model = new MTSMTOModel(animator);
+        Replication.TimeDoubleUnit replication = Replication.TimeDoubleUnit.create("rep1", Time.ZERO, Duration.ZERO,
                 new Duration(3000.0, DurationUnit.HOUR), model);
         animator.setPauseOnError(true);
         animator.setAnimationDelay(20); // 50 Hz animation update

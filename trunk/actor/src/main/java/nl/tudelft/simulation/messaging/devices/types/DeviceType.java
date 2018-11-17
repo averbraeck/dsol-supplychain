@@ -71,6 +71,9 @@ public class DeviceType implements Serializable
     /** the LETTER DEVICETYPE */
     public static final DeviceType LETTER = new DeviceType("Letter", DeviceType.DELAY_LETTER, 1.0e-5);
 
+    /** the OTHER DEVICETYPE */
+    public static final DeviceType OTHER = new DeviceType("Other", DeviceType.DELAY_LETTER, 1.0e-5);
+
     /**
      * Create a new device type. Please note: the uniqueness of the name is not cheched. The speed of the device type is an
      * indication of the time it takes to get the message from sender to receiver. The speed is given in several classes, for

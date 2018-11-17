@@ -27,7 +27,6 @@ import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.contentstore.memory.LeanContentStore;
 import nl.tudelft.simulation.supplychain.demand.Demand;
 import nl.tudelft.simulation.supplychain.demand.DemandGeneration;
-
 import nl.tudelft.simulation.supplychain.handlers.BillHandler;
 import nl.tudelft.simulation.supplychain.handlers.InternalDemandHandlerYP;
 import nl.tudelft.simulation.supplychain.handlers.OrderConfirmationHandler;

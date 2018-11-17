@@ -68,7 +68,7 @@ public class DemandGeneration extends InternalActor
         try
         {
             Serializable[] args = { product, demand };
-            super.simulator.scheduleEventNow(this, this, "createInternalDemand", args);
+            super.simulator.scheduleEventRel(demand.getInterval().draw().multiplyBy(0.5), this, this, "createInternalDemand", args);
         }
         catch (Exception e)
         {

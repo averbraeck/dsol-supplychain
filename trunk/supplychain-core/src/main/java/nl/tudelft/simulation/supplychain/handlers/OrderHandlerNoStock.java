@@ -7,15 +7,10 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
 import org.pmw.tinylog.Logger;
 
-import nl.tudelft.simulation.supplychain.actor.StockKeepingActor;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
-import nl.tudelft.simulation.supplychain.actor.capabilities.ProducerInterface;
 import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.content.OrderBasedOnQuote;
 import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
-import nl.tudelft.simulation.supplychain.content.ProductionOrder;
-import nl.tudelft.simulation.supplychain.production.Production;
-import nl.tudelft.simulation.supplychain.production.ProductionService;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
 import nl.tudelft.simulation.supplychain.transport.TransportMode;
 

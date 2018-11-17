@@ -6,10 +6,10 @@ import java.util.List;
 
 import org.pmw.tinylog.Logger;
 
-import nl.tudelft.simulation.dsol.animation.D2.AnimationPanel;
 import nl.tudelft.simulation.dsol.animation.D2.Renderable2DInterface;
-import nl.tudelft.simulation.dsol.animation.D2.mouse.InputListener;
-import nl.tudelft.simulation.introspection.gui.IntroSpectionDialog;
+import nl.tudelft.simulation.dsol.swing.animation.D2.AnimationPanel;
+import nl.tudelft.simulation.dsol.swing.animation.D2.mouse.InputListener;
+import nl.tudelft.simulation.dsol.swing.introspection.gui.IntroSpectionDialog;
 
 /**
  * Editor for introspection. <br>

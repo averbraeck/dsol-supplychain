@@ -44,7 +44,6 @@ import nl.tudelft.simulation.supplychain.handlers.ShipmentHandlerConsume;
 import nl.tudelft.simulation.supplychain.handlers.YellowPageAnswerHandler;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.production.DelayProductionService;
-import nl.tudelft.simulation.supplychain.production.Production;
 import nl.tudelft.simulation.supplychain.production.ProductionService;
 import nl.tudelft.simulation.supplychain.reference.Manufacturer;
 import nl.tudelft.simulation.supplychain.reference.YellowPage;

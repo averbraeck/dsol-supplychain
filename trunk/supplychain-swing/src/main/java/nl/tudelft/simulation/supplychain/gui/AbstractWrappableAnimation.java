@@ -42,15 +42,16 @@ import javax.swing.event.ChangeListener;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
 
-import nl.tudelft.simulation.dsol.DSOLModel;
 import nl.tudelft.simulation.dsol.SimRuntimeException;
 import nl.tudelft.simulation.dsol.animation.Locatable;
-import nl.tudelft.simulation.dsol.animation.D2.AnimationPanel;
 import nl.tudelft.simulation.dsol.animation.D2.GisRenderable2D;
 import nl.tudelft.simulation.dsol.experiment.Replication;
 import nl.tudelft.simulation.dsol.experiment.ReplicationMode;
+import nl.tudelft.simulation.dsol.model.DSOLModel;
 import nl.tudelft.simulation.dsol.simulators.DEVSAnimator;
+import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.dsol.simulators.SimulatorInterface;
+import nl.tudelft.simulation.dsol.swing.animation.D2.AnimationPanel;
 import nl.tudelft.simulation.jstats.streams.MersenneTwister;
 
 /**
@@ -89,7 +90,7 @@ public abstract class AbstractWrappableAnimation implements WrappableAnimation, 
     private Duration savedRunLength;
 
     /** The model. */
-    private DSOLModel.TimeDoubleUnit model;
+    private DSOLModel.TimeDoubleUnit<DEVSSimulatorInterface.TimeDoubleUnit> model;
 
     /** Override the replication number by this value if non-null. */
     private Integer replication = 0;
@@ -109,13 +110,13 @@ public abstract class AbstractWrappableAnimation implements WrappableAnimation, 
      */
     @SuppressWarnings("checkstyle:designforextension")
     protected DEVSAnimator.TimeDoubleUnit buildSimpleAnimator(final Time startTime, final Duration warmupPeriod,
-            final Duration runLength, final DSOLModel.TimeDoubleUnit scModel) throws SimRuntimeException, NamingException
+            final Duration runLength, final DSOLModel.TimeDoubleUnit<DEVSSimulatorInterface.TimeDoubleUnit> scModel) throws SimRuntimeException, NamingException
     {
         DEVSAnimator.TimeDoubleUnit animator = new DEVSAnimator.TimeDoubleUnit();
         animator.setPauseOnError(true);
         animator.setAnimationDelay(20); // 50 Hz animation update
-        Replication.TimeDoubleUnit rep =
-                new Replication.TimeDoubleUnit("rep" + ++this.replication, startTime, warmupPeriod, runLength, scModel);
+        Replication.TimeDoubleUnit<DEVSSimulatorInterface.TimeDoubleUnit> rep =
+                Replication.TimeDoubleUnit.create("rep" + ++this.replication, startTime, warmupPeriod, runLength, scModel);
         animator.initialize(rep, ReplicationMode.TERMINATING);
         animator.getReplication().getExperiment().setSimulator(animator);
         rep.getStreams().put("default", new MersenneTwister(this.replication));
@@ -135,14 +136,14 @@ public abstract class AbstractWrappableAnimation implements WrappableAnimation, 
      */
     @SuppressWarnings("checkstyle:designforextension")
     protected DEVSAnimator.TimeDoubleUnit buildSimpleAnimator(final Time startTime, final Duration warmupPeriod,
-            final Duration runLength, final DSOLModel.TimeDoubleUnit scModel, final int replicationNumber)
+            final Duration runLength, final DSOLModel.TimeDoubleUnit<DEVSSimulatorInterface.TimeDoubleUnit> scModel, final int replicationNumber)
             throws SimRuntimeException, NamingException
     {
         DEVSAnimator.TimeDoubleUnit animator = new DEVSAnimator.TimeDoubleUnit();
         animator.setPauseOnError(true);
         animator.setAnimationDelay(20); // 50 Hz animation update
-        Replication.TimeDoubleUnit rep =
-                new Replication.TimeDoubleUnit("rep" + replicationNumber, startTime, warmupPeriod, runLength, scModel);
+        Replication.TimeDoubleUnit<DEVSSimulatorInterface.TimeDoubleUnit> rep =
+                Replication.TimeDoubleUnit.create("rep" + replicationNumber, startTime, warmupPeriod, runLength, scModel);
         animator.initialize(rep, ReplicationMode.TERMINATING);
         animator.getReplication().getExperiment().setSimulator(animator);
         rep.getStreams().put("default", new MersenneTwister(replicationNumber));

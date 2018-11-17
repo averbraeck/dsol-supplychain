@@ -48,6 +48,7 @@ import javax.swing.text.MaskFormatter;
 import org.djunits.unit.TimeUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
+import org.djutils.io.URLResource;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.SimRuntimeException;
@@ -60,7 +61,6 @@ import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.dsol.simulators.SimulatorInterface;
 import nl.tudelft.simulation.event.EventInterface;
 import nl.tudelft.simulation.event.EventListenerInterface;
-import nl.tudelft.simulation.language.io.URLResource;
 
 /**
  * Peter's improved simulation control panel.
@@ -163,7 +163,7 @@ public class ControlPanel extends JPanel
         this.add(buttonPanel);
         fixButtons();
         installWindowCloseHandler();
-        this.simulator.addListener(this, SimulatorInterface.END_OF_REPLICATION_EVENT);
+        this.simulator.addListener(this, SimulatorInterface.END_REPLICATION_EVENT);
         this.simulator.addListener(this, SimulatorInterface.START_EVENT);
         this.simulator.addListener(this, SimulatorInterface.STOP_EVENT);
         this.simulator.addListener(this, DEVSRealTimeClock.CHANGE_SPEED_FACTOR_EVENT);
@@ -515,7 +515,14 @@ public class ControlPanel extends JPanel
     {
         if (getSimulator().isRunning())
         {
-            getSimulator().stop();
+            try
+            {
+                getSimulator().stop();
+            }
+            catch (SimRuntimeException exception)
+            {
+                Logger.error("ControlPanel - autoPauseSimulator: " + "Caught an exception while trying to stop the simulator");
+            }
             double currentTick = getSimulator().getSimulatorTime().getSI();
             double nextTick = getSimulator().getEventList().first().getAbsoluteExecutionTime().get().getSI();
             // System.out.println("currentTick is " + currentTick);
@@ -1124,7 +1131,7 @@ public class ControlPanel extends JPanel
     @Override
     public final void notify(final EventInterface event) throws RemoteException
     {
-        if (event.getType().equals(SimulatorInterface.END_OF_REPLICATION_EVENT)
+        if (event.getType().equals(SimulatorInterface.END_REPLICATION_EVENT)
                 || event.getType().equals(SimulatorInterface.START_EVENT)
                 || event.getType().equals(SimulatorInterface.STOP_EVENT)
                 || event.getType().equals(DEVSRealTimeClock.CHANGE_SPEED_FACTOR_EVENT))

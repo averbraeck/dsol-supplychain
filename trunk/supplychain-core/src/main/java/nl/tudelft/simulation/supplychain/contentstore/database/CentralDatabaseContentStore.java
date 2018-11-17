@@ -3,8 +3,9 @@ package nl.tudelft.simulation.supplychain.contentstore.database;
 import java.io.Serializable;
 import java.util.List;
 
+import org.djutils.exceptions.Throw;
+
 import nl.tudelft.simulation.event.EventProducer;
-import nl.tudelft.simulation.language.Throw;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.contentstore.ContentStoreInterface;

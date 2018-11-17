@@ -10,8 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.djunits.value.Scalar;
-
-import nl.tudelft.simulation.language.reflection.ClassUtil;
+import org.djutils.reflection.ClassUtil;
 
 /**
  * <br>

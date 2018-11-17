@@ -6,17 +6,13 @@ import javax.vecmath.Point3d;
 
 import org.djunits.unit.MassUnit;
 import org.djunits.unit.MoneyUnit;
-import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Mass;
 import org.djunits.value.vdouble.scalar.Money;
-import org.djunits.value.vdouble.scalar.Time;
 
-import nl.tudelft.simulation.dsol.DSOLModel;
 import nl.tudelft.simulation.dsol.animation.D2.SingleImageRenderable;
-import nl.tudelft.simulation.dsol.simtime.SimTimeDoubleUnit;
+import nl.tudelft.simulation.dsol.model.AbstractDSOLModel;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
-import nl.tudelft.simulation.dsol.simulators.SimulatorInterface;
 import nl.tudelft.simulation.jstats.streams.MersenneTwister;
 import nl.tudelft.simulation.jstats.streams.StreamInterface;
 import nl.tudelft.simulation.language.d3.DirectedPoint;
@@ -39,36 +35,32 @@ import nl.tudelft.simulation.supplychain.test.TestModel;
  * source code and binary code of this software is proprietary information of Delft University of Technology.
  * @author <a href="https://www.tudelft.nl/averbraeck" target="_blank">Alexander Verbraeck</a>
  */
-public class MTSMTOModel implements DSOLModel.TimeDoubleUnit
+public class MTSMTOModel extends AbstractDSOLModel.TimeDoubleUnit<DEVSSimulatorInterface.TimeDoubleUnit>
 {
     /** the serial version uid */
     private static final long serialVersionUID = 12L;
 
-    /** the simulator. */
-    private DEVSSimulatorInterface.TimeDoubleUnit devsSimulator;
-
     /**
      * constructs a new TestModel
      */
-    public MTSMTOModel()
+    public MTSMTOModel(final DEVSSimulatorInterface.TimeDoubleUnit simulator)
     {
-        super();
+        super(simulator);
         // We don't do anything to prevent state-based replications.
     }
 
     /** {@inheritDoc} */
     @Override
-    public void constructModel(final SimulatorInterface<Time, Duration, SimTimeDoubleUnit> simulator)
+    public void constructModel()
     {
         try
         {
-            this.devsSimulator = (DEVSSimulatorInterface.TimeDoubleUnit) simulator;
-            if (this.devsSimulator instanceof AnimatorInterface)
+            if (getSimulator() instanceof AnimatorInterface)
             {
                 // First we create some background. We set the zValue to -Double.Min value to ensure that it is actually drawn
                 // "below" our actors and messages.
                 new SingleImageRenderable(new DirectedPoint(0.0, 0.0, -Double.MIN_VALUE), new Dimension(800, 600),
-                        this.devsSimulator,
+                        getSimulator(),
                         TestModel.class.getResource("/nl/tudelft/simulation/supplychain/demo/mtsmto/images/background.gif"));
             }
 
@@ -94,58 +86,58 @@ public class MTSMTOModel implements DSOLModel.TimeDoubleUnit
             pcBOM.add(monitor, 1.0);
 
             // create the bank
-            Bank ing = new Bank("ING", this.devsSimulator, new Point3d(0, 0, 0));
+            Bank ing = new Bank("ING", getSimulator(), new Point3d(0, 0, 0));
             ing.setAnnualInterestRateNeg(0.080);
             ing.setAnnualInterestRatePos(0.025);
 
             // we create two yellow page 'domains', one between the customers and the retailers,
             // and one between the retailers, manufacturers, and suppliers
-            DemoYP ypCustomerMTS = new DemoYP("YP_customer_MTS", this.devsSimulator, new Point3d(-300, -270, 1), ing);
-            DemoYP ypCustomerMTO = new DemoYP("YP_customer_MTO", this.devsSimulator, new Point3d(-300, 30, 1), ing);
-            DemoYP ypProductionMTS = new DemoYP("YP_production_MTS", this.devsSimulator, new Point3d(100, -270, 1), ing);
-            DemoYP ypProductionMTO = new DemoYP("YP_production_MTO", this.devsSimulator, new Point3d(100, 30, 1), ing);
+            DemoYP ypCustomerMTS = new DemoYP("YP_customer_MTS", getSimulator(), new Point3d(-300, -270, 1), ing);
+            DemoYP ypCustomerMTO = new DemoYP("YP_customer_MTO", getSimulator(), new Point3d(-300, 30, 1), ing);
+            DemoYP ypProductionMTS = new DemoYP("YP_production_MTS", getSimulator(), new Point3d(100, -270, 1), ing);
+            DemoYP ypProductionMTO = new DemoYP("YP_production_MTO", getSimulator(), new Point3d(100, 30, 1), ing);
 
             // Markets
-            DemoMarket marketMTS = new DemoMarket("Market_MTS", this.devsSimulator, new Point3d(-360, -150, 1), ing,
+            DemoMarket marketMTS = new DemoMarket("Market_MTS", getSimulator(), new Point3d(-360, -150, 1), ing,
                     new Money(10000.0, MoneyUnit.USD), pc, ypCustomerMTS, streamMTS);
-            DemoMarket marketMTO = new DemoMarket("Market_MTO", this.devsSimulator, new Point3d(-360, 150, 1), ing,
+            DemoMarket marketMTO = new DemoMarket("Market_MTO", getSimulator(), new Point3d(-360, 150, 1), ing,
                     new Money(10000.0, MoneyUnit.USD), pc, ypCustomerMTO, streamMTO);
 
             // Retailers
             DemoRetailer[] mtsRet = new DemoRetailer[5];
-            mtsRet[0] = new DemoRetailer("Seattle_MTS", this.devsSimulator, new Point3d(-200, -270, 1), ing,
+            mtsRet[0] = new DemoRetailer("Seattle_MTS", getSimulator(), new Point3d(-200, -270, 1), ing,
                     new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTS, ypProductionMTS, streamMTS, true);
-            mtsRet[1] = new DemoRetailer("LosAngeles_MTS", this.devsSimulator, new Point3d(-200, -210, 1), ing,
+            mtsRet[1] = new DemoRetailer("LosAngeles_MTS", getSimulator(), new Point3d(-200, -210, 1), ing,
                     new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTS, ypProductionMTS, streamMTS, true);
-            mtsRet[2] = new DemoRetailer("NewYork_MTS", this.devsSimulator, new Point3d(-200, -150, 1), ing,
+            mtsRet[2] = new DemoRetailer("NewYork_MTS", getSimulator(), new Point3d(-200, -150, 1), ing,
                     new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTS, ypProductionMTS, streamMTS, true);
-            mtsRet[3] = new DemoRetailer("Washington_MTS", this.devsSimulator, new Point3d(-200, -90, 1), ing,
+            mtsRet[3] = new DemoRetailer("Washington_MTS", getSimulator(), new Point3d(-200, -90, 1), ing,
                     new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTS, ypProductionMTS, streamMTS, true);
-            mtsRet[4] = new DemoRetailer("Miami_MTS", this.devsSimulator, new Point3d(-200, -30, 1), ing,
+            mtsRet[4] = new DemoRetailer("Miami_MTS", getSimulator(), new Point3d(-200, -30, 1), ing,
                     new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTS, ypProductionMTS, streamMTS, true);
 
             DemoRetailer[] mtoRet = new DemoRetailer[5];
-            mtoRet[0] = new DemoRetailer("Seattle_MTO", this.devsSimulator, new Point3d(-200, 30, 1), ing,
+            mtoRet[0] = new DemoRetailer("Seattle_MTO", getSimulator(), new Point3d(-200, 30, 1), ing,
                     new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTO, ypProductionMTO, streamMTO, false);
-            mtoRet[1] = new DemoRetailer("LosAngeles_MTO", this.devsSimulator, new Point3d(-200, 90, 1), ing,
+            mtoRet[1] = new DemoRetailer("LosAngeles_MTO", getSimulator(), new Point3d(-200, 90, 1), ing,
                     new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTO, ypProductionMTO, streamMTO, false);
-            mtoRet[2] = new DemoRetailer("NewYork_MTO", this.devsSimulator, new Point3d(-200, 150, 1), ing,
+            mtoRet[2] = new DemoRetailer("NewYork_MTO", getSimulator(), new Point3d(-200, 150, 1), ing,
                     new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTO, ypProductionMTO, streamMTO, false);
-            mtoRet[3] = new DemoRetailer("Washington_MTO", this.devsSimulator, new Point3d(-200, 210, 1), ing,
+            mtoRet[3] = new DemoRetailer("Washington_MTO", getSimulator(), new Point3d(-200, 210, 1), ing,
                     new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTO, ypProductionMTO, streamMTO, false);
-            mtoRet[4] = new DemoRetailer("Miami_MTO", this.devsSimulator, new Point3d(-200, 270, 1), ing,
+            mtoRet[4] = new DemoRetailer("Miami_MTO", getSimulator(), new Point3d(-200, 270, 1), ing,
                     new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTO, ypProductionMTO, streamMTO, false);
 
             // Manufacturers
-            DemoManufacturer mtsMan = new DemoManufacturer("MexicoCity_MTS", this.devsSimulator, new Point3d(0, -150, 1), ing,
+            DemoManufacturer mtsMan = new DemoManufacturer("MexicoCity_MTS", getSimulator(), new Point3d(0, -150, 1), ing,
                     new Money(1000000, MoneyUnit.USD), pc, 50, ypCustomerMTS, ypProductionMTS, streamMTS, true);
-            DemoManufacturer mtoMan = new DemoManufacturer("MexicoCity_MTO", this.devsSimulator, new Point3d(0, 150, 1), ing,
+            DemoManufacturer mtoMan = new DemoManufacturer("MexicoCity_MTO", getSimulator(), new Point3d(0, 150, 1), ing,
                     new Money(1000000, MoneyUnit.USD), pc, 50, ypCustomerMTO, ypProductionMTO, streamMTO, false);
 
             // Suppliers
 
             // Create the animation.
-            DemoContentAnimator contentAnimator = new DemoContentAnimator(this.devsSimulator);
+            DemoContentAnimator contentAnimator = new DemoContentAnimator(getSimulator());
 
             contentAnimator.subscribe(ypCustomerMTS);
             contentAnimator.subscribe(ypCustomerMTO);
@@ -164,13 +156,6 @@ public class MTSMTOModel implements DSOLModel.TimeDoubleUnit
         {
             e.printStackTrace();
         }
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public SimulatorInterface<Time, Duration, SimTimeDoubleUnit> getSimulator()
-    {
-        return this.devsSimulator;
     }
 
 }

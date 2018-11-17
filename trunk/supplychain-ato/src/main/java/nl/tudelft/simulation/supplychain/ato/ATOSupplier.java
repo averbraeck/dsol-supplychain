@@ -21,7 +21,6 @@ import nl.tudelft.simulation.language.d3.BoundingBox;
 import nl.tudelft.simulation.messaging.devices.reference.FaxDevice;
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.contentstore.memory.LeanContentStore;
-
 import nl.tudelft.simulation.supplychain.handlers.OrderHandler;
 import nl.tudelft.simulation.supplychain.handlers.OrderHandlerMake;
 import nl.tudelft.simulation.supplychain.handlers.OrderHandlerStock;

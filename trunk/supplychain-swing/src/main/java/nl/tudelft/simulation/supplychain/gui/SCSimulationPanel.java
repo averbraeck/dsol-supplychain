@@ -9,10 +9,10 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
-import nl.tudelft.simulation.dsol.gui.swing.Console;
-import nl.tudelft.simulation.dsol.gui.swing.StatusBar;
-import nl.tudelft.simulation.dsol.gui.swing.TabbedContentPane;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
+import nl.tudelft.simulation.dsol.swing.gui.Console;
+import nl.tudelft.simulation.dsol.swing.gui.StatusBar;
+import nl.tudelft.simulation.dsol.swing.gui.TabbedContentPane;
 
 /**
  * GUI with simulator, console, control panel, status bar, etc.
