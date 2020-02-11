@@ -232,7 +232,7 @@ public abstract class Actor extends InternalActor implements ActorInterface
             {
                 if (_sendingDevices[i].getDeviceType().equals(_receivingDevices[j].getDeviceType()))
                 {
-                    possibleDevices.put(new Double(1000.0 * _sendingDevices[i].getTransmissionDelay()
+                    possibleDevices.put(Double.valueOf(1000.0 * _sendingDevices[i].getTransmissionDelay()
                             - 0.001 * _sendingDevices[i].getTransmissionFrequency()), _sendingDevices[i]);
                 }
             }
