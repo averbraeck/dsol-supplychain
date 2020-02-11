@@ -554,7 +554,7 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
             {
                 String retString = record.getValue(fieldName);
                 double d = Double.parseDouble(retString);
-                retValue = new Time(d, TimeUnit.BASE);
+                retValue = new Time(d, TimeUnit.BASE_SECOND);
             }
             catch (Exception exception)
             {
@@ -896,5 +896,12 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
     public String getDescription()
     {
         return this.description;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Serializable getSourceId()
+    {
+        return "DatabaseWorker";
     }
 }

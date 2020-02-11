@@ -42,7 +42,7 @@ public class Quote extends Content
     protected Time proposedShippingDate;
 
     /** the time on the simulator until which the quote is valid */
-    private Time validityTime = new Time(1.0E24, TimeUnit.BASE);
+    private Time validityTime = new Time(1.0E24, TimeUnit.BASE_SECOND);
 
     /** the transport mode */
     private TransportMode transportMode;

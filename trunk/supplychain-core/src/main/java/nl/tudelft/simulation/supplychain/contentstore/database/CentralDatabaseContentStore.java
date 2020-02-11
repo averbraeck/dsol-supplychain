@@ -99,4 +99,12 @@ public class CentralDatabaseContentStore extends EventProducer implements Conten
     {
         return this.owner;
     }
+    
+    /** {@inheritDoc} */
+    @Override
+    public Serializable getSourceId()
+    {
+        return this.owner.getName() + ".ContentStore";
+    }
+
 }

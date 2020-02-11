@@ -7,12 +7,12 @@ import java.util.Map;
 
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
-import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.StockKeepingActor;
 import nl.tudelft.simulation.supplychain.content.ProductionOrder;
+import nl.tudelft.simulation.supplychain.finance.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
 import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
@@ -79,7 +79,7 @@ public class ResourceProductionService extends ProductionService
         Duration ptime = this.productionTime.draw();
         if (!this.fixedTime)
         {
-            ptime = ptime.multiplyBy(productionOrder.getAmount());
+            ptime = ptime.times(productionOrder.getAmount());
         }
         Time startTime = productionOrder.getDateReady().minus(ptime);
         startTime = Time.max(this.owner.getSimulatorTime(), startTime);
@@ -94,7 +94,7 @@ public class ResourceProductionService extends ProductionService
             Product raw = bomIter.next();
             double amount = bom.get(raw).doubleValue();
             amount *= productionOrder.getAmount();
-            availableMaterials.put(raw, new Double(amount));
+            availableMaterials.put(raw,Double.valueOf(amount));
         }
         // don't do anyting before production has to start
         Serializable[] args = new Serializable[] { productionOrder, ptime, availableMaterials };
@@ -117,7 +117,7 @@ public class ResourceProductionService extends ProductionService
         Duration ptime = this.productionTime.draw();
         if (!this.fixedTime)
         {
-            ptime = ptime.multiplyBy(productionOrder.getAmount());
+            ptime = ptime.times(productionOrder.getAmount());
         }
 
         Product _product = productionOrder.getProduct();
@@ -131,7 +131,7 @@ public class ResourceProductionService extends ProductionService
             Product raw = bomIter.next();
             double amount = bom.get(raw).doubleValue();
             amount *= productionOrder.getAmount();
-            availableMaterials.put(raw, new Double(amount));
+            availableMaterials.put(raw,Double.valueOf(amount));
         }
 
         boolean enoughOnStock = pickRawMaterials(productionOrder, availableMaterials, false);

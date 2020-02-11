@@ -96,7 +96,7 @@ public class RequestForQuoteHandler extends SupplyChainHandler
         // add half a day for handling to be sure it arrives on time
         Duration shippingDuration = this.transportMode.transportTime(rfq.getSender(), rfq.getReceiver())
                 .plus(new Duration(12.0, DurationUnit.HOUR));
-        Mass weight = rfq.getProduct().getAverageUnitWeight().multiplyBy(rfq.getAmount());
+        Mass weight = rfq.getProduct().getAverageUnitWeight().times(rfq.getAmount());
         Money transportCosts = this.transportMode.transportCosts(rfq.getSender(), rfq.getReceiver(), weight);
         // react with a Quote. First calculate the price
         Money price = this.stock.getUnitPrice(product).multiplyBy(rfq.getAmount() * this.profitMargin).plus(transportCosts);

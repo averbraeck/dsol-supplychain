@@ -51,7 +51,7 @@ public class QuoteComparator implements Comparator<Quote>, Serializable
     {
         Money price0 = quote1.getPrice();
         Money price1 = quote2.getPrice();
-        int priceCompare = Double.compare(price0.si, price1.si);
+        int priceCompare = Double.compare(price0.getAmount(), price1.getAmount());
         Time date0 = quote1.getProposedDeliveryDate();
         Time date1 = quote2.getProposedDeliveryDate();
         int dateCompare = Double.compare(date0.si, date1.si);

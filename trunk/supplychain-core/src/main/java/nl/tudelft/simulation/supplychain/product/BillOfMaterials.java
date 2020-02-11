@@ -47,7 +47,7 @@ public class BillOfMaterials implements Serializable
      */
     public void add(final Product _product, final double amount)
     {
-        this.materials.put(_product, new Double(amount));
+        this.materials.put(_product,Double.valueOf(amount));
     }
 
     /**

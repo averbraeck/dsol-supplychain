@@ -51,7 +51,7 @@ public class DemandGeneration extends InternalActor
      * @param administrativeDelay the administrative delay when sending messages
      */
     public DemandGeneration(final SupplyChainActor owner, final DEVSSimulatorInterface.TimeDoubleUnit simulator,
-            final DistContinuousDurationUnit administrativeDelay)
+        final DistContinuousDurationUnit administrativeDelay)
     {
         super(owner.getName() + "-DEMAND", simulator);
         this.owner = owner;
@@ -67,8 +67,9 @@ public class DemandGeneration extends InternalActor
         this.demandGenerators.put(product, demand);
         try
         {
-            Serializable[] args = { product, demand };
-            super.simulator.scheduleEventRel(demand.getInterval().draw().multiplyBy(0.5), this, this, "createInternalDemand", args);
+            Serializable[] args = {product, demand};
+            super.simulator.scheduleEventRel(demand.getInterval().draw().times(0.5), this, this, "createInternalDemand",
+                args);
         }
         catch (Exception e)
         {
@@ -105,17 +106,17 @@ public class DemandGeneration extends InternalActor
         {
             try
             {
-                InternalDemand id = new InternalDemand(getOwner(), product, demand.getAmount().draw(),
-                        super.simulator.getSimulatorTime().plus(demand.getEarliestDeliveryDuration().draw()),
-                        super.simulator.getSimulatorTime().plus(demand.getLatestDeliveryDuration().draw()));
+                InternalDemand id = new InternalDemand(getOwner(), product, demand.getAmount().draw(), super.simulator
+                    .getSimulatorTime().plus(demand.getEarliestDeliveryDuration().draw()), super.simulator.getSimulatorTime()
+                        .plus(demand.getLatestDeliveryDuration().draw()));
                 getOwner().sendContent(id, this.administrativeDelay.draw());
-                Serializable[] args = { product, demand };
+                Serializable[] args = {product, demand};
                 Time time = super.simulator.getSimulatorTime().plus(demand.getInterval().draw());
                 super.simulator.scheduleEventAbs(time, this, this, "createInternalDemand", args);
 
                 // we collect some statistics for the internal demand
-                super.fireEvent(new TimedEvent<Time>(DemandGeneration.DEMAND_GENERATED_EVENT, this, id,
-                        super.simulator.getSimulatorTime()));
+                super.fireEvent(new TimedEvent<Time>(DemandGeneration.DEMAND_GENERATED_EVENT, this, id, super.simulator
+                    .getSimulatorTime()));
             }
             catch (Exception e)
             {

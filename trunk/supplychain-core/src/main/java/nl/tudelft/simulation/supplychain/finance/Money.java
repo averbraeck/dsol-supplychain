@@ -67,5 +67,37 @@ public class Money implements Serializable
         return new Money(amount / factor, getMoneyUnit());
     }
 
+    public boolean eq(Money other)
+    {
+        // TODO: check same MoneyUnit
+        return amount == other.getAmount();
+    }
+
+    public boolean ne(Money other)
+    {
+        // TODO: check same MoneyUnit
+        return amount != other.getAmount();
+    }
+    public boolean lt(Money other)
+    {
+        // TODO: check same MoneyUnit
+        return amount < other.getAmount();
+    }
+    public boolean le(Money other)
+    {
+        // TODO: check same MoneyUnit
+        return amount <= other.getAmount();
+    }
+    public boolean gt(Money other)
+    {
+        // TODO: check same MoneyUnit
+        return amount > other.getAmount();
+    }
+    public boolean ge(Money other)
+    {
+        // TODO: check same MoneyUnit
+        return amount >= other.getAmount();
+    }
+
 }
 

@@ -578,4 +578,12 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
     {
         return this.owner;
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public Serializable getSourceId()
+    {
+        return this.owner.getName() + ".ContentStore";
+    }
+    
 }

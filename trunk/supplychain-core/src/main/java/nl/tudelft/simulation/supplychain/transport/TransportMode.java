@@ -115,7 +115,7 @@ public class TransportMode implements Serializable
      */
     public Duration transportTime(final Length distance)
     {
-        return this.fixedDuration.plus(distance.divideBy(this.speed));
+        return this.fixedDuration.plus(distance.divide(this.speed));
     }
 
     /**

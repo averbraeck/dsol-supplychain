@@ -13,6 +13,7 @@
 
 package nl.tudelft.simulation.supplychain.stock;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -386,4 +387,12 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
     {
         return this.owner.toString() + "_stock";
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public Serializable getSourceId()
+    {
+        return this.owner.getName() + ".Stock";
+    }
+    
 }
