@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
-import org.djunits.value.vdouble.scalar.Money;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
@@ -12,6 +11,7 @@ import nl.tudelft.simulation.supplychain.content.Bill;
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.content.Shipment;
+import nl.tudelft.simulation.supplychain.finance.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
 import nl.tudelft.simulation.supplychain.transport.TransportMode;

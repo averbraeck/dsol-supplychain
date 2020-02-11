@@ -13,13 +13,12 @@ import org.djunits.unit.DurationUnit;
 import org.djunits.unit.LengthUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Length;
-import org.djunits.value.vdouble.scalar.Money;
+import org.djutils.event.EventType;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.actor.Actor;
 import nl.tudelft.simulation.content.HandlerInterface;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
-import nl.tudelft.simulation.event.EventType;
 import nl.tudelft.simulation.messaging.Message;
 import nl.tudelft.simulation.messaging.devices.components.SendingDeviceInterface;
 import nl.tudelft.simulation.messaging.devices.components.SendingReceivingDevice;
@@ -29,6 +28,7 @@ import nl.tudelft.simulation.supplychain.banking.FixedCost;
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.Shipment;
 import nl.tudelft.simulation.supplychain.contentstore.ContentStoreInterface;
+import nl.tudelft.simulation.supplychain.finance.Money;
 import nl.tudelft.simulation.supplychain.roles.Role;
 
 /**

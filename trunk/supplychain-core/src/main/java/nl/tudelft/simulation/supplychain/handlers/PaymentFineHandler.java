@@ -3,14 +3,14 @@ package nl.tudelft.simulation.supplychain.handlers;
 import java.io.Serializable;
 
 import org.djunits.unit.DurationUnit;
-import org.djunits.unit.MoneyUnit;
-import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.banking.BankAccount;
 import nl.tudelft.simulation.supplychain.content.Payment;
+import nl.tudelft.simulation.supplychain.finance.Money;
+import nl.tudelft.simulation.supplychain.finance.MoneyUnit;
 
 /**
  * A payment handler where a check is performed whether the payment was paid on time. If not, a fine is imposed. <br>

@@ -19,13 +19,12 @@ import java.util.List;
 
 import javax.vecmath.Point3d;
 
-import org.djunits.unit.MoneyUnit;
-import org.djunits.value.vdouble.scalar.Money;
-
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.supplychain.actor.capabilities.ProducerInterface;
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.contentstore.ContentStoreInterface;
+import nl.tudelft.simulation.supplychain.finance.Money;
+import nl.tudelft.simulation.supplychain.finance.MoneyUnit;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.production.Production;
 import nl.tudelft.simulation.supplychain.production.ProductionService;

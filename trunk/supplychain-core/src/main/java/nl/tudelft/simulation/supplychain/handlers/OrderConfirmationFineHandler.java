@@ -2,14 +2,14 @@ package nl.tudelft.simulation.supplychain.handlers;
 
 import java.io.Serializable;
 
-import org.djunits.unit.MoneyUnit;
 import org.djunits.value.vdouble.scalar.Duration;
-import org.djunits.value.vdouble.scalar.Money;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
 import nl.tudelft.simulation.supplychain.content.Shipment;
+import nl.tudelft.simulation.supplychain.finance.Money;
+import nl.tudelft.simulation.supplychain.finance.MoneyUnit;
 
 /**
  * An OrderConfirmationFineHandler checks whether a promised delivery is on time or even delivered at all. If too late, a fine

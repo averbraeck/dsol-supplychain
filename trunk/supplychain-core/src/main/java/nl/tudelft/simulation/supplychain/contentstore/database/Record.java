@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.djunits.value.Scalar;
+import org.djunits.value.vdouble.scalar.base.DoubleScalarInterface;
 import org.djutils.reflection.ClassUtil;
 
 /**
@@ -129,8 +129,8 @@ public class Record implements Serializable
                     value = field.get(object);
                     if (value != null)
                     {
-                        if (value instanceof Scalar)
-                            valueString = "" + ((Scalar<?>) value).doubleValue();
+                        if (value instanceof DoubleScalarInterface<?, ?>)
+                            valueString = "" + ((DoubleScalarInterface<?, ?>) value).getSI();
                         else
                             valueString = value.toString();
                         this.values.put(recordDescriptor.getName(), valueString);

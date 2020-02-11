@@ -3,12 +3,12 @@ package nl.tudelft.simulation.supplychain.stock;
 import java.io.Serializable;
 import java.util.Iterator;
 
-import org.djunits.value.vdouble.scalar.Money;
+import org.djutils.event.EventProducerInterface;
+import org.djutils.event.EventType;
 
-import nl.tudelft.simulation.event.EventProducerInterface;
-import nl.tudelft.simulation.event.EventType;
 import nl.tudelft.simulation.supplychain.actor.StockKeepingActor;
 import nl.tudelft.simulation.supplychain.content.Shipment;
+import nl.tudelft.simulation.supplychain.finance.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
 
 /**

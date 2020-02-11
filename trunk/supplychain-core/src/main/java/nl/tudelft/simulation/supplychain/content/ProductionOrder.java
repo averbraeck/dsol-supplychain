@@ -2,11 +2,11 @@ package nl.tudelft.simulation.supplychain.content;
 
 import java.io.Serializable;
 
-import org.djunits.unit.MoneyUnit;
-import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.supplychain.actor.StockKeepingActor;
+import nl.tudelft.simulation.supplychain.finance.Money;
+import nl.tudelft.simulation.supplychain.finance.MoneyUnit;
 import nl.tudelft.simulation.supplychain.product.Product;
 
 /**

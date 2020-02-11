@@ -3,13 +3,13 @@ package nl.tudelft.simulation.supplychain.stock;
 import java.io.Serializable;
 
 import org.djunits.unit.DurationUnit;
-import org.djunits.unit.MoneyUnit;
 import org.djunits.value.vdouble.scalar.Duration;
-import org.djunits.value.vdouble.scalar.Money;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.supplychain.actor.StockKeepingActor;
+import nl.tudelft.simulation.supplychain.finance.Money;
+import nl.tudelft.simulation.supplychain.finance.MoneyUnit;
 import nl.tudelft.simulation.supplychain.product.Product;
 
 /**

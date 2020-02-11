@@ -8,13 +8,11 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.djunits.unit.DurationUnit;
-import org.djunits.unit.MoneyUnit;
 import org.djunits.unit.TimeUnit;
 import org.djunits.value.vdouble.scalar.Duration;
-import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
+import org.djutils.event.EventProducer;
 
-import nl.tudelft.simulation.event.EventProducer;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.Bill;
 import nl.tudelft.simulation.supplychain.content.Content;
@@ -27,6 +25,8 @@ import nl.tudelft.simulation.supplychain.content.Payment;
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.content.Shipment;
+import nl.tudelft.simulation.supplychain.finance.Money;
+import nl.tudelft.simulation.supplychain.finance.MoneyUnit;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.transport.TransportMode;
 

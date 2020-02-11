@@ -8,14 +8,13 @@ import java.util.Set;
 
 import javax.vecmath.Point3d;
 
-import org.djunits.value.vdouble.scalar.Money;
-
 import nl.tudelft.simulation.actor.ActorInterface;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.actor.capabilities.YPInterface;
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.contentstore.ContentStoreInterface;
+import nl.tudelft.simulation.supplychain.finance.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.yellowpage.Category;
 

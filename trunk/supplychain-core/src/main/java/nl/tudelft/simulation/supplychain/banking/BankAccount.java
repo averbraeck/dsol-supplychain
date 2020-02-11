@@ -1,17 +1,19 @@
 package nl.tudelft.simulation.supplychain.banking;
 
+import java.io.Serializable;
+
 import org.djunits.unit.DurationUnit;
-import org.djunits.unit.MoneyUnit;
 import org.djunits.value.vdouble.scalar.Duration;
-import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
+import org.djutils.event.EventProducer;
+import org.djutils.event.EventType;
+import org.djutils.event.TimedEvent;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
-import nl.tudelft.simulation.event.EventProducer;
-import nl.tudelft.simulation.event.EventType;
-import nl.tudelft.simulation.event.TimedEvent;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
+import nl.tudelft.simulation.supplychain.finance.Money;
+import nl.tudelft.simulation.supplychain.finance.MoneyUnit;
 
 /**
  * The BackAccount keeps track of the balance of a SupplyChainActor. This simple implementation just has one number as the
@@ -60,11 +62,11 @@ public class BankAccount extends EventProducer
             this.owner = owner;
             this.bank = bank;
             this.simulator = this.owner.getSimulator();
-            if (Double.isInfinite(initialBalance.si))
+            if (Double.isInfinite(initialBalance.getAmount()))
             {
                 throw new Exception("initial bank balance = infinite");
             }
-            if (Double.isNaN(initialBalance.si))
+            if (Double.isNaN(initialBalance.getAmount()))
             {
                 throw new Exception("initial bank balance = NaN");
             }
@@ -135,7 +137,7 @@ public class BankAccount extends EventProducer
      */
     private void roundBalance()
     {
-        this.balance = new Money(0.01 * Math.round(100.0 * this.balance.si), this.balance.getUnit());
+        this.balance = new Money(0.01 * Math.round(100.0 * this.balance.getAmount()), this.balance.getMoneyUnit());
     }
 
     /**
@@ -145,7 +147,7 @@ public class BankAccount extends EventProducer
     {
         try
         {
-            if (this.balance.si < 0)
+            if (this.balance.getAmount() < 0)
             {
                 addToBalance(this.balance.multiplyBy(this.bank.getAnnualInterestRateNeg() / 365.0));
             }
@@ -161,6 +163,13 @@ public class BankAccount extends EventProducer
             Logger.error(exception, "interest");
         }
 
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Serializable getSourceId()
+    {
+        return this.owner.getName() + ".BankAccount";
     }
 
 }

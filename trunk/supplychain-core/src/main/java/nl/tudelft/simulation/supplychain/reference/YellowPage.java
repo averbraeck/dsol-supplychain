@@ -2,11 +2,10 @@ package nl.tudelft.simulation.supplychain.reference;
 
 import javax.vecmath.Point3d;
 
-import org.djunits.value.vdouble.scalar.Money;
-
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.contentstore.ContentStoreInterface;
+import nl.tudelft.simulation.supplychain.finance.Money;
 import nl.tudelft.simulation.supplychain.yellowpage.SupplyChainYellowPage;
 
 /**

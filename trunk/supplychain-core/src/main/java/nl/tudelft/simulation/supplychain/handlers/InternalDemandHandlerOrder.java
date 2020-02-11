@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.djunits.value.vdouble.scalar.Duration;
-import org.djunits.value.vdouble.scalar.Money;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.InternalDemand;
 import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.content.OrderStandAlone;
+import nl.tudelft.simulation.supplychain.finance.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
 import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;

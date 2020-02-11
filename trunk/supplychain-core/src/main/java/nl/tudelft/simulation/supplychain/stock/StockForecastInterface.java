@@ -1,8 +1,8 @@
 package nl.tudelft.simulation.supplychain.stock;
 
 import org.djunits.value.vdouble.scalar.Time;
+import org.djutils.event.EventType;
 
-import nl.tudelft.simulation.event.EventType;
 import nl.tudelft.simulation.supplychain.product.Product;
 
 /**

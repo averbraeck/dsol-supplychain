@@ -2,9 +2,8 @@ package nl.tudelft.simulation.supplychain.content;
 
 import java.io.Serializable;
 
-import org.djunits.value.vdouble.scalar.Money;
-
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
+import nl.tudelft.simulation.supplychain.finance.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
 
 /**

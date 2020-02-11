@@ -5,12 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.djunits.value.vdouble.scalar.Time;
+import org.djutils.event.EventType;
+import org.djutils.event.TimedEvent;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.actor.InternalActor;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
-import nl.tudelft.simulation.event.EventType;
-import nl.tudelft.simulation.event.TimedEvent;
 import nl.tudelft.simulation.jstats.streams.StreamInterface;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.InternalDemand;

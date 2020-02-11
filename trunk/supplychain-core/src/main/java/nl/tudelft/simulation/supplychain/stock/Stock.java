@@ -20,14 +20,14 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
+import org.djutils.event.EventProducer;
+import org.djutils.event.TimedEvent;
 import org.pmw.tinylog.Logger;
 
-import nl.tudelft.simulation.event.EventProducer;
-import nl.tudelft.simulation.event.TimedEvent;
 import nl.tudelft.simulation.supplychain.actor.StockKeepingActor;
 import nl.tudelft.simulation.supplychain.content.Shipment;
+import nl.tudelft.simulation.supplychain.finance.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
 
 /**

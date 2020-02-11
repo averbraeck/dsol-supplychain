@@ -3,13 +3,13 @@ package nl.tudelft.simulation.supplychain.handlers;
 import java.io.Serializable;
 
 import org.djunits.unit.DurationUnit;
-import org.djunits.unit.MoneyUnit;
 import org.djunits.value.vdouble.scalar.Duration;
-import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.Shipment;
+import nl.tudelft.simulation.supplychain.finance.Money;
+import nl.tudelft.simulation.supplychain.finance.MoneyUnit;
 
 /**
  * When a Shipment comes in, consume it. In other words and in terms of the supply chain simulation: do nothing... <br>
