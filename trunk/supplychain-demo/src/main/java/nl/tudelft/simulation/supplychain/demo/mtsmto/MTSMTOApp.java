@@ -10,6 +10,7 @@ import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
 import org.djutils.event.Event;
+import org.djutils.logger.CategoryLogger;
 import org.pmw.tinylog.Level;
 
 import nl.tudelft.simulation.dsol.SimRuntimeException;
@@ -23,7 +24,7 @@ import nl.tudelft.simulation.dsol.swing.animation.D2.AnimationPanel;
 import nl.tudelft.simulation.dsol.swing.gui.DSOLApplication;
 import nl.tudelft.simulation.dsol.swing.gui.DSOLPanel;
 import nl.tudelft.simulation.jstats.streams.MersenneTwister;
-import nl.tudelft.simulation.logger.ConsoleLogger;
+import nl.tudelft.simulation.language.DSOLException;
 
 /**
  * TestModelApp.java. <br>
@@ -52,14 +53,14 @@ public class MTSMTOApp extends DSOLApplication
      * @throws RemoteException if error
      * @throws SimRuntimeException if error
      * @throws NamingException if error
+     * @throws DSOLException on dsol error
      */
-    public static void main(final String[] args) throws SimRuntimeException, NamingException, RemoteException
+    public static void main(final String[] args) throws SimRuntimeException, NamingException, RemoteException, DSOLException
     {
-        SimLogger.setAllLogLevel(Level.TRACE);
-        SimLogger.setAllLogMessageFormat("{level} - {class_name}.{method}:{line}  {message}");
+        CategoryLogger.setAllLogLevel(Level.TRACE);
+        CategoryLogger.setAllLogMessageFormat("{level} - {class_name}.{method}:{line}  {message}");
 
-        // DEVSAnimator.TimeDoubleUnit animator = new DEVSAnimator.TimeDoubleUnit();
-        DEVSRealTimeClock.TimeDoubleUnit animator = new DEVSRealTimeClock.TimeDoubleUnit();
+        DEVSRealTimeClock.TimeDoubleUnit animator = new DEVSRealTimeClock.TimeDoubleUnit("MTSMTO");
         DSOLModel.TimeDoubleUnit model = new MTSMTOModel(animator);
         Replication.TimeDoubleUnit replication = Replication.TimeDoubleUnit.create("rep1", Time.ZERO, Duration.ZERO,
                 new Duration(3000.0, DurationUnit.HOUR), model);
