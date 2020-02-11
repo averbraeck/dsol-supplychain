@@ -3,19 +3,18 @@ package nl.tudelft.simulation.supplychain.gui.plot;
 import java.rmi.RemoteException;
 
 import org.djunits.value.vdouble.scalar.Duration;
-import org.djunits.value.vdouble.scalar.Money;
 import org.djunits.value.vdouble.scalar.Time;
+import org.djutils.event.EventInterface;
+import org.djutils.event.EventListenerInterface;
+import org.djutils.event.EventProducer;
+import org.djutils.event.EventType;
+import org.djutils.event.TimedEvent;
 
 import nl.tudelft.simulation.dsol.simtime.SimTimeDoubleUnit;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
-import nl.tudelft.simulation.dsol.statistics.Persistent;
-import nl.tudelft.simulation.dsol.swing.charts.xy.XYChart;
-import nl.tudelft.simulation.event.EventInterface;
-import nl.tudelft.simulation.event.EventListenerInterface;
-import nl.tudelft.simulation.event.EventProducer;
-import nl.tudelft.simulation.event.EventType;
-import nl.tudelft.simulation.event.TimedEvent;
+import nl.tudelft.simulation.jstats.statistics.Persistent;
 import nl.tudelft.simulation.supplychain.banking.BankAccount;
+import nl.tudelft.simulation.supplychain.finance.Money;
 
 /**
  * StockPlot.java. <br>

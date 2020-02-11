@@ -3,11 +3,11 @@ package nl.tudelft.simulation.supplychain.animation;
 import java.rmi.RemoteException;
 
 import org.djunits.value.vdouble.scalar.Duration;
+import org.djutils.event.EventInterface;
+import org.djutils.event.EventListenerInterface;
 
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
-import nl.tudelft.simulation.event.EventInterface;
-import nl.tudelft.simulation.event.EventListenerInterface;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.Content;
 

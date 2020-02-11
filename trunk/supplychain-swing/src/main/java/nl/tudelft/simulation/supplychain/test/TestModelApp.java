@@ -9,20 +9,20 @@ import javax.naming.NamingException;
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
+import org.djutils.event.Event;
 import org.pmw.tinylog.Level;
 
 import nl.tudelft.simulation.dsol.SimRuntimeException;
 import nl.tudelft.simulation.dsol.experiment.Replication;
 import nl.tudelft.simulation.dsol.experiment.ReplicationMode;
-import nl.tudelft.simulation.dsol.logger.SimLogger;
 import nl.tudelft.simulation.dsol.simtime.SimTimeDoubleUnit;
 import nl.tudelft.simulation.dsol.simulators.DEVSRealTimeClock;
 import nl.tudelft.simulation.dsol.simulators.SimulatorInterface;
 import nl.tudelft.simulation.dsol.swing.animation.D2.AnimationPanel;
 import nl.tudelft.simulation.dsol.swing.gui.DSOLApplication;
 import nl.tudelft.simulation.dsol.swing.gui.DSOLPanel;
-import nl.tudelft.simulation.event.Event;
 import nl.tudelft.simulation.jstats.streams.MersenneTwister;
+import nl.tudelft.simulation.logger.ConsoleLogger;
 
 /**
  * TestModelApp.java. <br>
@@ -54,12 +54,13 @@ public class TestModelApp extends DSOLApplication
      */
     public static void main(final String[] args) throws SimRuntimeException, NamingException, RemoteException
     {
-        SimLogger.setAllLogLevel(Level.INFO);
+        ConsoleLogger.create();
+        ConsoleLogger.setLevel(Level.INFO);
 
+        TestModel model = new TestModel();
         // DEVSAnimator.TimeDoubleUnit animator = new DEVSAnimator.TimeDoubleUnit();
         DEVSRealTimeClock.TimeDoubleUnit animator = new DEVSRealTimeClock.TimeDoubleUnit();
-        TestModel model = new TestModel(animator);
-        Replication.TimeDoubleUnit replication = Replication.TimeDoubleUnit.create("rep1", Time.ZERO, Duration.ZERO,
+        Replication.TimeDoubleUnit replication = new Replication.TimeDoubleUnit("rep1", Time.ZERO, Duration.ZERO,
                 new Duration(1800.0, DurationUnit.HOUR), model);
         animator.setPauseOnError(true);
         animator.setAnimationDelay(20); // 50 Hz animation update
