@@ -52,6 +52,7 @@ import nl.tudelft.simulation.dsol.simulators.DEVSAnimator;
 import nl.tudelft.simulation.dsol.simulators.SimulatorInterface;
 import nl.tudelft.simulation.dsol.swing.animation.D2.AnimationPanel;
 import nl.tudelft.simulation.jstats.streams.MersenneTwister;
+import nl.tudelft.simulation.language.DSOLException;
 
 /**
  * <p>
@@ -96,9 +97,13 @@ public abstract class AbstractWrappableAnimation implements WrappableAnimation, 
 
     /** Current appearance. */
     private Appearance appearance = Appearance.GRAY;
+    
+    /** id. */
+    private String id;
 
     /**
      * Build the animator.
+     * @param id String; the id of the simulation
      * @param startTime Time; the start time
      * @param warmupPeriod Duration; the warm up period
      * @param runLength Duration; the duration of the simulation / animation
@@ -108,14 +113,16 @@ public abstract class AbstractWrappableAnimation implements WrappableAnimation, 
      * @throws NamingException when context for the animation cannot be created
      */
     @SuppressWarnings("checkstyle:designforextension")
-    protected DEVSAnimator.TimeDoubleUnit buildSimpleAnimator(final Time startTime, final Duration warmupPeriod,
-            final Duration runLength, final DSOLModel.TimeDoubleUnit scModel) throws SimRuntimeException, NamingException
+    protected DEVSAnimator.TimeDoubleUnit buildSimpleAnimator(final String id, final Time startTime,
+        final Duration warmupPeriod, final Duration runLength, final DSOLModel.TimeDoubleUnit scModel)
+        throws SimRuntimeException, NamingException
     {
-        DEVSAnimator.TimeDoubleUnit animator = new DEVSAnimator.TimeDoubleUnit();
+        this.id = id;
+        DEVSAnimator.TimeDoubleUnit animator = new DEVSAnimator.TimeDoubleUnit(id);
         animator.setPauseOnError(true);
         animator.setAnimationDelay(20); // 50 Hz animation update
-        Replication.TimeDoubleUnit rep =
-                new Replication.TimeDoubleUnit("rep" + ++this.replication, startTime, warmupPeriod, runLength, scModel);
+        Replication.TimeDoubleUnit rep = Replication.TimeDoubleUnit.create("rep" + ++this.replication, startTime,
+            warmupPeriod, runLength, scModel);
         animator.initialize(rep, ReplicationMode.TERMINATING);
         animator.getReplication().getExperiment().setSimulator(animator);
         rep.getStreams().put("default", new MersenneTwister(this.replication));
@@ -134,15 +141,15 @@ public abstract class AbstractWrappableAnimation implements WrappableAnimation, 
      * @throws NamingException when context for the animation cannot be created
      */
     @SuppressWarnings("checkstyle:designforextension")
-    protected DEVSAnimator.TimeDoubleUnit buildSimpleAnimator(final Time startTime, final Duration warmupPeriod,
-            final Duration runLength, final DSOLModel.TimeDoubleUnit scModel, final int replicationNumber)
-            throws SimRuntimeException, NamingException
+    protected DEVSAnimator.TimeDoubleUnit buildSimpleAnimator(final String id, final Time startTime,
+        final Duration warmupPeriod, final Duration runLength, final DSOLModel.TimeDoubleUnit scModel,
+        final int replicationNumber) throws SimRuntimeException, NamingException
     {
-        DEVSAnimator.TimeDoubleUnit animator = new DEVSAnimator.TimeDoubleUnit();
+        DEVSAnimator.TimeDoubleUnit animator = new DEVSAnimator.TimeDoubleUnit(id);
         animator.setPauseOnError(true);
         animator.setAnimationDelay(20); // 50 Hz animation update
-        Replication.TimeDoubleUnit rep =
-                new Replication.TimeDoubleUnit("rep" + replicationNumber, startTime, warmupPeriod, runLength, scModel);
+        Replication.TimeDoubleUnit rep = Replication.TimeDoubleUnit.create("rep" + replicationNumber, startTime,
+            warmupPeriod, runLength, scModel);
         animator.initialize(rep, ReplicationMode.TERMINATING);
         animator.getReplication().getExperiment().setSimulator(animator);
         rep.getStreams().put("default", new MersenneTwister(replicationNumber));
@@ -152,8 +159,8 @@ public abstract class AbstractWrappableAnimation implements WrappableAnimation, 
     /** {@inheritDoc} */
     @Override
     @SuppressWarnings("checkstyle:designforextension")
-    public DEVSAnimator.TimeDoubleUnit buildAnimator(final Time startTime, final Duration warmupPeriod,
-            final Duration runLength, final Rectangle rect, final boolean eoc) throws SimRuntimeException, NamingException
+    public DEVSAnimator.TimeDoubleUnit buildAnimator(final String id, final Time startTime, final Duration warmupPeriod,
+        final Duration runLength, final Rectangle rect, final boolean eoc) throws SimRuntimeException, NamingException
     {
         this.exitOnClose = eoc;
         this.savedStartTime = startTime;
@@ -166,15 +173,15 @@ public abstract class AbstractWrappableAnimation implements WrappableAnimation, 
         }
 
         // Animator
-        final DEVSAnimator.TimeDoubleUnit simulator =
-                null == this.replication ? buildSimpleAnimator(startTime, warmupPeriod, runLength, this.model)
-                        : buildSimpleAnimator(startTime, warmupPeriod, runLength, this.model, this.replication);
+        final DEVSAnimator.TimeDoubleUnit simulator = null == this.replication ? buildSimpleAnimator(id, startTime,
+            warmupPeriod, runLength, this.model) : buildSimpleAnimator(id, startTime, warmupPeriod, runLength, this.model,
+                this.replication);
         try
         {
-            this.panel =
-                    new SCAnimationPanel(new Rectangle2D.Double(0, 0, 100, 100), new Dimension(1024, 768), simulator, this);
+            this.panel = new SCAnimationPanel(new Rectangle2D.Double(0, 0, 100, 100), new Dimension(1024, 768), simulator,
+                this);
         }
-        catch (RemoteException exception)
+        catch (RemoteException | DSOLException exception)
         {
             throw new SimRuntimeException(exception);
         }
@@ -265,8 +272,8 @@ public abstract class AbstractWrappableAnimation implements WrappableAnimation, 
         lafGroup.add(addLookAndFeel(frame, laf, "com.sun.java.swing.plaf.motif.MotifLookAndFeel", "Motif"));
         lafGroup.add(addLookAndFeel(frame, laf, "javax.swing.plaf.nimbus.NimbusLookAndFeel", "Nimbus"));
         lafGroup.add(addLookAndFeel(frame, laf, "com.sun.java.swing.plaf.windows.WindowsLookAndFeel", "Windows"));
-        lafGroup.add(
-                addLookAndFeel(frame, laf, "com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel", "Windows classic"));
+        lafGroup.add(addLookAndFeel(frame, laf, "com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel",
+            "Windows classic"));
         lafGroup.add(addLookAndFeel(frame, laf, UIManager.getSystemLookAndFeelClassName(), "System default"));
 
         // Appearance menu
@@ -301,7 +308,7 @@ public abstract class AbstractWrappableAnimation implements WrappableAnimation, 
         // Set the Look and Feel and Appearance as by frame properties
         setAppearance(getAppearance()); // color elements that were just added
         Try.execute(() -> UIManager.setLookAndFeel(this.frameProperties.getProperty("LookAndFeel")),
-                "Could not set look-and-feel %s", laf);
+            "Could not set look-and-feel %s", laf);
         SwingUtilities.invokeLater(() -> SwingUtilities.updateComponentTreeUI(frame));
 
         return simulator;
@@ -475,7 +482,7 @@ public abstract class AbstractWrappableAnimation implements WrappableAnimation, 
      * @param idButton id button that needs to be placed next to the previous button
      */
     public final void addToggleAnimationButtonIcon(final String name, final Class<? extends Locatable> locatableClass,
-            final String iconPath, final String toolTipText, final boolean initiallyVisible, final boolean idButton)
+        final String iconPath, final String toolTipText, final boolean initiallyVisible, final boolean idButton)
     {
         this.panel.addToggleAnimationButtonIcon(name, locatableClass, iconPath, toolTipText, initiallyVisible, idButton);
     }
@@ -488,7 +495,7 @@ public abstract class AbstractWrappableAnimation implements WrappableAnimation, 
      * @param initiallyVisible whether the class is initially shown or not
      */
     public final void addToggleAnimationButtonText(final String name, final Class<? extends Locatable> locatableClass,
-            final String toolTipText, final boolean initiallyVisible)
+        final String toolTipText, final boolean initiallyVisible)
     {
         this.panel.addToggleAnimationButtonText(name, locatableClass, toolTipText, initiallyVisible);
     }
@@ -580,9 +587,10 @@ public abstract class AbstractWrappableAnimation implements WrappableAnimation, 
 
     /** {@inheritDoc} */
     @Override
-    public final DEVSAnimator.TimeDoubleUnit rebuildSimulator(final Rectangle rect) throws SimRuntimeException, NamingException
+    public final DEVSAnimator.TimeDoubleUnit rebuildSimulator(final Rectangle rect) throws SimRuntimeException,
+        NamingException
     {
-        return buildAnimator(this.savedStartTime, this.savedWarmupPeriod, this.savedRunLength, rect, this.exitOnClose);
+        return buildAnimator(getId(), this.savedStartTime, this.savedWarmupPeriod, this.savedRunLength, rect, this.exitOnClose);
     }
 
     /** {@inheritDoc} */
@@ -635,6 +643,14 @@ public abstract class AbstractWrappableAnimation implements WrappableAnimation, 
     }
 
     /**
+     * @return id.
+     */
+    public String getId()
+    {
+        return this.id;
+    }
+
+    /**
      * Mouse listener which shows the submenu when the mouse enters the button.
      * <p>
      * Copyright (c) 2013-2017 Delft University of Technology, PO Box 5, 2600 AA, Delft, the Netherlands. All rights reserved.
@@ -665,8 +681,8 @@ public abstract class AbstractWrappableAnimation implements WrappableAnimation, 
         @Override
         public void mouseEntered(MouseEvent e)
         {
-            MenuSelectionManager.defaultManager().setSelectedPath(
-                    new MenuElement[] { (MenuElement) this.menu.getParent(), this.menu, this.menu.getPopupMenu() });
+            MenuSelectionManager.defaultManager().setSelectedPath(new MenuElement[] {(MenuElement) this.menu.getParent(),
+                this.menu, this.menu.getPopupMenu()});
         }
     }
 
@@ -738,8 +754,8 @@ public abstract class AbstractWrappableAnimation implements WrappableAnimation, 
                 }
             }
             JMenu menu = (JMenu) path[path.length - 3];
-            MenuSelectionManager.defaultManager()
-                    .setSelectedPath(new MenuElement[] { (MenuElement) menu.getParent(), menu, menu.getPopupMenu() });
+            MenuSelectionManager.defaultManager().setSelectedPath(new MenuElement[] {(MenuElement) menu.getParent(), menu,
+                menu.getPopupMenu()});
         }
 
         /** {@inheritDoc} */

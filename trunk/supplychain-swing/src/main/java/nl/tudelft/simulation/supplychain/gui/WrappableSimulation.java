@@ -22,6 +22,7 @@ public interface WrappableSimulation
 {
     /**
      * Build the simulation.
+     * @param id String; the id of the simulation
      * @param startTime Time; the start time of the simulation
      * @param warmupPeriod Duration; the warm up period of the simulation (use new Duration(0, SECOND) if you don't know what
      *            this is)
@@ -30,8 +31,8 @@ public interface WrappableSimulation
      * @throws SimRuntimeException on ???
      * @throws NamingException when context for the animation cannot be created
      */
-    SimulatorInterface.TimeDoubleUnit buildSimulator(Time startTime, Duration warmupPeriod, Duration runLength)
-            throws SimRuntimeException, NamingException;
+    SimulatorInterface.TimeDoubleUnit buildSimulator(String id, Time startTime, Duration warmupPeriod, Duration runLength)
+        throws SimRuntimeException, NamingException;
 
     /**
      * Return a very short description of the simulation.

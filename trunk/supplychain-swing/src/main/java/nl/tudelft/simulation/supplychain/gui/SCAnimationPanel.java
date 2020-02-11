@@ -36,6 +36,7 @@ import nl.tudelft.simulation.dsol.animation.D2.GisRenderable2D;
 import nl.tudelft.simulation.dsol.simulators.DEVSAnimator;
 import nl.tudelft.simulation.dsol.simulators.SimulatorInterface;
 import nl.tudelft.simulation.dsol.swing.animation.D2.AnimationPanel;
+import nl.tudelft.simulation.language.DSOLException;
 
 /**
  * Animation panel with various controls.
@@ -104,9 +105,10 @@ public class SCAnimationPanel extends SCSimulationPanel implements ActionListene
      * @param simulator the simulator or animator of the model.
      * @param wrappableAnimation the builder and rebuilder of the simulation, based on properties.
      * @throws RemoteException when notification of the animation panel fails
+     * @throws DSOLException on dsol error
      */
     public SCAnimationPanel(final Rectangle2D extent, final Dimension size, final DEVSAnimator.TimeDoubleUnit simulator,
-            final WrappableAnimation wrappableAnimation) throws RemoteException
+            final WrappableAnimation wrappableAnimation) throws RemoteException, DSOLException
     {
         super(simulator, wrappableAnimation);
 

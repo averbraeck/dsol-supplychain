@@ -9,14 +9,11 @@ import org.djunits.unit.DurationUnit;
 import org.djunits.unit.MassUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Mass;
-import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.dsol.animation.D2.SingleImageRenderable;
-import nl.tudelft.simulation.dsol.model.DSOLModel;
-import nl.tudelft.simulation.dsol.simtime.SimTimeDoubleUnit;
+import nl.tudelft.simulation.dsol.model.AbstractDSOLModel;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
-import nl.tudelft.simulation.dsol.simulators.SimulatorInterface;
 import nl.tudelft.simulation.language.d3.DirectedPoint;
 import nl.tudelft.simulation.supplychain.animation.ContentAnimator;
 import nl.tudelft.simulation.supplychain.banking.Bank;
@@ -34,7 +31,7 @@ import nl.tudelft.simulation.supplychain.product.Unit;
  * source code and binary code of this software is proprietary information of Delft University of Technology.
  * @author <a href="https://www.tudelft.nl/averbraeck" target="_blank">Alexander Verbraeck</a>
  */
-public class TestModel implements DSOLModel.TimeDoubleUnit
+public class TestModel extends AbstractDSOLModel.TimeDoubleUnit<DEVSSimulatorInterface.TimeDoubleUnit>
 {
     /** the serial version uid */
     private static final long serialVersionUID = 12L;
@@ -59,16 +56,17 @@ public class TestModel implements DSOLModel.TimeDoubleUnit
 
     /**
      * constructs a new TestModel
+     * @param simulator the simulator
      */
-    public TestModel()
+    public TestModel(final DEVSSimulatorInterface.TimeDoubleUnit simulator)
     {
-        super();
+        super(simulator);
         // We don't do anything to prevent state-based replications.
     }
 
     /** {@inheritDoc} */
     @Override
-    public void constructModel(final SimulatorInterface<Time, Duration, SimTimeDoubleUnit> simulator)
+    public void constructModel()
     {
         try
         {
@@ -79,8 +77,8 @@ public class TestModel implements DSOLModel.TimeDoubleUnit
                 // First we create some background. We set the zValue to -Double.Min value to ensure that it is actually drawn
                 // "below" our actors and messages.
                 new SingleImageRenderable(new DirectedPoint(0.0, 0.0, -Double.MIN_VALUE), new Dimension(1618, 716),
-                        this.devsSimulator,
-                        TestModel.class.getResource("/nl/tudelft/simulation/supplychain/images/worldmap.gif"));
+                    this.devsSimulator, TestModel.class.getResource(
+                        "/nl/tudelft/simulation/supplychain/images/worldmap.gif"));
             }
 
             // create the bank
@@ -89,24 +87,24 @@ public class TestModel implements DSOLModel.TimeDoubleUnit
             ing.setAnnualInterestRatePos(0.025);
 
             // create a product
-            this.laptop =
-                    new Product("Laptop", Unit.PIECE, new Money(1400.0, MoneyUnit.USD), new Mass(6.5, MassUnit.KILOGRAM), 0.0);
+            this.laptop = new Product("Laptop", Unit.PIECE, new Money(1400.0, MoneyUnit.USD), new Mass(6.5,
+                MassUnit.KILOGRAM), 0.0);
 
             // create a manufacturer
-            this.factory = new Factory("Factory", this.devsSimulator, new Point3d(200, 200, 0), ing,
-                    new Money(50000.0, MoneyUnit.USD), this.laptop, 1000, new LeanContentStore(this.devsSimulator));
+            this.factory = new Factory("Factory", this.devsSimulator, new Point3d(200, 200, 0), ing, new Money(50000.0,
+                MoneyUnit.USD), this.laptop, 1000, new LeanContentStore(this.devsSimulator));
 
             // create a retailer
-            this.pcShop = new PCShop("PCshop", this.devsSimulator, new Point3d(20, 200, 0), ing,
-                    new Money(50000.0, MoneyUnit.USD), this.laptop, 10, this.factory, new LeanContentStore(this.devsSimulator));
+            this.pcShop = new PCShop("PCshop", this.devsSimulator, new Point3d(20, 200, 0), ing, new Money(50000.0,
+                MoneyUnit.USD), this.laptop, 10, this.factory, new LeanContentStore(this.devsSimulator));
 
             // create a customer
-            this.client = new Client("Client", this.devsSimulator, new Point3d(100, 100, 0), ing,
-                    new Money(1500000.0, MoneyUnit.USD), this.laptop, this.pcShop, new LeanContentStore(this.devsSimulator));
+            this.client = new Client("Client", this.devsSimulator, new Point3d(100, 100, 0), ing, new Money(1500000.0,
+                MoneyUnit.USD), this.laptop, this.pcShop, new LeanContentStore(this.devsSimulator));
 
             // schedule a remark that the simulation is ready
             Duration endTime = new Duration(simulator.getReplication().getTreatment().getRunLength().doubleValue() - 0.001,
-                    DurationUnit.SI);
+                DurationUnit.SI);
             this.devsSimulator.scheduleEventRel(endTime, this, this, "endSimulation", new Serializable[] {});
 
             // Create the animation.
@@ -133,9 +131,9 @@ public class TestModel implements DSOLModel.TimeDoubleUnit
 
     /** {@inheritDoc} */
     @Override
-    public SimulatorInterface<Time, Duration, SimTimeDoubleUnit> getSimulator()
+    public Serializable getSourceId()
     {
-        return this.devsSimulator;
+        return "TestModel";
     }
 
 }

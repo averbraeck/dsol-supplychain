@@ -10,6 +10,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
+import nl.tudelft.simulation.dsol.swing.gui.Console;
 import nl.tudelft.simulation.dsol.swing.gui.StatusBar;
 import nl.tudelft.simulation.dsol.swing.gui.TabbedContentPane;
 

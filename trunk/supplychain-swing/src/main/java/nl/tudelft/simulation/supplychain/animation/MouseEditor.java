@@ -9,7 +9,7 @@ import org.pmw.tinylog.Logger;
 import nl.tudelft.simulation.dsol.animation.D2.Renderable2DInterface;
 import nl.tudelft.simulation.dsol.swing.animation.D2.AnimationPanel;
 import nl.tudelft.simulation.dsol.swing.animation.D2.mouse.InputListener;
-import nl.tudelft.simulation.introspection.gui.IntroSpectionDialog;
+import nl.tudelft.simulation.dsol.swing.introspection.gui.IntrospectionDialog;
 
 /**
  * Editor for introspection. <br>
@@ -54,7 +54,7 @@ public class MouseEditor extends InputListener
             {
                 source = ((ContentAnimation) source).getContent();
             }
-            new IntroSpectionDialog(source, source.toString());
+            new IntrospectionDialog(source, source.toString());
         }
         catch (RemoteException exception)
         {

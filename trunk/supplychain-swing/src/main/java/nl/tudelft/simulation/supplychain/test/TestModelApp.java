@@ -10,6 +10,7 @@ import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
 import org.djutils.event.Event;
+import org.djutils.logger.CategoryLogger;
 import org.pmw.tinylog.Level;
 
 import nl.tudelft.simulation.dsol.SimRuntimeException;
@@ -22,7 +23,7 @@ import nl.tudelft.simulation.dsol.swing.animation.D2.AnimationPanel;
 import nl.tudelft.simulation.dsol.swing.gui.DSOLApplication;
 import nl.tudelft.simulation.dsol.swing.gui.DSOLPanel;
 import nl.tudelft.simulation.jstats.streams.MersenneTwister;
-import nl.tudelft.simulation.logger.ConsoleLogger;
+import nl.tudelft.simulation.language.DSOLException;
 
 /**
  * TestModelApp.java. <br>
@@ -51,16 +52,16 @@ public class TestModelApp extends DSOLApplication
      * @throws RemoteException if error
      * @throws SimRuntimeException if error
      * @throws NamingException if error
+     * @throws DSOLException on dsol error
      */
-    public static void main(final String[] args) throws SimRuntimeException, NamingException, RemoteException
+    public static void main(final String[] args) throws SimRuntimeException, NamingException, RemoteException, DSOLException
     {
-        ConsoleLogger.create();
-        ConsoleLogger.setLevel(Level.INFO);
+        CategoryLogger.setAllLogLevel(Level.INFO);
+        CategoryLogger.setAllLogMessageFormat("{level} - {class_name}.{method}:{line}  {message}");
 
-        TestModel model = new TestModel();
-        // DEVSAnimator.TimeDoubleUnit animator = new DEVSAnimator.TimeDoubleUnit();
-        DEVSRealTimeClock.TimeDoubleUnit animator = new DEVSRealTimeClock.TimeDoubleUnit();
-        Replication.TimeDoubleUnit replication = new Replication.TimeDoubleUnit("rep1", Time.ZERO, Duration.ZERO,
+        DEVSRealTimeClock.TimeDoubleUnit animator = new DEVSRealTimeClock.TimeDoubleUnit("MTSMTO");
+        TestModel model = new TestModel(animator);
+        Replication.TimeDoubleUnit replication = Replication.TimeDoubleUnit.create("rep1", Time.ZERO, Duration.ZERO,
                 new Duration(1800.0, DurationUnit.HOUR), model);
         animator.setPauseOnError(true);
         animator.setAnimationDelay(20); // 50 Hz animation update

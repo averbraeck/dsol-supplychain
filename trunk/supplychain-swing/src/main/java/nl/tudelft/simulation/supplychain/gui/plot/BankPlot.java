@@ -1,5 +1,6 @@
 package nl.tudelft.simulation.supplychain.gui.plot;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 
 import org.djunits.value.vdouble.scalar.Duration;
@@ -12,6 +13,8 @@ import org.djutils.event.TimedEvent;
 
 import nl.tudelft.simulation.dsol.simtime.SimTimeDoubleUnit;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
+import nl.tudelft.simulation.dsol.statistics.SimPersistent;
+import nl.tudelft.simulation.dsol.swing.charts.xy.XYChart;
 import nl.tudelft.simulation.jstats.statistics.Persistent;
 import nl.tudelft.simulation.supplychain.banking.BankAccount;
 import nl.tudelft.simulation.supplychain.finance.Money;
@@ -27,22 +30,24 @@ import nl.tudelft.simulation.supplychain.finance.Money;
 public class BankPlot extends XYChart
 {
     /** */
-    private Persistent<Time, Duration, SimTimeDoubleUnit> balancePersistent;
+    private static final long serialVersionUID = 20200211L;
+    
+    /** */
+    private SimPersistent<Time, Duration, SimTimeDoubleUnit> balancePersistent;
 
     /**
      * @param simulator
      * @param title
      * @param bankAccount
      */
-    @SuppressWarnings("static-access")
     public BankPlot(DEVSSimulatorInterface.TimeDoubleUnit simulator, String title, BankAccount bankAccount)
     {
         super(simulator, title);
         BalanceListener balanceListener = new BalanceListener(simulator, bankAccount);
         try
         {
-            this.balancePersistent =
-                    new Persistent<>("balance", simulator, balanceListener, BalanceListener.BALANCE_CHANGE_EVENT);
+            this.balancePersistent = new SimPersistent<>("balance " + title, simulator, balanceListener,
+                BalanceListener.BALANCE_CHANGE_EVENT);
             add("balance", this.balancePersistent, Persistent.VALUE_EVENT);
         }
         catch (RemoteException exception)
@@ -87,7 +92,15 @@ public class BankPlot extends XYChart
         public void notify(EventInterface event) throws RemoteException
         {
             Money balance = (Money) event.getContent();
-            fireEvent(new TimedEvent<Double>(BALANCE_CHANGE_EVENT, this, balance.si, this.simulator.getSimulatorTime().si));
+            fireEvent(new TimedEvent<Double>(BALANCE_CHANGE_EVENT, this, balance.getAmount(), this.simulator
+                .getSimulatorTime().si));
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public Serializable getSourceId()
+        {
+            return "BalanceListener";
         }
 
     }
