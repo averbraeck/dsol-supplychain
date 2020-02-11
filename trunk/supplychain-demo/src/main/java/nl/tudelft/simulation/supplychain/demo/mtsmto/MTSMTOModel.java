@@ -5,14 +5,16 @@ import java.awt.Dimension;
 import javax.vecmath.Point3d;
 
 import org.djunits.unit.MassUnit;
-import org.djunits.unit.MoneyUnit;
+import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Mass;
-import org.djunits.value.vdouble.scalar.Money;
+import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.dsol.animation.D2.SingleImageRenderable;
-import nl.tudelft.simulation.dsol.model.AbstractDSOLModel;
+import nl.tudelft.simulation.dsol.model.DSOLModel;
+import nl.tudelft.simulation.dsol.simtime.SimTimeDoubleUnit;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
+import nl.tudelft.simulation.dsol.simulators.SimulatorInterface;
 import nl.tudelft.simulation.jstats.streams.MersenneTwister;
 import nl.tudelft.simulation.jstats.streams.StreamInterface;
 import nl.tudelft.simulation.language.d3.DirectedPoint;
@@ -22,6 +24,8 @@ import nl.tudelft.simulation.supplychain.demo.reference.DemoManufacturer;
 import nl.tudelft.simulation.supplychain.demo.reference.DemoMarket;
 import nl.tudelft.simulation.supplychain.demo.reference.DemoRetailer;
 import nl.tudelft.simulation.supplychain.demo.reference.DemoYP;
+import nl.tudelft.simulation.supplychain.finance.Money;
+import nl.tudelft.simulation.supplychain.finance.MoneyUnit;
 import nl.tudelft.simulation.supplychain.product.BillOfMaterials;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.product.Unit;
@@ -39,6 +43,9 @@ public class MTSMTOModel extends AbstractDSOLModel.TimeDoubleUnit<DEVSSimulatorI
 {
     /** the serial version uid */
     private static final long serialVersionUID = 12L;
+
+    /** the simulator. */
+    private DEVSSimulatorInterface.TimeDoubleUnit devsSimulator;
 
     /**
      * constructs a new TestModel
