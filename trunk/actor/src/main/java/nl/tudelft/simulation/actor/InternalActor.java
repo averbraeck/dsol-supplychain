@@ -7,11 +7,11 @@ import java.util.Map;
 import java.util.Set;
 
 import org.djunits.value.vdouble.scalar.Time;
+import org.djutils.event.EventProducer;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.content.HandlerInterface;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
-import nl.tudelft.simulation.event.EventProducer;
 import nl.tudelft.simulation.messaging.Message;
 
 /**
@@ -183,5 +183,12 @@ public abstract class InternalActor extends EventProducer implements InternalAct
     public String toString()
     {
         return this.name;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Serializable getSourceId()
+    {
+        return getName();
     }
 }

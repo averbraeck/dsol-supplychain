@@ -1,6 +1,9 @@
 package nl.tudelft.simulation.messaging.devices.components;
 
-import nl.tudelft.simulation.event.EventProducer;
+import java.io.Serializable;
+
+import org.djutils.event.EventProducer;
+
 import nl.tudelft.simulation.messaging.devices.types.DeviceType;
 
 /**
@@ -102,4 +105,13 @@ public abstract class AbstractDevice extends EventProducer implements DeviceInte
     {
         return this.transmissionFrequency;
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public Serializable getSourceId()
+    {
+        return getName();
+    }
+    
+    
 }

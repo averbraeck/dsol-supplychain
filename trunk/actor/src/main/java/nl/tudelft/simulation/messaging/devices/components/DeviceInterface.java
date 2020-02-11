@@ -2,8 +2,9 @@ package nl.tudelft.simulation.messaging.devices.components;
 
 import java.io.Serializable;
 
-import nl.tudelft.simulation.event.EventProducerInterface;
-import nl.tudelft.simulation.event.EventType;
+import org.djutils.event.EventProducerInterface;
+import org.djutils.event.EventType;
+
 import nl.tudelft.simulation.messaging.devices.types.DeviceType;
 
 /**

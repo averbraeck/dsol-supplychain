@@ -3,10 +3,10 @@ package nl.tudelft.simulation.messaging.devices.components;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 
+import org.djutils.event.EventInterface;
+import org.djutils.event.EventListenerInterface;
 import org.pmw.tinylog.Logger;
 
-import nl.tudelft.simulation.event.EventInterface;
-import nl.tudelft.simulation.event.EventListenerInterface;
 import nl.tudelft.simulation.messaging.Message;
 import nl.tudelft.simulation.messaging.queues.MessageQueueInterface;
 
