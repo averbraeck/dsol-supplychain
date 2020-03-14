@@ -4,13 +4,13 @@ import org.djunits.unit.DurationUnit;
 
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.jstats.distributions.DistTriangular;
+import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.messaging.comparators.FiFo;
 import nl.tudelft.simulation.messaging.devices.components.DelaySendingDevice;
 import nl.tudelft.simulation.messaging.devices.components.ReceivingDevice;
 import nl.tudelft.simulation.messaging.devices.components.SendingReceivingDevice;
 import nl.tudelft.simulation.messaging.devices.types.DeviceType;
 import nl.tudelft.simulation.messaging.queues.MessageQueue;
-import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * A reference implementation of a Phone for communication. <br>
@@ -34,7 +34,7 @@ public class Phone extends SendingReceivingDevice
     {
         super(name, new ReceivingDevice(name + "-R", DeviceType.PHONE, new MessageQueue(new FiFo())),
                 new DelaySendingDevice(name + "-S", DeviceType.PHONE, simulator,
-                        new DistContinuousDurationUnit(
+                        new DistContinuousDuration(
                                 new DistTriangular(simulator.getReplication().getStream("default"), 5.0, 10.0, 15.0),
                                 DurationUnit.MINUTE)));
     }

@@ -22,16 +22,16 @@ import nl.tudelft.simulation.supplychain.banking.BankAccount;
 import nl.tudelft.simulation.supplychain.contentstore.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.finance.Money;
 import nl.tudelft.simulation.supplychain.finance.MoneyUnit;
-import nl.tudelft.simulation.supplychain.handlers.OrderHandler;
-import nl.tudelft.simulation.supplychain.handlers.OrderHandlerStock;
-import nl.tudelft.simulation.supplychain.handlers.PaymentHandler;
-import nl.tudelft.simulation.supplychain.handlers.RequestForQuoteHandler;
+import nl.tudelft.simulation.supplychain.policy.order.OrderPolicy;
+import nl.tudelft.simulation.supplychain.policy.order.OrderPolicyStock;
+import nl.tudelft.simulation.supplychain.policy.payment.PaymentPolicy;
+import nl.tudelft.simulation.supplychain.policy.rfq.RequestForQuotePolicy;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Supplier;
 import nl.tudelft.simulation.supplychain.roles.SellingRole;
 import nl.tudelft.simulation.supplychain.stock.Stock;
 import nl.tudelft.simulation.supplychain.transport.TransportMode;
-import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
+import nl.tudelft.simulation.unit.dist.DistConstantDuration;
 
 /**
  * The ComputerShop named Factory. <br>
@@ -93,7 +93,7 @@ public class Factory extends Supplier
         // Let's give Factory its corresponding image
         if (simulator instanceof AnimatorInterface)
         {
-            new SingleImageRenderable(this, simulator,
+            new SingleImageRenderable<>(this, simulator,
                     Factory.class.getResource("/nl/tudelft/simulation/supplychain/images/Manufacturer.gif"));
         }
     }
@@ -107,17 +107,17 @@ public class Factory extends Supplier
         FaxDevice fax = new FaxDevice("FactoryFax", this.simulator);
         super.addSendingDevice(fax);
         MessageHandlerInterface secretary = new HandleAllMessages(this);
-        super.addReceivingDevice(fax, secretary, new DistConstantDurationUnit(new Duration(1.0, DurationUnit.HOUR)));
+        super.addReceivingDevice(fax, secretary, new DistConstantDuration(new Duration(1.0, DurationUnit.HOUR)));
         //
         // tell Factory to use the RFQhandler to handle RFQs
-        RequestForQuoteHandler rfqHandler = new RequestForQuoteHandler(this, super.stock, 1.2,
-                new DistConstantDurationUnit(new Duration(1.23, DurationUnit.HOUR)), TransportMode.PLANE);
+        RequestForQuotePolicy rfqHandler = new RequestForQuotePolicy(this, super.stock, 1.2,
+                new DistConstantDuration(new Duration(1.23, DurationUnit.HOUR)), TransportMode.PLANE);
         //
         // create an order handler
-        OrderHandler orderHandler = new OrderHandlerStock(this, super.stock);
+        OrderPolicy orderHandler = new OrderPolicyStock(this, super.stock);
         //
         // hopefully, Factory will get payments in the end
-        PaymentHandler paymentHandler = new PaymentHandler(this, super.bankAccount);
+        PaymentPolicy paymentHandler = new PaymentPolicy(this, super.bankAccount);
         //
         // add the handlers to the SellingRole
         SellingRole sellingRole = new SellingRole(this, this.simulator, rfqHandler, orderHandler, paymentHandler);

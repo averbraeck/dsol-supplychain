@@ -24,19 +24,19 @@ import nl.tudelft.simulation.supplychain.banking.BankAccount;
 import nl.tudelft.simulation.supplychain.contentstore.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.finance.Money;
 import nl.tudelft.simulation.supplychain.finance.MoneyUnit;
-import nl.tudelft.simulation.supplychain.handlers.BillHandler;
-import nl.tudelft.simulation.supplychain.handlers.InternalDemandHandlerRFQ;
-import nl.tudelft.simulation.supplychain.handlers.OrderConfirmationHandler;
-import nl.tudelft.simulation.supplychain.handlers.OrderHandler;
-import nl.tudelft.simulation.supplychain.handlers.OrderHandlerStock;
-import nl.tudelft.simulation.supplychain.handlers.PaymentHandler;
-import nl.tudelft.simulation.supplychain.handlers.PaymentPolicyEnum;
-import nl.tudelft.simulation.supplychain.handlers.QuoteComparatorEnum;
-import nl.tudelft.simulation.supplychain.handlers.QuoteHandler;
-import nl.tudelft.simulation.supplychain.handlers.QuoteHandlerAll;
-import nl.tudelft.simulation.supplychain.handlers.RequestForQuoteHandler;
-import nl.tudelft.simulation.supplychain.handlers.ShipmentHandler;
-import nl.tudelft.simulation.supplychain.handlers.ShipmentHandlerStock;
+import nl.tudelft.simulation.supplychain.policy.bill.BillPolicy;
+import nl.tudelft.simulation.supplychain.policy.internaldemand.InternalDemandPolicyRFQ;
+import nl.tudelft.simulation.supplychain.policy.order.OrderPolicy;
+import nl.tudelft.simulation.supplychain.policy.order.OrderPolicyStock;
+import nl.tudelft.simulation.supplychain.policy.orderconfirmation.OrderConfirmationPolicy;
+import nl.tudelft.simulation.supplychain.policy.payment.PaymentPolicy;
+import nl.tudelft.simulation.supplychain.policy.payment.PaymentPolicyEnum;
+import nl.tudelft.simulation.supplychain.policy.quote.QuoteComparatorEnum;
+import nl.tudelft.simulation.supplychain.policy.quote.QuotePolicy;
+import nl.tudelft.simulation.supplychain.policy.quote.QuotePolicyAll;
+import nl.tudelft.simulation.supplychain.policy.rfq.RequestForQuotePolicy;
+import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentPolicy;
+import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentPolicyStock;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Retailer;
 import nl.tudelft.simulation.supplychain.roles.BuyingRole;
@@ -44,7 +44,7 @@ import nl.tudelft.simulation.supplychain.roles.SellingRole;
 import nl.tudelft.simulation.supplychain.stock.Stock;
 import nl.tudelft.simulation.supplychain.stock.policies.RestockingPolicySafety;
 import nl.tudelft.simulation.supplychain.transport.TransportMode;
-import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
+import nl.tudelft.simulation.unit.dist.DistConstantDuration;
 
 /**
  * Retailer. <br>
@@ -110,7 +110,7 @@ public class PCShop extends Retailer
         init();
         if (simulator instanceof AnimatorInterface)
         {
-            new SingleImageRenderable(this, simulator,
+            new SingleImageRenderable<>(this, simulator,
                     Factory.class.getResource("/nl/tudelft/simulation/supplychain/images/Retailer.gif"));
         }
     }
@@ -124,17 +124,17 @@ public class PCShop extends Retailer
         FaxDevice fax = new FaxDevice("PCShopFAx", this.simulator);
         super.addSendingDevice(fax);
         MessageHandlerInterface secretary = new HandleAllMessages(this);
-        super.addReceivingDevice(fax, secretary, new DistConstantDurationUnit(new Duration(1.0, DurationUnit.HOUR)));
+        super.addReceivingDevice(fax, secretary, new DistConstantDuration(new Duration(1.0, DurationUnit.HOUR)));
         //
         // tell PCshop to use the RFQhandler to handle RFQs
-        RequestForQuoteHandler rfqHandler = new RequestForQuoteHandler(this, super.stock, 1.2,
-                new DistConstantDurationUnit(new Duration(1.23, DurationUnit.HOUR)), TransportMode.PLANE);
+        RequestForQuotePolicy rfqHandler = new RequestForQuotePolicy(this, super.stock, 1.2,
+                new DistConstantDuration(new Duration(1.23, DurationUnit.HOUR)), TransportMode.PLANE);
         //
         // create an order handler
-        OrderHandler orderHandler = new OrderHandlerStock(this, super.stock);
+        OrderPolicy orderHandler = new OrderPolicyStock(this, super.stock);
         //
         // hopefully, the PCShop will get payments in the end
-        PaymentHandler paymentHandler = new PaymentHandler(this, super.bankAccount);
+        PaymentPolicy paymentHandler = new PaymentPolicy(this, super.bankAccount);
         //
         // add the handlers to the buying role for PCShop
         SellingRole sellingRole = new SellingRole(this, this.simulator, rfqHandler, orderHandler, paymentHandler);
@@ -155,8 +155,8 @@ public class PCShop extends Retailer
         // BUY PRODUCTS WHEN THERE IS INTERNAL DEMAND
         //
         // tell PCShop to use the InternalDemandHandler for all products
-        InternalDemandHandlerRFQ internalDemandHandler =
-                new InternalDemandHandlerRFQ(this, new Duration(1.0, DurationUnit.HOUR), super.stock);
+        InternalDemandPolicyRFQ internalDemandHandler =
+                new InternalDemandPolicyRFQ(this, new Duration(1.0, DurationUnit.HOUR), super.stock);
         Iterator<Product> productIter = super.stock.iterator();
         while (productIter.hasNext())
         {
@@ -165,18 +165,18 @@ public class PCShop extends Retailer
         }
         //
         // tell PCShop to use the Quotehandler to handle quotes
-        QuoteHandler quoteHandler = new QuoteHandlerAll(this, QuoteComparatorEnum.SORT_DATE_PRICE_DISTANCE,
+        QuotePolicy quoteHandler = new QuotePolicyAll(this, QuoteComparatorEnum.SORT_DATE_PRICE_DISTANCE,
                 new Duration(1.0, DurationUnit.HOUR), 0.4, 0.1);
         //
         // PCShop has the standard order confirmation handler
-        OrderConfirmationHandler confirmationHandler = new OrderConfirmationHandler(this);
+        OrderConfirmationPolicy confirmationHandler = new OrderConfirmationPolicy(this);
         //
         // PCShop will get a bill in the end
-        BillHandler billHandler = new BillHandler(this, super.bankAccount, PaymentPolicyEnum.PAYMENT_IMMEDIATE,
-                new DistConstantDurationUnit(Duration.ZERO));
+        BillPolicy billHandler = new BillPolicy(this, super.bankAccount, PaymentPolicyEnum.PAYMENT_IMMEDIATE,
+                new DistConstantDuration(Duration.ZERO));
         //
         // hopefully, PCShop will get laptop shipments, put them in stock
-        ShipmentHandler shipmentHandler = new ShipmentHandlerStock(this, super.stock);
+        ShipmentPolicy shipmentHandler = new ShipmentPolicyStock(this, super.stock);
         //
         // add the handlers to the buying role for PCShop
         BuyingRole buyingRole = new BuyingRole(this, this.simulator, internalDemandHandler, quoteHandler, confirmationHandler,

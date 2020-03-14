@@ -1,8 +1,8 @@
 package nl.tudelft.simulation.actor;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,7 +32,7 @@ public abstract class InternalActor extends EventProducer implements InternalAct
     private static final long serialVersionUID = 12L;
 
     /** the content handlers for this actor */
-    protected Map<Class<?>, Set<HandlerInterface>> contentHandlers = new HashMap<>();
+    protected Map<Class<?>, Set<HandlerInterface>> contentHandlers = new LinkedHashMap<>();
 
     /** the name of an actor */
     protected String name;
@@ -100,7 +100,7 @@ public abstract class InternalActor extends EventProducer implements InternalAct
         Set<HandlerInterface> handlers = this.contentHandlers.get(contentClass);
         if (handlers == null)
         {
-            handlers = new HashSet<HandlerInterface>();
+            handlers = new LinkedHashSet<HandlerInterface>();
             this.contentHandlers.put(contentClass, handlers);
         }
         handlers.add(handler);
@@ -129,7 +129,7 @@ public abstract class InternalActor extends EventProducer implements InternalAct
     protected Set<HandlerInterface> resolveContentHandlers(final Class<?> contentClass)
     {
         Class<?> classIterator = contentClass;
-        Set<HandlerInterface> handlers = new HashSet<HandlerInterface>();
+        Set<HandlerInterface> handlers = new LinkedHashSet<HandlerInterface>();
         try
         {
             while (classIterator != null)

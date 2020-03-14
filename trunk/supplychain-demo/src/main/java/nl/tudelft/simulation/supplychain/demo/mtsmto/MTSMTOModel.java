@@ -64,7 +64,7 @@ public class MTSMTOModel extends AbstractDSOLModel.TimeDoubleUnit<DEVSSimulatorI
             {
                 // First we create some background. We set the zValue to -Double.Min value to ensure that it is actually drawn
                 // "below" our actors and messages.
-                new SingleImageRenderable(new DirectedPoint(0.0, 0.0, -Double.MIN_VALUE), new Dimension(800, 600),
+                new SingleImageRenderable<>(new DirectedPoint(0.0, 0.0, -Double.MIN_VALUE), new Dimension(800, 600),
                     getSimulator(), TestModel.class.getResource(
                         "/nl/tudelft/simulation/supplychain/demo/mtsmto/images/background.gif"));
             }

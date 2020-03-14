@@ -20,6 +20,7 @@ import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface.TimeDoubleUn
 import nl.tudelft.simulation.jstats.distributions.DistConstant;
 import nl.tudelft.simulation.jstats.distributions.DistTriangular;
 import nl.tudelft.simulation.jstats.distributions.DistUniform;
+import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.jstats.streams.StreamInterface;
 import nl.tudelft.simulation.language.d3.BoundingBox;
 import nl.tudelft.simulation.messaging.devices.reference.FaxDevice;
@@ -27,21 +28,21 @@ import nl.tudelft.simulation.messaging.devices.reference.WebApplication;
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.contentstore.memory.LeanContentStore;
 import nl.tudelft.simulation.supplychain.finance.Money;
-import nl.tudelft.simulation.supplychain.handlers.BillHandler;
-import nl.tudelft.simulation.supplychain.handlers.InternalDemandHandlerYP;
-import nl.tudelft.simulation.supplychain.handlers.OrderConfirmationHandler;
-import nl.tudelft.simulation.supplychain.handlers.OrderHandler;
-import nl.tudelft.simulation.supplychain.handlers.OrderHandlerMake;
-import nl.tudelft.simulation.supplychain.handlers.OrderHandlerStock;
-import nl.tudelft.simulation.supplychain.handlers.PaymentHandler;
-import nl.tudelft.simulation.supplychain.handlers.PaymentPolicyEnum;
-import nl.tudelft.simulation.supplychain.handlers.QuoteComparatorEnum;
-import nl.tudelft.simulation.supplychain.handlers.QuoteHandler;
-import nl.tudelft.simulation.supplychain.handlers.QuoteHandlerAll;
-import nl.tudelft.simulation.supplychain.handlers.RequestForQuoteHandler;
-import nl.tudelft.simulation.supplychain.handlers.ShipmentHandler;
-import nl.tudelft.simulation.supplychain.handlers.ShipmentHandlerConsume;
-import nl.tudelft.simulation.supplychain.handlers.YellowPageAnswerHandler;
+import nl.tudelft.simulation.supplychain.policy.bill.BillPolicy;
+import nl.tudelft.simulation.supplychain.policy.internaldemand.InternalDemandPolicyYP;
+import nl.tudelft.simulation.supplychain.policy.order.OrderPolicy;
+import nl.tudelft.simulation.supplychain.policy.order.OrderPolicyMake;
+import nl.tudelft.simulation.supplychain.policy.order.OrderPolicyStock;
+import nl.tudelft.simulation.supplychain.policy.orderconfirmation.OrderConfirmationPolicy;
+import nl.tudelft.simulation.supplychain.policy.payment.PaymentPolicy;
+import nl.tudelft.simulation.supplychain.policy.payment.PaymentPolicyEnum;
+import nl.tudelft.simulation.supplychain.policy.quote.QuoteComparatorEnum;
+import nl.tudelft.simulation.supplychain.policy.quote.QuotePolicy;
+import nl.tudelft.simulation.supplychain.policy.quote.QuotePolicyAll;
+import nl.tudelft.simulation.supplychain.policy.rfq.RequestForQuotePolicy;
+import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentPolicy;
+import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentPolicyConsume;
+import nl.tudelft.simulation.supplychain.policy.yp.YellowPageAnswerPolicy;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.production.DelayProductionService;
 import nl.tudelft.simulation.supplychain.production.ProductionService;
@@ -52,8 +53,7 @@ import nl.tudelft.simulation.supplychain.roles.SellingRole;
 import nl.tudelft.simulation.supplychain.stock.Stock;
 import nl.tudelft.simulation.supplychain.stock.policies.RestockingPolicySafety;
 import nl.tudelft.simulation.supplychain.transport.TransportMode;
-import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
-import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
+import nl.tudelft.simulation.unit.dist.DistConstantDuration;
 import nl.tudelft.simulation.yellowpage.Category;
 
 /**
@@ -97,12 +97,12 @@ public class ATOManufacturer extends Manufacturer
         WebApplication www = new WebApplication("Web-" + name, this.simulator);
         super.addSendingDevice(www);
         MessageHandlerInterface webSystem = new HandleAllMessages(this);
-        super.addReceivingDevice(www, webSystem, new DistConstantDurationUnit(new Duration(10.0, DurationUnit.SECOND)));
+        super.addReceivingDevice(www, webSystem, new DistConstantDuration(new Duration(10.0, DurationUnit.SECOND)));
 
         FaxDevice fax = new FaxDevice("fax-" + name, this.simulator);
         super.addSendingDevice(fax);
         MessageHandlerInterface faxChecker = new HandleAllMessages(this);
-        super.addReceivingDevice(fax, faxChecker, new DistConstantDurationUnit(new Duration(1.0, DurationUnit.HOUR)));
+        super.addReceivingDevice(fax, faxChecker, new DistConstantDuration(new Duration(1.0, DurationUnit.HOUR)));
 
         // REGISTER IN YP- should we do the same for customer and supplier? do we need instance of argument first?
 
@@ -122,27 +122,27 @@ public class ATOManufacturer extends Manufacturer
 
         // BUYING HANDLERS
 
-        DistContinuousDurationUnit administrativeDelayInternalDemand =
-                new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-        InternalDemandHandlerYP internalDemandHandler = new InternalDemandHandlerYP(this, administrativeDelayInternalDemand,
+        DistContinuousDuration administrativeDelayInternalDemand =
+                new DistContinuousDuration(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
+        InternalDemandPolicyYP internalDemandHandler = new InternalDemandPolicyYP(this, administrativeDelayInternalDemand,
                 ypManufacturer, new Length(1E6, LengthUnit.METER), 1000, super.stock);
 // InternalDemandHandlerOrder
-        DistContinuousDurationUnit administrativeDelayYellowPageAnswer =
-                new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-        YellowPageAnswerHandler ypAnswerHandler = new YellowPageAnswerHandler(this, administrativeDelayYellowPageAnswer);
+        DistContinuousDuration administrativeDelayYellowPageAnswer =
+                new DistContinuousDuration(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
+        YellowPageAnswerPolicy ypAnswerHandler = new YellowPageAnswerPolicy(this, administrativeDelayYellowPageAnswer);
 
-        DistContinuousDurationUnit administrativeDelayQuote =
-                new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-        QuoteHandler quoteHandler =
-                new QuoteHandlerAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE, administrativeDelayQuote, 0.4, 0);
+        DistContinuousDuration administrativeDelayQuote =
+                new DistContinuousDuration(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
+        QuotePolicy quoteHandler =
+                new QuotePolicyAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE, administrativeDelayQuote, 0.4, 0);
 
-        OrderConfirmationHandler orderConfirmationHandler = new OrderConfirmationHandler(this);
+        OrderConfirmationPolicy orderConfirmationHandler = new OrderConfirmationPolicy(this);
 
-        ShipmentHandler shipmentHandler = new ShipmentHandlerConsume(this);
+        ShipmentPolicy shipmentHandler = new ShipmentPolicyConsume(this);
 
-        DistContinuousDurationUnit paymentDelay =
-                new DistContinuousDurationUnit(new DistConstant(stream, 0.0), DurationUnit.HOUR);
-        BillHandler billHandler = new BillHandler(this, this.getBankAccount(), PaymentPolicyEnum.PAYMENT_ON_TIME, paymentDelay);
+        DistContinuousDuration paymentDelay =
+                new DistContinuousDuration(new DistConstant(stream, 0.0), DurationUnit.HOUR);
+        BillPolicy billHandler = new BillPolicy(this, this.getBankAccount(), PaymentPolicyEnum.PAYMENT_ON_TIME, paymentDelay);
 
         BuyingRole buyingRole = new BuyingRole(this, simulator, internalDemandHandler, ypAnswerHandler, quoteHandler,
                 orderConfirmationHandler, shipmentHandler, billHandler);
@@ -150,16 +150,16 @@ public class ATOManufacturer extends Manufacturer
 
         // SELLING HANDLERS
 
-        RequestForQuoteHandler rfqHandler = new RequestForQuoteHandler(this, super.stock, 1.2,
-                new DistConstantDurationUnit(new Duration(1.23, DurationUnit.HOUR)), TransportMode.PLANE);
+        RequestForQuotePolicy rfqHandler = new RequestForQuotePolicy(this, super.stock, 1.2,
+                new DistConstantDuration(new Duration(1.23, DurationUnit.HOUR)), TransportMode.PLANE);
 
-        OrderHandler orderHandler;
+        OrderPolicy orderHandler;
         if (mts)
-            orderHandler = new OrderHandlerStock(this, super.stock);
+            orderHandler = new OrderPolicyStock(this, super.stock);
         else
-            orderHandler = new OrderHandlerMake(this, super.stock);
+            orderHandler = new OrderPolicyMake(this, super.stock);
 
-        PaymentHandler paymentHandler = new PaymentHandler(this, super.bankAccount);
+        PaymentPolicy paymentHandler = new PaymentPolicy(this, super.bankAccount);
 
         SellingRole sellingRole = new SellingRole(this, this.simulator, rfqHandler, orderHandler, paymentHandler);
         super.setSellingRole(sellingRole);
@@ -179,7 +179,7 @@ public class ATOManufacturer extends Manufacturer
         // MANUFACTURING
 
         ProductionService productionService = new DelayProductionService(this, super.getStock(), product,
-                new DistContinuousDurationUnit(new DistUniform(stream, 5.0, 10.0), DurationUnit.DAY), true, true, 0.2);
+                new DistContinuousDuration(new DistUniform(stream, 5.0, 10.0), DurationUnit.DAY), true, true, 0.2);
         getProduction().addProductionService(productionService);
 
         // ANIMATION
@@ -188,7 +188,7 @@ public class ATOManufacturer extends Manufacturer
         {
             try
             {
-                new SingleImageRenderable(this, simulator,
+                new SingleImageRenderable<>(this, simulator,
                         ATOManufacturer.class.getResource("/nl/tudelft/simulation/supplychain/images/Manufacturer.gif"));
             }
             catch (RemoteException | NamingException exception)

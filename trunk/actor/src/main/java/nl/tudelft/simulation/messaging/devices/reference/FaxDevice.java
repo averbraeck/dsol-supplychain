@@ -4,13 +4,13 @@ import org.djunits.unit.DurationUnit;
 
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.jstats.distributions.DistTriangular;
+import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.messaging.comparators.FiFo;
 import nl.tudelft.simulation.messaging.devices.components.DelaySendingDevice;
 import nl.tudelft.simulation.messaging.devices.components.ReceivingDevice;
 import nl.tudelft.simulation.messaging.devices.components.SendingReceivingDevice;
 import nl.tudelft.simulation.messaging.devices.types.DeviceType;
 import nl.tudelft.simulation.messaging.queues.MessageQueue;
-import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * A reference implementation of a FaxDevice. <br>
@@ -34,7 +34,7 @@ public class FaxDevice extends SendingReceivingDevice
     {
         super(name, new ReceivingDevice(name + "-R", DeviceType.EMAIL, new MessageQueue(new FiFo())),
                 new DelaySendingDevice(name + "-S", DeviceType.EMAIL, simulator,
-                        new DistContinuousDurationUnit(
+                        new DistContinuousDuration(
                                 new DistTriangular(simulator.getReplication().getStream("default"), 10.0, 20.0, 60.0),
                                 DurationUnit.SECOND)));
     }

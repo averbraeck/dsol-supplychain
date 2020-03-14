@@ -1,6 +1,6 @@
 package nl.tudelft.simulation.actor;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.vecmath.Point3d;
@@ -23,7 +23,7 @@ public abstract class ActorGroup extends Actor
     private static final long serialVersionUID = 12L;
 
     /** the actors of this list */
-    private Set<ActorInterface> actors = new HashSet<ActorInterface>();
+    private Set<ActorInterface> actors = new LinkedHashSet<ActorInterface>();
 
     /**
      * Creates an ActorGroup.
@@ -63,7 +63,7 @@ public abstract class ActorGroup extends Actor
      */
     public Set<ActorInterface> getIndividualActors()
     {
-        Set<ActorInterface> resultSet = new HashSet<ActorInterface>();
+        Set<ActorInterface> resultSet = new LinkedHashSet<ActorInterface>();
         for (ActorInterface actor : this.actors)
         {
             if ((actor instanceof ActorGroup) && (actor != this))

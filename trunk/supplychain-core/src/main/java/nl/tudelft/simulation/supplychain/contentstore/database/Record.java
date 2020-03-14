@@ -6,7 +6,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.djunits.value.vdouble.scalar.base.DoubleScalarInterface;
@@ -25,7 +25,7 @@ public class Record implements Serializable
     private static final long serialVersionUID = 1L;
 
     /** the data values */
-    private Map<String, String> values = new HashMap<String, String>();
+    private Map<String, String> values = new LinkedHashMap<String, String>();
 
     /** the table descriptor */
     private TableDescriptor tableDescriptor;

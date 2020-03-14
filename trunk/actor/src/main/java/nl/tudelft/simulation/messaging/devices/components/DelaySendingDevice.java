@@ -5,9 +5,9 @@ import java.io.Serializable;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
+import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.messaging.Message;
 import nl.tudelft.simulation.messaging.devices.types.DeviceType;
-import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * The DelaySendingDevice device is a device that sends out a message, which will arrive after a certain delay. There is no
@@ -27,7 +27,7 @@ public class DelaySendingDevice extends SendingDevice
     protected DEVSSimulatorInterface.TimeDoubleUnit simulator = null;
 
     /** the delay of the sender */
-    protected DistContinuousDurationUnit delay = null;
+    protected DistContinuousDuration delay = null;
 
     /**
      * constructs a new DelaySendingDevice, take the transmission delay and frequency from the DeviceType.
@@ -37,7 +37,7 @@ public class DelaySendingDevice extends SendingDevice
      * @param delay the delay
      */
     public DelaySendingDevice(final String name, final DeviceType deviceType, final DEVSSimulatorInterface.TimeDoubleUnit simulator,
-            final DistContinuousDurationUnit delay)
+            final DistContinuousDuration delay)
     {
         super(name, deviceType);
         this.simulator = simulator;
@@ -55,7 +55,7 @@ public class DelaySendingDevice extends SendingDevice
      */
     public DelaySendingDevice(final String name, final DeviceType deviceType, final int transmissionDelay,
             final double transmissionFrequency, final DEVSSimulatorInterface.TimeDoubleUnit simulator,
-            final DistContinuousDurationUnit delay)
+            final DistContinuousDuration delay)
     {
         super(name, deviceType, transmissionDelay, transmissionFrequency);
         this.simulator = simulator;

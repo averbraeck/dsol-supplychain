@@ -19,9 +19,9 @@ import nl.tudelft.simulation.messaging.devices.reference.WebApplication;
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.content.YellowPageRequest;
 import nl.tudelft.simulation.supplychain.contentstore.memory.EmptyContentStore;
-import nl.tudelft.simulation.supplychain.handlers.YellowPageRequestHandler;
+import nl.tudelft.simulation.supplychain.policy.yp.YellowPageRequestPolicy;
 import nl.tudelft.simulation.supplychain.reference.YellowPage;
-import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
+import nl.tudelft.simulation.unit.dist.DistConstantDuration;
 
 /**
  * <p>
@@ -53,11 +53,11 @@ public class ATOYP extends YellowPage
         WebApplication www = new WebApplication("Web-" + name, this.simulator);
         super.addSendingDevice(www);
         MessageHandlerInterface webSystem = new HandleAllMessages(this);
-        super.addReceivingDevice(www, webSystem, new DistConstantDurationUnit(new Duration(10.0, DurationUnit.SECOND)));
+        super.addReceivingDevice(www, webSystem, new DistConstantDuration(new Duration(10.0, DurationUnit.SECOND)));
 
         // YP MESSAGE HANDLING
 
-        addContentHandler(YellowPageRequest.class, new YellowPageRequestHandler(this, new Duration(10.0, DurationUnit.MINUTE)));
+        addContentHandler(YellowPageRequest.class, new YellowPageRequestPolicy(this, new Duration(10.0, DurationUnit.MINUTE)));
 
         // ANIMATION
 
@@ -65,7 +65,7 @@ public class ATOYP extends YellowPage
         {
             try
             {
-                new SingleImageRenderable(this, simulator,
+                new SingleImageRenderable<>(this, simulator,
                         ATOYP.class.getResource("/nl/tudelft/simulation/supplychain/images/YellowPage.gif"));
             }
             catch (RemoteException | NamingException exception)

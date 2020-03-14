@@ -2,7 +2,7 @@ package nl.tudelft.simulation.supplychain.contentstore.memory;
 
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.djunits.unit.DurationUnit;
@@ -41,7 +41,7 @@ public class LeanContentStore extends ContentStore
     protected DEVSSimulatorInterface.TimeDoubleUnit simulator;
 
     /** the map of unanswered content */
-    private Map<Serializable, Content> unansweredContentMap = Collections.synchronizedMap(new HashMap<Serializable, Content>());
+    private Map<Serializable, Content> unansweredContentMap = Collections.synchronizedMap(new LinkedHashMap<Serializable, Content>());
 
     /**
      * @param simulator the simulator

@@ -105,7 +105,7 @@ public class ContentAnimation implements Locatable, Serializable
                     content.getReceiver().getLocation());
 
             // We load the image
-            this.imageRenderable = new SingleImageRenderable(this, this.simulator, imageURL);
+            this.imageRenderable = new SingleImageRenderable<>(this, this.simulator, imageURL);
             // new GISContentAnimation(this, this.simulator, imageURL);
 
             // We do rotate and thus not flip the image

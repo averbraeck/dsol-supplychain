@@ -2,8 +2,8 @@ package nl.tudelft.simulation.actor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
@@ -17,12 +17,12 @@ import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.actor.messagehandlers.MessageHandlerInterface;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
+import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.language.d3.BoundingBox;
 import nl.tudelft.simulation.language.d3.DirectedPoint;
 import nl.tudelft.simulation.messaging.devices.components.ReceivingDeviceInterface;
 import nl.tudelft.simulation.messaging.devices.components.SendingDeviceInterface;
 import nl.tudelft.simulation.messaging.devices.types.DeviceType;
-import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * The actor is the basic entity in the nl.tudelft.simulation.actor package. It implements the behavior of a 'communicating'
@@ -62,8 +62,8 @@ public abstract class Actor extends InternalActor implements ActorInterface
     public Actor(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position)
     {
         super(name, simulator);
-        this.sendingDevices = new HashSet<>();
-        this.receivingDevices = new HashMap<>();
+        this.sendingDevices = new LinkedHashSet<>();
+        this.receivingDevices = new LinkedHashMap<>();
         this.location = new DirectedPoint(position);
     }
 
@@ -94,7 +94,7 @@ public abstract class Actor extends InternalActor implements ActorInterface
      * @param checkInterval the distribution of times for checking the device
      */
     public void addReceivingDevice(final ReceivingDeviceInterface device, final MessageHandlerInterface messageHandler,
-            final DistContinuousDurationUnit checkInterval)
+            final DistContinuousDuration checkInterval)
     {
         addReceivingDevice(device, messageHandler);
         setCheckInterval(device, checkInterval);
@@ -105,7 +105,7 @@ public abstract class Actor extends InternalActor implements ActorInterface
      * @param device the device to set the check interval for
      * @param checkInterval the interval for checking the device
      */
-    public void setCheckInterval(final ReceivingDeviceInterface device, final DistContinuousDurationUnit checkInterval)
+    public void setCheckInterval(final ReceivingDeviceInterface device, final DistContinuousDuration checkInterval)
     {
         try
         {

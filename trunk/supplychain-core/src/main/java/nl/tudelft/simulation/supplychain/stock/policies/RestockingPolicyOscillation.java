@@ -2,9 +2,9 @@ package nl.tudelft.simulation.supplychain.stock.policies;
 
 import org.djunits.value.vdouble.scalar.Duration;
 
+import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
-import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * This restocking policy looks at the difference between ordered and stock on hand on one hand, and the committed stock on the
@@ -36,7 +36,7 @@ public class RestockingPolicyOscillation extends RestockingPolicyFixed
      * @param maxDeliveryTime the maximum delivery time to use
      */
     public RestockingPolicyOscillation(final StockInterface stock, final Product product,
-            final DistContinuousDurationUnit frequency, final boolean ceiling, final double amount, final boolean includeClaims,
+            final DistContinuousDuration frequency, final boolean ceiling, final double amount, final boolean includeClaims,
             final double overReactionMargin, final Duration maxDeliveryTime)
     {
         super(stock, product, frequency, ceiling, amount, includeClaims, maxDeliveryTime);

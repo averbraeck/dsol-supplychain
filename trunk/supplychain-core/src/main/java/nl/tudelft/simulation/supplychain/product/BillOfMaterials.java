@@ -1,7 +1,7 @@
 package nl.tudelft.simulation.supplychain.product;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -28,7 +28,7 @@ public class BillOfMaterials implements Serializable
     private double amountProduced;
 
     /** the bill of materials (product, amount) */
-    private Map<Product, Double> materials = new HashMap<Product, Double>();
+    private Map<Product, Double> materials = new LinkedHashMap<Product, Double>();
 
     /**
      * Construct a new Bill of Materials for a product

@@ -3,9 +3,9 @@ package nl.tudelft.simulation.supplychain.stock.policies;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.pmw.tinylog.Logger;
 
+import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
-import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * Restocking according to economic order quantity. Needs fixed and variable costs when it has to be implemented. For that
@@ -27,7 +27,7 @@ public abstract class RestockingPolicyEOQ extends RestockingPolicy
      * @param frequency the frequency distribution for restocking or checking
      * @param maxDeliveryTime the maximum delivery time to use
      */
-    public RestockingPolicyEOQ(final StockInterface stock, final Product product, final DistContinuousDurationUnit frequency,
+    public RestockingPolicyEOQ(final StockInterface stock, final Product product, final DistContinuousDuration frequency,
             final Duration maxDeliveryTime)
     {
         super(stock, product, frequency, maxDeliveryTime);

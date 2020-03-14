@@ -2,7 +2,7 @@ package nl.tudelft.simulation.supplychain.contentstore.database;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -57,13 +57,13 @@ public class DatabaseWorker extends EventProducer implements DatabaseWorkerInter
     private String runId = "";
 
     /** the mapping from actor name to SupplyChainActor */
-    protected Map<String, SupplyChainActor> supplyChainActorMap = new HashMap<String, SupplyChainActor>();
+    protected Map<String, SupplyChainActor> supplyChainActorMap = new LinkedHashMap<String, SupplyChainActor>();
 
     /** the mapping from product name to product */
-    protected Map<String, Product> productMap = new HashMap<String, Product>();
+    protected Map<String, Product> productMap = new LinkedHashMap<String, Product>();
 
     /** the mapping from transport mode name to transport mode */
-    protected Map<String, TransportMode> transportModeMap = new HashMap<String, TransportMode>();
+    protected Map<String, TransportMode> transportModeMap = new LinkedHashMap<String, TransportMode>();
 
     /**
      * Constructs a new ContentStore

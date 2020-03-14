@@ -3,8 +3,8 @@ package nl.tudelft.simulation.supplychain.contentstore.memory;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -51,13 +51,13 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
 
     /** the received content */
     private Map<Serializable, Map<Class<?>, List<Content>>> internalDemandMap =
-            Collections.synchronizedMap(new HashMap<Serializable, Map<Class<?>, List<Content>>>());
+            Collections.synchronizedMap(new LinkedHashMap<Serializable, Map<Class<?>, List<Content>>>());
 
     /** the received content, latest state */
-    private Map<Class<?>, List<Content>> receivedStateMap = Collections.synchronizedMap(new HashMap<Class<?>, List<Content>>());
+    private Map<Class<?>, List<Content>> receivedStateMap = Collections.synchronizedMap(new LinkedHashMap<Class<?>, List<Content>>());
 
     /** the sent content, latest state */
-    private Map<Class<?>, List<Content>> sentStateMap = Collections.synchronizedMap(new HashMap<Class<?>, List<Content>>());
+    private Map<Class<?>, List<Content>> sentStateMap = Collections.synchronizedMap(new LinkedHashMap<Class<?>, List<Content>>());
 
     /** the owner */
     private SupplyChainActor owner;
@@ -102,7 +102,7 @@ public class ContentStore extends EventProducer implements ContentStoreInterface
         Map<Class<?>, List<Content>> contentMap = this.internalDemandMap.get(identifier);
         if (contentMap == null)
         {
-            contentMap = new HashMap<Class<?>, List<Content>>();
+            contentMap = new LinkedHashMap<Class<?>, List<Content>>();
             this.internalDemandMap.put(identifier, contentMap);
         }
         // look if the content class already exists in the contentMap

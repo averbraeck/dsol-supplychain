@@ -21,11 +21,11 @@ import nl.tudelft.simulation.messaging.devices.reference.FaxDevice;
 import nl.tudelft.simulation.supplychain.banking.Bank;
 import nl.tudelft.simulation.supplychain.contentstore.memory.LeanContentStore;
 import nl.tudelft.simulation.supplychain.finance.Money;
-import nl.tudelft.simulation.supplychain.handlers.OrderHandler;
-import nl.tudelft.simulation.supplychain.handlers.OrderHandlerMake;
-import nl.tudelft.simulation.supplychain.handlers.OrderHandlerStock;
-import nl.tudelft.simulation.supplychain.handlers.PaymentHandler;
-import nl.tudelft.simulation.supplychain.handlers.RequestForQuoteHandler;
+import nl.tudelft.simulation.supplychain.policy.order.OrderPolicy;
+import nl.tudelft.simulation.supplychain.policy.order.OrderPolicyMake;
+import nl.tudelft.simulation.supplychain.policy.order.OrderPolicyStock;
+import nl.tudelft.simulation.supplychain.policy.payment.PaymentPolicy;
+import nl.tudelft.simulation.supplychain.policy.rfq.RequestForQuotePolicy;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Supplier;
 import nl.tudelft.simulation.supplychain.reference.YellowPage;
@@ -33,7 +33,7 @@ import nl.tudelft.simulation.supplychain.roles.SellingRole;
 import nl.tudelft.simulation.supplychain.stock.Stock;
 import nl.tudelft.simulation.supplychain.stock.policies.RestockingPolicySafety;
 import nl.tudelft.simulation.supplychain.transport.TransportMode;
-import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
+import nl.tudelft.simulation.unit.dist.DistConstantDuration;
 import nl.tudelft.simulation.yellowpage.Category;
 
 /**
@@ -73,7 +73,7 @@ public class ATOSupplier extends Supplier
         FaxDevice fax = new FaxDevice("fax-" + name, this.simulator);
         super.addSendingDevice(fax);
         MessageHandlerInterface faxChecker = new HandleAllMessages(this);
-        super.addReceivingDevice(fax, faxChecker, new DistConstantDurationUnit(new Duration(1.0, DurationUnit.HOUR)));
+        super.addReceivingDevice(fax, faxChecker, new DistConstantDuration(new Duration(1.0, DurationUnit.HOUR)));
 
         // REGISTER IN YP
 
@@ -88,16 +88,16 @@ public class ATOSupplier extends Supplier
 
         // SELLING HANDLERS
 
-        RequestForQuoteHandler rfqHandler = new RequestForQuoteHandler(this, super.stock, 1.2,
-                new DistConstantDurationUnit(new Duration(1.23, DurationUnit.HOUR)), TransportMode.PLANE);
+        RequestForQuotePolicy rfqHandler = new RequestForQuotePolicy(this, super.stock, 1.2,
+                new DistConstantDuration(new Duration(1.23, DurationUnit.HOUR)), TransportMode.PLANE);
 
-        OrderHandler orderHandler;
+        OrderPolicy orderHandler;
         if (mts)
-            orderHandler = new OrderHandlerStock(this, super.stock);
+            orderHandler = new OrderPolicyStock(this, super.stock);
         else
-            orderHandler = new OrderHandlerMake(this, super.stock);
+            orderHandler = new OrderPolicyMake(this, super.stock);
 
-        PaymentHandler paymentHandler = new PaymentHandler(this, super.bankAccount);
+        PaymentPolicy paymentHandler = new PaymentPolicy(this, super.bankAccount);
 
         SellingRole sellingRole = new SellingRole(this, this.simulator, rfqHandler, orderHandler, paymentHandler);
         super.setSellingRole(sellingRole);
@@ -120,7 +120,7 @@ public class ATOSupplier extends Supplier
         {
             try
             {
-                new SingleImageRenderable(this, simulator,
+                new SingleImageRenderable<>(this, simulator,
                         ATOSupplier.class.getResource("/nl/tudelft/simulation/supplychain/images/Supplier.gif"));
             }
             catch (RemoteException | NamingException exception)

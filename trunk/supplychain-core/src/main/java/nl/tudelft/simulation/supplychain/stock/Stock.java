@@ -15,9 +15,8 @@ package nl.tudelft.simulation.supplychain.stock;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -50,12 +49,12 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
     protected StockKeepingActor owner;
 
     /** record keeping of the stock */
-    protected Hashtable<Product, StockRecord> stockRecords = new Hashtable<Product, StockRecord>();
+    protected Map<Product, StockRecord> stockRecords = new LinkedHashMap<Product, StockRecord>();
 
     /**
      * <Product, <time moment, ArrayList<values for time moment>>> future changes
      */
-    protected Map<Product, TreeMap<Time, ArrayList<Double>>> futureChanges = new HashMap<>();
+    protected Map<Product, TreeMap<Time, ArrayList<Double>>> futureChanges = new LinkedHashMap<>();
 
     /**
      * Create a new Stock for an actor.
@@ -208,8 +207,8 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
     {
         if (time.lt(this.owner.getSimulatorTime()))
         {
-            Logger.error("changeFutureClaimedAmount - Time for the change is smaller than current simulator time (" + time + "<"
-                    + this.owner.getSimulatorTime() + ").");
+            Logger.error("changeFutureClaimedAmount - Time for the change is smaller than current simulator time (" + time
+                + "<" + this.owner.getSimulatorTime() + ").");
             return false;
         }
 
@@ -256,8 +255,8 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
     {
         if (time.lt(this.owner.getSimulatorTime()))
         {
-            Logger.error("changeFutureOrderedAmount - Time for the change is smaller than current simulator time (" + time + "<"
-                    + this.owner.getSimulatorTime() + ").");
+            Logger.error("changeFutureOrderedAmount - Time for the change is smaller than current simulator time (" + time
+                + "<" + this.owner.getSimulatorTime() + ").");
             return false;
         }
         if (delta < 0)
@@ -312,7 +311,7 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
     public void sendStockUpdateEvent(final StockRecord stockRecord)
     {
         StockUpdateData data = new StockUpdateData(stockRecord.getProduct().getName(), stockRecord.getActualAmount(),
-                stockRecord.getClaimedAmount(), stockRecord.getOrderedAmount());
+            stockRecord.getClaimedAmount(), stockRecord.getOrderedAmount());
 
         this.fireEvent(new TimedEvent<Time>(StockInterface.STOCK_CHANGE_EVENT, this, data, this.owner.getSimulatorTime()));
     }
@@ -394,5 +393,5 @@ public class Stock extends EventProducer implements StockInterface, StockForecas
     {
         return this.owner.getName() + ".Stock";
     }
-    
+
 }

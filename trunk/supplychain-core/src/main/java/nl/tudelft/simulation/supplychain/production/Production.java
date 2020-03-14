@@ -1,7 +1,7 @@
 package nl.tudelft.simulation.supplychain.production;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.pmw.tinylog.Logger;
@@ -29,7 +29,7 @@ public class Production implements Serializable
     protected StockKeepingActor owner = null;
 
     /** the handlers for this role */
-    protected Map<Product, ProductionService> productionServices = new HashMap<>();
+    protected Map<Product, ProductionService> productionServices = new LinkedHashMap<>();
 
     /**
      * Constructor for a production department of a Trader.

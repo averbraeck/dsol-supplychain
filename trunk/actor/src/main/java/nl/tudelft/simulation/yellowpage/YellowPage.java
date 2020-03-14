@@ -1,7 +1,7 @@
 package nl.tudelft.simulation.yellowpage;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +21,7 @@ public class YellowPage implements YellowPageInterface
     public static final long serialVersionUID = 12L;
 
     /** a map of entries */
-    protected Map<Category, List<ActorInterface>> entries = new HashMap<Category, List<ActorInterface>>();
+    protected Map<Category, List<ActorInterface>> entries = new LinkedHashMap<Category, List<ActorInterface>>();
 
     /** the parent of this yellowPage */
     protected YellowPage parent = null;

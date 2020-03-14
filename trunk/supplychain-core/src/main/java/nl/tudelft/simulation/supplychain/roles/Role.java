@@ -65,7 +65,7 @@ public abstract class Role extends InternalActor
 
     /** {@inheritDoc} */
     @Override
-    public boolean handleContent(Serializable content)
+    public boolean handleContent(final Serializable content)
     {
         return super.handleContent(content, false);
     }

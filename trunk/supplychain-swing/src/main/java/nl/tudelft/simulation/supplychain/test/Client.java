@@ -17,6 +17,7 @@ import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
 import nl.tudelft.simulation.dsol.swing.charts.xy.XYChart;
 import nl.tudelft.simulation.jstats.distributions.DistConstant;
 import nl.tudelft.simulation.jstats.distributions.DistExponential;
+import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.jstats.streams.StreamInterface;
 import nl.tudelft.simulation.language.d3.BoundingBox;
 import nl.tudelft.simulation.messaging.devices.reference.FaxDevice;
@@ -26,21 +27,20 @@ import nl.tudelft.simulation.supplychain.contentstore.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.demand.Demand;
 import nl.tudelft.simulation.supplychain.demand.DemandGeneration;
 import nl.tudelft.simulation.supplychain.finance.Money;
-import nl.tudelft.simulation.supplychain.handlers.BillHandler;
-import nl.tudelft.simulation.supplychain.handlers.InternalDemandHandlerRFQ;
-import nl.tudelft.simulation.supplychain.handlers.OrderConfirmationHandler;
-import nl.tudelft.simulation.supplychain.handlers.PaymentPolicyEnum;
-import nl.tudelft.simulation.supplychain.handlers.QuoteComparatorEnum;
-import nl.tudelft.simulation.supplychain.handlers.QuoteHandler;
-import nl.tudelft.simulation.supplychain.handlers.QuoteHandlerAll;
-import nl.tudelft.simulation.supplychain.handlers.ShipmentHandler;
-import nl.tudelft.simulation.supplychain.handlers.ShipmentHandlerConsume;
+import nl.tudelft.simulation.supplychain.policy.bill.BillPolicy;
+import nl.tudelft.simulation.supplychain.policy.internaldemand.InternalDemandPolicyRFQ;
+import nl.tudelft.simulation.supplychain.policy.orderconfirmation.OrderConfirmationPolicy;
+import nl.tudelft.simulation.supplychain.policy.payment.PaymentPolicyEnum;
+import nl.tudelft.simulation.supplychain.policy.quote.QuoteComparatorEnum;
+import nl.tudelft.simulation.supplychain.policy.quote.QuotePolicy;
+import nl.tudelft.simulation.supplychain.policy.quote.QuotePolicyAll;
+import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentPolicy;
+import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentPolicyConsume;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Customer;
 import nl.tudelft.simulation.supplychain.reference.Retailer;
 import nl.tudelft.simulation.supplychain.roles.BuyingRole;
-import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
-import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
+import nl.tudelft.simulation.unit.dist.DistConstantDuration;
 
 /**
  * Customer. <br>
@@ -74,8 +74,8 @@ public class Client extends Customer
      * @throws NamingException
      */
     public Client(final String name, final DEVSSimulatorInterface.TimeDoubleUnit simulator, final Point3d position,
-            final Bank bank, final Money initialBankAccount, final Product product, final Retailer retailer,
-            final ContentStoreInterface contentStore) throws RemoteException, NamingException
+        final Bank bank, final Money initialBankAccount, final Product product, final Retailer retailer,
+        final ContentStoreInterface contentStore) throws RemoteException, NamingException
     {
         super(name, simulator, position, bank, initialBankAccount, contentStore);
         this.product = product;
@@ -84,8 +84,8 @@ public class Client extends Customer
         // Let's give Client its corresponding image
         if (simulator instanceof AnimatorInterface)
         {
-            new SingleImageRenderable(this, simulator,
-                    Factory.class.getResource("/nl/tudelft/simulation/supplychain/images/Market.gif"));
+            new SingleImageRenderable<>(this, simulator, Factory.class.getResource(
+                "/nl/tudelft/simulation/supplychain/images/Market.gif"));
         }
     }
 
@@ -101,40 +101,39 @@ public class Client extends Customer
         FaxDevice fax = new FaxDevice("ClientFax", this.simulator);
         super.addSendingDevice(fax);
         MessageHandlerInterface secretary = new HandleAllMessages(this);
-        super.addReceivingDevice(fax, secretary, new DistConstantDurationUnit(hour));
+        super.addReceivingDevice(fax, secretary, new DistConstantDuration(hour));
         //
         // create the internal demand for PCs
-        Demand demand =
-                new Demand(this.product, new DistContinuousDurationUnit(new DistExponential(stream, 24.0), DurationUnit.HOUR),
-                        new DistConstant(stream, 1.0), new DistConstantDurationUnit(Duration.ZERO),
-                        new DistConstantDurationUnit(new Duration(14.0, DurationUnit.DAY)));
-        DemandGeneration dg = new DemandGeneration(this, super.simulator,
-                new DistContinuousDurationUnit(new DistExponential(stream, 2.0), DurationUnit.MINUTE));
+        Demand demand = new Demand(this.product, new DistContinuousDuration(new DistExponential(stream, 24.0),
+            DurationUnit.HOUR), new DistConstant(stream, 1.0), new DistConstantDuration(Duration.ZERO),
+            new DistConstantDuration(new Duration(14.0, DurationUnit.DAY)));
+        DemandGeneration dg = new DemandGeneration(this, new DistContinuousDuration(new DistExponential(stream, 2.0),
+            DurationUnit.MINUTE));
         dg.addDemandGenerator(this.product, demand);
         super.setDemandGeneration(dg);
         //
         // tell Client to use the InternalDemandHandler
-        InternalDemandHandlerRFQ internalDemandHandler =
-                new InternalDemandHandlerRFQ(this, new Duration(24.0, DurationUnit.HOUR), null); // XXX: Why does it need stock?
+        InternalDemandPolicyRFQ internalDemandHandler = new InternalDemandPolicyRFQ(this, new Duration(24.0,
+            DurationUnit.HOUR), null); // XXX: Why does it need stock?
         internalDemandHandler.addSupplier(this.product, this.retailer);
         //
         // tell Client to use the Quotehandler to handle quotes
-        QuoteHandler quoteHandler = new QuoteHandlerAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE,
-                new DistConstantDurationUnit(new Duration(2.0, DurationUnit.HOUR)), 0.4, 0.1);
+        QuotePolicy quoteHandler = new QuotePolicyAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE,
+            new DistConstantDuration(new Duration(2.0, DurationUnit.HOUR)), 0.4, 0.1);
         //
         // Client has the standard order confirmation handler
-        OrderConfirmationHandler confirmationHandler = new OrderConfirmationHandler(this);
+        OrderConfirmationPolicy confirmationHandler = new OrderConfirmationPolicy(this);
         //
         // Client will get a bill in the end
-        BillHandler billHandler = new BillHandler(this, super.bankAccount, PaymentPolicyEnum.PAYMENT_IMMEDIATE,
-                new DistConstantDurationUnit(Duration.ZERO));
+        BillPolicy billHandler = new BillPolicy(this, super.bankAccount, PaymentPolicyEnum.PAYMENT_IMMEDIATE,
+            new DistConstantDuration(Duration.ZERO));
         //
         // hopefully, Client will get laptop shipments
-        ShipmentHandler shipmentHandler = new ShipmentHandlerConsume(this);
+        ShipmentPolicy shipmentHandler = new ShipmentPolicyConsume(this);
         //
         // add the handlers to the buying role for Client
-        BuyingRole buyingRole = new BuyingRole(this, super.simulator, internalDemandHandler, quoteHandler, confirmationHandler,
-                shipmentHandler, billHandler);
+        BuyingRole buyingRole = new BuyingRole(this, super.simulator, internalDemandHandler, quoteHandler,
+            confirmationHandler, shipmentHandler, billHandler);
         super.setBuyingRole(buyingRole);
 
         //

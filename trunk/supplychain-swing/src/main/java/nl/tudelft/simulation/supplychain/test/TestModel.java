@@ -76,7 +76,7 @@ public class TestModel extends AbstractDSOLModel.TimeDoubleUnit<DEVSSimulatorInt
             {
                 // First we create some background. We set the zValue to -Double.Min value to ensure that it is actually drawn
                 // "below" our actors and messages.
-                new SingleImageRenderable(new DirectedPoint(0.0, 0.0, -Double.MIN_VALUE), new Dimension(1618, 716),
+                new SingleImageRenderable<>(new DirectedPoint(0.0, 0.0, -Double.MIN_VALUE), new Dimension(1618, 716),
                     this.devsSimulator, TestModel.class.getResource(
                         "/nl/tudelft/simulation/supplychain/images/worldmap.gif"));
             }

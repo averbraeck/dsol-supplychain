@@ -62,7 +62,7 @@ public class ATOModel extends AbstractDSOLModel.TimeDoubleUnit<DEVSSimulatorInte
             {
                 // First we create some background. We set the zValue to -Double.Min value to ensure that it is actually drawn
                 // "below" our actors and messages.
-                new SingleImageRenderable(new DirectedPoint(0.0, 0.0, -Double.MIN_VALUE), new Dimension(1618, 716),
+                new SingleImageRenderable<>(new DirectedPoint(0.0, 0.0, -Double.MIN_VALUE), new Dimension(1618, 716),
                     getSimulator(), ATOModel.class.getResource("/supplychain-ato/src/main/resources/images/europe-osm.png"));
                 // basics
                 // do we need 2 streams?

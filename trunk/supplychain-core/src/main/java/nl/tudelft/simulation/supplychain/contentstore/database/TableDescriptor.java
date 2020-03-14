@@ -2,7 +2,7 @@ package nl.tudelft.simulation.supplychain.contentstore.database;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +29,7 @@ public class TableDescriptor extends ArrayList<RecordDescriptor>
     private String displayField;
 
     /** the data descriptors as a searchable map */
-    private Map<String, RecordDescriptor> fields = new HashMap<String, RecordDescriptor>();
+    private Map<String, RecordDescriptor> fields = new LinkedHashMap<String, RecordDescriptor>();
 
     /** the needed WHERE strings to display this specific table */
     private List<String> whereStrings = new ArrayList<String>();

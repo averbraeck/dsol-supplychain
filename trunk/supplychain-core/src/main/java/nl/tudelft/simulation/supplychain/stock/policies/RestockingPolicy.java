@@ -6,12 +6,12 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
+import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.StockKeepingActor;
 import nl.tudelft.simulation.supplychain.content.InternalDemand;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
-import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
-import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
+import nl.tudelft.simulation.unit.dist.DistConstantDuration;
 
 /**
  * <br>
@@ -36,7 +36,7 @@ public abstract class RestockingPolicy implements Serializable
 
     // TODO: See if this should be a Duration or a Frequency
     /** the frequency distribution for restocking or checking the stock */
-    protected DistContinuousDurationUnit frequency;
+    protected DistContinuousDuration frequency;
 
     /** the maximum delivery time */
     protected Duration maxDeliveryDuration = Duration.ZERO;
@@ -48,7 +48,7 @@ public abstract class RestockingPolicy implements Serializable
      * @param frequency the frequency distribution for restocking or checking
      * @param maxDeliveryDuration the maximum delivery time to use
      */
-    public RestockingPolicy(final StockInterface stock, final Product product, final DistContinuousDurationUnit frequency,
+    public RestockingPolicy(final StockInterface stock, final Product product, final DistContinuousDuration frequency,
             final Duration maxDeliveryDuration)
     {
         super();
@@ -77,7 +77,7 @@ public abstract class RestockingPolicy implements Serializable
     public RestockingPolicy(final StockInterface stock, final Product product, final Duration frequency,
             final Duration maxDeliveryDuration)
     {
-        this(stock, product, new DistConstantDurationUnit(frequency), maxDeliveryDuration);
+        this(stock, product, new DistConstantDuration(frequency), maxDeliveryDuration);
     }
 
     /**
@@ -116,7 +116,7 @@ public abstract class RestockingPolicy implements Serializable
     /**
      * @return Returns the frequency distribution.
      */
-    public DistContinuousDurationUnit getFrequency()
+    public DistContinuousDuration getFrequency()
     {
         return this.frequency;
     }
@@ -124,7 +124,7 @@ public abstract class RestockingPolicy implements Serializable
     /**
      * @param frequency The frequency distribution to set.
      */
-    public void setFrequency(final DistContinuousDurationUnit frequency)
+    public void setFrequency(final DistContinuousDuration frequency)
     {
         this.frequency = frequency;
     }
@@ -134,7 +134,7 @@ public abstract class RestockingPolicy implements Serializable
      */
     public void setFrequency(final Duration frequency)
     {
-        this.frequency = new DistConstantDurationUnit(frequency);
+        this.frequency = new DistConstantDuration(frequency);
     }
 
     /**

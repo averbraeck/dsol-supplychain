@@ -4,9 +4,9 @@ import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.actor.ActorInterface;
 import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface;
+import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.messaging.Message;
 import nl.tudelft.simulation.messaging.queues.MessageQueueInterface;
-import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * The MessageHandlerTimeDelay takes messages one by one and only looks at the next message after a certain time delay. A busy
@@ -30,7 +30,7 @@ public class HandleMessagesTimeDelay implements MessageHandlerInterface
     private DEVSSimulatorInterface.TimeDoubleUnit simulator;
 
     /** the time distribution for handling the message */
-    private DistContinuousDurationUnit handlingTime;
+    private DistContinuousDuration handlingTime;
 
     /** a flag to indicate that the message handler is already busy */
     private boolean busy;
@@ -43,7 +43,7 @@ public class HandleMessagesTimeDelay implements MessageHandlerInterface
      * @param handlingTime distribution for handling the message
      */
     public HandleMessagesTimeDelay(final ActorInterface owner, final DEVSSimulatorInterface.TimeDoubleUnit simulator,
-            final DistContinuousDurationUnit handlingTime)
+            final DistContinuousDuration handlingTime)
     {
         super();
         this.owner = owner;

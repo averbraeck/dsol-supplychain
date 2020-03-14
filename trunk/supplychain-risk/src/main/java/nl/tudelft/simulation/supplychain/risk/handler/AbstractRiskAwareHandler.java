@@ -2,7 +2,7 @@ package nl.tudelft.simulation.supplychain.risk.handler;
 
 import org.djutils.event.EventListenerInterface;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
-import nl.tudelft.simulation.supplychain.handlers.SupplyChainHandler;
+import nl.tudelft.simulation.supplychain.policy.SupplyChainHandler;
 
 /**
  * AbstractRiskAwareHandler.java. <br>

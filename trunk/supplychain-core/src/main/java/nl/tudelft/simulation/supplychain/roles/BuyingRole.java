@@ -8,15 +8,15 @@ import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.content.Shipment;
 import nl.tudelft.simulation.supplychain.content.YellowPageAnswer;
-import nl.tudelft.simulation.supplychain.handlers.BillHandler;
-import nl.tudelft.simulation.supplychain.handlers.InternalDemandHandler;
-import nl.tudelft.simulation.supplychain.handlers.InternalDemandHandlerOrder;
-import nl.tudelft.simulation.supplychain.handlers.InternalDemandHandlerRFQ;
-import nl.tudelft.simulation.supplychain.handlers.InternalDemandHandlerYP;
-import nl.tudelft.simulation.supplychain.handlers.OrderConfirmationHandler;
-import nl.tudelft.simulation.supplychain.handlers.QuoteHandler;
-import nl.tudelft.simulation.supplychain.handlers.ShipmentHandler;
-import nl.tudelft.simulation.supplychain.handlers.YellowPageAnswerHandler;
+import nl.tudelft.simulation.supplychain.policy.bill.BillPolicy;
+import nl.tudelft.simulation.supplychain.policy.internaldemand.InternalDemandPolicy;
+import nl.tudelft.simulation.supplychain.policy.internaldemand.InternalDemandPolicyOrder;
+import nl.tudelft.simulation.supplychain.policy.internaldemand.InternalDemandPolicyRFQ;
+import nl.tudelft.simulation.supplychain.policy.internaldemand.InternalDemandPolicyYP;
+import nl.tudelft.simulation.supplychain.policy.orderconfirmation.OrderConfirmationPolicy;
+import nl.tudelft.simulation.supplychain.policy.quote.QuotePolicy;
+import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentPolicy;
+import nl.tudelft.simulation.supplychain.policy.yp.YellowPageAnswerPolicy;
 
 /**
  * The buying role is a role that can handle several types of message content: internal demand, order confirmation, bill, and
@@ -45,8 +45,8 @@ public class BuyingRole extends Role implements BuyingRoleInterface
      * @param billHandler the bill handler
      */
     public BuyingRole(final SupplyChainActor owner, final DEVSSimulatorInterface.TimeDoubleUnit simulator,
-            final InternalDemandHandler internalDemandHandler, final OrderConfirmationHandler orderConfirmationHandler,
-            final ShipmentHandler shipmentHandler, final BillHandler billHandler)
+            final InternalDemandPolicy internalDemandHandler, final OrderConfirmationPolicy orderConfirmationHandler,
+            final ShipmentPolicy shipmentHandler, final BillPolicy billHandler)
     {
         super(owner, owner.getName() + "-BUYING", simulator);
         addContentHandler(InternalDemand.class, internalDemandHandler);
@@ -65,8 +65,8 @@ public class BuyingRole extends Role implements BuyingRoleInterface
      * @param billHandler the bill handler
      */
     public BuyingRole(final SupplyChainActor owner, final DEVSSimulatorInterface.TimeDoubleUnit simulator,
-            final InternalDemandHandlerOrder internalDemandHandler, final OrderConfirmationHandler orderConfirmationHandler,
-            final ShipmentHandler shipmentHandler, final BillHandler billHandler)
+            final InternalDemandPolicyOrder internalDemandHandler, final OrderConfirmationPolicy orderConfirmationHandler,
+            final ShipmentPolicy shipmentHandler, final BillPolicy billHandler)
     {
         super(owner, owner.getName() + "-BUYING", simulator);
         addContentHandler(InternalDemand.class, internalDemandHandler);
@@ -86,9 +86,9 @@ public class BuyingRole extends Role implements BuyingRoleInterface
      * @param billHandler the bill handler
      */
     public BuyingRole(final SupplyChainActor owner, final DEVSSimulatorInterface.TimeDoubleUnit simulator,
-            final InternalDemandHandlerRFQ internalDemandHandler, final QuoteHandler quoteHandler,
-            final OrderConfirmationHandler orderConfirmationHandler, final ShipmentHandler shipmentHandler,
-            final BillHandler billHandler)
+            final InternalDemandPolicyRFQ internalDemandHandler, final QuotePolicy quoteHandler,
+            final OrderConfirmationPolicy orderConfirmationHandler, final ShipmentPolicy shipmentHandler,
+            final BillPolicy billHandler)
     {
         super(owner, owner.getName() + "-BUYING", simulator);
         addContentHandler(InternalDemand.class, internalDemandHandler);
@@ -110,9 +110,9 @@ public class BuyingRole extends Role implements BuyingRoleInterface
      * @param billHandler the bill handler
      */
     public BuyingRole(final SupplyChainActor owner, final DEVSSimulatorInterface.TimeDoubleUnit simulator,
-            final InternalDemandHandlerYP internalDemandHandler, final YellowPageAnswerHandler ypAnswerHandler,
-            final QuoteHandler quoteHandler, final OrderConfirmationHandler orderConfirmationHandler,
-            final ShipmentHandler shipmentHandler, final BillHandler billHandler)
+            final InternalDemandPolicyYP internalDemandHandler, final YellowPageAnswerPolicy ypAnswerHandler,
+            final QuotePolicy quoteHandler, final OrderConfirmationPolicy orderConfirmationHandler,
+            final ShipmentPolicy shipmentHandler, final BillPolicy billHandler)
     {
         super(owner, owner.getName() + "-BUYING", simulator);
         addContentHandler(InternalDemand.class, internalDemandHandler);

@@ -19,6 +19,7 @@ import nl.tudelft.simulation.dsol.simulators.DEVSSimulatorInterface.TimeDoubleUn
 import nl.tudelft.simulation.jstats.distributions.DistConstant;
 import nl.tudelft.simulation.jstats.distributions.DistExponential;
 import nl.tudelft.simulation.jstats.distributions.DistTriangular;
+import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.jstats.streams.StreamInterface;
 import nl.tudelft.simulation.language.d3.BoundingBox;
 import nl.tudelft.simulation.messaging.devices.reference.WebApplication;
@@ -27,22 +28,21 @@ import nl.tudelft.simulation.supplychain.contentstore.memory.LeanContentStore;
 import nl.tudelft.simulation.supplychain.demand.Demand;
 import nl.tudelft.simulation.supplychain.demand.DemandGeneration;
 import nl.tudelft.simulation.supplychain.finance.Money;
-import nl.tudelft.simulation.supplychain.handlers.BillHandler;
-import nl.tudelft.simulation.supplychain.handlers.InternalDemandHandlerYP;
-import nl.tudelft.simulation.supplychain.handlers.OrderConfirmationHandler;
-import nl.tudelft.simulation.supplychain.handlers.PaymentPolicyEnum;
-import nl.tudelft.simulation.supplychain.handlers.QuoteComparatorEnum;
-import nl.tudelft.simulation.supplychain.handlers.QuoteHandler;
-import nl.tudelft.simulation.supplychain.handlers.QuoteHandlerAll;
-import nl.tudelft.simulation.supplychain.handlers.ShipmentHandler;
-import nl.tudelft.simulation.supplychain.handlers.ShipmentHandlerConsume;
-import nl.tudelft.simulation.supplychain.handlers.YellowPageAnswerHandler;
+import nl.tudelft.simulation.supplychain.policy.bill.BillPolicy;
+import nl.tudelft.simulation.supplychain.policy.internaldemand.InternalDemandPolicyYP;
+import nl.tudelft.simulation.supplychain.policy.orderconfirmation.OrderConfirmationPolicy;
+import nl.tudelft.simulation.supplychain.policy.payment.PaymentPolicyEnum;
+import nl.tudelft.simulation.supplychain.policy.quote.QuoteComparatorEnum;
+import nl.tudelft.simulation.supplychain.policy.quote.QuotePolicy;
+import nl.tudelft.simulation.supplychain.policy.quote.QuotePolicyAll;
+import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentPolicy;
+import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentPolicyConsume;
+import nl.tudelft.simulation.supplychain.policy.yp.YellowPageAnswerPolicy;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Customer;
 import nl.tudelft.simulation.supplychain.reference.YellowPage;
 import nl.tudelft.simulation.supplychain.roles.BuyingRole;
-import nl.tudelft.simulation.unit.dist.DistConstantDurationUnit;
-import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
+import nl.tudelft.simulation.unit.dist.DistConstantDuration;
 
 /**
  * <p>
@@ -51,8 +51,10 @@ import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
  * </p>
  * $LastChangedDate: 2015-07-24 02:58:59 +0200 (Fri, 24 Jul 2015) $, @version $Revision: 1147 $, by $Author: averbraeck $,
  * initial version Oct 12, 2018 <br>
- * @author <a href="http://www.tbm.tudelft.nl/averbraeck">Alexander Verbraeck</a> 
- * @author <a href="http://https://www.tudelft.nl/tbm/over-de-faculteit/afdelingen/multi-actor-systems/people/phd-candidates/b-bahareh-zohoori/">Bahareh Zohoori</a> 
+ * @author <a href="http://www.tbm.tudelft.nl/averbraeck">Alexander Verbraeck</a>
+ * @author <a href=
+ *         "http://https://www.tudelft.nl/tbm/over-de-faculteit/afdelingen/multi-actor-systems/people/phd-candidates/b-bahareh-zohoori/">Bahareh
+ *         Zohoori</a>
  */
 public class ATOMarket extends Customer
 {
@@ -64,84 +66,83 @@ public class ATOMarket extends Customer
      * @param simulator
      * @param position
      * @param bank
-     * @param initialBankAccount 
-     * @param product 
-     * @param ypCustomre 
-     * @param stream 
+     * @param initialBankAccount
+     * @param product
+     * @param ypCustomre
+     * @param stream
      */
-    
-    // Another constructor to handle demand not through yellowPage? if we want to create another constructor should we add everything again including communication? 
+
+    // Another constructor to handle demand not through yellowPage? if we want to create another constructor should we add
+    // everything again including communication?
     public ATOMarket(String name, TimeDoubleUnit simulator, Point3d position, Bank bank, Money initialBankAccount,
-            Product product, YellowPage ypCustomre, StreamInterface stream)
+        Product product, YellowPage ypCustomre, StreamInterface stream)
     {
         super(name, simulator, position, bank, initialBankAccount, new LeanContentStore(simulator));
 
         // COMMUNICATION
-        //should it be different from webapplication of manufacturer? should we name them differently? 
+        // should it be different from webapplication of manufacturer? should we name them differently?
 
         WebApplication www = new WebApplication("Web-" + name, this.simulator);
         super.addSendingDevice(www);
         MessageHandlerInterface webSystem = new HandleAllMessages(this);
-        super.addReceivingDevice(www, webSystem, new DistConstantDurationUnit(new Duration(10.0, DurationUnit.SECOND)));
+        super.addReceivingDevice(www, webSystem, new DistConstantDuration(new Duration(10.0, DurationUnit.SECOND)));
 
         // DEMAND GENERATION
-// shall we createInternalDeman here? how to change demand to internal demand?
-        Demand demand = new Demand(product, new DistContinuousDurationUnit(new DistExponential(stream, 8.0), DurationUnit.HOUR),
-                new DistConstant(stream, 1.0), new DistConstantDurationUnit(Duration.ZERO),
-                new DistConstantDurationUnit(new Duration(14.0, DurationUnit.DAY)));
-        DemandGeneration dg = new DemandGeneration(this, simulator,
-                new DistContinuousDurationUnit(new DistExponential(stream, 2.0), DurationUnit.MINUTE));
+        // shall we createInternalDeman here? how to change demand to internal demand?
+        Demand demand = new Demand(product, new DistContinuousDuration(new DistExponential(stream, 8.0), DurationUnit.HOUR),
+            new DistConstant(stream, 1.0), new DistConstantDuration(Duration.ZERO), new DistConstantDuration(new Duration(
+                14.0, DurationUnit.DAY)));
+        DemandGeneration dg = new DemandGeneration(this, new DistContinuousDuration(new DistExponential(stream,
+            2.0), DurationUnit.MINUTE));
         dg.addDemandGenerator(product, demand);
         this.setDemandGeneration(dg);
-      //why we can not use dg.createInternalDemand? what is the meaning of protection?
+        // why we can not use dg.createInternalDemand? what is the meaning of protection?
 
         // MESSAGE HANDLING
- 
-        DistContinuousDurationUnit administrativeDelayInternalDemand =
-                new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-           // handling massage through yellow page-create yellow page request. what exactly ypCustomer does?
-        // why in the Internal DemanHandler we use this? this is the owner of internal demand!
-        InternalDemandHandlerYP internalDemandHandler = new InternalDemandHandlerYP(this, administrativeDelayInternalDemand, ypCustomre,
-                new Length(1E6, LengthUnit.METER), 1000, null);
-        
-        //InternalDemandHandlerOrder internalDemandHandlerOrder = new InternalDemandhandlerOrder(this,administrativeDelayInternalDemand, stochInterface Stock?) 
 
-        DistContinuousDurationUnit administrativeDelayYellowPageAnswer =
-                new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
+        DistContinuousDuration administrativeDelayInternalDemand = new DistContinuousDuration(new DistTriangular(stream, 2,
+            2.5, 3), DurationUnit.HOUR);
+        // handling massage through yellow page-create yellow page request. what exactly ypCustomer does?
+        // why in the Internal DemanHandler we use this? this is the owner of internal demand!
+        InternalDemandPolicyYP internalDemandHandler = new InternalDemandPolicyYP(this, administrativeDelayInternalDemand,
+            ypCustomre, new Length(1E6, LengthUnit.METER), 1000, null);
+
+        // InternalDemandHandlerOrder internalDemandHandlerOrder = new
+        // InternalDemandhandlerOrder(this,administrativeDelayInternalDemand, stochInterface Stock?)
+
+        DistContinuousDuration administrativeDelayYellowPageAnswer = new DistContinuousDuration(new DistTriangular(stream, 2,
+            2.5, 3), DurationUnit.HOUR);
         // why its not YellowpageRequestHandler?beacuse that handler is taking care of yellowPage stuff(such as search ,...)
         // YellowPageAnswerHandler is the buyer who should reply to the findings of yellowpage
-        YellowPageAnswerHandler ypAnswerHandler = new YellowPageAnswerHandler(this, administrativeDelayYellowPageAnswer);
+        YellowPageAnswerPolicy ypAnswerHandler = new YellowPageAnswerPolicy(this, administrativeDelayYellowPageAnswer);
 
-        DistContinuousDurationUnit administrativeDelayQuote =
-                new DistContinuousDurationUnit(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-        // quotes are received from RFQ request        
-        QuoteHandler quoteHandler =
-         
-                new QuoteHandlerAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE, administrativeDelayQuote, 0.5, 0);
+        DistContinuousDuration administrativeDelayQuote = new DistContinuousDuration(new DistTriangular(stream, 2, 2.5, 3),
+            DurationUnit.HOUR);
+        // quotes are received from RFQ request
+        QuotePolicy quoteHandler =
 
-        OrderConfirmationHandler orderConfirmationHandler = new OrderConfirmationHandler(this);
+            new QuotePolicyAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE, administrativeDelayQuote, 0.5, 0);
 
-        ShipmentHandler shipmentHandler = new ShipmentHandlerConsume(this);
+        OrderConfirmationPolicy orderConfirmationHandler = new OrderConfirmationPolicy(this);
 
-        DistContinuousDurationUnit paymentDelay =
-                new DistContinuousDurationUnit(new DistConstant(stream, 0.0), DurationUnit.HOUR);
-        BillHandler billHandler = new BillHandler(this, this.getBankAccount(), PaymentPolicyEnum.PAYMENT_ON_TIME, paymentDelay);
+        ShipmentPolicy shipmentHandler = new ShipmentPolicyConsume(this);
+
+        DistContinuousDuration paymentDelay = new DistContinuousDuration(new DistConstant(stream, 0.0), DurationUnit.HOUR);
+        BillPolicy billHandler = new BillPolicy(this, this.getBankAccount(), PaymentPolicyEnum.PAYMENT_ON_TIME,
+            paymentDelay);
 
         BuyingRole buyingRole = new BuyingRole(this, simulator, internalDemandHandler, ypAnswerHandler, quoteHandler,
-                orderConfirmationHandler, shipmentHandler, billHandler);
+            orderConfirmationHandler, shipmentHandler, billHandler);
         this.setBuyingRole(buyingRole);
-       
-        
-        
 
         // ANIMATION
-        
+
         if (simulator instanceof AnimatorInterface)
         {
             try
             {
-                new SingleImageRenderable(this, simulator,
-                        ATOMarket.class.getResource("/nl/tudelft/simulation/supplychain/images/Market.gif"));
+                new SingleImageRenderable<>(this, simulator, ATOMarket.class.getResource(
+                    "/nl/tudelft/simulation/supplychain/images/Market.gif"));
             }
             catch (RemoteException | NamingException exception)
             {
@@ -158,6 +159,3 @@ public class ATOMarket extends Customer
     }
 
 }
-
-
-

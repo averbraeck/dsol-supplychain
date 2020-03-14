@@ -2,7 +2,7 @@ package nl.tudelft.simulation.supplychain.actor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -53,7 +53,7 @@ public abstract class SupplyChainActor extends Actor
     private final ContentStoreInterface contentStore;
 
     /** the roles for this actor; avoid roles to be registered multiple times (Set). */
-    private Set<Role> roles = new HashSet<Role>();
+    private Set<Role> roles = new LinkedHashSet<Role>();
 
     /** the fixed costs for this supply chain actor */
     private List<FixedCost> fixedCosts = new ArrayList<FixedCost>();

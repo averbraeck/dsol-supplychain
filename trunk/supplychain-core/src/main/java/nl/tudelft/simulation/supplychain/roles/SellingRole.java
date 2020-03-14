@@ -5,9 +5,9 @@ import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.content.Payment;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
-import nl.tudelft.simulation.supplychain.handlers.OrderHandler;
-import nl.tudelft.simulation.supplychain.handlers.PaymentHandler;
-import nl.tudelft.simulation.supplychain.handlers.RequestForQuoteHandler;
+import nl.tudelft.simulation.supplychain.policy.order.OrderPolicy;
+import nl.tudelft.simulation.supplychain.policy.payment.PaymentPolicy;
+import nl.tudelft.simulation.supplychain.policy.rfq.RequestForQuotePolicy;
 
 /**
  * The selling role is a role that can handle several types of message content: order and payment in the minimum form. Depending
@@ -32,7 +32,7 @@ public class SellingRole extends Role implements SellingRoleInterface
      * @param paymentHandler the payment handler
      */
     public SellingRole(final SupplyChainActor owner, final DEVSSimulatorInterface.TimeDoubleUnit simulator,
-            final OrderHandler orderHandler, final PaymentHandler paymentHandler)
+            final OrderPolicy orderHandler, final PaymentPolicy paymentHandler)
     {
         super(owner, owner.getName() + "-SELLLING", simulator);
         addContentHandler(Order.class, orderHandler);
@@ -48,7 +48,7 @@ public class SellingRole extends Role implements SellingRoleInterface
      * @param paymentHandler the payment handler
      */
     public SellingRole(final SupplyChainActor owner, final DEVSSimulatorInterface.TimeDoubleUnit simulator,
-            final RequestForQuoteHandler rfqHandler, final OrderHandler orderHandler, final PaymentHandler paymentHandler)
+            final RequestForQuotePolicy rfqHandler, final OrderPolicy orderHandler, final PaymentPolicy paymentHandler)
     {
         super(owner, owner.getName() + "-SELLLING", simulator);
         addContentHandler(Order.class, orderHandler);

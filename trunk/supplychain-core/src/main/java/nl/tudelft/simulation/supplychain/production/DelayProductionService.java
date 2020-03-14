@@ -3,6 +3,7 @@ package nl.tudelft.simulation.supplychain.production;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.djunits.unit.DurationUnit;
@@ -10,12 +11,12 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
 import org.pmw.tinylog.Logger;
 
+import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.StockKeepingActor;
 import nl.tudelft.simulation.supplychain.content.ProductionOrder;
 import nl.tudelft.simulation.supplychain.finance.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.stock.StockInterface;
-import nl.tudelft.simulation.unit.dist.DistContinuousDurationUnit;
 
 /**
  * The DelayProductionService starts production at the latest possible moment to meet the delivery date of the production order.
@@ -34,7 +35,7 @@ public class DelayProductionService extends ProductionService
     private static final long serialVersionUID = 12L;
 
     /** the time distribution to produce products */
-    protected DistContinuousDurationUnit productionTime;
+    protected DistContinuousDuration productionTime;
 
     /** fixed time, independent of order size; otherwise time is per unit */
     protected boolean fixedTime;
@@ -56,7 +57,7 @@ public class DelayProductionService extends ProductionService
      * @param profitMargin the fraction that is added to the cost of the materials.
      */
     public DelayProductionService(final StockKeepingActor owner, final StockInterface stock, final Product product,
-            final DistContinuousDurationUnit productionTime, final boolean fixedTime, final boolean greedy,
+            final DistContinuousDuration productionTime, final boolean fixedTime, final boolean greedy,
             final double profitMargin)
     {
         super(owner, stock, product);
@@ -88,7 +89,7 @@ public class DelayProductionService extends ProductionService
         Product _product = productionOrder.getProduct();
         Map<Product, Double> bom = _product.getBillOfMaterials().getMaterials();
 
-        HashMap<Product, Double> availableMaterials = new HashMap<>();
+        HashMap<Product, Double> availableMaterials = new LinkedHashMap<>();
         Iterator<Product> bomIter = bom.keySet().iterator();
         while (bomIter.hasNext())
         {
@@ -125,7 +126,7 @@ public class DelayProductionService extends ProductionService
         Map<Product, Double> bom = _product.getBillOfMaterials().getMaterials();
 
         // check whether there is enough on stock for this order
-        HashMap<Product, Double> availableMaterials = new HashMap<>();
+        HashMap<Product, Double> availableMaterials = new LinkedHashMap<>();
         Iterator<Product> bomIter = bom.keySet().iterator();
         while (bomIter.hasNext())
         {

@@ -1,7 +1,8 @@
 package nl.tudelft.simulation.supplychain.yellowpage;
 
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,7 +36,7 @@ public class SupplyChainYellowPage extends SupplyChainActor implements YPInterfa
     private nl.tudelft.simulation.yellowpage.YellowPage yp;
 
     /** the dictionary of product-actor combinations */
-    private Map<Product, HashSet<SupplyChainActor>> dictionary = new HashMap<>();
+    private Map<Product, HashSet<SupplyChainActor>> dictionary = new LinkedHashMap<>();
 
     /**
      * @param name
@@ -76,7 +77,7 @@ public class SupplyChainYellowPage extends SupplyChainActor implements YPInterfa
         HashSet<SupplyChainActor> supplierSet = this.dictionary.get(product);
         if (supplierSet == null)
         {
-            supplierSet = new HashSet<SupplyChainActor>();
+            supplierSet = new LinkedHashSet<SupplyChainActor>();
             this.dictionary.put(product, supplierSet);
         }
         supplierSet.add(supplier);
@@ -102,7 +103,7 @@ public class SupplyChainYellowPage extends SupplyChainActor implements YPInterfa
      */
     public Set<SupplyChainActor> getSuppliers(final Product product)
     {
-        Set<SupplyChainActor> supplierSet = new HashSet<>();
+        Set<SupplyChainActor> supplierSet = new LinkedHashSet<>();
         if (this.dictionary.get(product) != null)
         {
             supplierSet.addAll(this.dictionary.get(product));
