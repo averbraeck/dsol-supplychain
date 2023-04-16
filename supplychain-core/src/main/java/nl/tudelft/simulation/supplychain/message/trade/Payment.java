@@ -1,8 +1,8 @@
 package nl.tudelft.simulation.supplychain.message.trade;
 
-import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.finance.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
 
 /**
  * The Payment follows on a Bill, and it contains a pointer to the Bill for which it is the payment.
@@ -25,13 +25,13 @@ public class Payment extends TradeMessage
 
     /**
      * Constructs a new Payment.
-     * @param sender Actor; the sender actor of the message content
-     * @param receiver Actor; the receving actor of the message content
+     * @param sender FinancingActor; the sender actor of the message content
+     * @param receiver FinancingActor; the receving actor of the message content
      * @param internalDemandId the internal demand that triggered the supply chain
      * @param bill the bill for which this is the payment
      * @param payment the payment
      */
-    public Payment(final Actor sender, final Actor receiver, final long internalDemandId, final Bill bill,
+    public Payment(final FinancingActor sender, final FinancingActor receiver, final long internalDemandId, final Bill bill,
             final Money payment)
     {
         super(sender, receiver, internalDemandId);
@@ -70,4 +70,19 @@ public class Payment extends TradeMessage
     {
         return this.bill.getProduct();
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public FinancingActor getSender()
+    {
+        return (FinancingActor) super.getSender();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public FinancingActor getReceiver()
+    {
+        return (FinancingActor) super.getReceiver();
+    }
+
 }

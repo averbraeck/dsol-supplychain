@@ -2,9 +2,9 @@ package nl.tudelft.simulation.supplychain.message.trade;
 
 import org.djunits.value.vdouble.scalar.Time;
 
-import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.finance.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
 
 /**
  * The bill represents a document that asks for payment for a product or service. It contains a pointer to an Order to see for
@@ -37,15 +37,15 @@ public class Bill extends TradeMessage
 
     /**
      * Constructs a new Bill.
-     * @param sender Actor; the sender
-     * @param receiver Actor; the receiver
+     * @param sender FinancingActor; the sender
+     * @param receiver FinancingActor; the receiver
      * @param internalDemandId the unique internal demand id of this bill
      * @param order the order the bill is sent for
      * @param finalPaymentDate the final payment date of the bill
      * @param price Money; the amount to be paid
      * @param description the description
      */
-    public Bill(final Actor sender, final Actor receiver, final long internalDemandId, final Order order,
+    public Bill(final FinancingActor sender, final FinancingActor receiver, final long internalDemandId, final Order order,
             final Time finalPaymentDate, final Money price, final String description)
     {
         super(sender, receiver, internalDemandId);
@@ -120,4 +120,19 @@ public class Bill extends TradeMessage
     {
         this.isPaid = paid;
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public FinancingActor getSender()
+    {
+        return (FinancingActor) super.getSender();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public FinancingActor getReceiver()
+    {
+        return (FinancingActor) super.getReceiver();
+    }
+        
 }
