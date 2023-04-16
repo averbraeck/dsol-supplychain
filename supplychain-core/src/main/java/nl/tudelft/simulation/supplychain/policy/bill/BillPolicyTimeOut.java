@@ -6,11 +6,11 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
-import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.finance.BankAccount;
 import nl.tudelft.simulation.supplychain.message.trade.Bill;
 import nl.tudelft.simulation.supplychain.message.trade.Payment;
 import nl.tudelft.simulation.supplychain.policy.payment.PaymentPolicyEnum;
+import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
 
 /**
  * A Bill handler which has a restriction that after a time out the bill is paid automatically if not paid yet.
@@ -39,7 +39,7 @@ public class BillPolicyTimeOut extends BillPolicy
      * @param paymentDelay the payment delay
      * @param maximumTimeOut the maximum time out for a bill
      */
-    public BillPolicyTimeOut(final Role owner, final BankAccount bankAccount, final PaymentPolicyEnum paymentPolicy,
+    public BillPolicyTimeOut(final FinancingRole owner, final BankAccount bankAccount, final PaymentPolicyEnum paymentPolicy,
             final DistContinuousDuration paymentDelay, final Duration maximumTimeOut)
     {
         super(owner, bankAccount, paymentPolicy, paymentDelay);
@@ -52,7 +52,7 @@ public class BillPolicyTimeOut extends BillPolicy
      * @param bankAccount the bankaccount to use.
      * @param maximumTimeOut the maximum time out for a bill
      */
-    public BillPolicyTimeOut(final Role owner, final BankAccount bankAccount, final Duration maximumTimeOut)
+    public BillPolicyTimeOut(final FinancingRole owner, final BankAccount bankAccount, final Duration maximumTimeOut)
     {
         this(owner, bankAccount, PaymentPolicyEnum.PAYMENT_ON_TIME, null, maximumTimeOut);
     }
@@ -65,8 +65,8 @@ public class BillPolicyTimeOut extends BillPolicy
         {
             try
             {
-                getSimulator().scheduleEventAbs(bill.getFinalPaymentDate().plus(this.maximumTimeOut), this,
-                        "checkPayment", new Serializable[] {bill});
+                getSimulator().scheduleEventAbs(bill.getFinalPaymentDate().plus(this.maximumTimeOut), this, "checkPayment",
+                        new Serializable[] {bill});
             }
             catch (Exception exception)
             {
@@ -97,8 +97,7 @@ public class BillPolicyTimeOut extends BillPolicy
     {
         // make a payment to send out
         super.bankAccount.withdrawFromBalance(bill.getPrice());
-        Payment payment =
-                new Payment(getActor(), bill.getSender(), bill.getInternalDemandId(), bill, bill.getPrice());
+        Payment payment = new Payment(bill.getReceiver(), bill.getSender(), bill.getInternalDemandId(), bill, bill.getPrice());
         sendMessage(payment, Duration.ZERO);
         if (this.debug)
         {

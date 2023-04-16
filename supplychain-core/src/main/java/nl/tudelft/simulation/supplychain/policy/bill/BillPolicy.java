@@ -9,12 +9,12 @@ import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.SimRuntimeException;
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
-import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.finance.BankAccount;
 import nl.tudelft.simulation.supplychain.message.trade.Bill;
 import nl.tudelft.simulation.supplychain.message.trade.Payment;
 import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
 import nl.tudelft.simulation.supplychain.policy.payment.PaymentPolicyEnum;
+import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
 
 /**
  * The BillHandler is a simple implementation of the business logic to pay a bill. Four different policies are available in this
@@ -47,7 +47,7 @@ public class BillPolicy extends SupplyChainPolicy<Bill>
      * @param paymentPolicy the payment policy to use (early, late, etc.).
      * @param paymentDelay the delay to use in early or late payment
      */
-    public BillPolicy(final Role owner, final BankAccount bankAccount, final PaymentPolicyEnum paymentPolicy,
+    public BillPolicy(final FinancingRole owner, final BankAccount bankAccount, final PaymentPolicyEnum paymentPolicy,
             final DistContinuousDuration paymentDelay)
     {
         super("BillPolicy", owner, Bill.class);
@@ -61,7 +61,7 @@ public class BillPolicy extends SupplyChainPolicy<Bill>
      * @param owner Role; the owner of the policy.
      * @param bankAccount the bankaccount to use.
      */
-    public BillPolicy(final Role owner, final BankAccount bankAccount)
+    public BillPolicy(final FinancingRole owner, final BankAccount bankAccount)
     {
         this(owner, bankAccount, PaymentPolicyEnum.PAYMENT_ON_TIME, null);
     }
@@ -134,7 +134,7 @@ public class BillPolicy extends SupplyChainPolicy<Bill>
         // make a payment to send out
         this.bankAccount.withdrawFromBalance(bill.getPrice());
         Payment payment =
-                new Payment(getActor(), bill.getSender(), bill.getInternalDemandId(), bill, bill.getPrice());
+                new Payment(bill.getReceiver(), bill.getSender(), bill.getInternalDemandId(), bill, bill.getPrice());
         sendMessage(payment, Duration.ZERO);
     }
 
