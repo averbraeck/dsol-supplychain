@@ -54,7 +54,7 @@ public interface Actor extends EventProducer, Locatable, Identifiable, Serializa
      * message is not intended for this actor, a log warning is given, and the message is not processed.
      * @param message message; the message to receive
      */
-    void receiveMessage(final Message message);
+    void receiveMessage(Message message);
 
     /**
      * Send a message to another actor with a delay. This method is public, so Roles, Policies, Departments, ad other
@@ -64,7 +64,7 @@ public interface Actor extends EventProducer, Locatable, Identifiable, Serializa
      * @param message message; the message to send
      * @param delay Duration; the time it takes between sending and receiving
      */
-    void sendMessage(final Message message, final Duration delay);
+    void sendMessage(Message message, Duration delay);
 
     /**
      * Send a message to another actor without a delay.
@@ -121,7 +121,7 @@ public interface Actor extends EventProducer, Locatable, Identifiable, Serializa
      * Set the bounds of the object (size and relative height in the animation).
      * @param bounds the bounds for the (animation) object
      */
-    void setBounds(final Bounds3d bounds);
+    void setBounds(Bounds3d bounds);
 
     /** {@inheritDoc} */
     @Override

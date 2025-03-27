@@ -9,13 +9,14 @@ import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Actor;
-import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.finance.Money;
 import nl.tudelft.simulation.supplychain.inventory.Inventory;
 import nl.tudelft.simulation.supplychain.message.trade.InternalDemand;
 import nl.tudelft.simulation.supplychain.message.trade.Order;
 import nl.tudelft.simulation.supplychain.message.trade.OrderStandalone;
 import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.supplychain.role.buying.BuyingRole;
+import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 import nl.tudelft.simulation.supplychain.transport.TransportChoiceProvider;
 import nl.tudelft.simulation.supplychain.transport.TransportOption;
 import nl.tudelft.simulation.supplychain.transport.TransportOptionProvider;
@@ -52,7 +53,7 @@ public class InternalDemandPolicyOrder extends InternalDemandPolicy
      * @param handlingTime the handling time distribution
      * @param stock the stock for being able to change the ordered amount
      */
-    public InternalDemandPolicyOrder(final Role owner, final TransportOptionProvider transportOptionProvider,
+    public InternalDemandPolicyOrder(final BuyingRole owner, final TransportOptionProvider transportOptionProvider,
             final TransportChoiceProvider transportChoiceProvider, final DistContinuousDuration handlingTime,
             final Inventory stock)
     {
@@ -94,17 +95,25 @@ public class InternalDemandPolicyOrder extends InternalDemandPolicy
         {
             super.inventory.changeOrderedAmount(internalDemand.getProduct(), internalDemand.getAmount());
         }
-        Actor supplier = supplierRecord.getSupplier();
+        SellingActor supplier = supplierRecord.getSupplier();
         Money price = supplierRecord.getUnitPrice().multiplyBy(internalDemand.getAmount());
         Set<TransportOption> transportOptions = this.transportOptionProvider.provideTransportOptions(supplier, getActor());
         TransportOption transportOption =
                 this.transportChoiceProvider.chooseTransportOptions(transportOptions, internalDemand.getProduct().getSku());
-        Order order = new OrderStandalone(getActor(), supplier, internalDemand, internalDemand.getLatestDeliveryDate(),
+        Order order = new OrderStandalone(getRole().getActor(), supplier, internalDemand, internalDemand.getLatestDeliveryDate(),
                 internalDemand.getProduct(), internalDemand.getAmount(), price, transportOption);
         // and send it out after the handling time
         sendMessage(order, this.handlingTime.draw());
         return true;
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public BuyingRole getRole()
+    {
+        return (BuyingRole) super.getRole();
+    }
+
 
     /**
      * INNER CLASS FOR STORING RECORDS OF SUPPLIERS AND PRICE
