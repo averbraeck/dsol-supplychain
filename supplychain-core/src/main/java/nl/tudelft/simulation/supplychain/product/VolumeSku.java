@@ -2,8 +2,8 @@ package nl.tudelft.simulation.supplychain.product;
 
 import java.util.Objects;
 
-import org.djunits.Throw;
 import org.djunits.value.vdouble.scalar.Volume;
+import org.djutils.exceptions.Throw;
 
 /**
  * The VolumeUnit is a Unit that has a certain volume as limiting / determining factor. Examples are fluids and gases.

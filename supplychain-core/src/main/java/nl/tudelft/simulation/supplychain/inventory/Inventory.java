@@ -8,12 +8,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.djunits.Throw;
 import org.djunits.value.vdouble.scalar.Time;
 import org.djutils.event.EventProducer;
 import org.djutils.event.EventType;
 import org.djutils.event.LocalEventProducer;
 import org.djutils.event.TimedEvent;
+import org.djutils.exceptions.Throw;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.Actor;

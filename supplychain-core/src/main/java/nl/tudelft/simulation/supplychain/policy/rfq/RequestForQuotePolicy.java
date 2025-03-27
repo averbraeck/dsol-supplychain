@@ -1,8 +1,8 @@
 package nl.tudelft.simulation.supplychain.policy.rfq;
 
-import org.djunits.Throw;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
+import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Role;

@@ -2,7 +2,7 @@ package nl.tudelft.simulation.supplychain.finance;
 
 import java.io.Serializable;
 
-import org.djunits.Throw;
+import org.djutils.exceptions.Throw;
 
 /**
  * Money implements a monetary value and is modeled after the Scalar and Unit in djunits.

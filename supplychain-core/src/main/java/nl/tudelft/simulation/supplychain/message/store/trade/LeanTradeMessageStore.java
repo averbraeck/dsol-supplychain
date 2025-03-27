@@ -5,10 +5,10 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.djunits.Throw;
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
+import org.djutils.exceptions.Throw;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;

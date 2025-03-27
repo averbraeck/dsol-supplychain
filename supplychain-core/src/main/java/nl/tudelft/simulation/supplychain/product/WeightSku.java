@@ -2,8 +2,8 @@ package nl.tudelft.simulation.supplychain.product;
 
 import java.util.Objects;
 
-import org.djunits.Throw;
 import org.djunits.value.vdouble.scalar.Mass;
+import org.djutils.exceptions.Throw;
 
 /**
  * The WeightUnit is a Unit that has a certain weight as limiting / determining factor. Examples are mining materials and

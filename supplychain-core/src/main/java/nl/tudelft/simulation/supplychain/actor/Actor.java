@@ -5,11 +5,10 @@ import java.io.Serializable;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
 import org.djutils.base.Identifiable;
-import org.djutils.draw.Oriented;
-import org.djutils.draw.bounds.Bounds;
+import org.djutils.draw.bounds.Bounds2d;
 import org.djutils.draw.bounds.Bounds3d;
-import org.djutils.draw.point.Point;
-import org.djutils.draw.point.Point3d;
+import org.djutils.draw.point.DirectedPoint2d;
+import org.djutils.draw.point.Point2d;
 import org.djutils.event.EventProducer;
 import org.djutils.immutablecollections.ImmutableSet;
 
@@ -125,7 +124,7 @@ public interface Actor extends EventProducer, Locatable, Identifiable, Serializa
 
     /** {@inheritDoc} */
     @Override
-    Point<?> getLocation();
+    Point2d getLocation();
 
     /**
      * Return the z-value of the location, or 0.0 when the location is in 2 dimensions, avoiding the RemoteException.
@@ -135,8 +134,7 @@ public interface Actor extends EventProducer, Locatable, Identifiable, Serializa
     @Override
     default double getZ()
     {
-        Point<?> p = getLocation();
-        return p == null ? 0.0 : p instanceof Point3d ? ((Point3d) p).getZ() : 0.0;
+        return 0.0;
     }
 
     /**
@@ -148,12 +146,16 @@ public interface Actor extends EventProducer, Locatable, Identifiable, Serializa
     @Override
     default double getDirZ()
     {
-        Point<?> p = getLocation();
-        return p == null ? 0.0 : p instanceof Oriented ? ((Oriented<?>) p).getDirZ() : 0.0;
+        Point2d p = getLocation();
+        return p == null ? 0.0 : p instanceof DirectedPoint2d ? ((DirectedPoint2d) p).getDirZ() : 0.0;
     }
 
-    /** {@inheritDoc} */
     @Override
-    Bounds<?, ?, ?> getBounds();
+    Bounds2d getBounds();
+
+    /**
+     * @param bounds
+     */
+    void setBounds(Bounds2d bounds);
 
 }

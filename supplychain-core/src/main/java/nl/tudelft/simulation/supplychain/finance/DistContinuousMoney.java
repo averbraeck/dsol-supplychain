@@ -1,6 +1,6 @@
 package nl.tudelft.simulation.supplychain.finance;
 
-import org.djunits.Throw;
+import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.jstats.distributions.Dist;
 import nl.tudelft.simulation.jstats.distributions.DistContinuous;

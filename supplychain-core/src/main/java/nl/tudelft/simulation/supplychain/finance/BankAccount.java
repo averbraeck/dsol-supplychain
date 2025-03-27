@@ -1,10 +1,10 @@
 package nl.tudelft.simulation.supplychain.finance;
 
-import org.djunits.Throw;
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djutils.event.EventType;
 import org.djutils.event.LocalEventProducer;
+import org.djutils.exceptions.Throw;
 import org.djutils.metadata.MetaData;
 import org.djutils.metadata.ObjectDescriptor;
 

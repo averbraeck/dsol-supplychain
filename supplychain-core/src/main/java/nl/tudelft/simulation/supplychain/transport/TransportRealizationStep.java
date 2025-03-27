@@ -3,9 +3,9 @@ package nl.tudelft.simulation.supplychain.transport;
 import java.io.Serializable;
 import java.util.Objects;
 
-import org.djunits.Throw;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djutils.base.Identifiable;
+import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.finance.Money;

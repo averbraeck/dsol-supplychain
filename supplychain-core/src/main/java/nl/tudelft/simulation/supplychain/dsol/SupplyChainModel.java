@@ -4,11 +4,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.djunits.Throw;
 import org.djunits.value.vdouble.scalar.Duration;
+import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.dsol.experiment.StreamInformation;
-import nl.tudelft.simulation.dsol.model.AbstractDSOLModel;
+import nl.tudelft.simulation.dsol.model.AbstractDsolModel;
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.actor.ActorNotFoundException;
@@ -22,7 +22,7 @@ import nl.tudelft.simulation.supplychain.actor.ActorNotFoundException;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public abstract class SupplyChainModel extends AbstractDSOLModel<Duration, SupplyChainSimulatorInterface>
+public abstract class SupplyChainModel extends AbstractDsolModel<Duration, SupplyChainSimulatorInterface>
         implements SupplyChainModelInterface
 {
     /** */

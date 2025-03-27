@@ -6,14 +6,14 @@ import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import org.djunits.Throw;
 import org.djunits.value.vdouble.scalar.Duration;
-import org.djutils.draw.bounds.Bounds3d;
-import org.djutils.draw.point.OrientedPoint2d;
+import org.djutils.draw.bounds.Bounds2d;
+import org.djutils.draw.point.DirectedPoint2d;
 import org.djutils.event.EventListenerMap;
 import org.djutils.event.EventProducer;
 import org.djutils.event.EventType;
 import org.djutils.event.LocalEventProducer;
+import org.djutils.exceptions.Throw;
 import org.djutils.immutablecollections.ImmutableLinkedHashSet;
 import org.djutils.immutablecollections.ImmutableSet;
 import org.djutils.logger.CategoryLogger;
@@ -60,10 +60,10 @@ public abstract class SupplyChainActor implements Actor
     private final EventProducer eventProducer;
 
     /** the location of the actor. */
-    private final OrientedPoint2d location;
+    private final DirectedPoint2d location;
 
     /** the bounds of the object (size and relative height in the animation). */
-    private Bounds3d bounds = new Bounds3d(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
+    private Bounds2d bounds = new Bounds2d(-1.0, 1.0, -1.0, 1.0);
 
     /** the store for the content to use. */
     private final TradeMessageStoreInterface messageStore;
@@ -85,7 +85,7 @@ public abstract class SupplyChainActor implements Actor
      */
     @SuppressWarnings("checkstyle:parameternumber")
     public SupplyChainActor(final String id, final String name, final SupplyChainModelInterface model,
-            final OrientedPoint2d location, final String locationDescription, final EventProducer eventProducer,
+            final DirectedPoint2d location, final String locationDescription, final EventProducer eventProducer,
             final TradeMessageStoreInterface messageStore) throws ActorAlreadyDefinedException
     {
         Throw.whenNull(model, "model cannot be null");
@@ -119,7 +119,7 @@ public abstract class SupplyChainActor implements Actor
      */
     @SuppressWarnings("checkstyle:parameternumber")
     public SupplyChainActor(final String id, final String name, final SupplyChainModelInterface model,
-            final OrientedPoint2d location, final String locationDescription, final TradeMessageStoreInterface messageStore)
+            final DirectedPoint2d location, final String locationDescription, final TradeMessageStoreInterface messageStore)
             throws ActorAlreadyDefinedException
     {
         this(id, name, model, location, locationDescription, new LocalEventProducer(), messageStore);
@@ -261,21 +261,20 @@ public abstract class SupplyChainActor implements Actor
 
     /** {@inheritDoc} */
     @Override
-    public OrientedPoint2d getLocation()
+    public DirectedPoint2d getLocation()
     {
         return this.location;
     }
 
-    /** {@inheritDoc} */
     @Override
-    public void setBounds(final Bounds3d bounds)
+    public void setBounds(final Bounds2d bounds)
     {
         this.bounds = bounds;
     }
 
     /** {@inheritDoc} */
     @Override
-    public Bounds3d getBounds()
+    public Bounds2d getBounds()
     {
         return this.bounds;
     }

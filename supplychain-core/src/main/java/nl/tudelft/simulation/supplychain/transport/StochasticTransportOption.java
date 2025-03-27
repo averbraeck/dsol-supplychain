@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.djunits.Throw;
 import org.djutils.base.Identifiable;
+import org.djutils.exceptions.Throw;
 import org.djutils.immutablecollections.ImmutableArrayList;
 import org.djutils.immutablecollections.ImmutableList;
 

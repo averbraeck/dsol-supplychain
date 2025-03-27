@@ -2,8 +2,8 @@ package nl.tudelft.simulation.supplychain.role.producing;
 
 import java.io.Serializable;
 
-import org.djunits.Throw;
 import org.djunits.value.vdouble.scalar.Duration;
+import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.supplychain.inventory.Inventory;
 import nl.tudelft.simulation.supplychain.message.trade.ProductionOrder;

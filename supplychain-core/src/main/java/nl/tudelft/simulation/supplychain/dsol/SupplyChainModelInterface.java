@@ -4,7 +4,7 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Length;
 import org.djutils.draw.point.Point;
 
-import nl.tudelft.simulation.dsol.model.DSOLModel;
+import nl.tudelft.simulation.dsol.model.DsolModel;
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.actor.ActorNotFoundException;
@@ -17,7 +17,7 @@ import nl.tudelft.simulation.supplychain.actor.ActorNotFoundException;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public interface SupplyChainModelInterface extends DSOLModel<Duration, SupplyChainSimulatorInterface>
+public interface SupplyChainModelInterface extends DsolModel<Duration, SupplyChainSimulatorInterface>
 {
     /**
      * Return a unique message id.

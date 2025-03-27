@@ -2,7 +2,7 @@ package nl.tudelft.simulation.supplychain.finance;
 
 import java.io.Serializable;
 
-import org.djunits.Throw;
+import org.djutils.exceptions.Throw;
 
 /**
  * MoneyUnit implements a currency unit, such as the Euro or US Dollar.

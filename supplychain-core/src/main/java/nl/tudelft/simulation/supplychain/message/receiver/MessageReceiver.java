@@ -2,8 +2,8 @@ package nl.tudelft.simulation.supplychain.message.receiver;
 
 import java.io.Serializable;
 
-import org.djunits.Throw;
 import org.djutils.base.Identifiable;
+import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.message.Message;

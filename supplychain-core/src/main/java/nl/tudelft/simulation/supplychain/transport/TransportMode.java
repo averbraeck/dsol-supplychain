@@ -5,9 +5,9 @@ import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import org.djunits.Throw;
 import org.djunits.value.vdouble.scalar.Speed;
 import org.djutils.base.Identifiable;
+import org.djutils.exceptions.Throw;
 import org.djutils.immutablecollections.ImmutableLinkedHashSet;
 import org.djutils.immutablecollections.ImmutableSet;
 

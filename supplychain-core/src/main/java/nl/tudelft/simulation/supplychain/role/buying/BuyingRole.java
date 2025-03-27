@@ -1,6 +1,5 @@
 package nl.tudelft.simulation.supplychain.role.buying;
 
-import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.message.receiver.MessageReceiver;
 import nl.tudelft.simulation.supplychain.message.receiver.MessageReceiverDirect;

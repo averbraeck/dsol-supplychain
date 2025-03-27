@@ -3,7 +3,7 @@ package nl.tudelft.simulation.supplychain.product;
 import java.io.Serializable;
 import java.util.Objects;
 
-import org.djunits.Throw;
+import org.djutils.exceptions.Throw;
 
 /**
  * SKU stands for Stock Keeping Unit. At this moment, it just is a placeholder for a unit name, providing some standard static

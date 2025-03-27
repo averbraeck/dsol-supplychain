@@ -2,8 +2,8 @@ package nl.tudelft.simulation.supplychain.finance;
 
 import java.io.Serializable;
 
-import org.djunits.Throw;
 import org.djunits.value.vdouble.scalar.Duration;
+import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.dsol.formalisms.eventscheduling.SimEventInterface;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;

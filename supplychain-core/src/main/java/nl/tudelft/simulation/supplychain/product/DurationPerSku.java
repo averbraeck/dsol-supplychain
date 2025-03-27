@@ -3,8 +3,8 @@ package nl.tudelft.simulation.supplychain.product;
 import java.io.Serializable;
 import java.util.Objects;
 
-import org.djunits.Throw;
 import org.djunits.value.vdouble.scalar.Duration;
+import org.djutils.exceptions.Throw;
 
 /**
  * DurationPerSKU indicates a (handling) duration for, e.g., transloading or (un)loading of one SKU, independent of the product.

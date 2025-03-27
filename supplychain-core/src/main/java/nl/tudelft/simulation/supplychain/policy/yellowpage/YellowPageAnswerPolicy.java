@@ -3,8 +3,8 @@ package nl.tudelft.simulation.supplychain.policy.yellowpage;
 import java.util.List;
 import java.util.Set;
 
-import org.djunits.Throw;
 import org.djunits.value.vdouble.scalar.Duration;
+import org.djutils.exceptions.Throw;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;

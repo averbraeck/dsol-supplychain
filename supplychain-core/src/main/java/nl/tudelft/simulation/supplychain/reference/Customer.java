@@ -1,7 +1,7 @@
 package nl.tudelft.simulation.supplychain.reference;
 
-import org.djunits.Throw;
 import org.djutils.draw.point.OrientedPoint2d;
+import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;

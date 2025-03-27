@@ -3,9 +3,9 @@ package nl.tudelft.simulation.supplychain.product;
 import java.io.Serializable;
 import java.util.Objects;
 
-import org.djunits.Throw;
 import org.djunits.value.vdouble.scalar.Mass;
 import org.djunits.value.vdouble.scalar.Volume;
+import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.finance.Money;
