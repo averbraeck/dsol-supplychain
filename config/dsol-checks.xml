@@ -163,6 +163,7 @@
     </module>
     <module name="DesignForExtension">
       <property name="severity" value="warning"/>
+      <property name="ignoredAnnotations" value="Override"/>
     </module>
     <module name="FinalClass">
       <property name="severity" value="warning"/>
@@ -195,6 +196,7 @@
   </module>
   <module name="NewlineAtEndOfFile">
     <property name="severity" value="warning"/>
+    <property name="lineSeparator" value="crlf"/>
     <property name="fileExtensions" value="java"/>
   </module>
   <module name="Translation">
