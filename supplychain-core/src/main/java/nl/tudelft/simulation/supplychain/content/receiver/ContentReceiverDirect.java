@@ -1,17 +1,17 @@
 package nl.tudelft.simulation.supplychain.content.receiver;
 
+import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.ContentPolicy;
-import nl.tudelft.simulation.supplychain.content.Message;
 
 /**
- * MessageReceiverDirect implements message queuing for an actor that immediately handles the message upon receipt.
+ * MessageReceiverDirect implements content queuing for an actor that immediately handles the content upon receipt.
  * <p>
  * Copyright (c) 2022-2023 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class MessageReceiverDirect extends ContentReceiver
+public class ContentReceiverDirect extends ContentReceiver
 {
     /** */
     private static final long serialVersionUID = 20221127L;
@@ -19,16 +19,16 @@ public class MessageReceiverDirect extends ContentReceiver
     /**
      * Create a message handler for an actor that immediately handles the message upon receipt.
      */
-    public MessageReceiverDirect()
+    public ContentReceiverDirect()
     {
-        super("MessageReceiverDirect");
+        super("ContentReceiverDirect");
     }
 
     /** {@inheritDoc} */
     @Override
-    public <M extends Message> void receiveMessage(final M message, final ContentPolicy<M> messagePolicy)
+    public <C extends Content> void receiveContent(final C content, final ContentPolicy<C> contentPolicy)
     {
-        messagePolicy.handleContent(message);
+        contentPolicy.handleContent(content);
     }
 
 }

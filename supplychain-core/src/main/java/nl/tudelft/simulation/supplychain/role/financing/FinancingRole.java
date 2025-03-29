@@ -7,7 +7,7 @@ import org.djunits.value.vdouble.scalar.Duration;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
-import nl.tudelft.simulation.supplychain.content.receiver.MessageReceiverDirect;
+import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 import nl.tudelft.simulation.supplychain.finance.BankAccount;
 import nl.tudelft.simulation.supplychain.finance.FixedCost;
 import nl.tudelft.simulation.supplychain.finance.Money;
@@ -53,7 +53,7 @@ public class FinancingRole extends Role
      */
     public FinancingRole(final String id, final FinancingActor owner, final BankAccount bankAccount)
     {
-        this(id, owner, new MessageReceiverDirect(), bankAccount);
+        this(id, owner, new ContentReceiverDirect(), bankAccount);
     }
 
     /**

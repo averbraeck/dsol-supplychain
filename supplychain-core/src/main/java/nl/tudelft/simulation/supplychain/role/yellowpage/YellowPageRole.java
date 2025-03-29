@@ -10,7 +10,7 @@ import java.util.Set;
 
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.content.receiver.MessageReceiverDirect;
+import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 import nl.tudelft.simulation.supplychain.product.Product;
 
 /**
@@ -39,7 +39,7 @@ public class YellowPageRole extends Role
      */
     public YellowPageRole(final YellowPageActor owner)
     {
-        super("yp", owner, new MessageReceiverDirect());
+        super("yp", owner, new ContentReceiverDirect());
     }
 
     /**

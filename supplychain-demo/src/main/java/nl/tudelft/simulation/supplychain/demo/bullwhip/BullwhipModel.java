@@ -21,7 +21,7 @@ import nl.tudelft.simulation.jstats.distributions.DistNormal;
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.jstats.streams.MersenneTwister;
 import nl.tudelft.simulation.jstats.streams.StreamInterface;
-import nl.tudelft.simulation.supplychain.content.receiver.MessageReceiverDirect;
+import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 import nl.tudelft.simulation.supplychain.demo.DemoContentAnimator;
 import nl.tudelft.simulation.supplychain.demo.reference.DemoManufacturer;
 import nl.tudelft.simulation.supplychain.demo.reference.DemoMarket;
@@ -100,7 +100,7 @@ public class BullwhipModel extends AbstractDSOLModel<Duration, SupplyChainSimula
             pcBOM.add(monitor, 1.0);
 
             // create the bank
-            Bank ing = new Bank("ING", new MessageReceiverDirect(), getSimulator(), new OrientedPoint3d(0, 0, 0), null);
+            Bank ing = new Bank("ING", new ContentReceiverDirect(), getSimulator(), new OrientedPoint3d(0, 0, 0), null);
             ing.setAnnualInterestRateNeg(0.080);
             ing.setAnnualInterestRatePos(0.025);
 

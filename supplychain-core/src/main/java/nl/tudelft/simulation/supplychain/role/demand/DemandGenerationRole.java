@@ -13,7 +13,7 @@ import nl.tudelft.simulation.jstats.distributions.DistContinuous;
 import nl.tudelft.simulation.jstats.distributions.DistDiscrete;
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.content.receiver.MessageReceiverDirect;
+import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 import nl.tudelft.simulation.supplychain.message.trade.InternalDemand;
 import nl.tudelft.simulation.supplychain.product.Product;
 
@@ -46,7 +46,7 @@ public class DemandGenerationRole extends Role
      */
     public DemandGenerationRole(final DemandGeneratingActor owner, final DistContinuousDuration administrativeDelay)
     {
-        super("demandGeneration", owner, new MessageReceiverDirect());
+        super("demandGeneration", owner, new ContentReceiverDirect());
         this.administrativeDelay = administrativeDelay;
     }
 

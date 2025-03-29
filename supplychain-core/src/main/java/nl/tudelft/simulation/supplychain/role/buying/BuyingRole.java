@@ -2,7 +2,7 @@ package nl.tudelft.simulation.supplychain.role.buying;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
-import nl.tudelft.simulation.supplychain.content.receiver.MessageReceiverDirect;
+import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 
 /**
  * The buying role is a role that can handle several types of message content: internal demand, order confirmation, bill, and
@@ -27,7 +27,7 @@ public abstract class BuyingRole extends Role
      */
     public BuyingRole(final BuyingActor owner)
     {
-        this(owner, new MessageReceiverDirect());
+        this(owner, new ContentReceiverDirect());
     }
 
     /**

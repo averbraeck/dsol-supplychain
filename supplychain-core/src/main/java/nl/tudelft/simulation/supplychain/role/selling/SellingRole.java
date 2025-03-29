@@ -1,7 +1,7 @@
 package nl.tudelft.simulation.supplychain.role.selling;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.content.receiver.MessageReceiverDirect;
+import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 
 /**
  * The selling role is a role that can handle several types of message content: order and payment in the minimum form. Depending
@@ -24,7 +24,7 @@ public abstract class SellingRole extends Role
      */
     public SellingRole(final SellingActor owner)
     {
-        super("selling", owner, new MessageReceiverDirect());
+        super("selling", owner, new ContentReceiverDirect());
     }
 
 }

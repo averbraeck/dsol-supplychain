@@ -2,7 +2,7 @@ package nl.tudelft.simulation.supplychain.role.banking;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
-import nl.tudelft.simulation.supplychain.content.receiver.MessageReceiverDirect;
+import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 
 /**
  * The BankingRole maintains the interest rates for the Bank accounts. In this case, we have chosen to not make the Bank work
@@ -32,7 +32,7 @@ public class BankingRole extends Role
      */
     public BankingRole(final String id, final BankingActor owner)
     {
-        super("banking", owner, new MessageReceiverDirect());
+        super("banking", owner, new ContentReceiverDirect());
     }
 
     /**

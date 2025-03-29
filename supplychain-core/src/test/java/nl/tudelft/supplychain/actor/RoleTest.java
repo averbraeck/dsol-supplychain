@@ -11,7 +11,7 @@ import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
-import nl.tudelft.simulation.supplychain.content.receiver.MessageReceiverDirect;
+import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulator;
 
 /**
@@ -36,7 +36,7 @@ public class RoleTest
         TestModel model = new TestModel(simulator);
         TestActor actor = new TestActor("TA", "TestActor", model, new OrientedPoint2d(10, 10), "Dallas, TX");
         assertEquals(0, actor.getRoles().size());
-        ContentReceiver messageReceiver = new MessageReceiverDirect();
+        ContentReceiver messageReceiver = new ContentReceiverDirect();
         TestRole role = new TestRole("ROLE", actor, messageReceiver);
         assertEquals(1, actor.getRoles().size());
         assertTrue(actor.getRoles().contains(role));

@@ -14,7 +14,7 @@ import nl.tudelft.simulation.supplychain.content.Message;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class MessageReceiverDelay extends ContentReceiver
+public class ContentReceiverDelay extends ContentReceiver
 {
     /** */
     private static final long serialVersionUID = 20221127L;
@@ -27,7 +27,7 @@ public class MessageReceiverDelay extends ContentReceiver
      * @param delayDistribution DistContinuousDuration; the delay distribution for handling messages (note that the distribution
      *            can be changed later, e.g., for implementing temporary administrative delays)
      */
-    public MessageReceiverDelay(final DistContinuousDuration delayDistribution)
+    public ContentReceiverDelay(final DistContinuousDuration delayDistribution)
     {
         super("MessageReceiverDelay");
         setDelayDistribution(delayDistribution);
