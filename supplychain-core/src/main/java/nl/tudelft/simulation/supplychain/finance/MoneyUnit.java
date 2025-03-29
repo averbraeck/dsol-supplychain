@@ -34,8 +34,8 @@ public class MoneyUnit implements Serializable
 
     /**
      * Create a new money unit.
-     * @param name String; the (short) name of the money unit
-     * @param symbol String; the symbol to use when displaying the money unit
+     * @param name the (short) name of the money unit
+     * @param symbol the symbol to use when displaying the money unit
      */
     public MoneyUnit(final String name, final String symbol)
     {
@@ -49,7 +49,7 @@ public class MoneyUnit implements Serializable
 
     /**
      * Return the (short) name of the money unit.
-     * @return String; the (short) name of the money unit
+     * @return the (short) name of the money unit
      */
     public String getName()
     {
@@ -58,7 +58,7 @@ public class MoneyUnit implements Serializable
 
     /**
      * Return the symbol to use when displaying the money unit.
-     * @return String; the symbol to use when displaying the money unit
+     * @return the symbol to use when displaying the money unit
      */
     public String getSymbol()
     {

@@ -32,10 +32,10 @@ public class RestockingServiceFixed extends AbstractRestockingService
     /**
      * Construct a new restocking service, which works with fixed amounts.
      * @param inventory the inventory for which the service holds
-     * @param product Product; the product that has to be restocked
+     * @param product the product that has to be restocked
      * @param frequency the frequency distribution for restocking
      * @param ceiling fixed ceiling (true) or fixed amount (false)
-     * @param amount double; the amount with which or to which stock is supplemented
+     * @param amount the amount with which or to which stock is supplemented
      * @param includeClaims whether to include the claims in the stock or not
      * @param maxDeliveryTime the maximum delivery time to use
      */

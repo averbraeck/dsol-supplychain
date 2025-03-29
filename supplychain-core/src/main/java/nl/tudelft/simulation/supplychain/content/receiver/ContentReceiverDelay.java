@@ -24,7 +24,7 @@ public class ContentReceiverDelay extends ContentReceiver
 
     /**
      * Create a message queuing mechanism for an actor that handles messages after a (stochastic) delay.
-     * @param delayDistribution DistContinuousDuration; the delay distribution for handling messages (note that the distribution
+     * @param delayDistribution the delay distribution for handling messages (note that the distribution
      *            can be changed later, e.g., for implementing temporary administrative delays)
      */
     public ContentReceiverDelay(final DistContinuousDuration delayDistribution)
@@ -42,7 +42,7 @@ public class ContentReceiverDelay extends ContentReceiver
 
     /**
      * Return the delay distribution for handling messages.
-     * @return DistContinuousDuration; the delay distribution
+     * @return the delay distribution
      */
     public DistContinuousDuration getDelayDistribution()
     {
@@ -51,7 +51,7 @@ public class ContentReceiverDelay extends ContentReceiver
 
     /**
      * Set a new delay distribution for handling messages.
-     * @param delayDistribution DistContinuousDuration; the new delay distribution
+     * @param delayDistribution the new delay distribution
      */
     public void setDelayDistribution(final DistContinuousDuration delayDistribution)
     {

@@ -15,13 +15,13 @@ public interface SellingActor extends FinancingActor
 {
     /**
      * Return the SellingRole for this actor.
-     * @return SellingRole; the SellingRole for this actor
+     * @return the SellingRole for this actor
      */
     SellingRole getSellingRole();
 
     /**
      * Set the SellingRole for this actor.
-     * @param sellingRole SellingRole; the new SellingRole for this actor
+     * @param sellingRole the new SellingRole for this actor
      */
     void setSellingRole(SellingRole sellingRole);
 

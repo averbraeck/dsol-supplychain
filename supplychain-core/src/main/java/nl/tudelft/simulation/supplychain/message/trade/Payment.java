@@ -25,8 +25,8 @@ public class Payment extends TradeMessage
 
     /**
      * Constructs a new Payment.
-     * @param sender FinancingActor; the sender actor of the message content
-     * @param receiver FinancingActor; the receving actor of the message content
+     * @param sender the sender actor of the message content
+     * @param receiver the receving actor of the message content
      * @param internalDemandId the internal demand that triggered the supply chain
      * @param bill the bill for which this is the payment
      * @param payment the payment

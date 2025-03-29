@@ -18,13 +18,13 @@ public interface RestockingServiceInterface extends Serializable
 {
     /**
      * Return the product for which this is the restocking service.
-     * @return Product; the product for which this is the restocking service
+     * @return the product for which this is the restocking service
      */
     Product getProduct();
 
     /**
      * Return the inventory that needs to be checked for restocking.
-     * @return Inventory; the inventory that needs to be checked for restocking
+     * @return the inventory that needs to be checked for restocking
      */
     Inventory getInventory();
 }

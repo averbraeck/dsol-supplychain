@@ -36,8 +36,8 @@ public abstract class SupplyChainModel extends AbstractDsolModel<Duration, Suppl
 
     /**
      * Create a supply chain model with a specific set of random streams for this replication.
-     * @param simulator SupplyChainSimulatorInterface; the simulator
-     * @param streamInformation StreamInformation; information about the random streams to use in a replication
+     * @param simulator the simulator
+     * @param streamInformation information about the random streams to use in a replication
      */
     public SupplyChainModel(final SupplyChainSimulatorInterface simulator, final StreamInformation streamInformation)
     {
@@ -46,7 +46,7 @@ public abstract class SupplyChainModel extends AbstractDsolModel<Duration, Suppl
 
     /**
      * Create a supply chain model with a default set of random streams for this replication.
-     * @param simulator SupplyChainSimulatorInterface; the simulator
+     * @param simulator the simulator
      */
     public SupplyChainModel(final SupplyChainSimulatorInterface simulator)
     {

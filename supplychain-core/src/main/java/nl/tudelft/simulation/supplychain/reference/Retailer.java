@@ -40,13 +40,13 @@ public class Retailer extends SupplyChainActor implements Serializable
 
     /**
      * @param id String, the unique id of the retaler
-     * @param name String; the longer name of the retailer
-     * @param model SupplyChainModelInterface; the model
-     * @param location OrientedPoint2d; the location of the actor
-     * @param locationDescription String; the location description of the actor (e.g., a city, country)
-     * @param bank Bank; the bank for the BankAccount
-     * @param initialBalance Money; the initial balance for the actor
-     * @param messageStore TradeMessageStoreInterface; the message store for messages
+     * @param name the longer name of the retailer
+     * @param model the model
+     * @param location the location of the actor
+     * @param locationDescription the location description of the actor (e.g., a city, country)
+     * @param bank the bank for the BankAccount
+     * @param initialBalance the initial balance for the actor
+     * @param messageStore the message store for messages
      * @throws ActorAlreadyDefinedException when the actor was already registered in the model
      */
     @SuppressWarnings("checkstyle:parameternumber")
@@ -59,7 +59,7 @@ public class Retailer extends SupplyChainActor implements Serializable
 
     /**
      * Return the buying role.
-     * @return BuyingRole; the buying role
+     * @return the buying role
      */
     public BuyingRole getBuyingRole()
     {
@@ -68,7 +68,7 @@ public class Retailer extends SupplyChainActor implements Serializable
 
     /**
      * Set the buying role.
-     * @param buyingRole BuyingRole; the new buying role
+     * @param buyingRole the new buying role
      */
     public void setBuyingRole(final BuyingRole buyingRole)
     {
@@ -80,7 +80,7 @@ public class Retailer extends SupplyChainActor implements Serializable
 
     /**
      * Return the selling role.
-     * @return SellingRole; the selling role
+     * @return the selling role
      */
     public SellingRole getSellingRole()
     {
@@ -89,7 +89,7 @@ public class Retailer extends SupplyChainActor implements Serializable
 
     /**
      * Set the selling role.
-     * @param sellingRole SellingRole; the new selling role
+     * @param sellingRole the new selling role
      */
     public void setSellingRole(final SellingRole sellingRole)
     {
@@ -101,7 +101,7 @@ public class Retailer extends SupplyChainActor implements Serializable
 
     /**
      * Return the inventory role.
-     * @return InventoryRole; the inventory role
+     * @return the inventory role
      */
     public InventoryRole getInventoryRole()
     {
@@ -110,7 +110,7 @@ public class Retailer extends SupplyChainActor implements Serializable
 
     /**
      * Set the inventory role.
-     * @param inventoryRole InventoryRole; the new inventory role
+     * @param inventoryRole the new inventory role
      */
     public void setInventoryRole(final InventoryRole inventoryRole)
     {

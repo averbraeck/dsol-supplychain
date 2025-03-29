@@ -58,7 +58,7 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
 
     /**
      * Create a new Inventory for an actor.
-     * @param inventoryRole InventoryRole; the Role that physically handles the inventory.
+     * @param inventoryRole the Role that physically handles the inventory.
      */
     public Inventory(final InventoryRole inventoryRole)
     {
@@ -69,7 +69,7 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
 
     /**
      * Create a new Inventory for an actor, with an initial amount of products.
-     * @param inventoryRole InventoryRole; the Role that physically handles the inventory.
+     * @param inventoryRole the Role that physically handles the inventory.
      * @param initialInventory the initial inventory
      */
     public Inventory(final InventoryRole inventoryRole, final List<ProductAmount> initialInventory)
@@ -86,7 +86,7 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
 
     /**
      * Return the actor who owns this inventory.
-     * @return Actor; the actor who owns this inventory
+     * @return the actor who owns this inventory
      */
     public Actor getOwner()
     {
@@ -95,7 +95,7 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
 
     /**
      * Return an overview of the products that we have in inventory.
-     * @return Set&lt;Product&gt;; an overview of the products that we have in inventory
+     * @return an overview of the products that we have in inventory
      */
     public Set<Product> getProducts()
     {
@@ -104,8 +104,8 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
 
     /**
      * Add products to the inventory.
-     * @param product Product; the product
-     * @param amount double; the amount
+     * @param product the product
+     * @param amount the amount
      * @param totalPrice the value of this amount of product
      */
     public void addToInventory(final Product product, final double amount, final Money totalPrice)
@@ -150,8 +150,8 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
 
     /**
      * Remove products from the inventory.
-     * @param product Product; the product
-     * @param amount double; the amount
+     * @param product the product
+     * @param amount the amount
      * @return double the actual amount of the product taken out of inventory
      */
     public double removeFromInventory(final Product product, final double amount)
@@ -171,7 +171,7 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
 
     /**
      * Get the actual amount of a certain product in inventory.
-     * @param product Product; the product
+     * @param product the product
      * @return double the actual amount
      */
     public double getActualAmount(final Product product)
@@ -186,7 +186,7 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
 
     /**
      * Get the claimed amount of a certain product in inventory.
-     * @param product Product; the product
+     * @param product the product
      * @return double the claimed amount
      */
     public double getClaimedAmount(final Product product)
@@ -201,7 +201,7 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
 
     /**
      * Get the ordered amount of a certain product in inventory.
-     * @param product Product; the product
+     * @param product the product
      * @return double the ordered amount
      */
     public double getOrderedAmount(final Product product)
@@ -216,7 +216,7 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
 
     /**
      * Update the claimed amount of a certain product in inventory.
-     * @param product Product; the product
+     * @param product the product
      * @param delta the delta (positive or negative)
      * @return boolean success or not
      */
@@ -235,7 +235,7 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
 
     /**
      * Method changeFutureClaimedAmount.
-     * @param product Product; the product
+     * @param product the product
      * @param delta the delta (positive or negative)
      * @param time the time the change is scheduled to take place
      * @return boolean success or not
@@ -271,7 +271,7 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
 
     /**
      * Update the ordered amount of a certain product in inventory.
-     * @param product Product; the product
+     * @param product the product
      * @param delta the delta (positive or negative)
      * @return boolean success or not
      */
@@ -290,7 +290,7 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
 
     /**
      * Method changeFutureOrderedAmount.
-     * @param product Product; the product
+     * @param product the product
      * @param delta the delta (positive or negative)
      * @param time the time the change is scheduled to take place
      * @return boolean success or not
@@ -324,7 +324,7 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
 
     /**
      * Return the unit price of a product (based on its SKU).
-     * @param product Product; the product
+     * @param product the product
      * @return double the price per unit
      */
     public Money getUnitPrice(final Product product)
@@ -360,7 +360,7 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
 
     /**
      * Method sendInventoryUpdateEvent.
-     * @param product Product; the product for which the inventory is updated
+     * @param product the product for which the inventory is updated
      */
     public void sendInventoryUpdateEvent(final Product product)
     {

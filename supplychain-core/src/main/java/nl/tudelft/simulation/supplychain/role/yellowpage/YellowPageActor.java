@@ -14,13 +14,13 @@ public interface YellowPageActor extends Actor
 {
     /**
      * Return the YellowPageRole for this actor.
-     * @return YellowPageRole; the YellowPageRole for this actor
+     * @return the YellowPageRole for this actor
      */
     YellowPageRole getYellowPageRole();
 
     /**
      * Set the YellowPageRole for this actor.
-     * @param yellowPageRole YellowPageRole; the new YellowPageRole for this actor
+     * @param yellowPageRole the new YellowPageRole for this actor
      */
     void setYellowPageRole(YellowPageRole yellowPageRole);
 

@@ -53,7 +53,7 @@ public class InventoryRecord implements Serializable
     /**
      * @param owner the trader
      * @param simulator the simulator
-     * @param product Product; the product
+     * @param product the product
      */
     public InventoryRecord(final Actor owner, final SupplyChainSimulatorInterface simulator, final Product product)
     {
@@ -139,7 +139,7 @@ public class InventoryRecord implements Serializable
 
     /**
      * Method addActualAmount.
-     * @param delta The change in product; must be positive
+     * @param delta must be positive
      * @param unitprice The costprice of the products. Has to be positive
      */
     public void addActualAmount(final double delta, final Money unitprice)
@@ -150,7 +150,7 @@ public class InventoryRecord implements Serializable
 
     /**
      * Method remove an actualAmount.
-     * @param delta The change in product; must be positive
+     * @param delta must be positive
      */
     public void removeActualAmount(final double delta)
     {

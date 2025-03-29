@@ -23,7 +23,7 @@ public class PaymentPolicy extends SupplyChainPolicy<Payment>
 
     /**
      * Constructs a new PaymentHandler.
-     * @param owner Role; the owner of the policy.
+     * @param owner the owner of the policy.
      * @param bankAccount the bankaccount to use.
      */
     public PaymentPolicy(final Role owner, final BankAccount bankAccount)

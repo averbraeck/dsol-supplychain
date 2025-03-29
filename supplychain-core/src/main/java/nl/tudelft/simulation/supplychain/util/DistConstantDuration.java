@@ -21,7 +21,7 @@ public class DistConstantDuration extends DistContinuousDuration
 
     /**
      * Create a constant Duration distribution, that can be used in places where a DistConstantDuration is needed.
-     * @param constantDuration Duration; the constant duration to draw each time
+     * @param constantDuration the constant duration to draw each time
      */
     public DistConstantDuration(final Duration constantDuration)
     {

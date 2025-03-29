@@ -43,7 +43,7 @@ public abstract class QuotePolicy extends SupplyChainPolicy<Quote>
 
     /**
      * Constructor of the QuoteHandler with a one of the predefined comparators for quotes.
-     * @param id String; the id of the policy
+     * @param id the id of the policy
      * @param owner the role for this QuoteHandler.
      * @param comparatorType the predefined sorting comparator type.
      * @param handlingTime the time to handle the quotes
@@ -62,8 +62,8 @@ public abstract class QuotePolicy extends SupplyChainPolicy<Quote>
 
     /**
      * Constructor of the QuoteHandler with a user defined comparator for quotes.
-     * @param id String; the id of the policy
-     * @param owner Role; the role for this QuoteHandler.
+     * @param id the id of the policy
+     * @param owner the role for this QuoteHandler.
      * @param comparator the predefined sorting comparator type.
      * @param handlingTime the time to handle the quotes
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product

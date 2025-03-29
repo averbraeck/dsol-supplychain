@@ -15,13 +15,13 @@ public interface BuyingActor extends FinancingActor
 {
     /**
      * Return the BuyingRole for this actor.
-     * @return BuyingRole; the BuyingRole for this actor
+     * @return the BuyingRole for this actor
      */
     BuyingRole getBuyingRole();
 
     /**
      * Set the BuyingRole for this actor.
-     * @param buyingRole BuyingRole; the new BuyingRole for this actor
+     * @param buyingRole the new BuyingRole for this actor
      */
     void setBuyingRole(BuyingRole buyingRole);
 

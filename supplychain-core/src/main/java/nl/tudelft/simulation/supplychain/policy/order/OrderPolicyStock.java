@@ -30,7 +30,7 @@ public class OrderPolicyStock extends OrderPolicy<Order>
 
     /**
      * Construct a new OrderHandler that takes the goods from stock when ordered.
-     * @param owner Role; the owner of the policy
+     * @param owner the owner of the policy
      * @param stock the stock to use to handle the incoming order
      */
     public OrderPolicyStock(final Role owner, final Inventory stock)

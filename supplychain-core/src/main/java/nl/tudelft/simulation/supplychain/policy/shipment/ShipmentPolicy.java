@@ -19,8 +19,8 @@ public abstract class ShipmentPolicy extends SupplyChainPolicy<Shipment>
 
     /**
      * Construct a new ShipmentPolicy.
-     * @param id String; the id of the policy
-     * @param owner Role; the owner of the policy
+     * @param id the id of the policy
+     * @param owner the owner of the policy
      */
     public ShipmentPolicy(final String id, final Role owner)
     {

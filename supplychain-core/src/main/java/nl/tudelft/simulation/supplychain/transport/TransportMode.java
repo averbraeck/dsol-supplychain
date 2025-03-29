@@ -37,8 +37,8 @@ public class TransportMode implements Identifiable, Serializable
 
     /**
      * Constructor for TransportMode.
-     * @param id String; the name of the transport mode
-     * @param averageSpeed Speed; the average transportation speed of the mode
+     * @param id the name of the transport mode
+     * @param averageSpeed the average transportation speed of the mode
      */
     public TransportMode(final String id, final Speed averageSpeed)
     {
@@ -56,7 +56,7 @@ public class TransportMode implements Identifiable, Serializable
 
     /**
      * Return the average transportation speed of the mode.
-     * @return averageSpeed Speed; the average transportation speed of the mode
+     * @return the average transportation speed of the mode
      */
     public Speed getAverageSpeed()
     {
@@ -65,7 +65,7 @@ public class TransportMode implements Identifiable, Serializable
 
     /**
      * Set a new the average transportation speed for the mode.
-     * @param averageSpeed Speed; a new average transportation speed for the mode
+     * @param averageSpeed a new average transportation speed for the mode
      */
     public void setAverageSpeed(final Speed averageSpeed)
     {
@@ -75,7 +75,7 @@ public class TransportMode implements Identifiable, Serializable
 
     /**
      * Add a SKU to the set of SKUs that this TransportMode can handle.
-     * @param sku SKU; a SKU to be added to the set of SKUs that this TransportMode can handle
+     * @param sku a SKU to be added to the set of SKUs that this TransportMode can handle
      */
     public void addHandledSku(final Sku sku)
     {
@@ -87,7 +87,7 @@ public class TransportMode implements Identifiable, Serializable
 
     /**
      * Return the set of SKUs that this TransportMode can handle.
-     * @return handledSkuSet ImmutableSet&lt;Sku&gt;; the set of SKUs that this TransportMode can handle
+     * @return the set of SKUs that this TransportMode can handle
      */
     public ImmutableSet<Sku> getHandledSkuSet()
     {

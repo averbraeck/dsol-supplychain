@@ -21,7 +21,7 @@ public class SCClockPanel extends ClockPanel.TimeDoubleUnit
 
     /**
      * Construct a clock panel with a double time with a unit.
-     * @param simulator SupplyChainSimulatorInterface; the simulator
+     * @param simulator the simulator
      */
     public SCClockPanel(final SupplyChainAnimator simulator)
     {

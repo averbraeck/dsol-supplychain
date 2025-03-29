@@ -66,7 +66,7 @@ public class Sku implements Serializable
 
     /**
      * Return the name of the SKU.
-     * @return String; the name of the SKU.
+     * @return the name of the SKU.
      */
     public String getName()
     {

@@ -17,7 +17,7 @@ public class ActorNotFoundException extends SupplyChainException
 
     /**
      * Create the exception, identifying the missing actor.
-     * @param actorId String; the actor id that could not be found
+     * @param actorId the actor id that could not be found
      */
     public ActorNotFoundException(final String actorId)
     {

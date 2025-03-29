@@ -14,13 +14,13 @@ public interface ProducingActor extends Actor
 {
     /**
      * Return the ProducingRole for this actor.
-     * @return ProducingRole; the ProducingRole for this actor
+     * @return the ProducingRole for this actor
      */
     ProducingRole getProducingRole();
 
     /**
      * Set the ProducingRole for this actor.
-     * @param producingRole ProducingRole; the new ProducingRole for this actor
+     * @param producingRole the new ProducingRole for this actor
      */
     void setProducingRole(ProducingRole producingRole);
 

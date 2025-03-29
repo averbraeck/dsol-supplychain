@@ -17,8 +17,8 @@ public abstract class Message extends Content
 
     /**
      * Construct a new message.
-     * @param sender Actor; the sender (necessary for a possible reply)
-     * @param receiver Actor; the receiver
+     * @param sender the sender (necessary for a possible reply)
+     * @param receiver the receiver
      */
     public Message(final Actor sender, final Actor receiver)
     {

@@ -26,10 +26,10 @@ public class RestockingServiceSafety extends RestockingServiceFixed
     /**
      * Construct a new restocking service based on a safety stock level.
      * @param inventory the inventory for which the service holds
-     * @param product Product; the product that has to be restocked
+     * @param product the product that has to be restocked
      * @param frequency the frequency distribution for restocking
      * @param ceiling fixed ceiling (true) or fixed amount (false)
-     * @param amount double; the amount with which or to which stock is supplemented
+     * @param amount the amount with which or to which stock is supplemented
      * @param includeClaims whether to include the claims in the stock or not
      * @param safetyAmount the safety stock level for the product
      * @param maxDeliveryTime the maximum delivery time to use

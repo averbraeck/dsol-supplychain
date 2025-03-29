@@ -42,7 +42,7 @@ public class BillPolicy extends SupplyChainPolicy<Bill>
 
     /**
      * Constructs a new BillHandler with possibilities to pay early or late.
-     * @param owner Role; the owner of the policy.
+     * @param owner the owner of the policy.
      * @param bankAccount the bankaccount to use.
      * @param paymentPolicy the payment policy to use (early, late, etc.).
      * @param paymentDelay the delay to use in early or late payment
@@ -58,7 +58,7 @@ public class BillPolicy extends SupplyChainPolicy<Bill>
 
     /**
      * Constructs a new BillHandler that takes care of paying exactly on time.
-     * @param owner Role; the owner of the policy.
+     * @param owner the owner of the policy.
      * @param bankAccount the bankaccount to use.
      */
     public BillPolicy(final FinancingRole owner, final BankAccount bankAccount)

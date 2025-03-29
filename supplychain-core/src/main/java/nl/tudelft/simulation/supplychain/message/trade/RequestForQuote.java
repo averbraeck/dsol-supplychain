@@ -32,12 +32,12 @@ public class RequestForQuote extends TradeMessage
 
     /**
      * Create a new RFQ, based on an internal demand.
-     * @param sender Actor; the sender actor of the message content
-     * @param receiver Actor; the receving actor of the message content
-     * @param internalDemand InternalDemand; internal demand that triggered the process
-     * @param preferredTransportOption TransportOption; the preferred transport option for moving the product from sender to
+     * @param sender the sender actor of the message content
+     * @param receiver the receving actor of the message content
+     * @param internalDemand internal demand that triggered the process
+     * @param preferredTransportOption the preferred transport option for moving the product from sender to
      *            receiver
-     * @param cutoffDuration Duration; after how much time will the RFQ stop collecting quotes?
+     * @param cutoffDuration after how much time will the RFQ stop collecting quotes?
      */
     public RequestForQuote(final Actor sender, final Actor receiver, final InternalDemand internalDemand,
             final TransportOption preferredTransportOption, final Duration cutoffDuration)
@@ -50,7 +50,7 @@ public class RequestForQuote extends TradeMessage
 
     /**
      * Return the InternalDemand that triggerred this RFQ.
-     * @return InternalDemand; the InternalDemand that triggerred this RFQ.
+     * @return the InternalDemand that triggerred this RFQ.
      */
     protected InternalDemand getInternalDemand()
     {
@@ -92,7 +92,7 @@ public class RequestForQuote extends TradeMessage
 
     /**
      * Return the transport request for moving the product from sender to receiver.
-     * @return TransportRequest; the transport request for moving the product from sender to receiver
+     * @return the transport request for moving the product from sender to receiver
      */
     public TransportOption getPreferredTransportOption()
     {
@@ -101,7 +101,7 @@ public class RequestForQuote extends TradeMessage
 
     /**
      * Return the cutoff date.
-     * @return Time; the cutoff date
+     * @return the cutoff date
      */
     public Time getCutoffDate()
     {

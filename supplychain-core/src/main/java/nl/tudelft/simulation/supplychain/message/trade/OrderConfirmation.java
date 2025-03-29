@@ -37,8 +37,8 @@ public class OrderConfirmation extends TradeMessage
     private int status;
 
     /**
-     * @param sender SellingActor; the sender actor of the message content
-     * @param receiver BuyingActor; the receving actor of the message content
+     * @param sender the sender actor of the message content
+     * @param receiver the receving actor of the message content
      * @param internalDemandId the internal demand that triggered the order
      * @param order the order for which this is the confirmation
      * @param status the confirmation status (accepted, not accepted)

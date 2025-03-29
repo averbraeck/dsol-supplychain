@@ -32,8 +32,8 @@ public abstract class ProductionService implements Serializable
 
     /**
      * Constructs a new production service for one product.
-     * @param owner InventoryRole; the role that owns the production service.
-     * @param product Product; the product of the production service.
+     * @param owner the role that owns the production service.
+     * @param product the product of the production service.
      */
     public ProductionService(final InventoryRole owner, final Product product)
     {
@@ -57,7 +57,7 @@ public abstract class ProductionService implements Serializable
 
     /**
      * Return the product for which the ProductionService applies.
-     * @return Product; the product for which the ProductionService applies
+     * @return the product for which the ProductionService applies
      */
     public Product getProduct()
     {
@@ -66,7 +66,7 @@ public abstract class ProductionService implements Serializable
 
     /**
      * Return the role with inventory.
-     * @return InventoryRole; the actor with inventory
+     * @return the actor with inventory
      */
     public InventoryRole getOwner()
     {
@@ -75,7 +75,7 @@ public abstract class ProductionService implements Serializable
 
     /**
      * Return the inventory.
-     * @return Inventory; the inevntory.
+     * @return the inevntory.
      */
     public Inventory getInventory()
     {

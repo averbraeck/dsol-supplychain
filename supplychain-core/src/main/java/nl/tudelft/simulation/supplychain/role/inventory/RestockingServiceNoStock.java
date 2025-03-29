@@ -22,7 +22,7 @@ public class RestockingServiceNoStock extends RestockingServiceFixed
     /**
      * Construct a new restocking service that keeps no stock of the product.
      * @param inventory the inventory for which the service holds
-     * @param product Product; the product that will not be restocked
+     * @param product the product that will not be restocked
      */
     public RestockingServiceNoStock(final Inventory inventory, final Product product)
     {

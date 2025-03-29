@@ -45,15 +45,15 @@ public class Quote extends TradeMessage
     /**
      * The Constructor for a Quote. Note that the Quote contains a product and an amount. This sounds superfluous, but it is
      * not. The quote might contain a replacement product or less amount than the original request in the RFQ.
-     * @param sender Actor; the sender actor of the message content
-     * @param receiver Actor; the receving actor of the message content
-     * @param requestForQuote RequestForQuote; the RFQ for which this is the quote
-     * @param product Product; the product of the quote
-     * @param amount double; the amount of products
-     * @param price Money; the quotation price
-     * @param proposedShippingDate Time; the intended shipping date of the products
-     * @param transportOption TransportOption; the transport option offered
-     * @param validityTime Time; the time on the simulator clock until which the quote is valid
+     * @param sender the sender actor of the message content
+     * @param receiver the receving actor of the message content
+     * @param requestForQuote the RFQ for which this is the quote
+     * @param product the product of the quote
+     * @param amount the amount of products
+     * @param price the quotation price
+     * @param proposedShippingDate the intended shipping date of the products
+     * @param transportOption the transport option offered
+     * @param validityTime the time on the simulator clock until which the quote is valid
      */
     @SuppressWarnings("checkstyle:parameternumber")
     public Quote(final Actor sender, final Actor receiver, final RequestForQuote requestForQuote,
@@ -129,7 +129,7 @@ public class Quote extends TradeMessage
 
     /**
      * Return the proposed delivery date, based on the shipping date and the calculated shipping time.
-     * @return Time; the proposed delivery date, based on the shipping date and the calculated shipping time.
+     * @return the proposed delivery date, based on the shipping date and the calculated shipping time.
      */
     public Time getProposedDeliveryDate()
     {

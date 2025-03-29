@@ -59,16 +59,16 @@ public class TransportRealizationStep implements Identifiable, Serializable
 
     /**
      * Create a TransportRealizationStep, fixing SKU, durations and costs for one step in a trip.
-     * @param id String; the identifier for this TransportStep
-     * @param origin Actor; the actor at the origin (company, port, terminal)
-     * @param destination Actor; the actor at the destination (company, port, terminal)
-     * @param transportMode TransportMode; the transport mode between origin and destination
-     * @param sku Sku; the SKU that is used for transprort
-     * @param loadingTime Duration; the time to load a SKU at the origin (including typical waiting times)
-     * @param unloadingTime Duration; the time to unload a SKU at the destination (including typical waiting times)
-     * @param loadingCost Money; the cost for loading and storing a SKU at the origin location
-     * @param unloadingCost Money; the cost for unloading and storing a SKU at the destination location
-     * @param transportCostPerKm Money; the cost to transport one SKU per km
+     * @param id the identifier for this TransportStep
+     * @param origin the actor at the origin (company, port, terminal)
+     * @param destination the actor at the destination (company, port, terminal)
+     * @param transportMode the transport mode between origin and destination
+     * @param sku the SKU that is used for transprort
+     * @param loadingTime the time to load a SKU at the origin (including typical waiting times)
+     * @param unloadingTime the time to unload a SKU at the destination (including typical waiting times)
+     * @param loadingCost the cost for loading and storing a SKU at the origin location
+     * @param unloadingCost the cost for unloading and storing a SKU at the destination location
+     * @param transportCostPerKm the cost to transport one SKU per km
      */
     @SuppressWarnings("checkstyle:parameternumber")
     public TransportRealizationStep(final String id, final Actor origin, final Actor destination,
@@ -105,7 +105,7 @@ public class TransportRealizationStep implements Identifiable, Serializable
 
     /**
      * Return the actor at the origin (company, port, terminal).
-     * @return origin Actor; the actor at the origin (company, port, terminal)
+     * @return the actor at the origin (company, port, terminal)
      */
     public Actor getOrigin()
     {
@@ -114,7 +114,7 @@ public class TransportRealizationStep implements Identifiable, Serializable
 
     /**
      * Return the actor at the destination (company, port, terminal).
-     * @return destination Actor; the actor at the destination (company, port, terminal)
+     * @return the actor at the destination (company, port, terminal)
      */
     public Actor getDestination()
     {
@@ -123,7 +123,7 @@ public class TransportRealizationStep implements Identifiable, Serializable
 
     /**
      * Return the transport mode between origin and destination.
-     * @return TransportMode; the transport mode between origin and destination
+     * @return the transport mode between origin and destination
      */
     public TransportMode getTransportMode()
     {
@@ -132,7 +132,7 @@ public class TransportRealizationStep implements Identifiable, Serializable
 
     /**
      * Return the SKU that is used in this transport realization.
-     * @return Sku; the SKU that is used in this transport realization
+     * @return the SKU that is used in this transport realization
      */
     public Sku getSku()
     {
@@ -141,7 +141,7 @@ public class TransportRealizationStep implements Identifiable, Serializable
 
     /**
      * Return the time to load one SKU at the origin (including typical waiting times).
-     * @return Duration; the time to load one SKU at the origin (including typical waiting times)
+     * @return the time to load one SKU at the origin (including typical waiting times)
      */
     public Duration getLoadingTime()
     {
@@ -150,7 +150,7 @@ public class TransportRealizationStep implements Identifiable, Serializable
 
     /**
      * Return the time to unload one SKU at the destination (including typical waiting times).
-     * @return Duration; the time to unload one SKU at the destination (including typical waiting times)
+     * @return the time to unload one SKU at the destination (including typical waiting times)
      */
     public Duration getEstimatedUnloadingTime()
     {
@@ -159,7 +159,7 @@ public class TransportRealizationStep implements Identifiable, Serializable
 
     /**
      * Return the costs for loading and storing the one SKU at the origin location.
-     * @return Money; the costs for loading and storing the one SKU at the origin location
+     * @return the costs for loading and storing the one SKU at the origin location
      */
     public Money getEstimatedLoadingCost()
     {
@@ -168,7 +168,7 @@ public class TransportRealizationStep implements Identifiable, Serializable
 
     /**
      * Return the costs for loading and storing the one SKU at the destination location.
-     * @return Money; the costs for unloading and storing the one SKU at the destination location
+     * @return the costs for unloading and storing the one SKU at the destination location
      */
     public Money getEstimatedUnloadingCost()
     {
@@ -177,7 +177,7 @@ public class TransportRealizationStep implements Identifiable, Serializable
 
     /**
      * Return the transport cost for the SKU per km, for the TransportStep's transport mode.
-     * @return Money; the transport cost for the SKU per km, for the TransportStep's transport mode
+     * @return the transport cost for the SKU per km, for the TransportStep's transport mode
      */
     public Money getEstimatedTransportCostPerKm()
     {

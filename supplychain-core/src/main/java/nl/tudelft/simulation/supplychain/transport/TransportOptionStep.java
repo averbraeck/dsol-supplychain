@@ -57,10 +57,10 @@ public class TransportOptionStep implements Identifiable, Serializable
     private Map<Sku, Money> estimatedTransportCostsPerKm = new LinkedHashMap<>();
 
     /**
-     * @param id String; the identifier for this TransportStep
-     * @param origin Actor; the actor at the origin (company, port, terminal)
-     * @param destination Actor; the actor at the destination (company, port, terminal)
-     * @param transportMode TransportMode; the transport mode between origin and destination
+     * @param id the identifier for this TransportStep
+     * @param origin the actor at the origin (company, port, terminal)
+     * @param destination the actor at the destination (company, port, terminal)
+     * @param transportMode the transport mode between origin and destination
      */
     public TransportOptionStep(final String id, final Actor origin, final Actor destination, final TransportMode transportMode)
     {
@@ -82,7 +82,7 @@ public class TransportOptionStep implements Identifiable, Serializable
 
     /**
      * Return the actor at the origin (company, port, terminal).
-     * @return origin Actor; the actor at the origin (company, port, terminal)
+     * @return the actor at the origin (company, port, terminal)
      */
     public Actor getOrigin()
     {
@@ -91,7 +91,7 @@ public class TransportOptionStep implements Identifiable, Serializable
 
     /**
      * Return the actor at the destination (company, port, terminal).
-     * @return destination Actor; the actor at the destination (company, port, terminal)
+     * @return the actor at the destination (company, port, terminal)
      */
     public Actor getDestination()
     {
@@ -100,7 +100,7 @@ public class TransportOptionStep implements Identifiable, Serializable
 
     /**
      * Return the transport mode between origin and destination.
-     * @return TransportMode; the transport mode between origin and destination
+     * @return the transport mode between origin and destination
      */
     public TransportMode getTransportMode()
     {
@@ -109,8 +109,8 @@ public class TransportOptionStep implements Identifiable, Serializable
 
     /**
      * Return the estimated time to load goods at the origin (including typical waiting times) for a given SKU.
-     * @param sku Sku; the SKU to find the loading time for
-     * @return Duration; the estimated time to load goods at the origin (including typical waiting times), or null when there is
+     * @param sku the SKU to find the loading time for
+     * @return the estimated time to load goods at the origin (including typical waiting times), or null when there is
      *         no stored loading time for the provided SKU
      */
     public Duration getEstimatedLoadingTime(final Sku sku)
@@ -120,8 +120,8 @@ public class TransportOptionStep implements Identifiable, Serializable
 
     /**
      * Return the estimated time to unload goods at the destination (including typical waiting times) for a given SKU.
-     * @param sku Sku; the SKU to find the unloading time for
-     * @return Duration; the estimated time to unload goods at the destination (including typical waiting times), or null when
+     * @param sku the SKU to find the unloading time for
+     * @return the estimated time to unload goods at the destination (including typical waiting times), or null when
      *         there is no stored unloading time for the provided SKU
      */
     public Duration getEstimatedUnloadingTime(final Sku sku)
@@ -131,8 +131,8 @@ public class TransportOptionStep implements Identifiable, Serializable
 
     /**
      * Return the estimated costs for loading and storing the goods at the origin location for a given SKU.
-     * @param sku Sku; the SKU to find the loading cost for
-     * @return Money; the estimated costs for loading and storing the goods at the origin location, or null when there is no
+     * @param sku the SKU to find the loading cost for
+     * @return the estimated costs for loading and storing the goods at the origin location, or null when there is no
      *         stored loading cost for the provided SKU
      */
     public Money getEstimatedLoadingCost(final Sku sku)
@@ -142,8 +142,8 @@ public class TransportOptionStep implements Identifiable, Serializable
 
     /**
      * Return the estimated costs for loading and storing the goods at the destination location for a given SKU.
-     * @param sku Sku; the SKU to find the unloading cost for
-     * @return Money; the estimated costs for unloading and storing the goods at the destination location, or null when there is
+     * @param sku the SKU to find the unloading cost for
+     * @return the estimated costs for unloading and storing the goods at the destination location, or null when there is
      *         no stored unloading cost for the provided SKU
      */
     public Money getEstimatedUnloadingCost(final Sku sku)
@@ -153,8 +153,8 @@ public class TransportOptionStep implements Identifiable, Serializable
 
     /**
      * Return the estimated transport cost for the SKU per km, for the TransportStep's transport mode.
-     * @param sku Sku; the SKU to find the transport cost for
-     * @return Money; the estimated estimated transport cost for the SKU per km, for the TransportStep's transport mode, or null
+     * @param sku the SKU to find the transport cost for
+     * @return the estimated estimated transport cost for the SKU per km, for the TransportStep's transport mode, or null
      *         when there is no stored cost for the provided SKU
      */
     public Money getEstimatedTransportCostPerKm(final Sku sku)
@@ -164,8 +164,8 @@ public class TransportOptionStep implements Identifiable, Serializable
 
     /**
      * Set a new estimated time to load goods at the origin (including typical waiting times).
-     * @param sku Sku; the SKU to find the loading duration for
-     * @param estimatedLoadingTime Duration; new estimated time to load goods at the origin (including typical waiting times)
+     * @param sku the SKU to find the loading duration for
+     * @param estimatedLoadingTime new estimated time to load goods at the origin (including typical waiting times)
      */
     public void setEstimatedLoadingTime(final Sku sku, final Duration estimatedLoadingTime)
     {
@@ -176,8 +176,8 @@ public class TransportOptionStep implements Identifiable, Serializable
 
     /**
      * Set a new estimated time to unload goods at the destination (including typical waiting times).
-     * @param sku Sku; the SKU to set the unloading duration for
-     * @param estimatedUnloadingTime Duration; new estimated time to unload goods at the destination (including typical waiting
+     * @param sku the SKU to set the unloading duration for
+     * @param estimatedUnloadingTime new estimated time to unload goods at the destination (including typical waiting
      *            times)
      */
     public void setEstimatedUnloadingTime(final Sku sku, final Duration estimatedUnloadingTime)
@@ -189,8 +189,8 @@ public class TransportOptionStep implements Identifiable, Serializable
 
     /**
      * Set a new cost estimate for loading and storing the goods at the origin location.
-     * @param sku Sku; the SKU to set the loading cost for
-     * @param estimatedLoadingCost Money; new cost estimate for loading and storing the goods at the origin location
+     * @param sku the SKU to set the loading cost for
+     * @param estimatedLoadingCost new cost estimate for loading and storing the goods at the origin location
      */
     public void setEstimatedLoadingCost(final Sku sku, final Money estimatedLoadingCost)
     {
@@ -201,8 +201,8 @@ public class TransportOptionStep implements Identifiable, Serializable
 
     /**
      * Set a new cost estimate for unloading and storing the goods at the destination location.
-     * @param sku Sku; the SKU to set the unloading cost for
-     * @param estimatedUnloadingCost Money; new cost estimate for unloading and storing the goods at the destination location
+     * @param sku the SKU to set the unloading cost for
+     * @param estimatedUnloadingCost new cost estimate for unloading and storing the goods at the destination location
      */
     public void setEstimatedUnloadingCost(final Sku sku, final Money estimatedUnloadingCost)
     {
@@ -213,8 +213,8 @@ public class TransportOptionStep implements Identifiable, Serializable
 
     /**
      * Set a new estimated transport cost for the SKU per km, for the TransportStep's transport mode.
-     * @param sku Sku; the SKU to find the transport cost for
-     * @param estimatedTransportCostPerKm Money; the estimated estimated transport cost for the SKU per km, for the
+     * @param sku the SKU to find the transport cost for
+     * @param estimatedTransportCostPerKm the estimated estimated transport cost for the SKU per km, for the
      *            TransportStep's transport mode
      */
     public void setEstimatedTransportCostPerKm(final Sku sku, final Money estimatedTransportCostPerKm)

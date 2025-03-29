@@ -67,11 +67,11 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
     /**
      * Construct a new Actor.
      * @param id String, the unique id of the actor
-     * @param name String; the longer name of the actor
-     * @param model SupplyChainModelInterface; the model
-     * @param location OrientedPoint2d; the location of the actor
-     * @param locationDescription String; the location description of the actor (e.g., a city, country)
-     * @param messageStore TradeMessageStoreInterface; the message store for messages
+     * @param name the longer name of the actor
+     * @param model the model
+     * @param location the location of the actor
+     * @param locationDescription the location description of the actor (e.g., a city, country)
+     * @param messageStore the message store for messages
      * @throws ActorAlreadyDefinedException when the actor was already registered in the model
      */
     public SupplyChainActor(final String id, final String name, final SupplyChainModelInterface model,
@@ -151,7 +151,7 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
 
     /**
      * Return the short id of the actor.
-     * @return String; the short id of the actor
+     * @return the short id of the actor
      */
     @Override
     public String getId()

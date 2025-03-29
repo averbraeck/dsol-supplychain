@@ -20,7 +20,7 @@ public abstract class SellingRole extends Role
 
     /**
      * Create a SellingRole object for an actor.
-     * @param owner SellingActor; the owner of this role
+     * @param owner the owner of this role
      */
     public SellingRole(final SellingActor owner)
     {

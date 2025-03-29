@@ -51,7 +51,7 @@ public class DemandGenerationRole extends Role
     }
 
     /**
-     * @param product Product; the product
+     * @param product the product
      * @param demand the demand
      */
     public void addDemandGenerator(final Product product, final Demand demand)
@@ -70,7 +70,7 @@ public class DemandGenerationRole extends Role
 
     /**
      * Method getDemandGenerator.
-     * @param product Product; the product to return the demand generator for
+     * @param product the product to return the demand generator for
      * @return a demand, or null if it could not be found
      */
     public Demand getDemandGenerator(final Product product)
@@ -79,7 +79,7 @@ public class DemandGenerationRole extends Role
     }
 
     /**
-     * @param product Product; the product
+     * @param product the product
      */
     public void removeDemandGenerator(final Product product)
     {
@@ -87,7 +87,7 @@ public class DemandGenerationRole extends Role
     }
 
     /**
-     * @param product Product; the product
+     * @param product the product
      * @param demand the demand
      */
     protected void createInternalDemand(final Product product, final Demand demand)

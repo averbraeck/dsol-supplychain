@@ -25,9 +25,9 @@ public abstract class TradeMessage extends Message
 
     /**
      * Constructs a new TradeMessage object.
-     * @param sender Actor; the sending actor of the message content
-     * @param receiver Actor; the receiving actor of the message content
-     * @param internalDemandId long; the InternalDemandId that triggered the chain
+     * @param sender the sending actor of the message content
+     * @param receiver the receiving actor of the message content
+     * @param internalDemandId the InternalDemandId that triggered the chain
      */
     public TradeMessage(final Actor sender, final Actor receiver, final long internalDemandId)
     {
@@ -38,8 +38,8 @@ public abstract class TradeMessage extends Message
     /**
      * Constructs a new TradeMessage object, specifically an InternalDemand object, where the internalDemandId is set to the
      * value of the uniqueId.
-     * @param sender Actor; the sending actor of the message content
-     * @param receiver Actor; the receiving actor of the message content
+     * @param sender the sending actor of the message content
+     * @param receiver the receiving actor of the message content
      */
     public TradeMessage(final Actor sender, final Actor receiver)
     {
@@ -49,13 +49,13 @@ public abstract class TradeMessage extends Message
 
     /**
      * Return the product for which this trade message applies.
-     * @return Product; the product for which this trade message applies
+     * @return the product for which this trade message applies
      */
     public abstract Product getProduct();
 
     /**
      * Return the internalDemandId.
-     * @return long; the id of the internal demand that triggered the TtradeMessage chain.
+     * @return the id of the internal demand that triggered the TtradeMessage chain.
      */
     public long getInternalDemandId()
     {

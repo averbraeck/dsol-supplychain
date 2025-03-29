@@ -47,10 +47,10 @@ public class DelayProductionService extends ProductionService
 
     /**
      * Constructs a new production service for one product.
-     * @param owner InventoryRole; the role that owns the production service.
-     * @param product Product; the product of the production service.
+     * @param owner the role that owns the production service.
+     * @param product the product of the production service.
      * @param productionTime the time distribution to produce products.
-     * @param fixedTime fixed time, independent of order size; otherwise, the time is per unit.
+     * @param fixedTime otherwise, the time is per unit.
      * @param greedy if true, immediately start picking raw materials when production has to start.
      * @param profitMargin the fraction that is added to the cost of the materials.
      */

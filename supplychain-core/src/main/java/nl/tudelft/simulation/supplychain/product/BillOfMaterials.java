@@ -33,7 +33,7 @@ public class BillOfMaterials implements Serializable
 
     /**
      * Construct a new Bill of Materials for a product.
-     * @param product Product; the product to which this BOM belongs
+     * @param product the product to which this BOM belongs
      */
     public BillOfMaterials(final Product product)
     {
@@ -44,7 +44,7 @@ public class BillOfMaterials implements Serializable
     /**
      * Adds one ingredient with a certain amount of he ingredient's SKUs in its own Units to the BOM of this product.
      * @param ingredient the product to add to the BOM
-     * @param amount double; the amount of products needed in its own SKU
+     * @param amount the amount of products needed in its own SKU
      */
     public void add(final Product ingredient, final double amount)
     {
@@ -57,7 +57,7 @@ public class BillOfMaterials implements Serializable
 
     /**
      * Return the bill of materials as a map from product to the amount in the product's SKU.
-     * @return ImmutableMap&lt;Product, Double&gt;; the map of raw materials and amounts in SKUs.
+     * @return the map of raw materials and amounts in SKUs.
      */
     public ImmutableMap<Product, Double> getMaterials()
     {
@@ -66,7 +66,7 @@ public class BillOfMaterials implements Serializable
 
     /**
      * Return the product of which one unit is produced by this BOM.
-     * @return product; the product that is the result of this BOM
+     * @return the product that is the result of this BOM
      */
     public Product getProduct()
     {

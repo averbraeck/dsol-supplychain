@@ -14,13 +14,13 @@ public interface DemandGeneratingActor extends Actor
 {
     /**
      * Return the DemandGenerationRole for this actor.
-     * @return DemandGenerationRole; the DemandGenerationRole for this actor
+     * @return the DemandGenerationRole for this actor
      */
     DemandGenerationRole getDemandGenerationRole();
 
     /**
      * Set the DemandGenerationRole for this actor.
-     * @param demandGenerationRole DemandGenerationRole; the new DemandGenerationRole for this actor
+     * @param demandGenerationRole the new DemandGenerationRole for this actor
      */
     void setDemandGenerationRole(DemandGenerationRole demandGenerationRole);
 

@@ -20,7 +20,7 @@ public class BuyingRoleDirect extends BuyingRole
 
     /**
      * Construct a new BuyingRole for Generic Demand - Confirmation - Shipment - Bill.
-     * @param owner Actor; the actor to which this role belongs
+     * @param owner the actor to which this role belongs
      * @param internalDemandPolicy the internal demand handler
      * @param orderConfirmationPolicy the order confirmation handler
      * @param shipmentPolicy the shipment handler

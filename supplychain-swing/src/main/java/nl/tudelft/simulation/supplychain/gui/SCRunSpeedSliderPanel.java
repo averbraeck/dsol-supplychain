@@ -44,12 +44,12 @@ public class SCRunSpeedSliderPanel extends JPanel
 
     /**
      * Construct a new SCRunSpeedSliderPanel.
-     * @param minimum double; the minimum value on the scale (the displayed scale may extend a little further than this value)
-     * @param maximum double; the maximum value on the scale (the displayed scale may extend a little further than this value)
-     * @param initialValue double; the initially selected value on the scale
-     * @param factor double; the multiplicaton factor to use for the simulation time
-     * @param ticksPerDecade int; the number of steps per decade
-     * @param simulator DevsSimulatorInterface&lt;?, ?, ?&gt;; the simulator to change the speed of
+     * @param minimum the minimum value on the scale (the displayed scale may extend a little further than this value)
+     * @param maximum the maximum value on the scale (the displayed scale may extend a little further than this value)
+     * @param initialValue the initially selected value on the scale
+     * @param factor the multiplicaton factor to use for the simulation time
+     * @param ticksPerDecade the number of steps per decade
+     * @param simulator the simulator to change the speed of
      */
     public SCRunSpeedSliderPanel(final double minimum, final double maximum, final double initialValue, final double factor,
             final int ticksPerDecade, final DevsSimulatorInterface<?> simulator)
@@ -162,8 +162,8 @@ public class SCRunSpeedSliderPanel extends JPanel
 
     /**
      * Convert a position on the slider to a factor.
-     * @param step int; the position on the slider
-     * @return double; the factor that corresponds to step
+     * @param step the position on the slider
+     * @return the factor that corresponds to step
      */
     private double stepToFactor(final int step)
     {
@@ -190,7 +190,7 @@ public class SCRunSpeedSliderPanel extends JPanel
 
     /**
      * Retrieve the current TimeWarp factor.
-     * @return double; the current TimeWarp factor
+     * @return the current TimeWarp factor
      */
     public double getFactor()
     {
@@ -205,7 +205,7 @@ public class SCRunSpeedSliderPanel extends JPanel
 
     /**
      * Set the time warp factor to the best possible approximation of a given value.
-     * @param speed double; the requested speed
+     * @param speed the requested speed
      */
     public void setSpeed(final double speed)
     {

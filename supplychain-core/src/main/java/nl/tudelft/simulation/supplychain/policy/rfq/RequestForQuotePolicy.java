@@ -42,11 +42,11 @@ public class RequestForQuotePolicy extends SupplyChainPolicy<RequestForQuote>
 
     /**
      * Construct a new RFQ handler.
-     * @param owner Role; the role belonging to this policy
+     * @param owner the role belonging to this policy
      * @param inventory the stock to check for products when quoting
-     * @param profitMargin double; the profit margin to use; 1.0 is no profit
-     * @param handlingTime DistContinuousDuration; the distribution of the time to react on the RFQ
-     * @param validityDuration Duration;
+     * @param profitMargin the profit margin to use; 1.0 is no profit
+     * @param handlingTime the distribution of the time to react on the RFQ
+     * @param validityDuration 
      */
     public RequestForQuotePolicy(final Role owner, final Inventory inventory, final double profitMargin,
             final DistContinuousDuration handlingTime, final Duration validityDuration)

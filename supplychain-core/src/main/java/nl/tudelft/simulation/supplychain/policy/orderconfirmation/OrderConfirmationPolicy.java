@@ -29,7 +29,7 @@ public class OrderConfirmationPolicy extends SupplyChainPolicy<OrderConfirmation
 
     /**
      * Constructs a new OrderConfirmationHandler.
-     * @param owner Role; the owner of the policy.
+     * @param owner the owner of the policy.
      */
     public OrderConfirmationPolicy(final Role owner)
     {

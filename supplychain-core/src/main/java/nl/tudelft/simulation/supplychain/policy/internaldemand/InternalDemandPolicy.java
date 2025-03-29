@@ -30,7 +30,7 @@ public abstract class InternalDemandPolicy extends SupplyChainPolicy<InternalDem
 
     /**
      * Construct a new InternalDemandPolicy.
-     * @param id String; the id of the policy
+     * @param id the id of the policy
      * @param owner the Role that has this policy.
      * @param handlingTime the distribution of the time to handle an internal demand
      * @param inventory the inventory for being able to change the ordered amount

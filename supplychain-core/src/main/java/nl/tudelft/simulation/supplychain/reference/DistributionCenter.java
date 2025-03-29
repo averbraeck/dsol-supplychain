@@ -23,13 +23,13 @@ public class DistributionCenter extends Retailer
 
     /**
      * @param id String, the unique id of the distribution center
-     * @param name String; the longer name of the distributin center
-     * @param model SupplyChainModelInterface; the model
-     * @param location OrientedPoint2d; the location of the actor
-     * @param locationDescription String; the location description of the actor (e.g., a city, country)
-     * @param bank Bank; the bank for the BankAccount
-     * @param initialBalance Money; the initial balance for the actor
-     * @param messageStore TradeMessageStoreInterface; the message store for messages
+     * @param name the longer name of the distributin center
+     * @param model the model
+     * @param location the location of the actor
+     * @param locationDescription the location description of the actor (e.g., a city, country)
+     * @param bank the bank for the BankAccount
+     * @param initialBalance the initial balance for the actor
+     * @param messageStore the message store for messages
      * @throws ActorAlreadyDefinedException when the actor was already registered in the model
      */
     @SuppressWarnings("checkstyle:parameternumber")

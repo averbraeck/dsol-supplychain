@@ -49,11 +49,11 @@ public class YellowPageAnswerPolicy extends SupplyChainPolicy<YellowPageAnswer>
 
     /**
      * Constructs a new YellowPageAnswerHandler.
-     * @param owner Role; the owner of the policy
-     * @param transportOptionProvider TransportOptionProvider; the provider of transport options betwween two locations
-     * @param transportChoiceProvider TransportChoiceProvider; the provider to choose between transport options
-     * @param handlingTime DistContinuousDuration; the distribution of the time to react on the YP answer
-     * @param cutoffDuration Duration; the maximum time after which the RFQ will stop collecting quotes
+     * @param owner the owner of the policy
+     * @param transportOptionProvider the provider of transport options betwween two locations
+     * @param transportChoiceProvider the provider to choose between transport options
+     * @param handlingTime the distribution of the time to react on the YP answer
+     * @param cutoffDuration the maximum time after which the RFQ will stop collecting quotes
      */
     public YellowPageAnswerPolicy(final Role owner, final TransportOptionProvider transportOptionProvider,
             final TransportChoiceProvider transportChoiceProvider, final DistContinuousDuration handlingTime,

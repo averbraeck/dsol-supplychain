@@ -18,7 +18,7 @@ public class ShipmentPolicyConsume extends ShipmentPolicy
 
     /**
      * Construct a new ShipmentHandlerConsume handler.
-     * @param owner Role; the owner of the policy
+     * @param owner the owner of the policy
      */
     public ShipmentPolicyConsume(final Role owner)
     {

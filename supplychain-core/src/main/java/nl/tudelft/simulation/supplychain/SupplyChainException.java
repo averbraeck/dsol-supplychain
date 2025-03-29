@@ -29,7 +29,7 @@ public class SupplyChainException extends Exception
 
     /**
      * Create the exception with a message.
-     * @param message String; the message to explain the exception
+     * @param message the message to explain the exception
      */
     public SupplyChainException(final String message)
     {
@@ -39,7 +39,7 @@ public class SupplyChainException extends Exception
 
     /**
      * Wrap an earlier exception into this exception.
-     * @param cause Throwable; the earlier exception to wrap
+     * @param cause the earlier exception to wrap
      */
     public SupplyChainException(final Throwable cause)
     {
@@ -48,8 +48,8 @@ public class SupplyChainException extends Exception
 
     /**
      * Wrap an earlier exception into this exception, and give it a description.
-     * @param message String; the message to explain the exception
-     * @param cause Throwable; the earlier exception to wrap
+     * @param message the message to explain the exception
+     * @param cause the earlier exception to wrap
      */
     public SupplyChainException(final String message, final Throwable cause)
     {
@@ -61,10 +61,10 @@ public class SupplyChainException extends Exception
      * Create an exception that wraps an earlier exception into this exception, and gives it a description. This construstor
      * allows to set the flags on the exception for suppression enabled or disabled, and writable stack trace enabled or
      * disabled.
-     * @param message String; the message to explain the exception
-     * @param cause Throwable; the earlier exception to wrap
-     * @param enableSuppression boolean; whether or not suppression is enabled or disabled
-     * @param writableStackTrace boolean; whether or not the stack trace should be writable
+     * @param message the message to explain the exception
+     * @param cause the earlier exception to wrap
+     * @param enableSuppression whether or not suppression is enabled or disabled
+     * @param writableStackTrace whether or not the stack trace should be writable
      */
     public SupplyChainException(final String message, final Throwable cause, final boolean enableSuppression,
             final boolean writableStackTrace)

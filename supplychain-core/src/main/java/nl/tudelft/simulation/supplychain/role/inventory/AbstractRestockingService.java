@@ -44,7 +44,7 @@ public abstract class AbstractRestockingService implements RestockingServiceInte
     /**
      * Construct a new restocking service, with the basic parameters that every restocking service has.
      * @param inventory the inventory for which the service holds
-     * @param product Product; the product that has to be restocked
+     * @param product the product that has to be restocked
      * @param checkInterval the distribution of the interval for restocking or checking
      * @param maxDeliveryDuration the maximum delivery time to use
      */

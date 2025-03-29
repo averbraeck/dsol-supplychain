@@ -33,11 +33,11 @@ public class Customer extends SupplyChainActor implements BuyingActor, DemandGen
 
     /**
      * @param id String, the unique id of the customer
-     * @param name String; the longer name of the customer
-     * @param model SupplyChainModelInterface; the model
-     * @param location OrientedPoint2d; the location of the actor
-     * @param locationDescription String; the location description of the actor (e.g., a city, country)
-     * @param messageStore TradeMessageStoreInterface; the message store for messages
+     * @param name the longer name of the customer
+     * @param model the model
+     * @param location the location of the actor
+     * @param locationDescription the location description of the actor (e.g., a city, country)
+     * @param messageStore the message store for messages
      * @throws ActorAlreadyDefinedException when the actor was already registered in the model
      */
     @SuppressWarnings("checkstyle:parameternumber")
@@ -64,7 +64,7 @@ public class Customer extends SupplyChainActor implements BuyingActor, DemandGen
 
     /**
      * Return the demand generation role.
-     * @return DemandGenerationRole; the demand generation role
+     * @return the demand generation role
      */
     public DemandGenerationRole getDemandGenerationRole()
     {
@@ -73,7 +73,7 @@ public class Customer extends SupplyChainActor implements BuyingActor, DemandGen
 
     /**
      * Set the demand generation role.
-     * @param demandGenerationRole DemandGenerationRole; the new demand generation role
+     * @param demandGenerationRole the new demand generation role
      */
     public void setDemandGenerationRole(final DemandGenerationRole demandGenerationRole)
     {

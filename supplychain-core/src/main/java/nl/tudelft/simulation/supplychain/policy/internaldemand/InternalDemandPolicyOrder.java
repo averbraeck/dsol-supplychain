@@ -47,9 +47,9 @@ public class InternalDemandPolicyOrder extends InternalDemandPolicy
 
     /**
      * Constructs a new InternalDemandPolicyOrder.
-     * @param owner Role; the owner of the internal demand
-     * @param transportOptionProvider TransportOptionProvider; the provider of transport options betwween two locations
-     * @param transportChoiceProvider TransportChoiceProvider; the provider to choose between transport options
+     * @param owner the owner of the internal demand
+     * @param transportOptionProvider the provider of transport options betwween two locations
+     * @param transportChoiceProvider the provider to choose between transport options
      * @param handlingTime the handling time distribution
      * @param stock the stock for being able to change the ordered amount
      */
@@ -65,7 +65,7 @@ public class InternalDemandPolicyOrder extends InternalDemandPolicy
     }
 
     /**
-     * @param product Product; the product that has a fixed supplier.
+     * @param product the product that has a fixed supplier.
      * @param supplier the supplier for that product.
      * @param unitPrice the price per unit to ask for.
      */

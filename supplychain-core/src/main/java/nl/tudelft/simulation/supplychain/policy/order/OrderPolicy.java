@@ -48,10 +48,10 @@ public abstract class OrderPolicy<O extends Order> extends SupplyChainPolicy<O>
 
     /**
      * Construct a new OrderHandler. The OrderHandler is abstract, so this constructor can not be called directly.
-     * @param id String; the id of the policy
-     * @param owner Role; the owner of the policy
-     * @param stock StockInterface; the stock to use to handle the incoming order
-     * @param messageClass MessageClass; the specific order message class
+     * @param id the id of the policy
+     * @param owner the owner of the policy
+     * @param stock the stock to use to handle the incoming order
+     * @param messageClass the specific order message class
      */
     public OrderPolicy(final String id, final Role owner, final Inventory stock,
             final Class<O> messageClass)

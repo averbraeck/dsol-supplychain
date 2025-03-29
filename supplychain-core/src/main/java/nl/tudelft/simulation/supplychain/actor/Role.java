@@ -43,9 +43,9 @@ public abstract class Role implements Identifiable, Serializable
 
     /**
      * Create a new Role.
-     * @param id String; the id of the role
-     * @param actor Actor; the actor to which this role belongs
-     * @param messageReceiver ContentReceiver; the message handler to use for processing the messages
+     * @param id the id of the role
+     * @param actor the actor to which this role belongs
+     * @param messageReceiver the message handler to use for processing the messages
      */
     public Role(final String id, final Actor actor, final ContentReceiver messageReceiver)
     {
@@ -61,7 +61,7 @@ public abstract class Role implements Identifiable, Serializable
 
     /**
      * Set a message handling policy for a message type, possibly overwriting the previous message handling policy.
-     * @param policy ContentPolicyInterface&lt;M&gt;; the policy to add
+     * @param policy the policy to add
      * @param <C> the message type
      */
     public <C extends Content> void setMessagePolicy(final ContentPolicy<C> policy)
@@ -72,7 +72,7 @@ public abstract class Role implements Identifiable, Serializable
 
     /**
      * Remove a message handling policy for a mesage type.
-     * @param messageClass Class&lt;M&gt;; the message class of the policy to remove
+     * @param messageClass the message class of the policy to remove
      * @param <C> the message type
      */
     public <C extends Content> void removeMessagePolicy(final Class<C> messageClass)
@@ -83,9 +83,9 @@ public abstract class Role implements Identifiable, Serializable
 
     /**
      * This is the core processing of a message that was received. All appropriate policies of the actor or role are executed.
-     * @param content M; the message to process
+     * @param content the message to process
      * @param <C> The message class to ensure that the message and policy align
-     * @return boolean; whether the PolicyHandler processed the message or not
+     * @return whether the PolicyHandler processed the message or not
      */
     @SuppressWarnings("unchecked")
     public <C extends Content> boolean handleContent(final C content)
@@ -100,7 +100,7 @@ public abstract class Role implements Identifiable, Serializable
 
     /**
      * Return the actor to which this role belongs.
-     * @return owner Actor; the actor to which this role belongs
+     * @return the actor to which this role belongs
      */
     public Actor getActor()
     {
@@ -109,7 +109,7 @@ public abstract class Role implements Identifiable, Serializable
 
     /**
      * Return the simulator to schedule simulation events on.
-     * @return SupplyChainSimulatorInterface; the simulator
+     * @return the simulator
      */
     public SupplyChainSimulatorInterface getSimulator()
     {

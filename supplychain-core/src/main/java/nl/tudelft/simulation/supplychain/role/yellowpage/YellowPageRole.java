@@ -35,7 +35,7 @@ public class YellowPageRole extends Role
 
     /**
      * Create a new YellowPage role.
-     * @param owner YellowPageActor; the actor that owns the YP role
+     * @param owner the actor that owns the YP role
      */
     public YellowPageRole(final YellowPageActor owner)
     {
@@ -44,7 +44,7 @@ public class YellowPageRole extends Role
 
     /**
      * Add a supplier to for a certain product.
-     * @param product Product; the product with a set of suppliers.
+     * @param product the product with a set of suppliers.
      * @param supplier a supplier for that product.
      */
     public void addSupplier(final Product product, final Actor supplier)
@@ -60,7 +60,7 @@ public class YellowPageRole extends Role
 
     /**
      * Remove a supplier for a certain product.
-     * @param product Product; the product.
+     * @param product the product.
      * @param supplier the supplier for that product to be removed.
      */
     public void removeSupplier(final Product product, final Actor supplier)
@@ -73,7 +73,7 @@ public class YellowPageRole extends Role
     }
 
     /**
-     * @param product Product; the product for which to search for suppliers
+     * @param product the product for which to search for suppliers
      * @return the list of suppliers of the product (or an empty list)
      */
     public Set<Actor> getSuppliers(final Product product)

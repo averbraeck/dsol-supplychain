@@ -14,13 +14,13 @@ public interface FinancingActor extends Actor
 {
     /**
      * Return the FinancingRole for this actor.
-     * @return FinancingRole; the FinancingRole for this actor
+     * @return the FinancingRole for this actor
      */
     FinancingRole getFinancingRole();
 
     /**
      * Set the FinancingRole for this actor.
-     * @param financingRole FinancingRole; the new FinancingRole for this actor
+     * @param financingRole the new FinancingRole for this actor
      */
     void setFinancingRole(FinancingRole financingRole);
 

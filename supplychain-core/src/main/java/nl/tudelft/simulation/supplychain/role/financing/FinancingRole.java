@@ -33,10 +33,10 @@ public class FinancingRole extends Role
 
     /**
      * Create a new FinancingRole with an attached BankAccount.
-     * @param id String; the id of the role
-     * @param owner FinancingActor; the actor that has this role
-     * @param messageReceiver MessageReceiver; the message handler to use for processing the messages
-     * @param bankAccount BankAccount; the BankAccount
+     * @param id the id of the role
+     * @param owner the actor that has this role
+     * @param messageReceiver the message handler to use for processing the messages
+     * @param bankAccount the BankAccount
      */
     public FinancingRole(final String id, final FinancingActor owner, final ContentReceiver messageReceiver,
             final BankAccount bankAccount)
@@ -47,9 +47,9 @@ public class FinancingRole extends Role
 
     /**
      * Create a new FinancingRole with an attached BankAccount.
-     * @param id String; the id of the role
-     * @param owner FinancingActor; the actor that has this role
-     * @param bankAccount BankAccount; the BankAccount
+     * @param id the id of the role
+     * @param owner the actor that has this role
+     * @param bankAccount the BankAccount
      */
     public FinancingRole(final String id, final FinancingActor owner, final BankAccount bankAccount)
     {
@@ -58,9 +58,9 @@ public class FinancingRole extends Role
 
     /**
      * Add a fixed cost item for this actor.
-     * @param description String; the description of the fixed cost item
-     * @param interval Duration; the interval at which the amount will be deduced from the bank account
-     * @param amount Money; the amount to deduce at each interval
+     * @param description the description of the fixed cost item
+     * @param interval the interval at which the amount will be deduced from the bank account
+     * @param amount the amount to deduce at each interval
      */
     public void addFixedCost(final String description, final Duration interval, final Money amount)
     {
@@ -70,7 +70,7 @@ public class FinancingRole extends Role
 
     /**
      * Return the bank account of the Actor.
-     * @return BankAccount; the bankAccount of the Actor.
+     * @return the bankAccount of the Actor.
      */
     public BankAccount getBankAccount()
     {
@@ -79,7 +79,7 @@ public class FinancingRole extends Role
 
     /**
      * Return a list of the fixed cost items for this Actor.
-     * @return List&lt;FixedCosts&gt;; a list of fixed costs items for this Actor.
+     * @return a list of fixed costs items for this Actor.
      */
     public List<FixedCost> getFixedCosts()
     {

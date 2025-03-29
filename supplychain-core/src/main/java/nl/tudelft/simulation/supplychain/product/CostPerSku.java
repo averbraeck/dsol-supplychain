@@ -28,8 +28,8 @@ public class CostPerSku implements Serializable
 
     /**
      * Construct a new CostPerSKU object.
-     * @param sku Sku; the SKU, independent of the product.
-     * @param cost Money; the cost for, e.g., storing, transporting, (un)loading of one SKU.
+     * @param sku the SKU, independent of the product.
+     * @param cost the cost for, e.g., storing, transporting, (un)loading of one SKU.
      */
     public CostPerSku(final Sku sku, final Money cost)
     {
@@ -41,7 +41,7 @@ public class CostPerSku implements Serializable
 
     /**
      * Return the SKU, independent of the product.
-     * @return sku Sku; the SKU, independent of the product
+     * @return the SKU, independent of the product
      */
     public Sku getSku()
     {
@@ -50,7 +50,7 @@ public class CostPerSku implements Serializable
 
     /**
      * Return the cost for, e.g., storing, transporting, (un)loading of one SKU.
-     * @return cost Money; the cost for, e.g., storing, transporting, (un)loading of one SKU
+     * @return the cost for, e.g., storing, transporting, (un)loading of one SKU
      */
     public Money getCost()
     {

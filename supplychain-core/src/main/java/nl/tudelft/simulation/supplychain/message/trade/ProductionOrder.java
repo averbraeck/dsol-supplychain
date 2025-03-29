@@ -38,8 +38,8 @@ public class ProductionOrder extends TradeMessage
      * @param owner the producer of the products
      * @param internalDemandId the internal demand for this order
      * @param dateReady the internal date the product should be ready
-     * @param product Product; the product that has to be produced
-     * @param amount double; the amount of products to be produced, in the product's units
+     * @param product the product that has to be produced
+     * @param amount the amount of products to be produced, in the product's units
      */
     public ProductionOrder(final Actor owner, final long internalDemandId, final Time dateReady,
             final Product product, final double amount)

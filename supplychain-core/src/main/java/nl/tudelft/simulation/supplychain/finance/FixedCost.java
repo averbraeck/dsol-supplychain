@@ -40,10 +40,10 @@ public class FixedCost implements Serializable
 
     /**
      * Create a Fixed cost item for an actor.
-     * @param owner FinancingRole; the FinancingRole to wich these fixed costs belong
-     * @param description String; the description
-     * @param interval Duration; the interval for booking fixed cost
-     * @param amount double; the fixed cost per interval
+     * @param owner the FinancingRole to wich these fixed costs belong
+     * @param description the description
+     * @param interval the interval for booking fixed cost
+     * @param amount the fixed cost per interval
      */
     public FixedCost(final FinancingRole owner, final String description, final Duration interval, final Money amount)
     {
@@ -61,7 +61,7 @@ public class FixedCost implements Serializable
     /**
      * Change the interval to book fixed costs. The booking event is immediately rescheduled to the END of the interval; next
      * deduction takes place after 'interval' days.
-     * @param newInterval Duration; the new interval
+     * @param newInterval the new interval
      */
     public void changeInterval(final Duration newInterval)
     {
@@ -79,7 +79,7 @@ public class FixedCost implements Serializable
     /**
      * Change the fixed costs to book each interval. The change is effective on the next scheduled event for deduction of fixed
      * costs.
-     * @param newAmount double; the new amount
+     * @param newAmount the new amount
      */
     public void changeAmount(final Money newAmount)
     {
@@ -97,7 +97,7 @@ public class FixedCost implements Serializable
 
     /**
      * Return the fixed cost per interval.
-     * @return Money; the fixed cost per interval
+     * @return the fixed cost per interval
      */
     public Money getAmount()
     {
@@ -106,7 +106,7 @@ public class FixedCost implements Serializable
 
     /**
      * Return the description of the fixed cost item.
-     * @return String; the description of the fixed cost item
+     * @return the description of the fixed cost item
      */
     public String getDescription()
     {
@@ -115,7 +115,7 @@ public class FixedCost implements Serializable
 
     /**
      * Return the withdrawal interval.
-     * @return Duration; the withdrawal interval
+     * @return the withdrawal interval
      */
     public Duration getInterval()
     {
@@ -124,7 +124,7 @@ public class FixedCost implements Serializable
 
     /**
      * Return the FinancingRole to which these fixed costs apply.
-     * @return FinancingRole; the FinancingRole to which these fixed costs apply
+     * @return the FinancingRole to which these fixed costs apply
      */
     public FinancingRole getOwner()
     {

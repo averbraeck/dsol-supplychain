@@ -45,9 +45,9 @@ public abstract class SupplyChainPolicy<T extends TradeMessage> extends ContentP
     protected Set<Actor> validPartners = new LinkedHashSet<>();
 
     /**
-     * @param id String; the id of the policy
-     * @param owner Role; the owner of this policy
-     * @param messageClass Class&lt;T&gt;; the message type that this policy can process
+     * @param id the id of the policy
+     * @param owner the owner of this policy
+     * @param messageClass the message type that this policy can process
      */
     public SupplyChainPolicy(final String id, final Role owner, final Class<T> messageClass)
     {
@@ -77,7 +77,7 @@ public abstract class SupplyChainPolicy<T extends TradeMessage> extends ContentP
 
     /**
      * Add a valid product to the list of products to handle with this policy.
-     * @param product product; a new valid product to add to the valid product set for this policy
+     * @param product a new valid product to add to the valid product set for this policy
      */
     public void addValidProduct(final Product product)
     {
@@ -94,7 +94,7 @@ public abstract class SupplyChainPolicy<T extends TradeMessage> extends ContentP
 
     /**
      * Replace the current set of valid products. If you want to ADD a set, use addValidProduct per product instead.
-     * @param validProducts Set&lt;Product&gt;; a new set of valid products
+     * @param validProducts a new set of valid products
      */
     public void setValidProducts(final Set<Product> validProducts)
     {
@@ -144,7 +144,7 @@ public abstract class SupplyChainPolicy<T extends TradeMessage> extends ContentP
     
     /**
      * Convenience method: return the Model.
-     * @return SupplyChainModelInterface; the model
+     * @return the model
      */
     public SupplyChainModelInterface getModel()
     {
@@ -153,7 +153,7 @@ public abstract class SupplyChainPolicy<T extends TradeMessage> extends ContentP
 
     /**
      * Convenience method: return the Simulator.
-     * @return SupplyChainSimulatorInterface; the simulator of this model
+     * @return the simulator of this model
      */
     public SupplyChainSimulatorInterface getSimulator()
     {
@@ -162,8 +162,8 @@ public abstract class SupplyChainPolicy<T extends TradeMessage> extends ContentP
     
     /**
      * Convenience method: send a message to another actor with a delay.
-     * @param message message; the message to send
-     * @param delay Duration; the time it takes between sending and receiving
+     * @param message the message to send
+     * @param delay the time it takes between sending and receiving
      */
     protected void sendMessage(final Message message, final Duration delay)
     {
@@ -172,7 +172,7 @@ public abstract class SupplyChainPolicy<T extends TradeMessage> extends ContentP
 
     /**
      * Convenience method: send a message to another actor without a delay.
-     * @param message message; the message to send
+     * @param message the message to send
      */
     protected void sendMessage(final Message message)
     {
@@ -225,8 +225,8 @@ public abstract class SupplyChainPolicy<T extends TradeMessage> extends ContentP
 
     /**
      * Check partner and content for validity for this policy.
-     * @param message TradeMessage; the messageto check
-     * @return boolean; indicating whether the content can be handled by this policy
+     * @param message the messageto check
+     * @return indicating whether the content can be handled by this policy
      */
     protected boolean isValidMessage(final TradeMessage message)
     {

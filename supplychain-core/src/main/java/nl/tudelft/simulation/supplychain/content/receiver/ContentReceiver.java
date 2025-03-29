@@ -32,7 +32,7 @@ public abstract class ContentReceiver implements Identifiable, Serializable
 
     /**
      * Create a new content receiver for an actor.
-     * @param id String; an id for the message receiver
+     * @param id an id for the message receiver
      */
     public ContentReceiver(final String id)
     {
@@ -42,7 +42,7 @@ public abstract class ContentReceiver implements Identifiable, Serializable
 
     /**
      * Set the role to which this receiver belongs; can only be called once, preferably in the constructor of the Role.
-     * @param role Role; the Role to which this message receiver belongs
+     * @param role the Role to which this message receiver belongs
      * @throws IllegalStateException when the role has already been initialized
      */
     public void setRole(final Role role)
@@ -68,7 +68,7 @@ public abstract class ContentReceiver implements Identifiable, Serializable
 
     /**
      * Return the role to which this message receiver belongs.
-     * @return Role; the role to which this message receiver belongs
+     * @return the role to which this message receiver belongs
      */
     public Role getRole()
     {

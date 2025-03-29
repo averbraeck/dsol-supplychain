@@ -47,9 +47,9 @@ public class Demand implements Serializable
     private static StreamInterface stream = new Java2Random();
 
     /**
-     * @param product Product; the product
+     * @param product the product
      * @param interval the distribution for the demand generation interval
-     * @param amount double; the amount of product to order
+     * @param amount the amount of product to order
      * @param earliestDeliveryDurationDistribution the earliest delivery date distribution
      * @param latestDeliveryDurationDistribution the latest delivery date distribution
      */
@@ -65,9 +65,9 @@ public class Demand implements Serializable
     }
 
     /**
-     * @param product Product; the product
+     * @param product the product
      * @param interval the distribution for the demand generation interval
-     * @param amount double; the amount of product to order
+     * @param amount the amount of product to order
      * @param earliestDeliveryDuration the earliest delivery date
      * @param latestDeliveryDuration the latest delivery date
      */
@@ -84,11 +84,11 @@ public class Demand implements Serializable
     }
 
     /**
-     * @param product Product; the product
+     * @param product the product
      * @param interval the distribution for the demand generation interval
-     * @param amount double; the amount of product to order
-     * @param earliestDeliveryDate Time; the earliest delivery date distribution
-     * @param latestDeliveryDate Time; the latest delivery date distribution
+     * @param amount the amount of product to order
+     * @param earliestDeliveryDate the earliest delivery date distribution
+     * @param latestDeliveryDate the latest delivery date distribution
      */
     public Demand(final Product product, final DistContinuousDuration interval, final DistDiscrete amount,
             final DistContinuousDuration earliestDeliveryDate, final DistContinuousDuration latestDeliveryDate)
@@ -101,11 +101,11 @@ public class Demand implements Serializable
     }
 
     /**
-     * @param product Product; the product
+     * @param product the product
      * @param interval the distribution for the demand generation interval
-     * @param amount double; the amount of product to order
-     * @param earliestDeliveryDate Time; the earliest delivery date
-     * @param latestDeliveryDate Time; the latest delivery date
+     * @param amount the amount of product to order
+     * @param earliestDeliveryDate the earliest delivery date
+     * @param latestDeliveryDate the latest delivery date
      */
     public Demand(final Product product, final DistContinuousDuration interval, final long amount,
             final Duration earliestDeliveryDate, final Duration latestDeliveryDate)

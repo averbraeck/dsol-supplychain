@@ -20,7 +20,7 @@ public class SCSpeedPanel extends SpeedPanel.TimeDoubleUnit
 
     /**
      * Construct a clock panel with a djutils Duration.
-     * @param simulator SimulatorInterface; the simulator
+     * @param simulator the simulator
      */
     public SCSpeedPanel(final SupplyChainSimulatorInterface simulator)
     {

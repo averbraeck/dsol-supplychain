@@ -29,7 +29,7 @@ public class SupplyChainSimulator extends DevsSimulator<Duration> implements Sup
      * Construct the SupplyChainSimulator that extends the DevsSimulator, and offers absolute Time for the simulation time in
      * addition to relative duration.
      * @param id the simulator id
-     * @param absStartTime Time; the start time of the simulator
+     * @param absStartTime the start time of the simulator
      */
     public SupplyChainSimulator(final Serializable id, final Time absStartTime)
     {

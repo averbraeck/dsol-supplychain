@@ -28,7 +28,7 @@ public class OrderPolicyNoStock extends OrderPolicy<Order>
 
     /**
      * Construct a new OrderHandler that purchases the goods when ordered.
-     * @param owner Role; the owner of the policy
+     * @param owner the owner of the policy
      * @param stock the stock to use to handle the incoming order
      */
     public OrderPolicyNoStock(final Role owner, final Inventory stock)

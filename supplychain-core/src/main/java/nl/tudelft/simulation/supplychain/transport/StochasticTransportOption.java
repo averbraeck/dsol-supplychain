@@ -34,7 +34,7 @@ public class StochasticTransportOption implements Identifiable, Serializable
 
     /**
      * make a new TransportOption.
-     * @param id String; the id of the TransportOption
+     * @param id the id of the TransportOption
      */
     public StochasticTransportOption(final String id)
     {
@@ -50,7 +50,7 @@ public class StochasticTransportOption implements Identifiable, Serializable
 
     /**
      * Return the transport steps.
-     * @return ImmutableList&lt;StochasticTransportOptionStep&gt;; the transport steps
+     * @return the transport steps
      */
     public ImmutableList<StochasticTransportOptionStep> getTransportSteps()
     {
@@ -59,7 +59,7 @@ public class StochasticTransportOption implements Identifiable, Serializable
 
     /**
      * Add a transport step.
-     * @param transportOptionStep StochasticTransportOptionStep; the new transport step
+     * @param transportOptionStep the new transport step
      */
     public void addTransportStep(final StochasticTransportOptionStep transportOptionStep)
     {
@@ -71,7 +71,7 @@ public class StochasticTransportOption implements Identifiable, Serializable
 
     /**
      * Add a number of transport steps.
-     * @param steps List&lt;StochasticTransportOptionStep&gt;; the new transport steps
+     * @param steps the new transport steps
      */
     public void addTransportSteps(final List<StochasticTransportOptionStep> steps)
     {

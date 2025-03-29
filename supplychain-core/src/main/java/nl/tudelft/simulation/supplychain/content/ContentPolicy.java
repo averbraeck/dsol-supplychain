@@ -32,9 +32,9 @@ public abstract class ContentPolicy<C extends Content> implements Identifiable, 
 
     /**
      * constructs a new content policy.
-     * @param id String; the id of the policy
-     * @param role Role; the role that owns this policy
-     * @param contentClass Class&lt;M&gt;; the content type that this policy can process
+     * @param id the id of the policy
+     * @param role the role that owns this policy
+     * @param contentClass the content type that this policy can process
      */
     public ContentPolicy(final String id, final Role role, final Class<C> contentClass)
     {
@@ -49,7 +49,7 @@ public abstract class ContentPolicy<C extends Content> implements Identifiable, 
     /**
      * Handle the content.
      * @param content the content to be handled
-     * @return a boolean acknowledgement; true or false
+     * @return true or false
      */
     public abstract boolean handleContent(C content);
 
@@ -61,7 +61,7 @@ public abstract class ContentPolicy<C extends Content> implements Identifiable, 
 
     /**
      * Return the role to which this handler belongs.
-     * @return role Role; the role to which this handler belongs
+     * @return the role to which this handler belongs
      */
     public Role getRole()
     {
@@ -70,7 +70,7 @@ public abstract class ContentPolicy<C extends Content> implements Identifiable, 
 
     /**
      * Return the content class for which this policy applies.
-     * @return Class&lt;? extends M&gt;; the content class for which this policy applies
+     * @return the content class for which this policy applies
      */
     public Class<C> getContentClass()
     {

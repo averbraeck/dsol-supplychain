@@ -18,8 +18,8 @@ public interface TransportOptionProvider
 {
     /**
      * Give the transport options for a transport from a sender actor to a receiver actor.
-     * @param sender Actor; the sender actor
-     * @param receiver Actor; the receiver actor
+     * @param sender the sender actor
+     * @param receiver the receiver actor
      * @return a set of transport options from sender to receiver
      */
     default Set<TransportOption> provideTransportOptions(final Actor sender, final Actor receiver)
@@ -29,8 +29,8 @@ public interface TransportOptionProvider
 
     /**
      * Give the transport options for a transport between two locations.
-     * @param sender Point&lt;?&gt;; the origin location
-     * @param receiver Point&lt;?&gt;; the destination location
+     * @param sender the origin location
+     * @param receiver the destination location
      * @return a set of transport options between two locations
      */
     Set<TransportOption> provideTransportOptions(Point<?> sender, Point<?> receiver);

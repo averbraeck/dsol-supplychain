@@ -24,8 +24,8 @@ public class WeightSku extends Sku
 
     /**
      * Instantiate a Stock Keeping Unit based on weight in kg.
-     * @param name String; the name of the unit
-     * @param weightKg double; the weight of the unit in kg
+     * @param name the name of the unit
+     * @param weightKg the weight of the unit in kg
      */
     public WeightSku(final String name, final double weightKg)
     {
@@ -36,8 +36,8 @@ public class WeightSku extends Sku
 
     /**
      * Instantiate a Stock Keeping Unit based on weight provided as a Mass.
-     * @param name String; the name of the unit
-     * @param weight Mass; the weight of the unit
+     * @param name the name of the unit
+     * @param weight the weight of the unit
      */
     public WeightSku(final String name, final Mass weight)
     {
@@ -49,7 +49,7 @@ public class WeightSku extends Sku
 
     /**
      * Return the weight in kg.
-     * @return double; the weight in kg.
+     * @return the weight in kg.
      */
     public double getWeightKg()
     {
@@ -58,7 +58,7 @@ public class WeightSku extends Sku
 
     /**
      * Return the weight as a Mass.
-     * @return Mass; the weight of one SKU
+     * @return the weight of one SKU
      */
     public Mass getWeight()
     {

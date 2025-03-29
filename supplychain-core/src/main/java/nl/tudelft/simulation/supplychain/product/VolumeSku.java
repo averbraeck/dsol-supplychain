@@ -22,8 +22,8 @@ public class VolumeSku extends Sku
     private double volumeM3;
 
     /**
-     * @param name String; the name of the unit
-     * @param volumeM3 double; determining volume of the unit, in m3
+     * @param name the name of the unit
+     * @param volumeM3 determining volume of the unit, in m3
      */
     public VolumeSku(final String name, final double volumeM3)
     {
@@ -33,8 +33,8 @@ public class VolumeSku extends Sku
     }
 
     /**
-     * @param name String; the name of the unit
-     * @param volume Volume; determining volume of the unit
+     * @param name the name of the unit
+     * @param volume determining volume of the unit
      */
     public VolumeSku(final String name, final Volume volume)
     {
@@ -46,7 +46,7 @@ public class VolumeSku extends Sku
 
     /**
      * Return the volume in m3.
-     * @return double; the volume of the SKU in m3.
+     * @return the volume of the SKU in m3.
      */
     public double getVolumeM3()
     {
@@ -55,7 +55,7 @@ public class VolumeSku extends Sku
 
     /**
      * Return the volume as a Volume.
-     * @return Volume; the volume of the SKU.
+     * @return the volume of the SKU.
      */
     public Volume getVolume()
     {

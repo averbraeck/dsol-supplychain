@@ -36,11 +36,11 @@ public class InternalDemand extends TradeMessage
 
     /**
      * Constructs a new InternalDemand.
-     * @param sender Actor; the sender of the internal demand
-     * @param product Product; the product which is demanded
-     * @param amount double; the amount of the product in the product's SKU
-     * @param earliestDeliveryDate Time; the earliest delivery date
-     * @param latestDeliveryDate Time; the latest delivery date
+     * @param sender the sender of the internal demand
+     * @param product the product which is demanded
+     * @param amount the amount of the product in the product's SKU
+     * @param earliestDeliveryDate the earliest delivery date
+     * @param latestDeliveryDate the latest delivery date
      */
     public InternalDemand(final Actor sender, final Product product, final double amount,
             final Time earliestDeliveryDate, final Time latestDeliveryDate)
@@ -55,7 +55,7 @@ public class InternalDemand extends TradeMessage
 
     /**
      * Return the product for which this internal demand applies.
-     * @return Product; the product for which this internal demand applies
+     * @return the product for which this internal demand applies
      */
     @Override
     public Product getProduct()
@@ -92,7 +92,7 @@ public class InternalDemand extends TradeMessage
 
     /**
      * Return the internalDemandId.
-     * @return long; the id of the internal demand that triggered the TradeMessage chain.
+     * @return the id of the internal demand that triggered the TradeMessage chain.
      */
     @Override
     public long getInternalDemandId()

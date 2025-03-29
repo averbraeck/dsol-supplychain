@@ -28,8 +28,8 @@ public class YellowPageAnswer extends TradeMessage
 
     /**
      * Constructs a new YellowPageAnswer.
-     * @param sender YellowPageActor; the sender of the yellow page answer
-     * @param receiver Actor; the receiver of the yellow page answer
+     * @param sender the sender of the yellow page answer
+     * @param receiver the receiver of the yellow page answer
      * @param internalDemandId the internal demand that triggered the yellow page process
      * @param suppliers the suppliers of the requested product
      * @param ypRequest the request that triggered this YP answer

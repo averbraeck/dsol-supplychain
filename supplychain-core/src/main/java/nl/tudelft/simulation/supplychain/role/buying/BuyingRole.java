@@ -23,7 +23,7 @@ public abstract class BuyingRole extends Role
 
     /**
      * Create a BuyingRole object for an actor with a default message receiver.
-     * @param owner Actor; the owner of this role
+     * @param owner the owner of this role
      */
     public BuyingRole(final BuyingActor owner)
     {
@@ -32,8 +32,8 @@ public abstract class BuyingRole extends Role
 
     /**
      * Create a BuyingRole object for an actor with a specific message receiver.
-     * @param owner Actor; the owner of this role
-     * @param messageReceiver MessageReceiver; the message receiver to use
+     * @param owner the owner of this role
+     * @param messageReceiver the message receiver to use
      */
     public BuyingRole(final BuyingActor owner, final ContentReceiver messageReceiver)
     {

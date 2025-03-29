@@ -41,7 +41,7 @@ public class TransportOption implements Identifiable, Serializable
 
     /**
      * make a new TransportOption.
-     * @param id String; the id of the TransportOption
+     * @param id the id of the TransportOption
      */
     public TransportOption(final String id)
     {
@@ -57,7 +57,7 @@ public class TransportOption implements Identifiable, Serializable
 
     /**
      * Return the transport steps.
-     * @return ImmutableList&lt;TransportOptionStep&gt;; the transport steps
+     * @return the transport steps
      */
     public ImmutableList<TransportOptionStep> getTransportSteps()
     {
@@ -66,7 +66,7 @@ public class TransportOption implements Identifiable, Serializable
 
     /**
      * Add a transport step.
-     * @param transportOptionStep TransportOptionStep; the new transport step
+     * @param transportOptionStep the new transport step
      */
     public void addTransportStep(final TransportOptionStep transportOptionStep)
     {
@@ -78,7 +78,7 @@ public class TransportOption implements Identifiable, Serializable
 
     /**
      * Add a number of transport steps.
-     * @param steps List&lt;TransportOptionStep&gt;; the new transport steps
+     * @param steps the new transport steps
      */
     public void addTransportSteps(final List<TransportOptionStep> steps)
     {
@@ -91,8 +91,8 @@ public class TransportOption implements Identifiable, Serializable
 
     /**
      * Return the estimated total transport duration from sender to receiver.
-     * @param sku Sku; the sku that needs to be transported
-     * @return Duration; the total transport duration including transport and transloading
+     * @param sku the sku that needs to be transported
+     * @return the total transport duration including transport and transloading
      */
     public Duration estimatedTotalTransportDuration(final Sku sku)
     {
@@ -109,8 +109,8 @@ public class TransportOption implements Identifiable, Serializable
 
     /**
      * Return the estimated total transport cost from sender to receiver.
-     * @param sku Sku; the sku that needs to be transported
-     * @return Money; the total costs including transport and transloading
+     * @param sku the sku that needs to be transported
+     * @return the total costs including transport and transloading
      */
     public Money estimatedTotalTransportCost(final Sku sku)
     {

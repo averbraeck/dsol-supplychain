@@ -34,7 +34,7 @@ public final class JsonActorFactory
 
     /**
      * Create a JsonMessageFactory with the special type adapters.
-     * @param model SupplyChainModelInterface; the model for which to register the type adapters
+     * @param model the model for which to register the type adapters
      */
     public JsonActorFactory(final SupplyChainModelInterface model)
     {
@@ -50,7 +50,7 @@ public final class JsonActorFactory
 
     /**
      * Return the Gson (de)serializer.
-     * @return Gson; the Gson (de)serializer
+     * @return the Gson (de)serializer
      */
     public Gson getGson()
     {
@@ -67,7 +67,7 @@ public final class JsonActorFactory
 
     /**
      * Return a singleton instance of the Gson object that is unique to the model.
-     * @param model SupplyChainModelInterface; the model for which to return or create the Gson object
+     * @param model the model for which to return or create the Gson object
      * @return the unique Gson object (created) for this model
      */
     public static Gson instance(final SupplyChainModelInterface model)

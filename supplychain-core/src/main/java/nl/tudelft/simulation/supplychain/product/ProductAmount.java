@@ -18,8 +18,8 @@ public class ProductAmount
 
     /**
      * Create an amount of products, expressed in the SKU.
-     * @param product Product; the product
-     * @param amount double; the amount in the product's SKU
+     * @param product the product
+     * @param amount the amount in the product's SKU
      */
     public ProductAmount(final Product product, final double amount)
     {

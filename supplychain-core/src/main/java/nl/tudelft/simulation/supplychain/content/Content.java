@@ -34,8 +34,8 @@ public abstract class Content implements Serializable
 
     /**
      * Construct a new message.
-     * @param sender Actor; the sender (necessary for a possible reply)
-     * @param receiver Actor; the receiver
+     * @param sender the sender (necessary for a possible reply)
+     * @param receiver the receiver
      */
     public Content(final Actor sender, final Actor receiver)
     {
@@ -47,7 +47,7 @@ public abstract class Content implements Serializable
 
     /**
      * Return the sender of the message (to allow for a reply to be sent).
-     * @return Actor; the sender of the message
+     * @return the sender of the message
      */
     public Actor getSender()
     {
@@ -56,7 +56,7 @@ public abstract class Content implements Serializable
 
     /**
      * Return the receiver of the message.
-     * @return Actor; the receiver of the message
+     * @return the receiver of the message
      */
     public Actor getReceiver()
     {
@@ -65,7 +65,7 @@ public abstract class Content implements Serializable
 
     /**
      * Return the timestamp of the message.
-     * @return Time; the timestamp of the message
+     * @return the timestamp of the message
      */
     public Time getTimestamp()
     {
@@ -74,7 +74,7 @@ public abstract class Content implements Serializable
 
     /**
      * Return the unique message id.
-     * @return long; the unique message id.
+     * @return the unique message id.
      */
     public long getUniqueId()
     {

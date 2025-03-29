@@ -41,9 +41,9 @@ public class BankAccount extends LocalEventProducer
 
     /**
      * Constructor for BankAccount.
-     * @param owner FinancingActor; the owner of the bank account, which has a FinancingRole
-     * @param bank BankingActor; the bank actor, , which has a BankingRole, where this account is located
-     * @param initialBalance Money; the opening balance
+     * @param owner the owner of the bank account, which has a FinancingRole
+     * @param bank the bank actor, , which has a BankingRole, where this account is located
+     * @param initialBalance the opening balance
      */
     public BankAccount(final FinancingActor owner, final BankingActor bank, final Money initialBalance)
     {
@@ -61,7 +61,7 @@ public class BankAccount extends LocalEventProducer
 
     /**
      * Return the bank balance.
-     * @return Money; the bank balance
+     * @return the bank balance
      */
     public Money getBalance()
     {
@@ -70,7 +70,7 @@ public class BankAccount extends LocalEventProducer
 
     /**
      * Add money to the bank balance.
-     * @param amount Money; the amount of money to add
+     * @param amount the amount of money to add
      */
     public synchronized void addToBalance(final Money amount)
     {
@@ -81,7 +81,7 @@ public class BankAccount extends LocalEventProducer
 
     /**
      * Withdraw money from the bank balance.
-     * @param amount Money; the amount of money to withdraw
+     * @param amount the amount of money to withdraw
      */
     public synchronized void withdrawFromBalance(final Money amount)
     {

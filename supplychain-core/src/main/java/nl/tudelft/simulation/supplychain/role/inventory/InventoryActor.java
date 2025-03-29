@@ -14,13 +14,13 @@ public interface InventoryActor extends Actor
 {
     /**
      * Return the InventoryRole for this actor.
-     * @return InventoryRole; the InventoryRole for this actor
+     * @return the InventoryRole for this actor
      */
     InventoryRole getInventoryRole();
 
     /**
      * Set the InventoryRole for this actor.
-     * @param inventoryRole InventoryRole; the new InventoryRole for this actor
+     * @param inventoryRole the new InventoryRole for this actor
      */
     void setInventoryRole(InventoryRole inventoryRole);
 

@@ -27,8 +27,8 @@ public class BankingRole extends Role
 
     /**
      * Create a new FinancingRole with an attached BankAccount.
-     * @param id String; the id of the role
-     * @param owner Actor; the actor to which this role belongs
+     * @param id the id of the role
+     * @param owner the actor to which this role belongs
      */
     public BankingRole(final String id, final BankingActor owner)
     {
@@ -37,9 +37,9 @@ public class BankingRole extends Role
 
     /**
      * Create a new FinancingRole with an attached BankAccount.
-     * @param id String; the id of the role
-     * @param owner Actor; the actor to which this role belongs
-     * @param messageReceiver MessageReceiver; the message handler to use for processing the messages
+     * @param id the id of the role
+     * @param owner the actor to which this role belongs
+     * @param messageReceiver the message handler to use for processing the messages
      */
     public BankingRole(final String id, final BankingActor owner, final ContentReceiver messageReceiver)
     {
@@ -48,7 +48,7 @@ public class BankingRole extends Role
 
     /**
      * Return the negative annual interest rate.
-     * @return double; negative annual interest rate
+     * @return negative annual interest rate
      */
     public double getAnnualInterestRateNeg()
     {
@@ -57,7 +57,7 @@ public class BankingRole extends Role
 
     /**
      * Set a new negative annual interest rate.
-     * @param annualInterestRateNeg double; new negative annual interest rate
+     * @param annualInterestRateNeg new negative annual interest rate
      */
     public void setAnnualInterestRateNeg(final double annualInterestRateNeg)
     {
@@ -66,7 +66,7 @@ public class BankingRole extends Role
 
     /**
      * Return the positive annual interest rate.
-     * @return double; positive annual interest rate
+     * @return positive annual interest rate
      */
     public double getAnnualInterestRatePos()
     {
@@ -75,7 +75,7 @@ public class BankingRole extends Role
 
     /**
      * Set a new positive annual interest rate.
-     * @param annualInterestRatePos double; new positive annual interest rate
+     * @param annualInterestRatePos new positive annual interest rate
      */
     public void setAnnualInterestRatePos(final double annualInterestRatePos)
     {

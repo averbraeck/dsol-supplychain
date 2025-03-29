@@ -28,7 +28,7 @@ public class SupplyChainAnimator extends DevsRealTimeAnimator.TimeDoubleUnit imp
      * Construct the SupplyChainAnimator that extends the DevsRealTimeAnimator.TimeDoubleUnit, and offers absolute Time for the
      * simulation time in addition to relative duration.
      * @param id the simulator id
-     * @param absStartTime Time; the start time of the simulator
+     * @param absStartTime the start time of the simulator
      */
     public SupplyChainAnimator(final Serializable id, final Time absStartTime)
     {

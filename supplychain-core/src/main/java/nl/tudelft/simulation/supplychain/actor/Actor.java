@@ -62,7 +62,7 @@ public interface Actor extends EventProducer, Locatable, Identifiable, Serializa
      * the wrong actor. When this happens, i.e., when the message is not originating from this actor, a log warning is given,
      * but the content itself is sent.
      * @param content the content to send to another actor or to this actor
-     * @param delay Duration; the time it takes between sending and receiving
+     * @param delay the time it takes between sending and receiving
      */
     void sendContent(Content content, Duration delay);
 
@@ -77,31 +77,31 @@ public interface Actor extends EventProducer, Locatable, Identifiable, Serializa
 
     /**
      * Return the longer name of the actor.
-     * @return String; the longer name of the actor
+     * @return the longer name of the actor
      */
     String getName();
 
     /**
      * Return the location description of the actor (e.g., a city, country).
-     * @return String; the location description of the actor
+     * @return the location description of the actor
      */
     String getLocationDescription();
 
     /**
      * Return the MessageStore for the Actor.
-     * @return TradeMessageStoreInterface; the messageStore.
+     * @return the messageStore.
      */
     TradeMessageStoreInterface getMessageStore();
 
     /**
      * Return the model that this actor is a part of.
-     * @return SupplyChainModelInterface; the model
+     * @return the model
      */
     SupplyChainModelInterface getModel();
 
     /**
      * Return the simulator to schedule simulation events on.
-     * @return SupplyChainSimulatorInterface; the simulator
+     * @return the simulator
      */
     default SupplyChainSimulatorInterface getSimulator()
     {
@@ -110,7 +110,7 @@ public interface Actor extends EventProducer, Locatable, Identifiable, Serializa
 
     /**
      * Return the current simulation time.
-     * @return Time; the current simulation time
+     * @return the current simulation time
      */
     default Time getSimulatorTime()
     {
@@ -128,7 +128,7 @@ public interface Actor extends EventProducer, Locatable, Identifiable, Serializa
 
     /**
      * Return the z-value of the location, or 0.0 when the location is in 2 dimensions, avoiding the RemoteException.
-     * @return double; the z-value of the location, or 0.0 when the location is in 2 dimensions, or when getLocation() returns
+     * @return the z-value of the location, or 0.0 when the location is in 2 dimensions, or when getLocation() returns
      *         null
      */
     @Override
@@ -140,7 +140,7 @@ public interface Actor extends EventProducer, Locatable, Identifiable, Serializa
     /**
      * Return the z-direction of the location in radians, or 0.0 when the location has no direction, , avoiding the
      * RemoteException.
-     * @return double; the z-direction of the location in radians, or 0.0 when the location has no direction, or when
+     * @return the z-direction of the location in radians, or 0.0 when the location has no direction, or when
      *         getLocation() returns null
      */
     @Override

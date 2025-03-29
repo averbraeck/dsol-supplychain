@@ -32,13 +32,13 @@ public class YellowPage extends SupplyChainActor implements Serializable
     /**
      * Create a YellowPage actor.
      * @param id String, the unique id of the customer
-     * @param name String; the longer name of the customer
-     * @param model SupplyChainModelInterface; the model
-     * @param location OrientedPoint2d; the location of the actor
-     * @param locationDescription String; the location description of the actor (e.g., a city, country)
-     * @param bank Bank; the bank for the BankAccount
-     * @param initialBalance Money; the initial balance for the actor
-     * @param messageStore TradeMessageStoreInterface; the message store for messages
+     * @param name the longer name of the customer
+     * @param model the model
+     * @param location the location of the actor
+     * @param locationDescription the location description of the actor (e.g., a city, country)
+     * @param bank the bank for the BankAccount
+     * @param initialBalance the initial balance for the actor
+     * @param messageStore the message store for messages
      * @throws ActorAlreadyDefinedException when the actor was already registered in the model
      */
     public YellowPage(final String id, final String name, final SupplyChainModelInterface model, final OrientedPoint2d location,
@@ -50,7 +50,7 @@ public class YellowPage extends SupplyChainActor implements Serializable
 
     /**
      * Return the yellow page role.
-     * @return YellowPageRole; the yellow page role
+     * @return the yellow page role
      */
     public YellowPageRole getYellowPageRole()
     {
@@ -59,7 +59,7 @@ public class YellowPage extends SupplyChainActor implements Serializable
 
     /**
      * Set the yellow page role.
-     * @param yellowPageRole YellowPageRole; the new yellow page role
+     * @param yellowPageRole the new yellow page role
      */
     public void setYellowPageRole(final YellowPageRole yellowPageRole)
     {

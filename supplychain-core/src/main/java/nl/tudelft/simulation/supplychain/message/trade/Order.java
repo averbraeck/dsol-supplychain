@@ -34,11 +34,11 @@ public abstract class Order extends TradeMessage
 
     /**
      * Constructor for an order. This abstract constructor has to be called by every extending class.
-     * @param sender BuyingActor; the sender actor of the message content
-     * @param receiver SellingActor; the receving actor of the message content
+     * @param sender the sender actor of the message content
+     * @param receiver the receving actor of the message content
      * @param internalDemand the internal demand that triggered the order
      * @param deliveryDate the intended delivery date of the products
-     * @param transportOption TransportOption; the accepted transport option
+     * @param transportOption the accepted transport option
      */
     public Order(final BuyingActor sender, final SellingActor receiver, final InternalDemand internalDemand,
             final Time deliveryDate, final TransportOption transportOption)

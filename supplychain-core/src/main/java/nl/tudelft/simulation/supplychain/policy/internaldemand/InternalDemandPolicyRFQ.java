@@ -51,11 +51,11 @@ public class InternalDemandPolicyRFQ extends InternalDemandPolicy
 
     /**
      * Constructs a new InternalDemandPolicyRFQ.
-     * @param owner Role; the owner of the internal demand
-     * @param transportOptionProvider TransportOptionProvider; the provider of transport options betwween two locations
-     * @param transportChoiceProvider TransportChoiceProvider; the provider to choose between transport options
-     * @param handlingTime DistContinuousDuration; the distribution of the time to react on the YP answer
-     * @param cutoffDuration Duration; the maximum time after which the RFQ will stop collecting quotes
+     * @param owner the owner of the internal demand
+     * @param transportOptionProvider the provider of transport options betwween two locations
+     * @param transportChoiceProvider the provider to choose between transport options
+     * @param handlingTime the distribution of the time to react on the YP answer
+     * @param cutoffDuration the maximum time after which the RFQ will stop collecting quotes
      * @param stock the stock for being able to change the ordered amount
      */
     public InternalDemandPolicyRFQ(final Role owner, final TransportOptionProvider transportOptionProvider,
@@ -73,7 +73,7 @@ public class InternalDemandPolicyRFQ extends InternalDemandPolicy
 
     /**
      * Add a supplier to send an RFQ to for a certain product.
-     * @param product Product; the product with a set of suppliers.
+     * @param product the product with a set of suppliers.
      * @param supplier a supplier for that product.
      */
     public void addSupplier(final Product product, final Actor supplier)
@@ -89,7 +89,7 @@ public class InternalDemandPolicyRFQ extends InternalDemandPolicy
 
     /**
      * Remove a supplier to send an RFQ to for a certain product.
-     * @param product Product; the product.
+     * @param product the product.
      * @param supplier the supplier for that product to be removed.
      */
     public void removeSupplier(final Product product, final Actor supplier)

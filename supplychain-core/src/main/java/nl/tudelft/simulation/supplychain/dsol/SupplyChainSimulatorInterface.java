@@ -22,11 +22,11 @@ public interface SupplyChainSimulatorInterface extends DevsSimulatorInterface<Du
 {
     /**
      * Schedules a methodCall at an absolute time.
-     * @param absoluteTime Time; the exact time to schedule the method on the simulator.
-     * @param priority short; the priority compared to other events scheduled at the same time.
-     * @param target Object; the target
-     * @param method String; the method
-     * @param args Object[]; the arguments.
+     * @param absoluteTime the exact time to schedule the method on the simulator.
+     * @param priority the priority compared to other events scheduled at the same time.
+     * @param target the target
+     * @param method the method
+     * @param args the arguments.
      * @return the simulation event so it can be cancelled later
      * @throws SimRuntimeException whenever the event is scheduled in the past.
      */
@@ -38,10 +38,10 @@ public interface SupplyChainSimulatorInterface extends DevsSimulatorInterface<Du
 
     /**
      * Schedules a methodCall at an absolute time.
-     * @param absoluteTime Time; the exact time to schedule the method on the simulator.
-     * @param target Object; the target
-     * @param method String; the method
-     * @param args Object[]; the arguments.
+     * @param absoluteTime the exact time to schedule the method on the simulator.
+     * @param target the target
+     * @param method the method
+     * @param args the arguments.
      * @return the simulation event so it can be cancelled later
      * @throws SimRuntimeException whenever the event is scheduled in the past.
      */
@@ -53,9 +53,9 @@ public interface SupplyChainSimulatorInterface extends DevsSimulatorInterface<Du
 
     /**
      * schedules a lambda expression at an absolute time.
-     * @param absoluteTime T; the exact time to schedule the method on the simulator.
-     * @param priority short; the priority compared to other events scheduled at the same time.
-     * @param executable Executable; the lambda expression to execute
+     * @param absoluteTime the exact time to schedule the method on the simulator.
+     * @param priority the priority compared to other events scheduled at the same time.
+     * @param executable the lambda expression to execute
      * @return the simulation event so it can be cancelled later
      * @throws SimRuntimeException whenever the event is scheduled in the past.
      */
@@ -67,8 +67,8 @@ public interface SupplyChainSimulatorInterface extends DevsSimulatorInterface<Du
 
     /**
      * schedules a lambda expression at an absolute time.
-     * @param absoluteTime T; the exact time to schedule the method on the simulator.
-     * @param executable Executable; the lambda expression to execute
+     * @param absoluteTime the exact time to schedule the method on the simulator.
+     * @param executable the lambda expression to execute
      * @return the simulation event so it can be cancelled later
      * @throws SimRuntimeException whenever the event is scheduled in the past.
      */
@@ -80,13 +80,13 @@ public interface SupplyChainSimulatorInterface extends DevsSimulatorInterface<Du
 
     /**
      * Return the absolute start time .
-     * @return Time; the absolute start time
+     * @return the absolute start time
      */
     Time getAbsStartTime();
 
     /**
      * Return the absolute simulation time.
-     * @return Time; the absolute simulation time
+     * @return the absolute simulation time
      */
     default Time getAbsSimulatorTime()
     {

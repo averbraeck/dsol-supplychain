@@ -25,8 +25,8 @@ public class Money extends Number implements Serializable
 
     /**
      * Create a monetary value.
-     * @param amount double; the monetary value in the money unit
-     * @param moneyUnit MoneyUnit; the money unit for this monetary value
+     * @param amount the monetary value in the money unit
+     * @param moneyUnit the money unit for this monetary value
      */
     public Money(final double amount, final MoneyUnit moneyUnit)
     {
@@ -38,7 +38,7 @@ public class Money extends Number implements Serializable
 
     /**
      * Return the monetary value in the money unit.
-     * @return double; the monetary value in the money unit
+     * @return the monetary value in the money unit
      */
     public double getAmount()
     {
@@ -47,7 +47,7 @@ public class Money extends Number implements Serializable
 
     /**
      * Return the money unit for this monetary value.
-     * @return moneyUnit MoneyUnit; the money unit for this monetary value
+     * @return the money unit for this monetary value
      */
     public MoneyUnit getMoneyUnit()
     {
@@ -56,8 +56,8 @@ public class Money extends Number implements Serializable
 
     /**
      * Return a monetary amount that is the sum of this monetary amount and the increment.
-     * @param inc Money; the amount of money to add
-     * @return Money; a monetary amount that is the sum of this monetary amount and the increment
+     * @param inc the amount of money to add
+     * @return a monetary amount that is the sum of this monetary amount and the increment
      */
     public Money plus(final Money inc)
     {
@@ -67,8 +67,8 @@ public class Money extends Number implements Serializable
 
     /**
      * Return a monetary amount that is the difference of this monetary amount and the decrement.
-     * @param dec Money; the amount of money to subtract
-     * @return Money; a monetary amount that is the diffference of this monetary amount and the decrement
+     * @param dec the amount of money to subtract
+     * @return a monetary amount that is the diffference of this monetary amount and the decrement
      */
     public Money minus(final Money dec)
     {
@@ -78,8 +78,8 @@ public class Money extends Number implements Serializable
 
     /**
      * Return a monetary amount that is the multiplication of this monetary amount and the factor.
-     * @param factor double; the multiplication factor
-     * @return Money; a monetary amount that is the multiplication of this monetary amount and the factor
+     * @param factor the multiplication factor
+     * @return a monetary amount that is the multiplication of this monetary amount and the factor
      */
     public Money multiplyBy(final double factor)
     {
@@ -88,8 +88,8 @@ public class Money extends Number implements Serializable
 
     /**
      * Return a monetary amount that is the division of this monetary amount by the factor.
-     * @param factor double; the division factor
-     * @return Money; a monetary amount that is the division of this monetary amount by the factor
+     * @param factor the division factor
+     * @return a monetary amount that is the division of this monetary amount by the factor
      */
     public Money divideBy(final double factor)
     {
@@ -98,8 +98,8 @@ public class Money extends Number implements Serializable
 
     /**
      * Return whether this monetary amount is equal to the other monetary amount.
-     * @param other Money; the other monetary amount to compare with
-     * @return boolean; whether this monetary amount is equal to the other monetary amount
+     * @param other the other monetary amount to compare with
+     * @return whether this monetary amount is equal to the other monetary amount
      */
     public boolean eq(final Money other)
     {
@@ -109,8 +109,8 @@ public class Money extends Number implements Serializable
 
     /**
      * Return whether this monetary amount is unequal to the other monetary amount.
-     * @param other Money; the other monetary amount to compare with
-     * @return boolean; whether this monetary amount is unequal to the other monetary amount
+     * @param other the other monetary amount to compare with
+     * @return whether this monetary amount is unequal to the other monetary amount
      */
     public boolean ne(final Money other)
     {
@@ -120,8 +120,8 @@ public class Money extends Number implements Serializable
 
     /**
      * Return whether this monetary amount is less than the other monetary amount.
-     * @param other Money; the other monetary amount to compare with
-     * @return boolean; whether this monetary amount is less than the other monetary amount
+     * @param other the other monetary amount to compare with
+     * @return whether this monetary amount is less than the other monetary amount
      */
     public boolean lt(final Money other)
     {
@@ -131,8 +131,8 @@ public class Money extends Number implements Serializable
 
     /**
      * Return whether this monetary amount is less than or equal to the other monetary amount.
-     * @param other Money; the other monetary amount to compare with
-     * @return boolean; whether this monetary amount is less than or equal to the other monetary amount
+     * @param other the other monetary amount to compare with
+     * @return whether this monetary amount is less than or equal to the other monetary amount
      */
     public boolean le(final Money other)
     {
@@ -142,8 +142,8 @@ public class Money extends Number implements Serializable
 
     /**
      * Return whether this monetary amount is greater than the other monetary amount.
-     * @param other Money; the other monetary amount to compare with
-     * @return boolean; whether this monetary amount is greater than the other monetary amount
+     * @param other the other monetary amount to compare with
+     * @return whether this monetary amount is greater than the other monetary amount
      */
     public boolean gt(final Money other)
     {
@@ -153,8 +153,8 @@ public class Money extends Number implements Serializable
 
     /**
      * Return whether this monetary amount is greater than or equal to the other monetary amount.
-     * @param other Money; the other monetary amount to compare with
-     * @return boolean; whether this monetary amount is greater than or equal to the other monetary amount
+     * @param other the other monetary amount to compare with
+     * @return whether this monetary amount is greater than or equal to the other monetary amount
      */
     public boolean ge(final Money other)
     {

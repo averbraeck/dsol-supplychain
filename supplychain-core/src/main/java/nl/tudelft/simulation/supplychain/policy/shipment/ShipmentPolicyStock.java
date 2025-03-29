@@ -23,7 +23,7 @@ public class ShipmentPolicyStock extends ShipmentPolicy
 
     /**
      * Construct a new ShipmentHandlerStock handler.
-     * @param owner Role; the owner of the policy
+     * @param owner the owner of the policy
      * @param stock the stock to use for storing the incoming cargo
      */
     public ShipmentPolicyStock(final Role owner, final Inventory stock)

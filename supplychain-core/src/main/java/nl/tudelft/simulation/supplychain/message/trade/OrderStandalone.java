@@ -34,14 +34,14 @@ public class OrderStandalone extends Order
 
     /**
      * The constructor for the OrderStandAlone.
-     * @param sender BuyingActor; the sender actor of the message content
-     * @param receiver SellingActor; the receving actor of the message content
+     * @param sender the sender actor of the message content
+     * @param receiver the receving actor of the message content
      * @param internalDemand the internal demand that triggered the order
      * @param deliveryDate the intended delivery date of the products
-     * @param product Product; the ordered product
-     * @param amount double; the amount ordered
-     * @param price Money; the price to pay
-     * @param transportOption TransportOption; the accepted transport option
+     * @param product the ordered product
+     * @param amount the amount ordered
+     * @param price the price to pay
+     * @param transportOption the accepted transport option
      */
     @SuppressWarnings("checkstyle:parameternumber")
     public OrderStandalone(final BuyingActor sender, final SellingActor receiver, final InternalDemand internalDemand,

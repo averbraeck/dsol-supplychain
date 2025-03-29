@@ -26,10 +26,10 @@ public class LinearInterpolation2d
 
     /**
      * constructs a new LinearInterpolation.
-     * @param startTime double; the startingTime
-     * @param endTime double; the endTime
-     * @param origin OrientedPoint2d; the origin
-     * @param destination OrientedPoint2d; the destination
+     * @param startTime the startingTime
+     * @param endTime the endTime
+     * @param origin the origin
+     * @param destination the destination
      */
     public LinearInterpolation2d(final double startTime, final double endTime, final OrientedPoint2d origin,
             final OrientedPoint2d destination)
@@ -47,7 +47,7 @@ public class LinearInterpolation2d
 
     /**
      * returns the current location.
-     * @param time double; the current time
+     * @param time the current time
      * @return OrientedPoint3d the current location
      */
     public OrientedPoint2d getLocation(final double time)

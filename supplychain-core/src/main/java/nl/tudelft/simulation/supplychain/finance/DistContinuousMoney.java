@@ -26,8 +26,8 @@ public class DistContinuousMoney extends Dist
 
     /**
      * constructs a new continuous distribution for Money.
-     * @param wrappedDistribution DistContinuous; the wrapped continuous distribution
-     * @param moneyUnit MoneyUnit; the money unit for the values of the distribution
+     * @param wrappedDistribution the wrapped continuous distribution
+     * @param moneyUnit the money unit for the values of the distribution
      */
     public DistContinuousMoney(final DistContinuous wrappedDistribution, final MoneyUnit moneyUnit)
     {
@@ -49,8 +49,8 @@ public class DistContinuousMoney extends Dist
 
     /**
      * returns the probability density for a Money scalar.
-     * @param money Money; the value for which to calculate the probability density.
-     * @return double; the probability density for value scalar
+     * @param money the value for which to calculate the probability density.
+     * @return the probability density for value scalar
      */
     public double probDensity(final Money money)
     {
@@ -61,7 +61,7 @@ public class DistContinuousMoney extends Dist
 
     /**
      * Return the wrapped distribution.
-     * @return DistContinuous; the wrapped distribution
+     * @return the wrapped distribution
      */
     public DistContinuous getWrappedDistribution()
     {
@@ -70,7 +70,7 @@ public class DistContinuousMoney extends Dist
 
     /**
      * Return the money unit in which the samples from the wrapped distribution are returned.
-     * @return MoneyUnit; the money unit in which the samples from the wrapped distribution are returned
+     * @return the money unit in which the samples from the wrapped distribution are returned
      */
     public MoneyUnit getMMoneyUnit()
     {

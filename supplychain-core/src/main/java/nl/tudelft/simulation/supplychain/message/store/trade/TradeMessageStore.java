@@ -159,8 +159,8 @@ public class TradeMessageStore extends LocalEventProducer implements TradeMessag
     /**
      * Private, local method to remove all the content from one of the lists in the internalDemandMap for a certain
      * internalDemandId for a certain message type.
-     * @param messageMap Map; the Map for one internal demand ID to clean
-     * @param messageType MessageType; the message type to search for
+     * @param messageMap the Map for one internal demand ID to clean
+     * @param messageType the message type to search for
      */
     private synchronized void removeMessageList(final Map<Class<? extends TradeMessage>, List<? super TradeMessage>> messageMap,
             final Class<? extends TradeMessage> messageType)
@@ -447,8 +447,8 @@ public class TradeMessageStore extends LocalEventProducer implements TradeMessag
      * This method folds back extended message classes onto their basic message class. Examples are OrderBasedOnQuote and
      * OrderStandAlone that are mapped back onto 'Order' to simplify the business logic, because the business logic now only has
      * to deal with an 'Order' in the MessageStore, and not with each of the separate extensions.
-     * @param messageClass Class&lt;? extends TradeMessage&gt;; the message class to fold
-     * @return Class&lt;? extends TradeMessage&gt;; the folded extended message class
+     * @param messageClass the message class to fold
+     * @return the folded extended message class
      */
     protected Class<? extends TradeMessage> foldExtendedMessageClass(final Class<? extends TradeMessage> messageClass)
     {

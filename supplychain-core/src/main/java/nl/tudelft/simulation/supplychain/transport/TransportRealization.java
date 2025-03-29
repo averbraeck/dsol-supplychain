@@ -34,7 +34,7 @@ public class TransportRealization implements Identifiable, Serializable
 
     /**
      * Create a TransportRealization, fixing SKU, durations and costs for an entire trip.
-     * @param id String; the id of the TransportRealization
+     * @param id the id of the TransportRealization
      */
     public TransportRealization(final String id)
     {
@@ -50,7 +50,7 @@ public class TransportRealization implements Identifiable, Serializable
 
     /**
      * Return the transport steps.
-     * @return ImmutableList&lt;TransportRealizationStep&gt;; the transport steps
+     * @return the transport steps
      */
     public ImmutableList<TransportRealizationStep> getTransportSteps()
     {
@@ -59,7 +59,7 @@ public class TransportRealization implements Identifiable, Serializable
 
     /**
      * Add a transport step.
-     * @param transportRealizationStep TransportRealizationStep; the new transport step
+     * @param transportRealizationStep the new transport step
      */
     public void addTransportStep(final TransportRealizationStep transportRealizationStep)
     {
@@ -71,7 +71,7 @@ public class TransportRealization implements Identifiable, Serializable
 
     /**
      * Add a number of transport steps.
-     * @param steps List&lt;TransportRealizationStep&gt;; the new transport steps
+     * @param steps the new transport steps
      */
     public void addTransportSteps(final List<TransportRealizationStep> steps)
     {

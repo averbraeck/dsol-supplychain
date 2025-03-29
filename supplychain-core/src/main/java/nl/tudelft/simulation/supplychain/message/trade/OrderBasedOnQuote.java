@@ -27,11 +27,11 @@ public class OrderBasedOnQuote extends Order
 
     /**
      * The constructor for the OrderBasedOnQuote.
-     * @param sender BuyingActor; the sender actor of the message content
-     * @param receiver SellingActor; the receving actor of the message content
+     * @param sender the sender actor of the message content
+     * @param receiver the receving actor of the message content
      * @param deliveryDate the intended delivery date of the products
      * @param quote the quote on which the order is based
-     * @param transportOption TransportOption; the accepted transport option
+     * @param transportOption the accepted transport option
      */
     public OrderBasedOnQuote(final BuyingActor sender, final SellingActor receiver, final Time deliveryDate,
             final Quote quote, final TransportOption transportOption)

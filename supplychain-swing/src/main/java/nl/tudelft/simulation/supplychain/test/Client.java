@@ -62,13 +62,13 @@ public class Client extends Customer
 
     /**
      * @param id String, the unique id of the supplier
-     * @param name String; the longer name of the supplier
-     * @param model SupplyChainModelInterface; the model
-     * @param location OrientedPoint2d; the location of the actor
-     * @param locationDescription String; the location description of the actor (e.g., a city, country)
-     * @param bank Bank; the bank for the BankAccount
-     * @param initialBalance Money; the initial balance for the actor
-     * @param messageStore TradeMessageStoreInterface; the message store for messages
+     * @param name the longer name of the supplier
+     * @param model the model
+     * @param location the location of the actor
+     * @param locationDescription the location description of the actor (e.g., a city, country)
+     * @param bank the bank for the BankAccount
+     * @param initialBalance the initial balance for the actor
+     * @param messageStore the message store for messages
      * @param product product to order
      * @param retailer fixed retailer to use
      * @throws ActorAlreadyDefinedException when the actor was already registered in the model

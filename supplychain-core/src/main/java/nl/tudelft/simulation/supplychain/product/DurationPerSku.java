@@ -27,8 +27,8 @@ public class DurationPerSku implements Serializable
 
     /**
      * Construct a new DurationPerSKU object.
-     * @param sku Sku; the SKU, independent of the product.
-     * @param duration Duration; the (handling) duration for, e.g., transloading or (un)loading of one SKU, independent of the
+     * @param sku the SKU, independent of the product.
+     * @param duration the (handling) duration for, e.g., transloading or (un)loading of one SKU, independent of the
      *            product.
      */
     public DurationPerSku(final Sku sku, final Duration duration)
@@ -41,7 +41,7 @@ public class DurationPerSku implements Serializable
 
     /**
      * Return the SKU, independent of the product.
-     * @return sku Sku; the SKU, independent of the product
+     * @return the SKU, independent of the product
      */
     public Sku getSku()
     {
@@ -50,7 +50,7 @@ public class DurationPerSku implements Serializable
 
     /**
      * Return the (handling) duration for, e.g., transloading or (un)loading of one SKU, independent of the product.
-     * @return duration Duration; the (handling) duration of one SKU
+     * @return the (handling) duration of one SKU
      */
     public Duration getDuration()
     {

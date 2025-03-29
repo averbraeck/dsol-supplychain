@@ -48,7 +48,7 @@ public class BillPolicyTimeOut extends BillPolicy
 
     /**
      * Constructs a new BillHandler that takes care of paying exactly on time.
-     * @param owner Role; the owner of the policy.
+     * @param owner the owner of the policy.
      * @param bankAccount the bankaccount to use.
      * @param maximumTimeOut the maximum time out for a bill
      */

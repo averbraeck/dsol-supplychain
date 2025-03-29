@@ -36,7 +36,7 @@ public abstract class InventoryRole extends Role
 
     /**
      * Create an InventoryRole object for an actor, with an empty inventory.
-     * @param owner InventoryActor; the owner of this role
+     * @param owner the owner of this role
      */
     public InventoryRole(final InventoryActor owner)
     {
@@ -46,8 +46,8 @@ public abstract class InventoryRole extends Role
 
     /**
      * Create an InventoryRole object for an actor.
-     * @param owner InventoryActor; the owner of this role
-     * @param initialInventory List&lt;ProductAmount&gt;; the Inventory to use within this role
+     * @param owner the owner of this role
+     * @param initialInventory the Inventory to use within this role
      */
     public InventoryRole(final InventoryActor owner, final List<ProductAmount> initialInventory)
     {
@@ -58,7 +58,7 @@ public abstract class InventoryRole extends Role
 
     /**
      * Add a restocking service to this role.
-     * @param restockingService RestockingServiceInterface; the restocking service to add to this role
+     * @param restockingService the restocking service to add to this role
      */
     public void addRestockingService(final RestockingServiceInterface restockingService)
     {
@@ -70,7 +70,7 @@ public abstract class InventoryRole extends Role
 
     /**
      * Implement to check whether the inventory is below some level, might trigger ordering of extra amount of the product.
-     * @param product Product; the product to check the inventory for.
+     * @param product the product to check the inventory for.
      */
     public abstract void checkInventory(Product product);
 
@@ -89,7 +89,7 @@ public abstract class InventoryRole extends Role
 
     /**
      * Return the inventory of this Role.
-     * @return Inventory; the inventory of this Role
+     * @return the inventory of this Role
      */
     public Inventory getInventory()
     {

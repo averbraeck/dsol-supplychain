@@ -50,13 +50,13 @@ public class Product implements Serializable
 
     /**
      * Construct a new product with an empty Bill of Materials.
-     * @param model SupplyChainModelInterface; the model to register the products
-     * @param name String; the descriptive name of the product.
-     * @param sku Sku; the stock keeping unit in which this product is shipped (boxes, pallets, kilograms, m3, containers)
-     * @param initialUnitMarketPrice Money; the initial world market price of the product per SKU
-     * @param averageSkuWeight Mass; the average weight per SKU
-     * @param averageSkuVolume Volume; the average volume per SKU
-     * @param depreciation double; the depreciation as a factor per day for the product
+     * @param model the model to register the products
+     * @param name the descriptive name of the product.
+     * @param sku the stock keeping unit in which this product is shipped (boxes, pallets, kilograms, m3, containers)
+     * @param initialUnitMarketPrice the initial world market price of the product per SKU
+     * @param averageSkuWeight the average weight per SKU
+     * @param averageSkuVolume the average volume per SKU
+     * @param depreciation the depreciation as a factor per day for the product
      */
     public Product(final SupplyChainModelInterface model, final String name, final Sku sku, final Money initialUnitMarketPrice,
             final Mass averageSkuWeight, final Volume averageSkuVolume, final double depreciation)
@@ -88,7 +88,7 @@ public class Product implements Serializable
      * Method setBillOfMaterials. Sets the new BOM as one Map. The copy of the BOM is a shallow copy, which only copies the
      * pointer to the map, so changing a parameter within the provided billOfMaterials method may change the BOM of this
      * product!
-     * @param billOfMaterials BillOfMaterials; the new Bill of Materials
+     * @param billOfMaterials the new Bill of Materials
      */
     public void setBillOfMaterials(final BillOfMaterials billOfMaterials)
     {
@@ -98,7 +98,7 @@ public class Product implements Serializable
 
     /**
      * Return the stock keeping unit of this product.
-     * @return SKU; the stock keeping unit of this product
+     * @return the stock keeping unit of this product
      */
     public Sku getSku()
     {
@@ -107,7 +107,7 @@ public class Product implements Serializable
 
     /**
      * Return the product name.
-     * @return String; the product name
+     * @return the product name
      */
     public String getName()
     {
@@ -116,7 +116,7 @@ public class Product implements Serializable
 
     /**
      * Return the average sku weight as a Mass.
-     * @return Mass; the averag weight per SKU
+     * @return the averag weight per SKU
      */
     public Mass getAverageSkuWeight()
     {
@@ -125,7 +125,7 @@ public class Product implements Serializable
 
     /**
      * Return the average sku volume as a Volume.
-     * @return Volume; the averag volume per SKU
+     * @return the averag volume per SKU
      */
     public Volume getAverageSkuVolume()
     {
@@ -134,7 +134,7 @@ public class Product implements Serializable
 
     /**
      * Return the depreciation fraction.
-     * @return double; the depreciation fraction
+     * @return the depreciation fraction
      */
     public double getDepreciation()
     {
@@ -143,7 +143,7 @@ public class Product implements Serializable
 
     /**
      * Return the current average unit market price per SKU.
-     * @return Money; the current average unit market price per SKU.
+     * @return the current average unit market price per SKU.
      */
     public Money getUnitMarketPrice()
     {
@@ -152,7 +152,7 @@ public class Product implements Serializable
 
     /**
      * Set a new the average unit market price per SKU.
-     * @param unitMarketPrice Money; a new value for the current average unit market price per SKU
+     * @param unitMarketPrice a new value for the current average unit market price per SKU
      */
     public void setUnitMarketPrice(final Money unitMarketPrice)
     {
