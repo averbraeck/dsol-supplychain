@@ -3,11 +3,11 @@ package nl.tudelft.simulation.supplychain.content.receiver;
 import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
+import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.ContentPolicy;
-import nl.tudelft.simulation.supplychain.content.Message;
 
 /**
- * MessageReceiverDelay implements a message queuing mechanism for an actor that handles messages after a (stochastic) delay.
+ * ContentReceiverDelay implements a queuing mechanism for content of an actor that handles contents after a (stochastic) delay.
  * <p>
  * Copyright (c) 2022-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
@@ -23,25 +23,25 @@ public class ContentReceiverDelay extends ContentReceiver
     private DistContinuousDuration delayDistribution;
 
     /**
-     * Create a message queuing mechanism for an actor that handles messages after a (stochastic) delay.
-     * @param delayDistribution the delay distribution for handling messages (note that the distribution
-     *            can be changed later, e.g., for implementing temporary administrative delays)
+     * Create a content queuing mechanism for an actor that handles contents after a (stochastic) delay.
+     * @param delayDistribution the delay distribution for handling contents (note that the distribution can be changed later,
+     *            e.g., for implementing temporary administrative delays)
      */
     public ContentReceiverDelay(final DistContinuousDuration delayDistribution)
     {
-        super("MessageReceiverDelay");
+        super("ContentReceiverDelay");
         setDelayDistribution(delayDistribution);
     }
 
     @Override
-    public <M extends Message> void receiveMessage(final M message, final ContentPolicy<M> messagePolicy)
+    public <C extends Content> void receiveContent(final C content, final ContentPolicy<C> contentPolicy)
     {
-        getRole().getActor().getSimulator().scheduleEventRel(this.delayDistribution.draw(), messagePolicy, "handleMessage",
-                new Object[] {message});
+        getRole().getActor().getSimulator().scheduleEventRel(this.delayDistribution.draw(), contentPolicy, "handleContent",
+                new Object[] {content});
     }
 
     /**
-     * Return the delay distribution for handling messages.
+     * Return the delay distribution for handling contents.
      * @return the delay distribution
      */
     public DistContinuousDuration getDelayDistribution()
@@ -50,7 +50,7 @@ public class ContentReceiverDelay extends ContentReceiver
     }
 
     /**
-     * Set a new delay distribution for handling messages.
+     * Set a new delay distribution for handling contents.
      * @param delayDistribution the new delay distribution
      */
     public void setDelayDistribution(final DistContinuousDuration delayDistribution)
