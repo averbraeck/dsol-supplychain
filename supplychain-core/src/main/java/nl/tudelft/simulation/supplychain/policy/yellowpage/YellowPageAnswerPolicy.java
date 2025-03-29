@@ -72,7 +72,7 @@ public class YellowPageAnswerPolicy extends SupplyChainPolicy<YellowPageAnswer>
 
     /** {@inheritDoc} */
     @Override
-    public boolean handleMessage(final YellowPageAnswer ypAnswer)
+    public boolean handleContent(final YellowPageAnswer ypAnswer)
     {
         if (!isValidMessage(ypAnswer))
         {

@@ -59,9 +59,9 @@ public class BillPolicyTimeOut extends BillPolicy
 
     /** {@inheritDoc} */
     @Override
-    public boolean handleMessage(final Bill bill)
+    public boolean handleContent(final Bill bill)
     {
-        if (super.handleMessage(bill))
+        if (super.handleContent(bill))
         {
             try
             {

@@ -32,7 +32,7 @@ public class ProductionOrderPolicy extends SupplyChainPolicy<ProductionOrder>
 
     /** {@inheritDoc} */
     @Override
-    public boolean handleMessage(final ProductionOrder productionOrder)
+    public boolean handleContent(final ProductionOrder productionOrder)
     {
         return this.producingRole.acceptProductionOrder(productionOrder);
     }

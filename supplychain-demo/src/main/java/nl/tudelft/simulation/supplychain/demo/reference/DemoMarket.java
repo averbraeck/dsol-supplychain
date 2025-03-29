@@ -23,7 +23,7 @@ import nl.tudelft.simulation.supplychain.actor.unit.dist.DistConstantDuration;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.finance.Bank;
 import nl.tudelft.simulation.supplychain.finance.Money;
-import nl.tudelft.simulation.supplychain.message.receiver.MessageReceiver;
+import nl.tudelft.simulation.supplychain.message.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.message.store.trade.LeanTradeMessageStore;
 import nl.tudelft.simulation.supplychain.messagehandlers.HandleAllMessages;
 import nl.tudelft.simulation.supplychain.policy.bill.BillPolicy;
@@ -75,7 +75,7 @@ public class DemoMarket extends Customer
 
         WebApplication www = new WebApplication("Web-" + name, this.simulator);
         super.addSendingDevice(www);
-        MessageReceiver webSystem = new HandleAllMessages(this);
+        ContentReceiver webSystem = new HandleAllMessages(this);
         super.addReceivingDevice(www, webSystem, new DistConstantDuration(new Duration(10.0, DurationUnit.SECOND)));
 
         // DEMAND GENERATION

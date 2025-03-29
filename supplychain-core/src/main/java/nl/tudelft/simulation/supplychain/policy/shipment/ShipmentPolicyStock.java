@@ -34,7 +34,7 @@ public class ShipmentPolicyStock extends ShipmentPolicy
 
     /** {@inheritDoc} */
     @Override
-    public boolean handleMessage(final Shipment shipment)
+    public boolean handleContent(final Shipment shipment)
     {
         if (!isValidMessage(shipment))
         {

@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.message.policy;
+package nl.tudelft.simulation.supplychain.content;
 
 import java.io.Serializable;
 
@@ -6,18 +6,17 @@ import org.djutils.base.Identifiable;
 import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.content.Message;
 
 /**
- * An abstract definition of a message policy with a role as the owner.
+ * An abstract definition of a content policy with a role as the owner.
  * <p>
  * Copyright (c) 2003-2023 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
- * @param <M> the message class for which this policy applies
+ * @param <C> the content class for which this policy applies
  */
-public abstract class MessagePolicy<M extends Message> implements Identifiable, Serializable
+public abstract class ContentPolicy<C extends Content> implements Identifiable, Serializable
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221126L;
@@ -28,31 +27,31 @@ public abstract class MessagePolicy<M extends Message> implements Identifiable, 
     /** the role that owns this policy. */
     private final Role role;
 
-    /** the class of messages for which this policy applies. */
-    private final Class<M> messageClass;
+    /** the content class for which this policy applies. */
+    private final Class<C> contentClass;
 
     /**
-     * constructs a new message policy.
+     * constructs a new content policy.
      * @param id String; the id of the policy
      * @param role Role; the role that owns this policy
-     * @param messageClass Class&lt;M&gt;; the message type that this policy can process
+     * @param contentClass Class&lt;M&gt;; the content type that this policy can process
      */
-    public MessagePolicy(final String id, final Role role, final Class<M> messageClass)
+    public ContentPolicy(final String id, final Role role, final Class<C> contentClass)
     {
         Throw.whenNull(id, "id cannot be null");
         Throw.whenNull(role, "role cannot be null");
-        Throw.whenNull(messageClass, "messageClass cannot be null");
+        Throw.whenNull(contentClass, "contentClass cannot be null");
         this.id = id;
         this.role = role;
-        this.messageClass = messageClass;
+        this.contentClass = contentClass;
     }
 
     /**
-     * Handle the content of the message.
-     * @param message M; the message to be handled
+     * Handle the content.
+     * @param content the content to be handled
      * @return a boolean acknowledgement; true or false
      */
-    public abstract boolean handleMessage(M message);
+    public abstract boolean handleContent(C content);
 
     /** {@inheritDoc} */
     @Override
@@ -71,13 +70,12 @@ public abstract class MessagePolicy<M extends Message> implements Identifiable, 
     }
 
     /**
-     * Return the class of messages for which this policy applies.
-     * @return Class&lt;? extends M&gt;; the class of messages for which this policy applies
+     * Return the content class for which this policy applies.
+     * @return Class&lt;? extends M&gt;; the content class for which this policy applies
      */
-    public Class<M> getMessageClass()
+    public Class<C> getContentClass()
     {
-        return this.messageClass;
+        return this.contentClass;
     }
-    
-    
+
 }

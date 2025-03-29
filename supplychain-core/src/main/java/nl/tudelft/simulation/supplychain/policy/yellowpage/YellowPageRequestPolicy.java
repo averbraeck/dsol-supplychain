@@ -49,7 +49,7 @@ public class YellowPageRequestPolicy extends SupplyChainPolicy<YellowPageRequest
 
     /** {@inheritDoc} */
     @Override
-    public boolean handleMessage(final YellowPageRequest ypRequest)
+    public boolean handleContent(final YellowPageRequest ypRequest)
     {
         if (!isValidMessage(ypRequest))
         {

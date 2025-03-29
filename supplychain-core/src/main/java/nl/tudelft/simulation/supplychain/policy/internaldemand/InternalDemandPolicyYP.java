@@ -52,7 +52,7 @@ public class InternalDemandPolicyYP extends InternalDemandPolicy
 
     /** {@inheritDoc} */
     @Override
-    public boolean handleMessage(final InternalDemand internalDemand)
+    public boolean handleContent(final InternalDemand internalDemand)
     {
         if (!isValidMessage(internalDemand))
         {

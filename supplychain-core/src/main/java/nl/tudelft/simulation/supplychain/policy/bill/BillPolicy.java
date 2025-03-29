@@ -68,7 +68,7 @@ public class BillPolicy extends SupplyChainPolicy<Bill>
 
     /** {@inheritDoc} */
     @Override
-    public boolean handleMessage(final Bill bill)
+    public boolean handleContent(final Bill bill)
     {
         if (!isValidMessage(bill))
         {

@@ -50,9 +50,9 @@ public class ShipmentPolicyFineConsume extends ShipmentPolicyConsume
 
     /** {@inheritDoc} */
     @Override
-    public boolean handleMessage(final Shipment shipment)
+    public boolean handleContent(final Shipment shipment)
     {
-        if (super.handleMessage(shipment))
+        if (super.handleContent(shipment))
         {
             Time time = shipment.getSender().getSimulatorTime();
             if (time.gt(shipment.getOrder().getDeliveryDate())

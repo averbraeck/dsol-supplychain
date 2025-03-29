@@ -1,7 +1,7 @@
 package nl.tudelft.simulation.supplychain.role.banking;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.message.receiver.MessageReceiver;
+import nl.tudelft.simulation.supplychain.message.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.message.receiver.MessageReceiverDirect;
 
 /**
@@ -41,7 +41,7 @@ public class BankingRole extends Role
      * @param owner Actor; the actor to which this role belongs
      * @param messageReceiver MessageReceiver; the message handler to use for processing the messages
      */
-    public BankingRole(final String id, final BankingActor owner, final MessageReceiver messageReceiver)
+    public BankingRole(final String id, final BankingActor owner, final ContentReceiver messageReceiver)
     {
         super("banking", owner, messageReceiver);
     }

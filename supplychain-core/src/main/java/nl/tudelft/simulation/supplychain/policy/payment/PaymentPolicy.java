@@ -34,7 +34,7 @@ public class PaymentPolicy extends SupplyChainPolicy<Payment>
 
     /** {@inheritDoc} */
     @Override
-    public boolean handleMessage(final Payment payment)
+    public boolean handleContent(final Payment payment)
     {
         if (!isValidMessage(payment))
         {

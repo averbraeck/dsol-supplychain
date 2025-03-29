@@ -69,7 +69,7 @@ public class RequestForQuotePolicy extends SupplyChainPolicy<RequestForQuote>
      * {@inheritDoc}
      */
     @Override
-    public boolean handleMessage(final RequestForQuote rfq)
+    public boolean handleContent(final RequestForQuote rfq)
     {
         if (!isValidMessage(rfq))
         {

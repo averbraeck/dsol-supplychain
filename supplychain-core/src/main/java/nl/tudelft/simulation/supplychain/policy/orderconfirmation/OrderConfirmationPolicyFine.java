@@ -59,9 +59,9 @@ public class OrderConfirmationPolicyFine extends OrderConfirmationPolicy
 
     /** {@inheritDoc} */
     @Override
-    public boolean handleMessage(final OrderConfirmation orderConfirmation)
+    public boolean handleContent(final OrderConfirmation orderConfirmation)
     {
-        if (super.handleMessage(orderConfirmation))
+        if (super.handleContent(orderConfirmation))
         {
             if (orderConfirmation.isAccepted())
             {

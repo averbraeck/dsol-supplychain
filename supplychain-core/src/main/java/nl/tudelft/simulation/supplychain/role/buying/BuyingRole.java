@@ -1,7 +1,7 @@
 package nl.tudelft.simulation.supplychain.role.buying;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.message.receiver.MessageReceiver;
+import nl.tudelft.simulation.supplychain.message.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.message.receiver.MessageReceiverDirect;
 
 /**
@@ -35,7 +35,7 @@ public abstract class BuyingRole extends Role
      * @param owner Actor; the owner of this role
      * @param messageReceiver MessageReceiver; the message receiver to use
      */
-    public BuyingRole(final BuyingActor owner, final MessageReceiver messageReceiver)
+    public BuyingRole(final BuyingActor owner, final ContentReceiver messageReceiver)
     {
         super("buying", owner, messageReceiver);
     }

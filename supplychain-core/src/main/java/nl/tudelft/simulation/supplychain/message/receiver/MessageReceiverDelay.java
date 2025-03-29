@@ -3,8 +3,8 @@ package nl.tudelft.simulation.supplychain.message.receiver;
 import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
+import nl.tudelft.simulation.supplychain.content.ContentPolicy;
 import nl.tudelft.simulation.supplychain.content.Message;
-import nl.tudelft.simulation.supplychain.message.policy.MessagePolicy;
 
 /**
  * MessageReceiverDelay implements a message queuing mechanism for an actor that handles messages after a (stochastic) delay.
@@ -14,7 +14,7 @@ import nl.tudelft.simulation.supplychain.message.policy.MessagePolicy;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class MessageReceiverDelay extends MessageReceiver
+public class MessageReceiverDelay extends ContentReceiver
 {
     /** */
     private static final long serialVersionUID = 20221127L;
@@ -35,7 +35,7 @@ public class MessageReceiverDelay extends MessageReceiver
 
     /** {@inheritDoc} */
     @Override
-    public <M extends Message> void receiveMessage(final M message, final MessagePolicy<M> messagePolicy)
+    public <M extends Message> void receiveMessage(final M message, final ContentPolicy<M> messagePolicy)
     {
         getRole().getActor().getSimulator().scheduleEventRel(this.delayDistribution.draw(), messagePolicy, "handleMessage",
                 new Object[] {message});

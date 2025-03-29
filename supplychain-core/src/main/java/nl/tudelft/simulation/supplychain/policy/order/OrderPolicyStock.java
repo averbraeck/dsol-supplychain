@@ -40,7 +40,7 @@ public class OrderPolicyStock extends OrderPolicy<Order>
 
     /** {@inheritDoc} */
     @Override
-    public boolean handleMessage(final Order order)
+    public boolean handleContent(final Order order)
     {
         // send out the confirmation
         OrderConfirmation orderConfirmation = new OrderConfirmation(getActor(), order.getSender(), order.getInternalDemandId(),

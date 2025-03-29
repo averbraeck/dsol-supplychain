@@ -9,7 +9,7 @@ import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.finance.BankAccount;
 import nl.tudelft.simulation.supplychain.finance.FixedCost;
 import nl.tudelft.simulation.supplychain.finance.Money;
-import nl.tudelft.simulation.supplychain.message.receiver.MessageReceiver;
+import nl.tudelft.simulation.supplychain.message.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.message.receiver.MessageReceiverDirect;
 
 /**
@@ -38,7 +38,7 @@ public class FinancingRole extends Role
      * @param messageReceiver MessageReceiver; the message handler to use for processing the messages
      * @param bankAccount BankAccount; the BankAccount
      */
-    public FinancingRole(final String id, final FinancingActor owner, final MessageReceiver messageReceiver,
+    public FinancingRole(final String id, final FinancingActor owner, final ContentReceiver messageReceiver,
             final BankAccount bankAccount)
     {
         super("financing", owner, messageReceiver);

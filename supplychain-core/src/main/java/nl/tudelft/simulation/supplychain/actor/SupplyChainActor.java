@@ -1,7 +1,5 @@
 package nl.tudelft.simulation.supplychain.actor;
 
-import java.io.Serializable;
-import java.rmi.RemoteException;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -9,18 +7,15 @@ import java.util.Set;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djutils.draw.bounds.Bounds2d;
 import org.djutils.draw.point.DirectedPoint2d;
-import org.djutils.event.EventListenerMap;
-import org.djutils.event.EventProducer;
 import org.djutils.event.EventType;
 import org.djutils.event.LocalEventProducer;
 import org.djutils.exceptions.Throw;
-import org.djutils.immutablecollections.ImmutableLinkedHashSet;
-import org.djutils.immutablecollections.ImmutableSet;
 import org.djutils.logger.CategoryLogger;
 import org.djutils.metadata.MetaData;
 import org.djutils.metadata.ObjectDescriptor;
 import org.pmw.tinylog.Logger;
 
+import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.Message;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.message.store.trade.TradeMessageStoreInterface;
@@ -36,7 +31,7 @@ import nl.tudelft.simulation.supplychain.message.trade.TradeMessage;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public abstract class SupplyChainActor implements Actor
+public abstract class SupplyChainActor extends LocalEventProducer implements Actor
 {
     /** */
     private static final long serialVersionUID = 20221201L;
@@ -54,10 +49,7 @@ public abstract class SupplyChainActor implements Actor
     private final SupplyChainModelInterface model;
 
     /** the roles. */
-    private ImmutableSet<Role> roles = new ImmutableLinkedHashSet<>(new LinkedHashSet<>());
-
-    /** the embedded event producer. */
-    private final EventProducer eventProducer;
+    private Set<Role> roles = new LinkedHashSet<>();
 
     /** the location of the actor. */
     private final DirectedPoint2d location;
@@ -79,50 +71,28 @@ public abstract class SupplyChainActor implements Actor
      * @param model SupplyChainModelInterface; the model
      * @param location OrientedPoint2d; the location of the actor
      * @param locationDescription String; the location description of the actor (e.g., a city, country)
-     * @param eventProducer EventProducer; a special EventProducer to use, e.g., a RmiEventProducer
      * @param messageStore TradeMessageStoreInterface; the message store for messages
      * @throws ActorAlreadyDefinedException when the actor was already registered in the model
      */
-    @SuppressWarnings("checkstyle:parameternumber")
     public SupplyChainActor(final String id, final String name, final SupplyChainModelInterface model,
-            final DirectedPoint2d location, final String locationDescription, final EventProducer eventProducer,
-            final TradeMessageStoreInterface messageStore) throws ActorAlreadyDefinedException
+            final DirectedPoint2d location, final String locationDescription, final TradeMessageStoreInterface messageStore)
+            throws ActorAlreadyDefinedException
     {
         Throw.whenNull(model, "model cannot be null");
         Throw.whenNull(id, "name cannot be null");
-        Throw.when(id.length() == 0, IllegalArgumentException.class, "id of actor cannot be null");
+        Throw.when(id.length() == 0, IllegalArgumentException.class, "id of actor cannot be empty");
         Throw.whenNull(name, "name cannot be null");
         Throw.whenNull(location, "location cannot be null");
         Throw.whenNull(locationDescription, "locationDescription cannot be null");
-        Throw.whenNull(eventProducer, "eventProducer cannot be null");
         Throw.whenNull(messageStore, "messageStore cannot be null");
         this.id = id;
         this.name = name;
         this.locationDescription = locationDescription;
         this.model = model;
         this.location = location;
-        this.eventProducer = eventProducer;
         this.messageStore = messageStore;
         this.messageStore.setOwner(this);
         model.registerActor(this);
-    }
-
-    /**
-     * Construct a new Actor with a LocalEventProducer. The actor delegates all message handling to one or more Roles.
-     * @param id String, the unique id of the actor
-     * @param name String; the longer name of the actor
-     * @param model SupplyChainModelInterface; the model
-     * @param location OrientedPoint2d; the location of the actor
-     * @param locationDescription String; the location description of the actor (e.g., a city, country)
-     * @param messageStore TradeMessageStoreInterface; the message store for messages
-     * @throws ActorAlreadyDefinedException when the actor was already registered in the model
-     */
-    @SuppressWarnings("checkstyle:parameternumber")
-    public SupplyChainActor(final String id, final String name, final SupplyChainModelInterface model,
-            final DirectedPoint2d location, final String locationDescription, final TradeMessageStoreInterface messageStore)
-            throws ActorAlreadyDefinedException
-    {
-        this(id, name, model, location, locationDescription, new LocalEventProducer(), messageStore);
     }
 
     /** {@inheritDoc} */
@@ -130,88 +100,57 @@ public abstract class SupplyChainActor implements Actor
     public void addRole(final Role role)
     {
         Throw.whenNull(role, "role cannot be null");
-        Set<Role> newRoles = this.roles.toSet();
-        newRoles.add(role);
-        this.roles = new ImmutableLinkedHashSet<>(newRoles);
+        this.roles.add(role);
     }
 
     /** {@inheritDoc} */
     @Override
-    public ImmutableSet<Role> getRoles()
+    public Set<Role> getRoles()
     {
         return this.roles;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void receiveMessage(final Message message)
+    public void receiveContent(final Content content)
     {
-        checkNecessaryRoles();
-        if (!message.getReceiver().equals(this))
+        checkNecessaryRoleTypes();
+        if (!content.getReceiver().equals(this))
         {
-            CategoryLogger.always().warn("Message " + message + " not meant for receiver " + toString());
+            CategoryLogger.always().warn("Message " + content + " not meant for receiver " + toString());
         }
         else
         {
             boolean processed = false;
             for (Role role : getRoles())
             {
-                processed |= role.handleMessage(message);
+                processed |= role.handleContent(content);
             }
             if (!processed)
             {
-                Logger.warn(this.toString() + " does not have a handler for " + message.getClass().getSimpleName());
+                Logger.warn(this.toString() + " does not have a handler for " + content.getClass().getSimpleName());
             }
         }
-        if (message instanceof TradeMessage)
+        if (content instanceof TradeMessage)
         {
-            this.messageStore.addMessage((TradeMessage) message, false);
+            this.messageStore.addMessage((TradeMessage) content, false);
         }
     }
 
     /** {@inheritDoc} */
     @Override
-    public void sendMessage(final Message message, final Duration delay)
+    public void sendContent(final Content content, final Duration delay)
     {
-        if (!message.getSender().equals(this))
+        if (!content.getSender().equals(this))
         {
-            CategoryLogger.always().warn("Message " + message + " not originating from sender " + toString());
+            CategoryLogger.always().warn("Message " + content + " not originating from sender " + toString());
         }
-        getSimulator().scheduleEventRel(delay, message.getReceiver(), "receiveMessage", new Object[] {message});
-        if (message instanceof TradeMessage)
+        getSimulator().scheduleEventRel(delay, content.getReceiver(), "receiveContent", new Object[] {content});
+        if (content instanceof TradeMessage)
         {
-            this.messageStore.addMessage((TradeMessage) message, true);
+            this.messageStore.addMessage((TradeMessage) content, true);
         }
-        fireEvent(SEND_MESSAGE_EVENT, new Object[] {message});
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void fireEvent(final EventType eventType, final Serializable value)
-    {
-        try
-        {
-            this.eventProducer.fireEvent(eventType, value);
-        }
-        catch (RemoteException e)
-        {
-            CategoryLogger.always().error(e);
-        }
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public <C extends Comparable<C> & Serializable> void fireTimedEvent(final EventType eventType, final Serializable value,
-            final C time)
-    {
-        try
-        {
-            this.eventProducer.fireTimedEvent(eventType, value, time);
-        }
-        catch (RemoteException e)
-        {
-            CategoryLogger.always().error(e);
-        }
+        fireEvent(SEND_MESSAGE_EVENT, new Object[] {content});
     }
 
     /**
@@ -250,13 +189,6 @@ public abstract class SupplyChainActor implements Actor
     public SupplyChainModelInterface getModel()
     {
         return this.model;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public EventListenerMap getEventListenerMap() throws RemoteException
-    {
-        return this.eventProducer.getEventListenerMap();
     }
 
     /** {@inheritDoc} */

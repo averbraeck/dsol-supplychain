@@ -42,7 +42,7 @@ public class OrderConfirmationPolicy extends SupplyChainPolicy<OrderConfirmation
      * {@inheritDoc}
      */
     @Override
-    public boolean handleMessage(final OrderConfirmation orderConfirmation)
+    public boolean handleContent(final OrderConfirmation orderConfirmation)
     {
         if (!isValidMessage(orderConfirmation))
         {

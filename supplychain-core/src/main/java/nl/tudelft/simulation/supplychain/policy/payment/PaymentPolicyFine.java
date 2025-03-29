@@ -56,11 +56,11 @@ public class PaymentPolicyFine extends PaymentPolicy
 
     /** {@inheritDoc} */
     @Override
-    public boolean handleMessage(final Payment payment)
+    public boolean handleContent(final Payment payment)
     {
         try
         {
-            if (super.handleMessage(payment))
+            if (super.handleContent(payment))
             {
                 Time time = payment.getSender().getSimulatorTime();
                 if (time.gt(payment.getBill().getFinalPaymentDate()))

@@ -6,8 +6,7 @@ import org.djutils.base.Identifiable;
 import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.content.Message;
-import nl.tudelft.simulation.supplychain.message.policy.MessagePolicy;
+import nl.tudelft.simulation.supplychain.content.Content;
 
 /**
  * MessageReceiver contains the base implementation of a message receiver. A message receiver simulates the queuing method for
@@ -19,7 +18,7 @@ import nl.tudelft.simulation.supplychain.message.policy.MessagePolicy;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public abstract class MessageReceiver implements Identifiable, Serializable
+public abstract class ContentReceiver implements Identifiable, Serializable
 {
     /** */
     private static final long serialVersionUID = 20221126L;
@@ -31,10 +30,10 @@ public abstract class MessageReceiver implements Identifiable, Serializable
     private Role role;
 
     /**
-     * Create a new message receiver for an actor.
+     * Create a new content receiver for an actor.
      * @param id String; an id for the message receiver
      */
-    public MessageReceiver(final String id)
+    public ContentReceiver(final String id)
     {
         Throw.whenNull(id, "id cannot be null");
         this.id = id;
@@ -48,17 +47,17 @@ public abstract class MessageReceiver implements Identifiable, Serializable
     public void setRole(final Role role)
     {
         Throw.whenNull(role, "role cannot be null");
-        Throw.when(this.role != null, IllegalStateException.class, "MessageReceiver.role already initialized");
+        Throw.when(this.role != null, IllegalStateException.class, "ContentReceiver.role already initialized");
         this.role = role;
     }
 
     /**
-     * This is the core dispatching method for the processing of a message that was received.
-     * @param message M; the message to process
-     * @param messagePolicy MessagePolicy&lt;M&gt;; the policy to execute on the message
-     * @param <M> The message type to ensure that the message and policy align
+     * This is the core dispatching method for the processing of content that was received.
+     * @param content the content to process
+     * @param contentPolicy the policy to execute on the conntent
+     * @param <C> The content type to ensure that the content and policy align
      */
-    public abstract <M extends Message> void receiveMessage(M message, MessagePolicy<M> messagePolicy);
+    public abstract <C extends Content> void receiveContent(C content, ContentPolicy<C> contentPolicy);
 
     /** {@inheritDoc} */
     @Override

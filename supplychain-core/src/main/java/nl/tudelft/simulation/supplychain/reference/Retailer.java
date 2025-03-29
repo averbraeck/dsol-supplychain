@@ -127,6 +127,6 @@ public class Retailer extends SupplyChainActor implements Serializable
         Throw.whenNull(this.buyingRole, "BuyingRole not initialized for actor: " + this.getName());
         Throw.whenNull(this.sellingRole, "SellingRole not initialized for actor: " + this.getName());
         Throw.whenNull(this.inventoryRole, "InventoryRole not initialized for actor: " + this.getName());
-        super.receiveMessage(message);
+        super.receiveContent(message);
     }
 }

@@ -1,7 +1,7 @@
 package nl.tudelft.simulation.supplychain.message.receiver;
 
+import nl.tudelft.simulation.supplychain.content.ContentPolicy;
 import nl.tudelft.simulation.supplychain.content.Message;
-import nl.tudelft.simulation.supplychain.message.policy.MessagePolicy;
 
 /**
  * MessageReceiverDirect implements message queuing for an actor that immediately handles the message upon receipt.
@@ -11,7 +11,7 @@ import nl.tudelft.simulation.supplychain.message.policy.MessagePolicy;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class MessageReceiverDirect extends MessageReceiver
+public class MessageReceiverDirect extends ContentReceiver
 {
     /** */
     private static final long serialVersionUID = 20221127L;
@@ -26,9 +26,9 @@ public class MessageReceiverDirect extends MessageReceiver
 
     /** {@inheritDoc} */
     @Override
-    public <M extends Message> void receiveMessage(final M message, final MessagePolicy<M> messagePolicy)
+    public <M extends Message> void receiveMessage(final M message, final ContentPolicy<M> messagePolicy)
     {
-        messagePolicy.handleMessage(message);
+        messagePolicy.handleContent(message);
     }
 
 }

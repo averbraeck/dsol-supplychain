@@ -15,7 +15,7 @@ import nl.tudelft.simulation.supplychain.actor.messaging.devices.reference.WebAp
 import nl.tudelft.simulation.supplychain.actor.unit.dist.DistConstantDuration;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.finance.Bank;
-import nl.tudelft.simulation.supplychain.message.receiver.MessageReceiver;
+import nl.tudelft.simulation.supplychain.message.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.message.store.EmptyMessageStore;
 import nl.tudelft.simulation.supplychain.message.trade.YellowPageRequest;
 import nl.tudelft.simulation.supplychain.messagehandlers.HandleAllMessages;
@@ -49,7 +49,7 @@ public class DemoYP extends YellowPage
 
         WebApplication www = new WebApplication("Web-" + name, this.simulator);
         super.addSendingDevice(www);
-        MessageReceiver webSystem = new HandleAllMessages(this);
+        ContentReceiver webSystem = new HandleAllMessages(this);
         super.addReceivingDevice(www, webSystem, new DistConstantDuration(new Duration(10.0, DurationUnit.SECOND)));
 
         // YP MESSAGE HANDLING

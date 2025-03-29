@@ -11,7 +11,7 @@ import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulator;
-import nl.tudelft.simulation.supplychain.message.receiver.MessageReceiver;
+import nl.tudelft.simulation.supplychain.message.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.message.receiver.MessageReceiverDirect;
 
 /**
@@ -36,7 +36,7 @@ public class RoleTest
         TestModel model = new TestModel(simulator);
         TestActor actor = new TestActor("TA", "TestActor", model, new OrientedPoint2d(10, 10), "Dallas, TX");
         assertEquals(0, actor.getRoles().size());
-        MessageReceiver messageReceiver = new MessageReceiverDirect();
+        ContentReceiver messageReceiver = new MessageReceiverDirect();
         TestRole role = new TestRole("ROLE", actor, messageReceiver);
         assertEquals(1, actor.getRoles().size());
         assertTrue(actor.getRoles().contains(role));
@@ -46,7 +46,7 @@ public class RoleTest
     {
         private static final long serialVersionUID = 1L;
 
-        TestRole(final String id, final Actor actor, final MessageReceiver messageReceiver)
+        TestRole(final String id, final Actor actor, final ContentReceiver messageReceiver)
         {
             super(id, actor, messageReceiver);
         }

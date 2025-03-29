@@ -60,7 +60,7 @@ public class QuotePolicyAll extends QuotePolicy
 
     /** {@inheritDoc} */
     @Override
-    public boolean handleMessage(final Quote quote)
+    public boolean handleContent(final Quote quote)
     {
         if (!isValidMessage(quote))
         {

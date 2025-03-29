@@ -96,7 +96,7 @@ public abstract class AbstractRestockingService implements RestockingServiceInte
         Actor owner = this.inventory.getOwner();
         InternalDemand internalDemand = new InternalDemand(owner, this.product, orderAmount, owner.getSimulatorTime(),
                 owner.getSimulatorTime().plus(this.maxDeliveryDuration));
-        owner.sendMessage(internalDemand, Duration.ZERO);
+        owner.sendContent(internalDemand, Duration.ZERO);
     }
 
     /**

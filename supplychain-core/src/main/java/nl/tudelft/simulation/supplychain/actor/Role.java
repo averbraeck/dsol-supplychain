@@ -5,13 +5,14 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import org.checkerframework.checker.units.qual.C;
 import org.djutils.base.Identifiable;
 import org.djutils.exceptions.Throw;
 
-import nl.tudelft.simulation.supplychain.content.Message;
+import nl.tudelft.simulation.supplychain.content.Content;
+import nl.tudelft.simulation.supplychain.content.ContentPolicy;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.message.policy.MessagePolicy;
-import nl.tudelft.simulation.supplychain.message.receiver.MessageReceiver;
+import nl.tudelft.simulation.supplychain.message.receiver.ContentReceiver;
 
 /**
  * Role is a template for a consistent set of policies for handling messages, representing a certain part of the organization,
@@ -36,18 +37,18 @@ public abstract class Role implements Identifiable, Serializable
     private final Actor actor;
 
     /** the message handler. */
-    private final MessageReceiver messageReceiver;
+    private final ContentReceiver messageReceiver;
 
     /** the message handling policies. */
-    private final Map<Class<? extends Message>, MessagePolicy<? extends Message>> messagePolicies = new LinkedHashMap<>();
+    private final Map<Class<? extends Content>, ContentPolicy<? extends Content>> contentPolicies = new LinkedHashMap<>();
 
     /**
      * Create a new Role.
      * @param id String; the id of the role
      * @param actor Actor; the actor to which this role belongs
-     * @param messageReceiver MessageReceiver; the message handler to use for processing the messages
+     * @param messageReceiver ContentReceiver; the message handler to use for processing the messages
      */
-    public Role(final String id, final Actor actor, final MessageReceiver messageReceiver)
+    public Role(final String id, final Actor actor, final ContentReceiver messageReceiver)
     {
         Throw.whenNull(id, "id cannot be null");
         Throw.whenNull(actor, "actor cannot be null");
@@ -61,13 +62,13 @@ public abstract class Role implements Identifiable, Serializable
 
     /**
      * Set a message handling policy for a message type, possibly overwriting the previous message handling policy.
-     * @param policy MessagePolicyInterface&lt;M&gt;; the policy to add
+     * @param policy ContentPolicyInterface&lt;M&gt;; the policy to add
      * @param <M> the message type
      */
-    public <M extends Message> void setMessagePolicy(final MessagePolicy<M> policy)
+    public <C extends Content> void setMessagePolicy(final ContentPolicy<M> policy)
     {
         Throw.whenNull(policy, "policy cannot be null");
-        this.messagePolicies.put(policy.getMessageClass(), policy);
+        this.contentPolicies.put(policy.getContentClass(), policy);
     }
 
     /**
@@ -75,26 +76,26 @@ public abstract class Role implements Identifiable, Serializable
      * @param messageClass Class&lt;M&gt;; the message class of the policy to remove
      * @param <M> the message type
      */
-    public <M extends Message> void removeMessagePolicy(final Class<M> messageClass)
+    public <C extends Content> void removeMessagePolicy(final Class<M> messageClass)
     {
         Throw.whenNull(messageClass, "messageClass cannot be null");
-        this.messagePolicies.remove(messageClass);
+        this.contentPolicies.remove(messageClass);
     }
 
     /**
      * This is the core processing of a message that was received. All appropriate policies of the actor or role are executed.
-     * @param message M; the message to process
+     * @param content M; the message to process
      * @param <M> The message class to ensure that the message and policy align
      * @return boolean; whether the PolicyHandler processed the message or not
      */
     @SuppressWarnings("unchecked")
-    public <M extends Message> boolean handleMessage(final M message)
+    public <C extends Content> boolean handleContent(final C content)
     {
-        if (!this.messagePolicies.containsKey(message.getClass()))
+        if (!this.contentPolicies.containsKey(content.getClass()))
         {
             return false;
         }
-        this.messageReceiver.receiveMessage(message, (MessagePolicy<M>) this.messagePolicies.get(message.getClass()));
+        this.messageReceiver.receiveContent(content, (ContentPolicy<M>) this.contentPolicies.get(content.getClass()));
         return true;
     }
 
