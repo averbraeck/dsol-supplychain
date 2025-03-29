@@ -1,8 +1,8 @@
 package nl.tudelft.simulation.supplychain.role.banking;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.message.receiver.ContentReceiver;
-import nl.tudelft.simulation.supplychain.message.receiver.MessageReceiverDirect;
+import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
+import nl.tudelft.simulation.supplychain.content.receiver.MessageReceiverDirect;
 
 /**
  * The BankingRole maintains the interest rates for the Bank accounts. In this case, we have chosen to not make the Bank work

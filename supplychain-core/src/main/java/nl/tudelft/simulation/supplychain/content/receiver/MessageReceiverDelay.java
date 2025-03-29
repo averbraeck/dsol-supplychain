@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.message.receiver;
+package nl.tudelft.simulation.supplychain.content.receiver;
 
 import org.djutils.exceptions.Throw;
 

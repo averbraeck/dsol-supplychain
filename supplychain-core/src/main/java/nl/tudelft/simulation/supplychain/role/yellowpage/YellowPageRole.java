@@ -10,7 +10,7 @@ import java.util.Set;
 
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.message.receiver.MessageReceiverDirect;
+import nl.tudelft.simulation.supplychain.content.receiver.MessageReceiverDirect;
 import nl.tudelft.simulation.supplychain.product.Product;
 
 /**

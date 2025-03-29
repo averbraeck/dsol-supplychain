@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.message.receiver;
+package nl.tudelft.simulation.supplychain.content.receiver;
 
 import java.io.Serializable;
 
@@ -7,6 +7,7 @@ import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Content;
+import nl.tudelft.simulation.supplychain.content.ContentPolicy;
 
 /**
  * MessageReceiver contains the base implementation of a message receiver. A message receiver simulates the queuing method for

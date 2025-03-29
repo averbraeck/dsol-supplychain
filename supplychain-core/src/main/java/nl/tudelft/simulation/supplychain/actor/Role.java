@@ -5,14 +5,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import org.checkerframework.checker.units.qual.C;
 import org.djutils.base.Identifiable;
 import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.ContentPolicy;
+import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.message.receiver.ContentReceiver;
 
 /**
  * Role is a template for a consistent set of policies for handling messages, representing a certain part of the organization,
@@ -63,9 +62,9 @@ public abstract class Role implements Identifiable, Serializable
     /**
      * Set a message handling policy for a message type, possibly overwriting the previous message handling policy.
      * @param policy ContentPolicyInterface&lt;M&gt;; the policy to add
-     * @param <M> the message type
+     * @param <C> the message type
      */
-    public <C extends Content> void setMessagePolicy(final ContentPolicy<M> policy)
+    public <C extends Content> void setMessagePolicy(final ContentPolicy<C> policy)
     {
         Throw.whenNull(policy, "policy cannot be null");
         this.contentPolicies.put(policy.getContentClass(), policy);
@@ -74,9 +73,9 @@ public abstract class Role implements Identifiable, Serializable
     /**
      * Remove a message handling policy for a mesage type.
      * @param messageClass Class&lt;M&gt;; the message class of the policy to remove
-     * @param <M> the message type
+     * @param <C> the message type
      */
-    public <C extends Content> void removeMessagePolicy(final Class<M> messageClass)
+    public <C extends Content> void removeMessagePolicy(final Class<C> messageClass)
     {
         Throw.whenNull(messageClass, "messageClass cannot be null");
         this.contentPolicies.remove(messageClass);
@@ -85,7 +84,7 @@ public abstract class Role implements Identifiable, Serializable
     /**
      * This is the core processing of a message that was received. All appropriate policies of the actor or role are executed.
      * @param content M; the message to process
-     * @param <M> The message class to ensure that the message and policy align
+     * @param <C> The message class to ensure that the message and policy align
      * @return boolean; whether the PolicyHandler processed the message or not
      */
     @SuppressWarnings("unchecked")
@@ -95,7 +94,7 @@ public abstract class Role implements Identifiable, Serializable
         {
             return false;
         }
-        this.messageReceiver.receiveContent(content, (ContentPolicy<M>) this.contentPolicies.get(content.getClass()));
+        this.messageReceiver.receiveContent(content, (ContentPolicy<C>) this.contentPolicies.get(content.getClass()));
         return true;
     }
 

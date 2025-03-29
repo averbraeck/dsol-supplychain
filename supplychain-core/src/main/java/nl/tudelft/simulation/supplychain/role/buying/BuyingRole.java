@@ -1,8 +1,8 @@
 package nl.tudelft.simulation.supplychain.role.buying;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.message.receiver.ContentReceiver;
-import nl.tudelft.simulation.supplychain.message.receiver.MessageReceiverDirect;
+import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
+import nl.tudelft.simulation.supplychain.content.receiver.MessageReceiverDirect;
 
 /**
  * The buying role is a role that can handle several types of message content: internal demand, order confirmation, bill, and

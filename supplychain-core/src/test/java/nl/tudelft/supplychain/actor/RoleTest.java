@@ -10,9 +10,9 @@ import org.junit.Test;
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.actor.Role;
+import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
+import nl.tudelft.simulation.supplychain.content.receiver.MessageReceiverDirect;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulator;
-import nl.tudelft.simulation.supplychain.message.receiver.ContentReceiver;
-import nl.tudelft.simulation.supplychain.message.receiver.MessageReceiverDirect;
 
 /**
  * RoleTest tests the method of the Role.
