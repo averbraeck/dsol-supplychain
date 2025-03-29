@@ -116,21 +116,18 @@ public abstract class Role implements Identifiable, Serializable
         return getActor().getSimulator();
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getId()
     {
         return this.id;
     }
 
-    /** {@inheritDoc} */
     @Override
     public int hashCode()
     {
         return Objects.hash(this.actor, this.id);
     }
 
-    /** {@inheritDoc} */
     @Override
     @SuppressWarnings("checkstyle:needbraces")
     public boolean equals(final Object obj)
@@ -145,7 +142,6 @@ public abstract class Role implements Identifiable, Serializable
         return Objects.equals(this.actor, other.actor) && Objects.equals(this.id, other.id);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {

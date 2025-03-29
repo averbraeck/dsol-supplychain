@@ -35,7 +35,6 @@ public class SellingRoleRFQ extends SellingRole
         setMessagePolicy(paymentPolicy);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getId()
     {

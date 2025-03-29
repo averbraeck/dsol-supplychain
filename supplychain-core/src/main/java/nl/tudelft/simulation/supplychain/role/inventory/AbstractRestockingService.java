@@ -107,7 +107,6 @@ public abstract class AbstractRestockingService implements RestockingServiceInte
         return this.checkInterval;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Product getProduct()
     {
@@ -122,7 +121,6 @@ public abstract class AbstractRestockingService implements RestockingServiceInte
         return this.simulator;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Inventory getInventory()
     {

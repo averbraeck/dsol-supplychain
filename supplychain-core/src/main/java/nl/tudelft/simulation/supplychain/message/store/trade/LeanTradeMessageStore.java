@@ -54,7 +54,6 @@ public class LeanTradeMessageStore extends TradeMessageStore
         this.simulator = simulator;
     }
 
-    /** {@inheritDoc} */
     @Override
     public synchronized void addMessage(final TradeMessage message, final boolean sent)
     {
@@ -143,7 +142,6 @@ public class LeanTradeMessageStore extends TradeMessageStore
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public synchronized void removeMessage(final TradeMessage message, final boolean sent)
     {

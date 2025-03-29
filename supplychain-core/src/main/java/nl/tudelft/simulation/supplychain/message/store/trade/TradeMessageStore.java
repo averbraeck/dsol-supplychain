@@ -61,7 +61,6 @@ public class TradeMessageStore extends LocalEventProducer implements TradeMessag
     /** the owner. */
     private Actor owner;
 
-    /** {@inheritDoc} */
     @Override
     public void setOwner(final Actor owner)
     {
@@ -71,7 +70,6 @@ public class TradeMessageStore extends LocalEventProducer implements TradeMessag
         this.owner = owner;
     }
 
-    /** {@inheritDoc} */
     @Override
     public synchronized void addMessage(final TradeMessage message, final boolean sent)
     {
@@ -103,7 +101,6 @@ public class TradeMessageStore extends LocalEventProducer implements TradeMessag
         removeOldStateContent(message, sent, internalDemandId);
     }
 
-    /** {@inheritDoc} */
     @Override
     public synchronized void removeMessage(final TradeMessage message, final boolean sent)
     {
@@ -121,7 +118,6 @@ public class TradeMessageStore extends LocalEventProducer implements TradeMessag
         this.removeSentReceivedMessage(message, sent);
     }
 
-    /** {@inheritDoc} */
     @Override
     public synchronized void removeSentReceivedMessage(final TradeMessage message, final boolean sent)
     {
@@ -135,7 +131,6 @@ public class TradeMessageStore extends LocalEventProducer implements TradeMessag
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public void removeAllMessages(final long internalDemandId)
     {

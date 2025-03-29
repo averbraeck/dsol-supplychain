@@ -131,7 +131,6 @@ public class DemoMarket extends Customer
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public Bounds3d getBounds()
     {

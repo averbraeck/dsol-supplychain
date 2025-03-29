@@ -36,21 +36,18 @@ public class SupplyChainAnimator extends DevsRealTimeAnimator.TimeDoubleUnit imp
         this.absStartTime = absStartTime;
     }
 
-    /** {@inheritDoc} */
     @Override
     public ContextInterface getContext()
     {
         return getReplication().getContext();
     }
 
-    /** {@inheritDoc} */
     @Override
     public Time getAbsStartTime()
     {
         return this.absStartTime;
     }
 
-    /** {@inheritDoc} */
     @Override
     public SupplyChainModelInterface getModel()
     {

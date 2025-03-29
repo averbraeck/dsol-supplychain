@@ -63,7 +63,6 @@ public class QuotePolicyTimeout extends QuotePolicy
         super("QuotePolicyTimeout", owner, comparatorType, handlingTime, maximumPriceMargin, minimumAmountMargin);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean handleContent(final Quote quote)
     {

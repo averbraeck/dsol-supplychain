@@ -27,7 +27,6 @@ public class SCSpeedPanel extends SpeedPanel.TimeDoubleUnit
         super(simulator);
     }
 
-    /** {@inheritDoc} */
     @Override
     protected String formatSpeed(final Duration simulationTime)
     {

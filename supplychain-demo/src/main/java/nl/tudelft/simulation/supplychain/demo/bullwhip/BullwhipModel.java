@@ -64,7 +64,6 @@ public class BullwhipModel extends AbstractDSOLModel<Duration, SupplyChainSimula
         // We don't do anything to prevent state-based replications.
     }
 
-    /** {@inheritDoc} */
     @Override
     public void constructModel()
     {
@@ -208,7 +207,6 @@ public class BullwhipModel extends AbstractDSOLModel<Duration, SupplyChainSimula
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public Serializable getSourceId()
     {

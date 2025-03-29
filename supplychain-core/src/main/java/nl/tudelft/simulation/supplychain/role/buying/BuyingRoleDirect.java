@@ -37,7 +37,6 @@ public class BuyingRoleDirect extends BuyingRole
         setMessagePolicy(billPolicy);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getId()
     {

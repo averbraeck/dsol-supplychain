@@ -49,7 +49,6 @@ public class TransportOption implements Identifiable, Serializable
         this.id = id;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getId()
     {
@@ -133,14 +132,12 @@ public class TransportOption implements Identifiable, Serializable
         return new Money(cost, costUnit);
     }
 
-    /** {@inheritDoc} */
     @Override
     public int hashCode()
     {
         return Objects.hash(this.id, this.transportSteps);
     }
 
-    /** {@inheritDoc} */
     @Override
     @SuppressWarnings("checkstyle:needbraces")
     public boolean equals(final Object obj)
@@ -155,7 +152,6 @@ public class TransportOption implements Identifiable, Serializable
         return Objects.equals(this.id, other.id) && Objects.equals(this.transportSteps, other.transportSteps);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {

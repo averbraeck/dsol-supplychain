@@ -48,7 +48,6 @@ public class TransportMode implements Identifiable, Serializable
         this.averageSpeed = averageSpeed;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getId()
     {
@@ -95,14 +94,12 @@ public class TransportMode implements Identifiable, Serializable
         return this.handledSkuSet;
     }
 
-    /** {@inheritDoc} */
     @Override
     public int hashCode()
     {
         return Objects.hash(this.id);
     }
 
-    /** {@inheritDoc} */
     @Override
     @SuppressWarnings("checkstyle:needbraces")
     public boolean equals(final Object obj)
@@ -117,7 +114,6 @@ public class TransportMode implements Identifiable, Serializable
         return Objects.equals(this.id, other.id);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {

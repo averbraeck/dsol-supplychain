@@ -61,7 +61,6 @@ public class Topic implements Serializable
         return Topic.specializationOf(cat1.getParent(), cat2);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {

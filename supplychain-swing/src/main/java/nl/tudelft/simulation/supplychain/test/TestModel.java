@@ -68,7 +68,6 @@ public class TestModel extends SupplyChainModel
         // We don't do anything to prevent state-based replications.
     }
 
-    /** {@inheritDoc} */
     @Override
     public void constructModel()
     {
@@ -135,7 +134,6 @@ public class TestModel extends SupplyChainModel
         System.err.println("Simulation time = " + this.devsSimulator.getSimulatorTime());
     }
 
-    /** {@inheritDoc} */
     @Override
     public Length calculateDistance(final Point<?> loc1, final Point<?> loc2)
     {

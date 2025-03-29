@@ -123,7 +123,6 @@ public interface Actor extends EventProducer, Locatable, Identifiable, Serializa
      */
     void setBounds(Bounds3d bounds);
 
-    /** {@inheritDoc} */
     @Override
     Point2d getLocation();
 

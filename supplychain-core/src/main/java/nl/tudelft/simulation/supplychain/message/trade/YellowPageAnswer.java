@@ -58,21 +58,18 @@ public class YellowPageAnswer extends TradeMessage
         return this.ypRequest;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Product getProduct()
     {
         return this.ypRequest.getProduct();
     }
 
-    /** {@inheritDoc} */
     @Override
     public YellowPageActor getSender()
     {
         return (YellowPageActor) super.getSender();
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {

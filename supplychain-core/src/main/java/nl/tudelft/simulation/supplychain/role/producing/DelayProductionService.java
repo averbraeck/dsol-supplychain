@@ -109,7 +109,6 @@ public class DelayProductionService extends ProductionService
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public Duration getExpectedProductionDuration(final ProductionOrder productionOrder)
     {

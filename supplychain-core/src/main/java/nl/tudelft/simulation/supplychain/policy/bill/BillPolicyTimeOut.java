@@ -57,7 +57,6 @@ public class BillPolicyTimeOut extends BillPolicy
         this(owner, bankAccount, PaymentPolicyEnum.PAYMENT_ON_TIME, null, maximumTimeOut);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean handleContent(final Bill bill)
     {

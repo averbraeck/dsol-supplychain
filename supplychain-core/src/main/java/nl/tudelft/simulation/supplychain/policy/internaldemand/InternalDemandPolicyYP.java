@@ -50,7 +50,6 @@ public class InternalDemandPolicyYP extends InternalDemandPolicy
         this.maximumNumber = maximumNumber;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean handleContent(final InternalDemand internalDemand)
     {

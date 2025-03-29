@@ -24,7 +24,6 @@ public class ContentReceiverDirect extends ContentReceiver
         super("ContentReceiverDirect");
     }
 
-    /** {@inheritDoc} */
     @Override
     public <C extends Content> void receiveContent(final C content, final ContentPolicy<C> contentPolicy)
     {

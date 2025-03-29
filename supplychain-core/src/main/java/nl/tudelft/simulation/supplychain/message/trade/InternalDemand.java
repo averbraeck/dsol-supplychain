@@ -100,7 +100,6 @@ public class InternalDemand extends TradeMessage
         return this.internalDemandId;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {

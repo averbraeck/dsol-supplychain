@@ -22,7 +22,6 @@ import com.google.gson.JsonSerializer;
  */
 public class DurationAdapter implements JsonSerializer<Duration>, JsonDeserializer<Duration>
 {
-    /** {@inheritDoc} */
     @Override
     public Duration deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context)
             throws JsonParseException
@@ -30,7 +29,6 @@ public class DurationAdapter implements JsonSerializer<Duration>, JsonDeserializ
         return Duration.valueOf(json.getAsJsonPrimitive().getAsString());
     }
 
-    /** {@inheritDoc} */
     @Override
     public JsonElement serialize(final Duration src, final Type typeOfSrc, final JsonSerializationContext context)
     {

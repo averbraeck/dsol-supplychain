@@ -144,7 +144,6 @@ public class Client extends Customer
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public Bounds3d getBounds()
     {

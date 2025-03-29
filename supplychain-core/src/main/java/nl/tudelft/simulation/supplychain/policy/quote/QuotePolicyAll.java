@@ -58,7 +58,6 @@ public class QuotePolicyAll extends QuotePolicy
         super("QuotePolicyAll", owner, comparatorType, handlingTime, maximumPriceMargin, minimumAmountMargin);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean handleContent(final Quote quote)
     {

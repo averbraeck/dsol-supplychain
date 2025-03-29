@@ -82,7 +82,6 @@ public class Bill extends TradeMessage
         return this.price;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {
@@ -90,7 +89,6 @@ public class Bill extends TradeMessage
                 + this.description;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Product getProduct()
     {
@@ -121,14 +119,12 @@ public class Bill extends TradeMessage
         this.isPaid = paid;
     }
 
-    /** {@inheritDoc} */
     @Override
     public FinancingActor getSender()
     {
         return (FinancingActor) super.getSender();
     }
 
-    /** {@inheritDoc} */
     @Override
     public FinancingActor getReceiver()
     {

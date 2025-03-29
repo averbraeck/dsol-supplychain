@@ -71,7 +71,6 @@ public class Manufacturer extends DistributionCenter
         this.producingRole = producingRole;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void receiveMessage(final Message message)
     {

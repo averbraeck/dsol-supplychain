@@ -162,7 +162,6 @@ public class PCShop extends Retailer
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public Bounds3d getBounds()
     {

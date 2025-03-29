@@ -36,7 +36,6 @@ public class OrderPolicyMake extends OrderPolicy<Order>
         super("OrderPolicyMake", owner, stock, Order.class);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean handleContent(final Order order)
     {

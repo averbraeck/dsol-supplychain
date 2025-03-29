@@ -108,21 +108,18 @@ public class YellowPageRequest extends TradeMessage
         return this.maximumNumber;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Product getProduct()
     {
         return this.product;
     }
 
-    /** {@inheritDoc} */
     @Override
     public YellowPageActor getReceiver()
     {
         return (YellowPageActor) super.getReceiver();
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {

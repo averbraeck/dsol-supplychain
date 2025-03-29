@@ -371,7 +371,6 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {

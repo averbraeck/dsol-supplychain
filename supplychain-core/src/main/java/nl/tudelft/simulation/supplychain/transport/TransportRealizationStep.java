@@ -97,7 +97,6 @@ public class TransportRealizationStep implements Identifiable, Serializable
         this.transportCostPerKm = transportCostPerKm;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getId()
     {
@@ -185,7 +184,6 @@ public class TransportRealizationStep implements Identifiable, Serializable
         return this.transportCostPerKm;
     }
 
-    /** {@inheritDoc} */
     @Override
     public int hashCode()
     {
@@ -193,7 +191,6 @@ public class TransportRealizationStep implements Identifiable, Serializable
                 this.transportCostPerKm, this.transportMode, this.unloadingCost, this.unloadingTime);
     }
 
-    /** {@inheritDoc} */
     @Override
     @SuppressWarnings("checkstyle:needbraces")
     public boolean equals(final Object obj)
@@ -214,7 +211,6 @@ public class TransportRealizationStep implements Identifiable, Serializable
                 && Objects.equals(this.unloadingTime, other.unloadingTime);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {

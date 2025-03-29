@@ -90,21 +90,18 @@ public class OrderConfirmation extends TradeMessage
         return "NOT CONFIRMED";
     }
 
-    /** {@inheritDoc} */
     @Override
     public Product getProduct()
     {
         return this.order.getProduct();
     }
 
-    /** {@inheritDoc} */
     @Override
     public SellingActor getSender()
     {
         return (SellingActor) super.getSender();
     }
 
-    /** {@inheritDoc} */
     @Override
     public BuyingActor getReceiver()
     {

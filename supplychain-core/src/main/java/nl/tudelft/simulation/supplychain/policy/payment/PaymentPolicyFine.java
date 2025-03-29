@@ -47,14 +47,12 @@ public class PaymentPolicyFine extends PaymentPolicy
         this.fixedFinePerDay = fixedFinePerDay;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getId()
     {
         return "PaymentPolicyFine";
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean handleContent(final Payment payment)
     {

@@ -25,7 +25,6 @@ public class TestActor extends SupplyChainActor
         super(id, name, model, location, locationDescription, new TradeMessageStore());
     }
 
-    /** {@inheritDoc} */
     @Override
     public void checkNecessaryRoles()
     {

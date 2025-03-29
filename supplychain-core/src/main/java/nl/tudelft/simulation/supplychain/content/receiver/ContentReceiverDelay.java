@@ -33,7 +33,6 @@ public class ContentReceiverDelay extends ContentReceiver
         setDelayDistribution(delayDistribution);
     }
 
-    /** {@inheritDoc} */
     @Override
     public <M extends Message> void receiveMessage(final M message, final ContentPolicy<M> messagePolicy)
     {

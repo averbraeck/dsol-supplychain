@@ -93,7 +93,6 @@ public interface SupplyChainSimulatorInterface extends DevsSimulatorInterface<Du
         return getAbsStartTime().plus(getSimulatorTime());
     }
 
-    /** {@inheritDoc} */
     @Override
     SupplyChainModelInterface getModel();
 

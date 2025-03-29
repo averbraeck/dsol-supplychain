@@ -22,7 +22,6 @@ import com.google.gson.JsonSerializer;
  */
 public class TimeAdapter implements JsonSerializer<Time>, JsonDeserializer<Time>
 {
-    /** {@inheritDoc} */
     @Override
     public Time deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context)
             throws JsonParseException
@@ -30,7 +29,6 @@ public class TimeAdapter implements JsonSerializer<Time>, JsonDeserializer<Time>
         return Time.valueOf(json.getAsJsonPrimitive().getAsString());
     }
 
-    /** {@inheritDoc} */
     @Override
     public JsonElement serialize(final Time src, final Type typeOfSrc, final JsonSerializationContext context)
     {

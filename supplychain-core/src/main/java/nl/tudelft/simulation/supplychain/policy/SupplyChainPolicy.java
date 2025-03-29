@@ -127,7 +127,6 @@ public abstract class SupplyChainPolicy<T extends TradeMessage> extends ContentP
         return (this.validProducts.contains(internalDemand.getProduct()));
     }
 
-    /** {@inheritDoc} */
     @Override
     public Role getRole()
     {

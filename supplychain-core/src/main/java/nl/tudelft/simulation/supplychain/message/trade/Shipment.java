@@ -104,7 +104,6 @@ public class Shipment extends TradeMessage
         return this.amount;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Product getProduct()
     {
@@ -120,7 +119,6 @@ public class Shipment extends TradeMessage
         return this.totalCargoValue;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {

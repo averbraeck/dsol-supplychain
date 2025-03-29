@@ -57,14 +57,12 @@ public class CostPerSku implements Serializable
         return this.cost;
     }
 
-    /** {@inheritDoc} */
     @Override
     public int hashCode()
     {
         return Objects.hash(this.cost, this.sku);
     }
 
-    /** {@inheritDoc} */
     @Override
     @SuppressWarnings("checkstyle:needbraces")
     public boolean equals(final Object obj)
@@ -79,7 +77,6 @@ public class CostPerSku implements Serializable
         return Objects.equals(this.cost, other.cost) && Objects.equals(this.sku, other.sku);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {

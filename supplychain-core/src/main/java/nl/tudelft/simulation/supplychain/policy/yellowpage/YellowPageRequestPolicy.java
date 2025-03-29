@@ -47,7 +47,6 @@ public class YellowPageRequestPolicy extends SupplyChainPolicy<YellowPageRequest
         this.handlingTime = handlingTime;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean handleContent(final YellowPageRequest ypRequest)
     {
@@ -113,7 +112,6 @@ public class YellowPageRequestPolicy extends SupplyChainPolicy<YellowPageRequest
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public YellowPageRole getRole()
     {

@@ -44,7 +44,6 @@ public class QuoteComparator implements Comparator<Quote>, Serializable
         this.ownerPosition = owner.getActor().getLocation();
     }
 
-    /** {@inheritDoc} */
     @Override
     public int compare(final Quote quote1, final Quote quote2)
     {
@@ -144,7 +143,6 @@ public class QuoteComparator implements Comparator<Quote>, Serializable
         return 0;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {

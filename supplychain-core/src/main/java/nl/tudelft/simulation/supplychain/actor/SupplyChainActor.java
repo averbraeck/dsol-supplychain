@@ -95,7 +95,6 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
         model.registerActor(this);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void addRole(final Role role)
     {
@@ -103,14 +102,12 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
         this.roles.add(role);
     }
 
-    /** {@inheritDoc} */
     @Override
     public Set<Role> getRoles()
     {
         return this.roles;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void receiveContent(final Content content)
     {
@@ -137,7 +134,6 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public void sendContent(final Content content, final Duration delay)
     {
@@ -163,35 +159,30 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
         return this.id;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getName()
     {
         return this.name;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getLocationDescription()
     {
         return this.locationDescription;
     }
 
-    /** {@inheritDoc} */
     @Override
     public TradeMessageStoreInterface getMessageStore()
     {
         return this.messageStore;
     }
 
-    /** {@inheritDoc} */
     @Override
     public SupplyChainModelInterface getModel()
     {
         return this.model;
     }
 
-    /** {@inheritDoc} */
     @Override
     public DirectedPoint2d getLocation()
     {
@@ -204,21 +195,18 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
         this.bounds = bounds;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Bounds2d getBounds()
     {
         return this.bounds;
     }
 
-    /** {@inheritDoc} */
     @Override
     public int hashCode()
     {
         return Objects.hash(this.id);
     }
 
-    /** {@inheritDoc} */
     @Override
     @SuppressWarnings("checkstyle:needbraces")
     public boolean equals(final Object obj)
@@ -233,7 +221,6 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
         return Objects.equals(this.id, other.id);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {

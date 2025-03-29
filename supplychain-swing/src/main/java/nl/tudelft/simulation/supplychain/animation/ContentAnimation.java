@@ -120,14 +120,12 @@ public class ContentAnimation implements Locatable, Serializable
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public OrientedPoint2d getLocation() throws RemoteException
     {
         return this.linearInterpolation.getLocation(this.simulator.getSimulatorTime().si);
     }
 
-    /** {@inheritDoc} */
     @Override
     public Bounds3d getBounds() throws RemoteException
     {

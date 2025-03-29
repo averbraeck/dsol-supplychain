@@ -72,7 +72,6 @@ public class DemoYP extends YellowPage
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public Bounds3d getBounds()
     {

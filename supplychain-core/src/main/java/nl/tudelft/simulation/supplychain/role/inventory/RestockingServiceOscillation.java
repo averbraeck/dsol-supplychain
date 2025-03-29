@@ -44,7 +44,6 @@ public class RestockingServiceOscillation extends RestockingServiceFixed
         this.oscillationMargin = overReactionMargin;
     }
 
-    /** {@inheritDoc} */
     @Override
     protected void checkInventoryLevel()
     {

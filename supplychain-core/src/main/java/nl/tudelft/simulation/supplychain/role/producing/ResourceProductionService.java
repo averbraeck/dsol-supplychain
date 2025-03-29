@@ -109,7 +109,6 @@ public class ResourceProductionService extends ProductionService
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public Duration getExpectedProductionDuration(final ProductionOrder productionOrder)
     {

@@ -30,7 +30,6 @@ public class ProductionOrderPolicy extends SupplyChainPolicy<ProductionOrder>
         this.producingRole = owner;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean handleContent(final ProductionOrder productionOrder)
     {

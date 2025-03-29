@@ -159,21 +159,18 @@ public class Product implements Serializable
         this.unitMarketPrice = unitMarketPrice;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {
         return this.name;
     }
 
-    /** {@inheritDoc} */
     @Override
     public int hashCode()
     {
         return Objects.hash(this.name, this.sku);
     }
 
-    /** {@inheritDoc} */
     @Override
     @SuppressWarnings("checkstyle:needbraces")
     public boolean equals(final Object obj)

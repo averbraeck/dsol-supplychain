@@ -60,7 +60,6 @@ public abstract class ContentReceiver implements Identifiable, Serializable
      */
     public abstract <C extends Content> void receiveContent(C content, ContentPolicy<C> contentPolicy);
 
-    /** {@inheritDoc} */
     @Override
     public String getId()
     {

@@ -57,28 +57,24 @@ public class Payment extends TradeMessage
         return this.bill;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {
         return super.toString() + ", for " + this.getBill().toString();
     }
 
-    /** {@inheritDoc} */
     @Override
     public Product getProduct()
     {
         return this.bill.getProduct();
     }
 
-    /** {@inheritDoc} */
     @Override
     public FinancingActor getSender()
     {
         return (FinancingActor) super.getSender();
     }
 
-    /** {@inheritDoc} */
     @Override
     public FinancingActor getReceiver()
     {

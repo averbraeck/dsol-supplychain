@@ -70,7 +70,6 @@ public class YellowPageAnswerPolicy extends SupplyChainPolicy<YellowPageAnswer>
         this.cutoffDuration = cutoffDuration;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean handleContent(final YellowPageAnswer ypAnswer)
     {

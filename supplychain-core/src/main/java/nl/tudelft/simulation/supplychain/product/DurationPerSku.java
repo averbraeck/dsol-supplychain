@@ -57,14 +57,12 @@ public class DurationPerSku implements Serializable
         return this.duration;
     }
 
-    /** {@inheritDoc} */
     @Override
     public int hashCode()
     {
         return Objects.hash(this.duration, this.sku);
     }
 
-    /** {@inheritDoc} */
     @Override
     @SuppressWarnings("checkstyle:needbraces")
     public boolean equals(final Object obj)
@@ -79,7 +77,6 @@ public class DurationPerSku implements Serializable
         return Objects.equals(this.duration, other.duration) && Objects.equals(this.sku, other.sku);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {

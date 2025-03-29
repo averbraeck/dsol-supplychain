@@ -28,7 +28,6 @@ public class SCClockPanel extends ClockPanel.TimeDoubleUnit
         super(simulator);
     }
 
-    /** {@inheritDoc} */
     @Override
     protected String formatSimulationTime(final Duration simulationTime)
     {

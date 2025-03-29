@@ -55,7 +55,6 @@ public class MTSMTOModel extends AbstractDSOLModel<Duration, SupplyChainAnimator
         // We don't do anything to prevent state-based replications.
     }
 
-    /** {@inheritDoc} */
     @Override
     public void constructModel()
     {
@@ -164,7 +163,6 @@ public class MTSMTOModel extends AbstractDSOLModel<Duration, SupplyChainAnimator
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public Serializable getSourceId()
     {

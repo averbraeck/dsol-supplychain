@@ -81,14 +81,12 @@ public abstract class Content implements Serializable
         return this.uniqueId;
     }
 
-    /** {@inheritDoc} */
     @Override
     public int hashCode()
     {
         return Objects.hash(this.receiver, this.sender, this.timestamp, this.uniqueId);
     }
 
-    /** {@inheritDoc} */
     @Override
     @SuppressWarnings("checkstyle:needbraces")
     public boolean equals(final Object obj)

@@ -144,7 +144,6 @@ public class Quote extends TradeMessage
         return this.transportOption;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {

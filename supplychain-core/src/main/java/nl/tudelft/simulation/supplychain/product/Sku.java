@@ -73,21 +73,18 @@ public class Sku implements Serializable
         return this.name;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {
         return this.name;
     }
 
-    /** {@inheritDoc} */
     @Override
     public int hashCode()
     {
         return Objects.hash(this.name);
     }
 
-    /** {@inheritDoc} */
     @Override
     @SuppressWarnings("checkstyle:needbraces")
     public boolean equals(final Object obj)

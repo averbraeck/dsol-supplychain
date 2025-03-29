@@ -32,7 +32,6 @@ public class DemoContentAnimator extends ContentAnimator
         super(simulator);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void notify(EventInterface event) throws RemoteException
     {

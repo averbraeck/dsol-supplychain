@@ -119,7 +119,6 @@ public class DemandGenerationRole extends Role
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getId()
     {
@@ -142,7 +141,6 @@ public class DemandGenerationRole extends Role
         this.administrativeDelay = administrativeDelay;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {

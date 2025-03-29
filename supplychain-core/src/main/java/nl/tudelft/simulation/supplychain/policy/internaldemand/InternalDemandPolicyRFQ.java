@@ -101,7 +101,6 @@ public class InternalDemandPolicyRFQ extends InternalDemandPolicy
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean handleContent(final InternalDemand internalDemand)
     {

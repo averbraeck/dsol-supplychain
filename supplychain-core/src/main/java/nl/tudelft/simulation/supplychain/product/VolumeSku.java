@@ -62,7 +62,6 @@ public class VolumeSku extends Sku
         return Volume.instantiateSI(this.volumeM3);
     }
 
-    /** {@inheritDoc} */
     @Override
     public int hashCode()
     {
@@ -72,7 +71,6 @@ public class VolumeSku extends Sku
         return result;
     }
 
-    /** {@inheritDoc} */
     @Override
     @SuppressWarnings("checkstyle:needbraces")
     public boolean equals(final Object obj)

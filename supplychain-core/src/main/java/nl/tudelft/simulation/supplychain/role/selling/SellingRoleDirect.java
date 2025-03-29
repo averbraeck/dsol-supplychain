@@ -32,7 +32,6 @@ public class SellingRoleDirect extends SellingRole
         setMessagePolicy(paymentPolicy);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getId()
     {

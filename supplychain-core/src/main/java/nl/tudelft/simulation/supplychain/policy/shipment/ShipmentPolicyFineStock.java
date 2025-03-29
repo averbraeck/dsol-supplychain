@@ -49,7 +49,6 @@ public class ShipmentPolicyFineStock extends ShipmentPolicyStock
         this.fixedFinePerDay = fixedFinePerDay;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean handleContent(final Shipment shipment)
     {

@@ -53,7 +53,6 @@ public abstract class ContentPolicy<C extends Content> implements Identifiable, 
      */
     public abstract boolean handleContent(C content);
 
-    /** {@inheritDoc} */
     @Override
     public String getId()
     {

@@ -35,7 +35,6 @@ public class MessageAdapter implements JsonSerializer<Message>, JsonDeserializer
         this.model = model;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Message deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context)
             throws JsonParseException
@@ -54,7 +53,6 @@ public class MessageAdapter implements JsonSerializer<Message>, JsonDeserializer
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public JsonElement serialize(final Message src, final Type typeOfSrc, final JsonSerializationContext context)
     {

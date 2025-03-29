@@ -46,7 +46,6 @@ public class ContentAnimator implements EventListener
         sca.addListener(this, Actor.SEND_MESSAGE_EVENT);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void notify(final Event event) throws RemoteException
     {

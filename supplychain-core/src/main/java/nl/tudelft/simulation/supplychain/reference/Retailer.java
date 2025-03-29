@@ -120,7 +120,6 @@ public class Retailer extends SupplyChainActor implements Serializable
         this.inventoryRole = inventoryRole;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void receiveMessage(final Message message)
     {

@@ -49,7 +49,6 @@ public abstract class Order extends TradeMessage
         this.transportOption = transportOption;
     }
 
-    /** {@inheritDoc} */
     @Override
     public abstract Product getProduct();
 
@@ -87,21 +86,18 @@ public abstract class Order extends TradeMessage
         return this.transportOption;
     }
 
-    /** {@inheritDoc} */
     @Override
     public BuyingActor getSender()
     {
         return (BuyingActor) super.getSender();
     }
 
-    /** {@inheritDoc} */
     @Override
     public SellingActor getReceiver()
     {
         return (SellingActor) super.getReceiver();
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {

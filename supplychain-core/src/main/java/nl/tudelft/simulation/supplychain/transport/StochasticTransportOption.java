@@ -42,7 +42,6 @@ public class StochasticTransportOption implements Identifiable, Serializable
         this.id = id;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getId()
     {
@@ -83,14 +82,12 @@ public class StochasticTransportOption implements Identifiable, Serializable
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public int hashCode()
     {
         return Objects.hash(this.id, this.transportSteps);
     }
 
-    /** {@inheritDoc} */
     @Override
     @SuppressWarnings("checkstyle:needbraces")
     public boolean equals(final Object obj)
@@ -105,7 +102,6 @@ public class StochasticTransportOption implements Identifiable, Serializable
         return Objects.equals(this.id, other.id) && Objects.equals(this.transportSteps, other.transportSteps);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {

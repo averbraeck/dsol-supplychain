@@ -30,56 +30,48 @@ public class EmptyTradeMessageStore implements TradeMessageStoreInterface
         // nothing to do.
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setOwner(final Actor owner)
     {
         this.owner = owner;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Actor getOwner()
     {
         return this.owner;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void addMessage(final TradeMessage message, final boolean sent)
     {
         // do nothing
     }
 
-    /** {@inheritDoc} */
     @Override
     public void removeMessage(final TradeMessage message, final boolean sent)
     {
         // do nothing
     }
 
-    /** {@inheritDoc} */
     @Override
     public void removeSentReceivedMessage(final TradeMessage message, final boolean sent)
     {
         // do nothing
     }
 
-    /** {@inheritDoc} */
     @Override
     public void removeAllMessages(final long internalDemandId)
     {
         // do nothing
     }
 
-    /** {@inheritDoc} */
     @Override
     public <T extends TradeMessage> List<T> getMessageList(final long internalDemandId, final Class<T> messageClass)
     {
         return List.of();
     }
 
-    /** {@inheritDoc} */
     @Override
     public <T extends TradeMessage> List<T> getMessageList(final long internalDemandId, final Class<T> messageClass,
             final boolean sent)

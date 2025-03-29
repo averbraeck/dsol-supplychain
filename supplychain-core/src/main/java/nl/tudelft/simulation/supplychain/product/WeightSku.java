@@ -65,7 +65,6 @@ public class WeightSku extends Sku
         return Mass.instantiateSI(this.weightKg);
     }
 
-    /** {@inheritDoc} */
     @Override
     public int hashCode()
     {
@@ -75,7 +74,6 @@ public class WeightSku extends Sku
         return result;
     }
 
-    /** {@inheritDoc} */
     @Override
     @SuppressWarnings("checkstyle:needbraces")
     public boolean equals(final Object obj)

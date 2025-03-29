@@ -120,7 +120,6 @@ public class DemoSupplier extends Supplier
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public Bounds3d getBounds()
     {

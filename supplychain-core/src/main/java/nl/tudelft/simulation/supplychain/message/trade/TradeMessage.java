@@ -62,7 +62,6 @@ public abstract class TradeMessage extends Message
         return this.internalDemandId;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {

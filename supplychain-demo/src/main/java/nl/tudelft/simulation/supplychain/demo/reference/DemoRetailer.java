@@ -177,7 +177,6 @@ public class DemoRetailer extends Retailer
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public Bounds3d getBounds()
     {

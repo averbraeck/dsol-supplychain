@@ -50,7 +50,6 @@ public class ProductionOrder extends TradeMessage
         this.amount = amount;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Product getProduct()
     {
@@ -89,7 +88,6 @@ public class ProductionOrder extends TradeMessage
         this.materialCost = this.materialCost.plus(cost);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {

@@ -24,7 +24,6 @@ public class TestModel extends SupplyChainModel
         super(simulator);
     }
 
-    /** {@inheritDoc} */
     @Override
     public Length calculateDistance(final Point<?> loc1, final Point<?> loc2)
     {
@@ -33,7 +32,6 @@ public class TestModel extends SupplyChainModel
         return Length.instantiateSI(Math.sqrt(dx * dx + dy * dy));
     }
 
-    /** {@inheritDoc} */
     @Override
     public void constructModel() throws SimRuntimeException
     {

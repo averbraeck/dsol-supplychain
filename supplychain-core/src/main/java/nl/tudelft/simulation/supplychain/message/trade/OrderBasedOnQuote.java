@@ -40,21 +40,18 @@ public class OrderBasedOnQuote extends Order
         this.quote = quote;
     }
 
-    /** {@inheritDoc} */
     @Override
     public double getAmount()
     {
         return this.quote.getAmount();
     }
 
-    /** {@inheritDoc} */
     @Override
     public Money getPrice()
     {
         return this.quote.getPrice();
     }
 
-    /** {@inheritDoc} */
     @Override
     public Product getProduct()
     {

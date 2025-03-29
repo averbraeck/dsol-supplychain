@@ -57,7 +57,6 @@ public class RequestForQuote extends TradeMessage
         return this.internalDemand;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Product getProduct()
     {
@@ -109,7 +108,6 @@ public class RequestForQuote extends TradeMessage
         return this.cutoffDate;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {

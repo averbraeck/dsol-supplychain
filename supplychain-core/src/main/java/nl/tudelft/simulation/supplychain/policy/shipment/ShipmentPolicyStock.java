@@ -32,7 +32,6 @@ public class ShipmentPolicyStock extends ShipmentPolicy
         this.stock = stock;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean handleContent(final Shipment shipment)
     {

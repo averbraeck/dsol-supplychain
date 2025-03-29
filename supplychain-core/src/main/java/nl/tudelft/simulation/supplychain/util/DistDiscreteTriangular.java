@@ -34,14 +34,12 @@ public class DistDiscreteTriangular extends DistDiscrete
         this.distTriangular = new DistTriangular(stream, min, mode, max);
     }
 
-    /** {@inheritDoc} */
     @Override
     public long draw()
     {
         return Math.round(this.distTriangular.draw());
     }
 
-    /** {@inheritDoc} */
     @Override
     public double probability(final long observation)
     {
@@ -49,7 +47,6 @@ public class DistDiscreteTriangular extends DistDiscrete
                 - this.distTriangular.getProbabilityDensity(observation - 0.5);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {

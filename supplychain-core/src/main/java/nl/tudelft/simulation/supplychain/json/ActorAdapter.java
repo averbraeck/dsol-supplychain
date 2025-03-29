@@ -36,7 +36,6 @@ public class ActorAdapter implements JsonSerializer<Actor>, JsonDeserializer<Act
         this.model = model;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Actor deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context)
             throws JsonParseException
@@ -51,7 +50,6 @@ public class ActorAdapter implements JsonSerializer<Actor>, JsonDeserializer<Act
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public JsonElement serialize(final Actor src, final Type typeOfSrc, final JsonSerializationContext context)
     {

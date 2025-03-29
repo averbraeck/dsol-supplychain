@@ -53,14 +53,12 @@ public abstract class SupplyChainModel extends AbstractDsolModel<Duration, Suppl
         super(simulator);
     }
 
-    /** {@inheritDoc} */
     @Override
     public long getUniqueMessageId()
     {
         return this.uniqueMessageId.getAndIncrement();
     }
 
-    /** {@inheritDoc} */
     @Override
     public void registerActor(final Actor actor) throws ActorAlreadyDefinedException
     {
@@ -70,7 +68,6 @@ public abstract class SupplyChainModel extends AbstractDsolModel<Duration, Suppl
         this.actorMap.put(actor.getId(), actor);
     }
 
-    /** {@inheritDoc} */
     @Override
     public Actor getActor(final String id) throws ActorNotFoundException
     {

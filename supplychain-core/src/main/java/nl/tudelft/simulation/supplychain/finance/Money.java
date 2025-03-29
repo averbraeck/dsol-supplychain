@@ -162,28 +162,24 @@ public class Money extends Number implements Serializable
         return this.amount >= other.getAmount();
     }
 
-    /** {@inheritDoc} */
     @Override
     public int intValue()
     {
         return (int) Math.round(this.amount);
     }
 
-    /** {@inheritDoc} */
     @Override
     public long longValue()
     {
         return Math.round(this.amount);
     }
 
-    /** {@inheritDoc} */
     @Override
     public float floatValue()
     {
         return (float) this.amount;
     }
 
-    /** {@inheritDoc} */
     @Override
     public double doubleValue()
     {

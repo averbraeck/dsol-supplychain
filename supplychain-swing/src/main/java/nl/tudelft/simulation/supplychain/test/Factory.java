@@ -105,7 +105,6 @@ public class Factory extends Supplier
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public Bounds3d getBounds()
     {

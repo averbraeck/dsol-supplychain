@@ -49,7 +49,6 @@ public class RestockingServiceFixed extends AbstractRestockingService
         this.includeClaims = includeClaims;
     }
 
-    /** {@inheritDoc} */
     @Override
     protected void checkInventoryLevel()
     {

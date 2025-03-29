@@ -54,21 +54,18 @@ public class OrderStandalone extends Order
         this.price = price;
     }
 
-    /** {@inheritDoc} */
     @Override
     public double getAmount()
     {
         return this.amount;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Money getPrice()
     {
         return this.price;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Product getProduct()
     {

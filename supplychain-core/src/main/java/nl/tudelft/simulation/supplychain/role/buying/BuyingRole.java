@@ -40,7 +40,6 @@ public abstract class BuyingRole extends Role
         super("buying", owner, messageReceiver);
     }
 
-    /** {@inheritDoc} */
     @Override
     public BuyingActor getActor()
     {

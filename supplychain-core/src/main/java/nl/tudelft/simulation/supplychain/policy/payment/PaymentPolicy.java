@@ -32,7 +32,6 @@ public class PaymentPolicy extends SupplyChainPolicy<Payment>
         this.bankAccount = bankAccount;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean handleContent(final Payment payment)
     {

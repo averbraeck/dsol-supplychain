@@ -37,21 +37,18 @@ public class SupplyChainSimulator extends DevsSimulator<Duration> implements Sup
         this.absStartTime = absStartTime;
     }
 
-    /** {@inheritDoc} */
     @Override
     public ContextInterface getContext()
     {
         return getReplication().getContext();
     }
 
-    /** {@inheritDoc} */
     @Override
     public Time getAbsStartTime()
     {
         return this.absStartTime;
     }
 
-    /** {@inheritDoc} */
     @Override
     public SupplyChainModelInterface getModel()
     {

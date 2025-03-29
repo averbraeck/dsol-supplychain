@@ -191,7 +191,6 @@ public class DemoManufacturer extends Manufacturer
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public Bounds3d getBounds()
     {

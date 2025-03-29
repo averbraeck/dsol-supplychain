@@ -36,7 +36,6 @@ public class OrderPolicyNoStock extends OrderPolicy<Order>
         super("OrderPolicyNoStock", owner, stock, Order.class);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean handleContent(final Order order)
     {

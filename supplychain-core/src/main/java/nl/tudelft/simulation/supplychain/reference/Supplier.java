@@ -95,7 +95,6 @@ public class Supplier extends SupplyChainActor implements Serializable
         this.inventoryRole = inventoryRole;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void receiveMessage(final Message message)
     {

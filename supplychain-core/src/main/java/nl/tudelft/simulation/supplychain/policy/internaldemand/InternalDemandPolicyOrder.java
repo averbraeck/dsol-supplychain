@@ -74,7 +74,6 @@ public class InternalDemandPolicyOrder extends InternalDemandPolicy
         this.suppliers.put(product, new SupplierRecord(supplier, unitPrice));
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean handleContent(final InternalDemand internalDemand)
     {
@@ -107,7 +106,6 @@ public class InternalDemandPolicyOrder extends InternalDemandPolicy
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public BuyingRole getRole()
     {

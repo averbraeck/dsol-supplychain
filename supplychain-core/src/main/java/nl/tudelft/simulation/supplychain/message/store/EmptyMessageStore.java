@@ -28,35 +28,30 @@ public class EmptyMessageStore implements MessageStore
         // nothing to do.
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setOwner(final Actor owner)
     {
         this.owner = owner;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Actor getOwner()
     {
         return this.owner;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void addMessage(final Message message, final boolean sent)
     {
         // do nothing
     }
 
-    /** {@inheritDoc} */
     @Override
     public void removeMessage(final Message message, final boolean sent)
     {
         // do nothing
     }
 
-    /** {@inheritDoc} */
     @Override
     public void removeSentReceivedMessage(final Message message, final boolean sent)
     {

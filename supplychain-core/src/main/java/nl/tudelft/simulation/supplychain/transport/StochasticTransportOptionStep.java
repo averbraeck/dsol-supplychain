@@ -76,7 +76,6 @@ public class StochasticTransportOptionStep implements Identifiable, Serializable
         this.transportMode = transportMode;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getId()
     {
@@ -230,14 +229,12 @@ public class StochasticTransportOptionStep implements Identifiable, Serializable
         this.estimatedTransportCostsPerKm.put(sku, estimatedTransportCostPerKm);
     }
 
-    /** {@inheritDoc} */
     @Override
     public int hashCode()
     {
         return Objects.hash(this.destination, this.id, this.origin, this.transportMode);
     }
 
-    /** {@inheritDoc} */
     @Override
     @SuppressWarnings("checkstyle:needbraces")
     public boolean equals(final Object obj)
@@ -253,7 +250,6 @@ public class StochasticTransportOptionStep implements Identifiable, Serializable
                 && Objects.equals(this.origin, other.origin) && Objects.equals(this.transportMode, other.transportMode);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {

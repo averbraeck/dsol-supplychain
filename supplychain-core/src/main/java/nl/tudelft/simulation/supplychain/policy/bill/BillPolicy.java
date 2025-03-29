@@ -66,7 +66,6 @@ public class BillPolicy extends SupplyChainPolicy<Bill>
         this(owner, bankAccount, PaymentPolicyEnum.PAYMENT_ON_TIME, null);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean handleContent(final Bill bill)
     {

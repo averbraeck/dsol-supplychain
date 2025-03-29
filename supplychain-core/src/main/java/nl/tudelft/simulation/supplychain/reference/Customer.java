@@ -47,14 +47,12 @@ public class Customer extends SupplyChainActor implements BuyingActor, DemandGen
         super(id, name, model, location, locationDescription, messageStore);
     }
 
-    /** {@inheritDoc} */
     @Override
     public BuyingRole getBuyingRole()
     {
         return this.buyingRole;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setBuyingRole(final BuyingRole buyingRole)
     {
@@ -85,7 +83,6 @@ public class Customer extends SupplyChainActor implements BuyingActor, DemandGen
         this.demandGenerationRole = demandGenerationRole;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void checkNecessaryRoles()
     {

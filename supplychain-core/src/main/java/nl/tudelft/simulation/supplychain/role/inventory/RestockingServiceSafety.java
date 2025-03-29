@@ -43,7 +43,6 @@ public class RestockingServiceSafety extends RestockingServiceFixed
         this.safetyAmount = safetyAmount;
     }
 
-    /** {@inheritDoc} */
     @Override
     protected void checkInventoryLevel()
     {

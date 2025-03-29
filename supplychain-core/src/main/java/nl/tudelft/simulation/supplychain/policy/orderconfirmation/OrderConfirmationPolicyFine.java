@@ -50,14 +50,12 @@ public class OrderConfirmationPolicyFine extends OrderConfirmationPolicy
         this.fixedFine = fixedFine;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getId()
     {
         return "OrderConfirmationPolicyFine";
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean handleContent(final OrderConfirmation orderConfirmation)
     {
