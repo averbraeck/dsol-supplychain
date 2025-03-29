@@ -25,7 +25,7 @@ import nl.tudelft.simulation.supplychain.transport.TransportOptionProvider;
  * supply chain actor. The most simple version that is implemented here, sends out RFQs to <b>all </b> the actors that are
  * reported back inside the YellowPageAnswer.
  * <p>
- * Copyright (c) 2003-2023 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
+ * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>

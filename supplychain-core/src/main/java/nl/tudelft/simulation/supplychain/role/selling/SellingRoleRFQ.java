@@ -9,7 +9,7 @@ import nl.tudelft.simulation.supplychain.policy.rfq.RequestForQuotePolicy;
  * on the type of handling by the seller, several other messages can be handled as well. This version of the role handles the
  * seling of a product based on a RFQ-Quote process.
  * <p>
- * Copyright (c) 2003-2023 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
+ * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>

@@ -13,7 +13,7 @@ import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
  * JsonMessageFactory allows serializing and deserializing of any Message using the GSON library. This class can be extended to
  * add more type adapters. The Factory uses the JsonActorFactory to (de)serialize the fields.
  * <p>
- * Copyright (c) 2023-2023 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
+ * Copyright (c) 2023-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>

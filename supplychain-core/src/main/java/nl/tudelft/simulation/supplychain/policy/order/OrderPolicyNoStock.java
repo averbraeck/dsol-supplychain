@@ -16,7 +16,7 @@ import nl.tudelft.simulation.supplychain.message.trade.OrderConfirmation;
 /**
  * An OrderHandler that purchases the goods when receiving an order (no stock).
  * <p>
- * Copyright (c) 2003-2023 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
+ * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>

@@ -11,7 +11,7 @@ import nl.tudelft.simulation.supplychain.transport.TransportOption;
  * The RequestForQuote is a question to provide the receiver with a certain amount of a certain product at a certain date. It
  * will be answered with a Quote.
  * <p>
- * Copyright (c) 2003-2023 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
+ * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>

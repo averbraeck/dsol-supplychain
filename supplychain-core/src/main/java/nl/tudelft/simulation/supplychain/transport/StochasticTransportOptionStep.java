@@ -20,7 +20,7 @@ import nl.tudelft.simulation.supplychain.product.Sku;
  * destination Node, the mode of transport between origin and destination, and the stochastic costs associated with loading,
  * unloading (including storage costs), and transport per km.
  * <p>
- * Copyright (c) 2022-2023 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
+ * Copyright (c) 2022-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>

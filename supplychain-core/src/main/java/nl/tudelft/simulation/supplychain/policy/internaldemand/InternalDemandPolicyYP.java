@@ -13,7 +13,7 @@ import nl.tudelft.simulation.supplychain.message.trade.YellowPageRequest;
  * The InternalDemandPolicyYP is a simple implementation of the business logic to handle a request for new products through a
  * yellow page request. When receiving the internal demand, it just creates an YP request, without a given time delay.
  * <p>
- * Copyright (c) 2003-2023 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
+ * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>

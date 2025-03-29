@@ -18,7 +18,7 @@ import nl.tudelft.simulation.supplychain.message.trade.OrderConfirmation;
  * away, and waits till the delivery date (should be minus the expected transportation time), picks the order, and ships it out
  * as a Shipment. When the order is not available: wait one day and try again till it is available.
  * <p>
- * Copyright (c) 2003-2023 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
+ * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>

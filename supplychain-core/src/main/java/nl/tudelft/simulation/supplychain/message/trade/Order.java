@@ -13,7 +13,7 @@ import nl.tudelft.simulation.supplychain.transport.TransportOption;
  * "amount", "date" and "price" make up the order. Several implementations of the order can be made, i.e. a version that is
  * based on a Quote, or a version where the Order is the start of the entire chain.
  * <p>
- * Copyright (c) 2003-2023 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
+ * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>

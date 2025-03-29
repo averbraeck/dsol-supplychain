@@ -23,7 +23,7 @@ import nl.tudelft.simulation.supplychain.product.Sku;
  * another port, and trucking to the final destination. Each of the modes has a different speed, and each of the transfers will
  * take time (and possibly cost money),
  * <p>
- * Copyright (c) 2022-2023 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
+ * Copyright (c) 2022-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>

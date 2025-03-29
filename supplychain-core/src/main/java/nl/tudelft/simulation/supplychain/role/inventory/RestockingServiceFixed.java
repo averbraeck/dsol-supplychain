@@ -10,7 +10,7 @@ import nl.tudelft.simulation.supplychain.product.Product;
  * This RestockingService either orders fixed amounts of goods at the times indicated by the 'checkInterval', or supplements the
  * number of products till a fixed amount is reached.
  * <p>
- * Copyright (c) 2003-2023 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
+ * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>

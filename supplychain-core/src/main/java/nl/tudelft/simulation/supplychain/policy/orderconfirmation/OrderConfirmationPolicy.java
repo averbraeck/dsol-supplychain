@@ -14,7 +14,7 @@ import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
  * option, e.g. to the next Quote when there were quotes. It is also possible to redo the entire ordering process from scratch.
  * The latter strategy is implemented in this version of the policy.
  * <p>
- * Copyright (c) 2003-2023 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
+ * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>

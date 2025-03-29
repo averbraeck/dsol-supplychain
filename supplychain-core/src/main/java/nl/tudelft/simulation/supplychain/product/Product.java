@@ -17,7 +17,7 @@ import nl.tudelft.simulation.supplychain.finance.MoneyUnit;
  * product can not be manufactured in the simulation, in other words, it is a raw material that has always to be acquired from a
  * supplier.
  * <p>
- * Copyright (c) 2003-2023 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
+ * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>

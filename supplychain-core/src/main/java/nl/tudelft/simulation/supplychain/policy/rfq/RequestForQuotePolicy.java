@@ -18,7 +18,7 @@ import nl.tudelft.simulation.supplychain.product.Product;
  * version answers yes if the product is on stock or ordered, and bases the price on the average costs of the items on stock,
  * after adding a fixed, but changeable, profit margin. The answer is no if the product is not on stock, nor ordered.
  * <p>
- * Copyright (c) 2003-2023 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
+ * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
