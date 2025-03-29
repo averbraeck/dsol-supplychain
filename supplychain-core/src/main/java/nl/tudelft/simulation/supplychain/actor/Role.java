@@ -8,8 +8,8 @@ import java.util.Objects;
 import org.djutils.base.Identifiable;
 import org.djutils.exceptions.Throw;
 
+import nl.tudelft.simulation.supplychain.content.Message;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.message.Message;
 import nl.tudelft.simulation.supplychain.message.policy.MessagePolicy;
 import nl.tudelft.simulation.supplychain.message.receiver.MessageReceiver;
 

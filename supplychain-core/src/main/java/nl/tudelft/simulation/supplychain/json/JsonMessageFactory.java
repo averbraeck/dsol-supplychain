@@ -6,8 +6,8 @@ import java.util.Map;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import nl.tudelft.simulation.supplychain.content.Message;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
-import nl.tudelft.simulation.supplychain.message.Message;
 
 /**
  * JsonMessageFactory allows serializing and deserializing of any Message using the GSON library. This class can be extended to

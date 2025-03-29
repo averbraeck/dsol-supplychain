@@ -1,7 +1,7 @@
 package nl.tudelft.simulation.supplychain.message.trade;
 
 import nl.tudelft.simulation.supplychain.actor.Actor;
-import nl.tudelft.simulation.supplychain.message.Message;
+import nl.tudelft.simulation.supplychain.content.Message;
 import nl.tudelft.simulation.supplychain.product.Product;
 
 /**

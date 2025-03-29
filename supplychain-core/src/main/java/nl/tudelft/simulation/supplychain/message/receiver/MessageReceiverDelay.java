@@ -3,7 +3,7 @@ package nl.tudelft.simulation.supplychain.message.receiver;
 import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
-import nl.tudelft.simulation.supplychain.message.Message;
+import nl.tudelft.simulation.supplychain.content.Message;
 import nl.tudelft.simulation.supplychain.message.policy.MessagePolicy;
 
 /**

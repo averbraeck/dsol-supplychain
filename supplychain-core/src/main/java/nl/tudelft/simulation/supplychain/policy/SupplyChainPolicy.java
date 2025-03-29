@@ -9,9 +9,9 @@ import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.actor.Role;
+import nl.tudelft.simulation.supplychain.content.Message;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.message.Message;
 import nl.tudelft.simulation.supplychain.message.policy.MessagePolicy;
 import nl.tudelft.simulation.supplychain.message.trade.InternalDemand;
 import nl.tudelft.simulation.supplychain.message.trade.TradeMessage;

@@ -3,7 +3,7 @@ package nl.tudelft.supplychain.message;
 import org.djunits.value.vdouble.scalar.Duration;
 
 import nl.tudelft.simulation.supplychain.actor.Actor;
-import nl.tudelft.simulation.supplychain.message.Message;
+import nl.tudelft.simulation.supplychain.content.Message;
 
 /**
  * TestMessageFields is a test message class with several fields.

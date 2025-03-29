@@ -3,7 +3,7 @@ package nl.tudelft.simulation.supplychain.message.store;
 import java.io.Serializable;
 
 import nl.tudelft.simulation.supplychain.actor.Actor;
-import nl.tudelft.simulation.supplychain.message.Message;
+import nl.tudelft.simulation.supplychain.content.Message;
 
 /**
  * A MessageStore is taking care of storing messages for later use, for instance for matching purposes. It acts as an ERP or

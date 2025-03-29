@@ -21,8 +21,8 @@ import org.djutils.metadata.MetaData;
 import org.djutils.metadata.ObjectDescriptor;
 import org.pmw.tinylog.Logger;
 
+import nl.tudelft.simulation.supplychain.content.Message;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
-import nl.tudelft.simulation.supplychain.message.Message;
 import nl.tudelft.simulation.supplychain.message.store.trade.TradeMessageStoreInterface;
 import nl.tudelft.simulation.supplychain.message.trade.TradeMessage;
 

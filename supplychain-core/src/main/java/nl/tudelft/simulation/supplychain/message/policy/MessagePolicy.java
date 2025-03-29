@@ -6,7 +6,7 @@ import org.djutils.base.Identifiable;
 import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.message.Message;
+import nl.tudelft.simulation.supplychain.content.Message;
 
 /**
  * An abstract definition of a message policy with a role as the owner.

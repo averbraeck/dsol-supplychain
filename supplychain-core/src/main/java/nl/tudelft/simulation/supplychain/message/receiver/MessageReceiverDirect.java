@@ -1,6 +1,6 @@
 package nl.tudelft.simulation.supplychain.message.receiver;
 
-import nl.tudelft.simulation.supplychain.message.Message;
+import nl.tudelft.simulation.supplychain.content.Message;
 import nl.tudelft.simulation.supplychain.message.policy.MessagePolicy;
 
 /**

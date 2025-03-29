@@ -1,6 +1,7 @@
 package nl.tudelft.simulation.supplychain.actor;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
@@ -10,12 +11,11 @@ import org.djutils.draw.bounds.Bounds3d;
 import org.djutils.draw.point.DirectedPoint2d;
 import org.djutils.draw.point.Point2d;
 import org.djutils.event.EventProducer;
-import org.djutils.immutablecollections.ImmutableSet;
 
 import nl.tudelft.simulation.dsol.animation.Locatable;
+import nl.tudelft.simulation.supplychain.content.Message;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.message.Message;
 import nl.tudelft.simulation.supplychain.message.store.trade.TradeMessageStoreInterface;
 
 /**
@@ -31,29 +31,29 @@ import nl.tudelft.simulation.supplychain.message.store.trade.TradeMessageStoreIn
 public interface Actor extends EventProducer, Locatable, Identifiable, Serializable
 {
     /**
-     * Add a role to the actor.
-     * @param role Role; the role to add to the actor
+     * Add a role to the actor. If the role already exists, the current role replaces the earlier role.
+     * @param role the role to add to the actor
      */
     void addRole(Role role);
 
     /**
      * Return the set of roles for this actor.
-     * @return Set&lt;roles&gt;; the roles of this actor
+     * @return the roles of this actor
      */
-    ImmutableSet<Role> getRoles();
+    Set<Role> getRoles();
 
     /**
      * Check whether the necessary roles are set before executing a role-dependent method.
      * @throws IllegalStateException when some of the roles are not set
      */
-    void checkNecessaryRoles();
+    void checkNecessaryRoleTypes();
 
     /**
-     * Receive a message from another actor, and handle it (storing or handling, depending on the MessageReceiver). When the
-     * message is not intended for this actor, a log warning is given, and the message is not processed.
-     * @param message message; the message to receive
+     * Receive content, e.g. a message, from another actor, and handle it (storing or handling, depending on the MessageReceiver). When the
+     * content is not intended for this actor, a log warning is given, and the content is not processed.
+     * @param content the content to handle
      */
-    void receiveMessage(Message message);
+    void receiveMessage(Content content);
 
     /**
      * Send a message to another actor with a delay. This method is public, so Roles, Policies, Departments, ad other

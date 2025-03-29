@@ -13,8 +13,8 @@ import org.junit.Test;
 import nl.tudelft.simulation.dsol.experiment.SingleReplication;
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
+import nl.tudelft.simulation.supplychain.content.Message;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulator;
-import nl.tudelft.simulation.supplychain.message.Message;
 import nl.tudelft.supplychain.actor.TestActor;
 import nl.tudelft.supplychain.actor.TestModel;
 

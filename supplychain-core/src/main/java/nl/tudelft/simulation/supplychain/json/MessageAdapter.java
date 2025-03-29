@@ -10,8 +10,8 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+import nl.tudelft.simulation.supplychain.content.Message;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
-import nl.tudelft.simulation.supplychain.message.Message;
 
 /**
  * Serialize and deserialize a Message (sub)class with GSON.
