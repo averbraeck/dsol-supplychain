@@ -9,7 +9,6 @@ import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 import nl.tudelft.simulation.supplychain.finance.BankAccount;
-import nl.tudelft.simulation.supplychain.finance.FixedCost;
 import nl.tudelft.simulation.supplychain.finance.Money;
 
 /**
@@ -29,7 +28,7 @@ public class FinancingRole extends Role
     private final BankAccount bankAccount;
 
     /** the fixed costs for this supply chain actor. */
-    private List<FixedCost> fixedCosts = new ArrayList<FixedCost>();
+    private List<FixedCostProcess> fixedCosts = new ArrayList<FixedCostProcess>();
 
     /**
      * Create a new FinancingRole with an attached BankAccount.
@@ -64,7 +63,7 @@ public class FinancingRole extends Role
      */
     public void addFixedCost(final String description, final Duration interval, final Money amount)
     {
-        FixedCost fixedCost = new FixedCost(this, description, interval, amount);
+        FixedCostProcess fixedCost = new FixedCostProcess(this, description, interval, amount);
         this.fixedCosts.add(fixedCost);
     }
 
@@ -81,7 +80,7 @@ public class FinancingRole extends Role
      * Return a list of the fixed cost items for this Actor.
      * @return a list of fixed costs items for this Actor.
      */
-    public List<FixedCost> getFixedCosts()
+    public List<FixedCostProcess> getFixedCosts()
     {
         return this.fixedCosts;
     }

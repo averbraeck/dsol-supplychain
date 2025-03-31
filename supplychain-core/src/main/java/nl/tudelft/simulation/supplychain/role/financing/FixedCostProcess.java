@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.finance;
+package nl.tudelft.simulation.supplychain.role.financing;
 
 import java.io.Serializable;
 
@@ -6,7 +6,7 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.dsol.formalisms.eventscheduling.SimEventInterface;
-import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
+import nl.tudelft.simulation.supplychain.finance.Money;
 
 /**
  * When a supply chain actor is created, one or more FixedCost objects can be created to book fixed costs for e.g. personnel,
@@ -18,7 +18,7 @@ import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class FixedCost implements Serializable
+public class FixedCostProcess implements Serializable
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221127L;
@@ -45,7 +45,7 @@ public class FixedCost implements Serializable
      * @param interval the interval for booking fixed cost
      * @param amount the fixed cost per interval
      */
-    public FixedCost(final FinancingRole owner, final String description, final Duration interval, final Money amount)
+    public FixedCostProcess(final FinancingRole owner, final String description, final Duration interval, final Money amount)
     {
         Throw.whenNull(owner, "owner cannot be null");
         Throw.whenNull(description, "description cannot be null");
