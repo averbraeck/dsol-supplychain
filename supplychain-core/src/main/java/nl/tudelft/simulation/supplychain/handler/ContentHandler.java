@@ -26,7 +26,7 @@ public abstract class ContentHandler<C extends Content> implements Identifiable,
     private final String id;
 
     /** the role that owns this handler. */
-    private final Role role;
+    private final Role<?> role;
 
     /** the content class for which this handler applies. */
     private final Class<C> contentClass;
@@ -37,7 +37,7 @@ public abstract class ContentHandler<C extends Content> implements Identifiable,
      * @param role the role that owns this handler
      * @param contentClass the content type that this handler can process
      */
-    public ContentHandler(final String id, final Role role, final Class<C> contentClass)
+    public ContentHandler(final String id, final Role<?> role, final Class<C> contentClass)
     {
         Throw.whenNull(id, "id cannot be null");
         Throw.whenNull(role, "role cannot be null");
@@ -64,7 +64,7 @@ public abstract class ContentHandler<C extends Content> implements Identifiable,
      * Return the role to which this handler belongs.
      * @return the role to which this handler belongs
      */
-    public Role getRole()
+    public Role<?> getRole()
     {
         return this.role;
     }

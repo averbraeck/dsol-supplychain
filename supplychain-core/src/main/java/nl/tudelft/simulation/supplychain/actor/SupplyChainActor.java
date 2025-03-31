@@ -48,7 +48,7 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
     private final SupplyChainModelInterface model;
 
     /** the roles. */
-    private Set<Role> roles = new LinkedHashSet<>();
+    private Set<Role<?>> roles = new LinkedHashSet<>();
 
     /** cached check whether all roles have been initialized with handlers and processes. */
     private boolean rolesComplete = false;
@@ -67,7 +67,7 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
             new MetaData("sent message", "sent message", new ObjectDescriptor("message", "message", Message.class)));
 
     /**
-     * Construct a new Actor.
+     * Construct a new Actor, give it a message store, and register it in the model.
      * @param id String, the unique id of the actor
      * @param name the longer name of the actor
      * @param model the model
@@ -98,14 +98,14 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
     }
 
     @Override
-    public void addRole(final Role role)
+    public void addRole(final Role<?> role)
     {
         Throw.whenNull(role, "role cannot be null");
         this.roles.add(role);
     }
 
     @Override
-    public Set<Role> getRoles()
+    public Set<Role<?>> getRoles()
     {
         return this.roles;
     }
@@ -118,7 +118,7 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
             return true;
         }
         boolean check = true;
-        for (Role role : this.roles)
+        for (Role<?> role : this.roles)
         {
             if (!role.checkHandlersProcessesComplete())
             {
@@ -152,7 +152,7 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
         else
         {
             boolean processed = false;
-            for (Role role : getRoles())
+            for (Role<?> role : getRoles())
             {
                 processed |= role.handleContent(content);
             }

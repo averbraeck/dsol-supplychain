@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.djutils.base.Identifiable;
+import org.djutils.event.LocalEventProducer;
 import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.supplychain.content.Content;
@@ -26,8 +27,9 @@ import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
+ * @param <R> the specific role
  */
-public abstract class Role implements Identifiable, Serializable
+public abstract class Role<R extends Role<R>> extends LocalEventProducer implements Identifiable, Serializable
 {
     /** */
     private static final long serialVersionUID = 20221121L;
@@ -45,7 +47,7 @@ public abstract class Role implements Identifiable, Serializable
     private final Map<Class<? extends Content>, ContentHandler<? extends Content>> contentHandlers = new LinkedHashMap<>();
 
     /** the autonomous processes for this role. */
-    private final Set<AutonomousProcess> registeredAutonomousProcesses = new LinkedHashSet<>();
+    private final Set<AutonomousProcess<R>> registeredAutonomousProcesses = new LinkedHashSet<>();
 
     /** have all necessary handlers and processes been properly allocated? */
     private boolean handlersProcessesComplete = false;
@@ -75,7 +77,7 @@ public abstract class Role implements Identifiable, Serializable
     {
         for (var process : this.registeredAutonomousProcesses)
         {
-            process.init(getSimulator());
+            process.init();
         }
     }
 
@@ -129,7 +131,7 @@ public abstract class Role implements Identifiable, Serializable
      * static set for this role to avoid creating a set every time when the method is called.
      * @return a list of classes for autonomous processes that this role should implement
      */
-    protected abstract Set<Class<? extends AutonomousProcess>> getNecessaryAutonomousProcesses();
+    protected abstract Set<Class<? extends AutonomousProcess<R>>> getNecessaryAutonomousProcesses();
 
     /**
      * Set a handler for a content type, possibly overwriting the previous content handler.
@@ -145,7 +147,7 @@ public abstract class Role implements Identifiable, Serializable
      * Set a handler for a content type, possibly overwriting the previous content handler.
      * @param process the handler to set for the implicit content type
      */
-    public void addAutonomousProcess(final AutonomousProcess process)
+    public void addAutonomousProcess(final AutonomousProcess<R> process)
     {
         Throw.whenNull(process, "process cannot be null");
         this.registeredAutonomousProcesses.add(process);
@@ -208,7 +210,7 @@ public abstract class Role implements Identifiable, Serializable
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Role other = (Role) obj;
+        Role<?> other = (Role<?>) obj;
         return Objects.equals(this.actor, other.actor) && Objects.equals(this.id, other.id);
     }
 

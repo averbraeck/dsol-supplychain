@@ -34,9 +34,9 @@ public class ContentReceiverDelay extends ContentReceiver
     }
 
     @Override
-    public <C extends Content> void receiveContent(final C content, final ContentHandler<C> contentPolicy)
+    public <C extends Content> void receiveContent(final C content, final ContentHandler<C> contentHandler)
     {
-        getRole().getActor().getSimulator().scheduleEventRel(this.delayDistribution.draw(), contentPolicy, "handleContent",
+        getRole().getActor().getSimulator().scheduleEventRel(this.delayDistribution.draw(), contentHandler, "handleContent",
                 new Object[] {content});
     }
 
@@ -50,7 +50,7 @@ public class ContentReceiverDelay extends ContentReceiver
     }
 
     /**
-     * Set a new delay distribution for handling contents.
+     * Set a new delay distribution for handling content items.
      * @param delayDistribution the new delay distribution
      */
     public void setDelayDistribution(final DistContinuousDuration delayDistribution)

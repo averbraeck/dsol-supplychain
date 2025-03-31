@@ -34,13 +34,13 @@ public interface Actor extends EventProducer, Locatable, Identifiable, Serializa
      * Add a role to the actor. If the role already exists, the current role replaces the earlier role.
      * @param role the role to add to the actor
      */
-    void addRole(Role role);
+    void addRole(Role<?> role);
 
     /**
      * Return the set of roles for this actor.
      * @return the roles of this actor
      */
-    Set<Role> getRoles();
+    Set<Role<?>> getRoles();
 
     /**
      * Check whether the necessary roles are set and filled with the required handlers and processes before executing a
