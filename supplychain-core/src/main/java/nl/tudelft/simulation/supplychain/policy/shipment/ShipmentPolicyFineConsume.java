@@ -5,9 +5,9 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.finance.Money;
-import nl.tudelft.simulation.supplychain.finance.MoneyUnit;
 import nl.tudelft.simulation.supplychain.message.trade.Shipment;
+import nl.tudelft.simulation.supplychain.money.Money;
+import nl.tudelft.simulation.supplychain.money.MoneyUnit;
 
 /**
  * When a Shipment comes in, consume it. In other words and in terms of the supply chain simulation: do nothing... <br>

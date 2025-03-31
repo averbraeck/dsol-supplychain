@@ -8,8 +8,8 @@ import org.djunits.value.vdouble.scalar.Duration;
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
-import nl.tudelft.simulation.supplychain.finance.BankAccount;
-import nl.tudelft.simulation.supplychain.finance.Money;
+import nl.tudelft.simulation.supplychain.money.BankAccount;
+import nl.tudelft.simulation.supplychain.money.Money;
 
 /**
  * The FinancingRole manages the bank account of an organization and can take care of paying bills and receiving money.

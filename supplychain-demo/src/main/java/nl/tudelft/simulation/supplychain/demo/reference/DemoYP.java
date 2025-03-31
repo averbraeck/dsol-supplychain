@@ -15,10 +15,10 @@ import nl.tudelft.simulation.supplychain.actor.messaging.devices.reference.WebAp
 import nl.tudelft.simulation.supplychain.actor.unit.dist.DistConstantDuration;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.finance.Bank;
 import nl.tudelft.simulation.supplychain.message.store.EmptyMessageStore;
 import nl.tudelft.simulation.supplychain.message.trade.YellowPageRequest;
 import nl.tudelft.simulation.supplychain.messagehandlers.HandleAllMessages;
+import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.policy.yellowpage.YellowPageRequestPolicy;
 import nl.tudelft.simulation.supplychain.reference.YellowPage;
 

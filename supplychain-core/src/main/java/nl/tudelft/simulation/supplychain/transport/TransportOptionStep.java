@@ -10,7 +10,7 @@ import org.djutils.base.Identifiable;
 import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.supplychain.actor.Actor;
-import nl.tudelft.simulation.supplychain.finance.Money;
+import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Sku;
 
 /**

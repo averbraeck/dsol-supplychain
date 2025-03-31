@@ -13,8 +13,8 @@ import nl.tudelft.simulation.dsol.statistics.SimPersistent;
 import nl.tudelft.simulation.dsol.swing.charts.xy.XYChart;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.finance.BankAccount;
-import nl.tudelft.simulation.supplychain.finance.Money;
+import nl.tudelft.simulation.supplychain.money.BankAccount;
+import nl.tudelft.simulation.supplychain.money.Money;
 
 /**
  * StockPlot.java. <br>

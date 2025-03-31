@@ -8,8 +8,8 @@ import org.djunits.value.vdouble.scalar.Volume;
 import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
-import nl.tudelft.simulation.supplychain.finance.Money;
-import nl.tudelft.simulation.supplychain.finance.MoneyUnit;
+import nl.tudelft.simulation.supplychain.money.Money;
+import nl.tudelft.simulation.supplychain.money.MoneyUnit;
 
 /**
  * Product represents a certain type of product. It might have a billOfMaterials of other products and amounts, indicating from

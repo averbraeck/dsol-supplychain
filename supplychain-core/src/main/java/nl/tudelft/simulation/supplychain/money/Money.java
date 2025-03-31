@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.finance;
+package nl.tudelft.simulation.supplychain.money;
 
 import java.io.Serializable;
 

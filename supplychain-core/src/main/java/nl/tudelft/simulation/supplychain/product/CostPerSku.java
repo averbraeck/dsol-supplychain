@@ -5,7 +5,7 @@ import java.util.Objects;
 
 import org.djutils.exceptions.Throw;
 
-import nl.tudelft.simulation.supplychain.finance.Money;
+import nl.tudelft.simulation.supplychain.money.Money;
 
 /**
  * CostPerSKU indicates a cost for, e.g., storing, transporting, (un)loading of one SKU, independent of the product.

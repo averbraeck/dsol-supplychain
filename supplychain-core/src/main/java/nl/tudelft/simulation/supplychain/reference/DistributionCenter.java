@@ -4,9 +4,9 @@ import org.djutils.draw.point.OrientedPoint2d;
 
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
-import nl.tudelft.simulation.supplychain.finance.Bank;
-import nl.tudelft.simulation.supplychain.finance.Money;
 import nl.tudelft.simulation.supplychain.message.store.trade.TradeMessageStoreInterface;
+import nl.tudelft.simulation.supplychain.money.Bank;
+import nl.tudelft.simulation.supplychain.money.Money;
 
 /**
  * Reference implementation for a DC.

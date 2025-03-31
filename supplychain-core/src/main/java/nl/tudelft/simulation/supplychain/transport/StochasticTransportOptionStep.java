@@ -10,7 +10,7 @@ import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Actor;
-import nl.tudelft.simulation.supplychain.finance.DistContinuousMoney;
+import nl.tudelft.simulation.supplychain.money.DistContinuousMoney;
 import nl.tudelft.simulation.supplychain.product.Sku;
 
 /**
