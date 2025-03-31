@@ -31,10 +31,10 @@ public class BuyingRoleDirect extends BuyingRole
             final BillPolicy billPolicy)
     {
         super(owner);
-        setMessagePolicy(internalDemandPolicy);
-        setMessagePolicy(orderConfirmationPolicy);
-        setMessagePolicy(shipmentPolicy);
-        setMessagePolicy(billPolicy);
+        setContentHandler(internalDemandPolicy);
+        setContentHandler(orderConfirmationPolicy);
+        setContentHandler(shipmentPolicy);
+        setContentHandler(billPolicy);
     }
 
     @Override

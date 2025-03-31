@@ -135,7 +135,7 @@ public abstract class Role implements Identifiable, Serializable
      * Set a handler for a content type, possibly overwriting the previous content handler.
      * @param handler the handler to set for the implicit content type
      */
-    public void setMessagePolicy(final ContentHandler<? extends Content> handler)
+    public void setContentHandler(final ContentHandler<? extends Content> handler)
     {
         Throw.whenNull(handler, "handler cannot be null");
         this.contentHandlers.put(handler.getContentClass(), handler);
@@ -154,8 +154,8 @@ public abstract class Role implements Identifiable, Serializable
     /**
      * This is the core processing of a content that was received. All appropriate handlers role are executed.
      * @param content the conent to process
-     * @param <C> The content class to ensure that the content and policy align
-     * @return whether the PolicyHandler processed the content or not
+     * @param <C> The content class to ensure that the content and handler align
+     * @return whether the ContentHandler processed the content or not
      */
     @SuppressWarnings("unchecked")
     public <C extends Content> boolean handleContent(final C content)

@@ -30,9 +30,9 @@ public class SellingRoleRFQ extends SellingRole
             final PaymentPolicy paymentPolicy)
     {
         super(owner);
-        setMessagePolicy(rfqPolicy);
-        setMessagePolicy(orderPolicy);
-        setMessagePolicy(paymentPolicy);
+        setContentHandler(rfqPolicy);
+        setContentHandler(orderPolicy);
+        setContentHandler(paymentPolicy);
     }
 
     @Override

@@ -36,12 +36,12 @@ public class BuyingRoleYP extends BuyingRole
             final BillPolicy billPolicy)
     {
         super(owner);
-        setMessagePolicy(internalDemandPolicy);
-        setMessagePolicy(ypAnswerPolicy);
-        setMessagePolicy(quotePolicy);
-        setMessagePolicy(orderConfirmationPolicy);
-        setMessagePolicy(shipmentPolicy);
-        setMessagePolicy(billPolicy);
+        setContentHandler(internalDemandPolicy);
+        setContentHandler(ypAnswerPolicy);
+        setContentHandler(quotePolicy);
+        setContentHandler(orderConfirmationPolicy);
+        setContentHandler(shipmentPolicy);
+        setContentHandler(billPolicy);
     }
 
     @Override

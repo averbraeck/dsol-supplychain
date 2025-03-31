@@ -34,11 +34,11 @@ public class BuyingRoleRFQ extends BuyingRole
             final BillPolicy billPolicy)
     {
         super(owner);
-        setMessagePolicy(internalDemandPolicy);
-        setMessagePolicy(quotePolicy);
-        setMessagePolicy(orderConfirmationPolicy);
-        setMessagePolicy(shipmentPolicy);
-        setMessagePolicy(billPolicy);
+        setContentHandler(internalDemandPolicy);
+        setContentHandler(quotePolicy);
+        setContentHandler(orderConfirmationPolicy);
+        setContentHandler(shipmentPolicy);
+        setContentHandler(billPolicy);
     }
 
     @Override

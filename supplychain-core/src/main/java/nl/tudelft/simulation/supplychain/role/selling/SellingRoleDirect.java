@@ -28,8 +28,8 @@ public class SellingRoleDirect extends SellingRole
             final PaymentPolicy paymentPolicy)
     {
         super(owner);
-        setMessagePolicy(orderPolicy);
-        setMessagePolicy(paymentPolicy);
+        setContentHandler(orderPolicy);
+        setContentHandler(paymentPolicy);
     }
 
     @Override
