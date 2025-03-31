@@ -15,7 +15,6 @@ import org.djutils.metadata.MetaData;
 import org.djutils.metadata.ObjectDescriptor;
 
 import nl.tudelft.simulation.supplychain.content.Content;
-import nl.tudelft.simulation.supplychain.content.Message;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.message.store.trade.TradeMessageStoreInterface;
 import nl.tudelft.simulation.supplychain.message.trade.TradeMessage;
@@ -63,8 +62,8 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
     private final TradeMessageStoreInterface messageStore;
 
     /** the event to indicate that information has been sent. E.g., for animation. */
-    public static final EventType SEND_MESSAGE_EVENT = new EventType("SEND_MESSAGE_EVENT",
-            new MetaData("sent message", "sent message", new ObjectDescriptor("message", "message", Message.class)));
+    public static final EventType SEND_CONTENT_EVENT = new EventType("SEND_CONTENT_EVENT",
+            new MetaData("sent content", "sent content", new ObjectDescriptor("content", "content", Content.class)));
 
     /**
      * Construct a new Actor, give it a message store, and register it in the model.
@@ -145,7 +144,7 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
         {
             throw new IllegalStateException("The roles for " + this + " are not complete");
         }
-        if (!content.getReceiver().equals(this))
+        if (!content.receiver().equals(this))
         {
             CategoryLogger.always().warn("Message " + content + " not meant for receiver " + toString());
         }
@@ -170,16 +169,16 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
     @Override
     public void sendContent(final Content content, final Duration delay)
     {
-        if (!content.getSender().equals(this))
+        if (!content.sender().equals(this))
         {
             CategoryLogger.always().warn("Message " + content + " not originating from sender " + toString());
         }
-        getSimulator().scheduleEventRel(delay, content.getReceiver(), "receiveContent", new Object[] {content});
+        getSimulator().scheduleEventRel(delay, content.receiver(), "receiveContent", new Object[] {content});
         if (content instanceof TradeMessage)
         {
             this.messageStore.addMessage((TradeMessage) content, true);
         }
-        fireEvent(SEND_MESSAGE_EVENT, new Object[] {content});
+        fireEvent(SEND_CONTENT_EVENT, new Object[] {content});
     }
 
     /**
