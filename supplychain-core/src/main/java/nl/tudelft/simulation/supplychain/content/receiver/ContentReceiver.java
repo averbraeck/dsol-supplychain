@@ -28,7 +28,7 @@ public abstract class ContentReceiver implements Identifiable, Serializable
     private final String id;
 
     /** The Role to which this content receiver belongs. */
-    private Role role;
+    private Role<?> role;
 
     /**
      * Create a new content receiver for an actor.
@@ -45,7 +45,7 @@ public abstract class ContentReceiver implements Identifiable, Serializable
      * @param role the Role to which this content receiver belongs
      * @throws IllegalStateException when the role has already been initialized
      */
-    public void setRole(final Role role)
+    public void setRole(final Role<?> role)
     {
         Throw.whenNull(role, "role cannot be null");
         Throw.when(this.role != null, IllegalStateException.class, "ContentReceiver.role already initialized");
@@ -70,7 +70,7 @@ public abstract class ContentReceiver implements Identifiable, Serializable
      * Return the role to which this content receiver belongs.
      * @return the role to which this content receiver belongs
      */
-    public Role getRole()
+    public Role<?> getRole()
     {
         return this.role;
     }
