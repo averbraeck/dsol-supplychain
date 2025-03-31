@@ -4,7 +4,7 @@ import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.content.Content;
-import nl.tudelft.simulation.supplychain.content.ContentPolicy;
+import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 
 /**
  * ContentReceiverDelay implements a queuing mechanism for content of an actor that handles contents after a (stochastic) delay.
@@ -34,7 +34,7 @@ public class ContentReceiverDelay extends ContentReceiver
     }
 
     @Override
-    public <C extends Content> void receiveContent(final C content, final ContentPolicy<C> contentPolicy)
+    public <C extends Content> void receiveContent(final C content, final ContentHandler<C> contentPolicy)
     {
         getRole().getActor().getSimulator().scheduleEventRel(this.delayDistribution.draw(), contentPolicy, "handleContent",
                 new Object[] {content});

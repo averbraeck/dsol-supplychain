@@ -7,7 +7,7 @@ import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Content;
-import nl.tudelft.simulation.supplychain.content.ContentPolicy;
+import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 
 /**
  * MessageReceiver contains the base implementation of a message receiver. A message receiver simulates the queuing method for
@@ -58,7 +58,7 @@ public abstract class ContentReceiver implements Identifiable, Serializable
      * @param contentPolicy the policy to execute on the conntent
      * @param <C> The content type to ensure that the content and policy align
      */
-    public abstract <C extends Content> void receiveContent(C content, ContentPolicy<C> contentPolicy);
+    public abstract <C extends Content> void receiveContent(C content, ContentHandler<C> contentPolicy);
 
     @Override
     public String getId()

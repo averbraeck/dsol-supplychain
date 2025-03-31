@@ -9,10 +9,10 @@ import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.content.ContentPolicy;
 import nl.tudelft.simulation.supplychain.content.Message;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
+import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.message.trade.InternalDemand;
 import nl.tudelft.simulation.supplychain.message.trade.TradeMessage;
 import nl.tudelft.simulation.supplychain.product.Product;
@@ -31,7 +31,7 @@ import nl.tudelft.simulation.supplychain.product.Product;
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  * @param <T> The type of TradeMessage for which this policy applies
  */
-public abstract class SupplyChainPolicy<T extends TradeMessage> extends ContentPolicy<T>
+public abstract class SupplyChainPolicy<T extends TradeMessage> extends ContentHandler<T>
 {
     /** */
     private static final long serialVersionUID = 20221201L;

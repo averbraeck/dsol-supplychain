@@ -13,7 +13,6 @@ import org.djutils.exceptions.Throw;
 import org.djutils.logger.CategoryLogger;
 import org.djutils.metadata.MetaData;
 import org.djutils.metadata.ObjectDescriptor;
-import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.Message;
@@ -50,6 +49,9 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
 
     /** the roles. */
     private Set<Role> roles = new LinkedHashSet<>();
+
+    /** cached check whether all roles have been initialized with handlers and processes. */
+    private boolean rolesComplete = false;
 
     /** the location of the actor. */
     private final DirectedPoint2d location;
@@ -109,9 +111,40 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
     }
 
     @Override
+    public boolean checkRolesComplete()
+    {
+        if (this.rolesComplete)
+        {
+            return true;
+        }
+        boolean check = true;
+        for (Role role : this.roles)
+        {
+            if (!role.checkHandlersProcessesComplete())
+            {
+                check = false;
+            }
+        }
+        this.rolesComplete = check;
+        return check;
+    }
+
+    @Override
+    public void init()
+    {
+        for (var role : this.roles)
+        {
+            role.init();
+        }
+    }
+
+    @Override
     public void receiveContent(final Content content)
     {
-        checkNecessaryRoleTypes();
+        if (!this.rolesComplete)
+        {
+            throw new IllegalStateException("The roles for " + this + " are not complete");
+        }
         if (!content.getReceiver().equals(this))
         {
             CategoryLogger.always().warn("Message " + content + " not meant for receiver " + toString());
@@ -125,7 +158,7 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
             }
             if (!processed)
             {
-                Logger.warn(this.toString() + " does not have a handler for " + content.getClass().getSimpleName());
+                CategoryLogger.always().warn(toString() + " does not have a handler for " + content.getClass().getSimpleName());
             }
         }
         if (content instanceof TradeMessage)

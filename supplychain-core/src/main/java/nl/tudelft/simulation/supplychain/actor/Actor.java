@@ -43,11 +43,17 @@ public interface Actor extends EventProducer, Locatable, Identifiable, Serializa
     Set<Role> getRoles();
 
     /**
-     * Check whether the necessary roles are set before executing a role-dependent method.
-     * @throws IllegalStateException when some of the roles are not set
+     * Check whether the necessary roles are set and filled with the required handlers and processes before executing a
+     * role-dependent method.
+     * @return whether the necessary roles are set and filled with handlers and processes
      */
-    void checkNecessaryRoleTypes();
+    boolean checkRolesComplete();
 
+    /**
+     * Initialize all roles with their autonomous processes.
+     */
+    void init();
+    
     /**
      * Receive content, e.g. a message, from another actor, and handle it (storing or handling, depending on the
      * MessageReceiver). When the content is not intended for this actor, a log warning is given, and the content is not
@@ -128,8 +134,7 @@ public interface Actor extends EventProducer, Locatable, Identifiable, Serializa
 
     /**
      * Return the z-value of the location, or 0.0 when the location is in 2 dimensions, avoiding the RemoteException.
-     * @return the z-value of the location, or 0.0 when the location is in 2 dimensions, or when getLocation() returns
-     *         null
+     * @return the z-value of the location, or 0.0 when the location is in 2 dimensions, or when getLocation() returns null
      */
     @Override
     default double getZ()
@@ -140,8 +145,8 @@ public interface Actor extends EventProducer, Locatable, Identifiable, Serializa
     /**
      * Return the z-direction of the location in radians, or 0.0 when the location has no direction, , avoiding the
      * RemoteException.
-     * @return the z-direction of the location in radians, or 0.0 when the location has no direction, or when
-     *         getLocation() returns null
+     * @return the z-direction of the location in radians, or 0.0 when the location has no direction, or when getLocation()
+     *         returns null
      */
     @Override
     default double getDirZ()

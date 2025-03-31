@@ -1,7 +1,7 @@
 package nl.tudelft.simulation.supplychain.content.receiver;
 
 import nl.tudelft.simulation.supplychain.content.Content;
-import nl.tudelft.simulation.supplychain.content.ContentPolicy;
+import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 
 /**
  * MessageReceiverDirect implements content queuing for an actor that immediately handles the content upon receipt.
@@ -25,7 +25,7 @@ public class ContentReceiverDirect extends ContentReceiver
     }
 
     @Override
-    public <C extends Content> void receiveContent(final C content, final ContentPolicy<C> contentPolicy)
+    public <C extends Content> void receiveContent(final C content, final ContentHandler<C> contentPolicy)
     {
         contentPolicy.handleContent(content);
     }
