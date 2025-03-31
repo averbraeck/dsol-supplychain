@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.inventory;
+package nl.tudelft.simulation.supplychain.role.inventory;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,7 +21,6 @@ import nl.tudelft.simulation.supplychain.message.trade.Shipment;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.product.ProductAmount;
-import nl.tudelft.simulation.supplychain.role.inventory.InventoryRole;
 
 /**
  * Simple implementation of Inventory for a Trader. The information on inventoryed amounts is stored in a HashTable of

@@ -3,7 +3,6 @@ package nl.tudelft.simulation.supplychain.role.inventory;
 import org.djunits.value.vdouble.scalar.Duration;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
-import nl.tudelft.simulation.supplychain.inventory.Inventory;
 import nl.tudelft.simulation.supplychain.product.Product;
 
 /**

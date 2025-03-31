@@ -7,13 +7,13 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.inventory.Inventory;
 import nl.tudelft.simulation.supplychain.message.trade.Bill;
 import nl.tudelft.simulation.supplychain.message.trade.Order;
 import nl.tudelft.simulation.supplychain.message.trade.Shipment;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
 import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
 
 /**
  * The OrderHandler contains the business logic for handling an incoming Order. It will send out a positive or negative

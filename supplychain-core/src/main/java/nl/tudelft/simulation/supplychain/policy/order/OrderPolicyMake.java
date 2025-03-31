@@ -8,11 +8,11 @@ import org.djunits.value.vdouble.scalar.Time;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.inventory.Inventory;
 import nl.tudelft.simulation.supplychain.message.trade.Order;
 import nl.tudelft.simulation.supplychain.message.trade.OrderBasedOnQuote;
 import nl.tudelft.simulation.supplychain.message.trade.OrderConfirmation;
 import nl.tudelft.simulation.supplychain.message.trade.ProductionOrder;
+import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
 
 /**
  * <p>

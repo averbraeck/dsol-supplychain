@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.inventory;
+package nl.tudelft.simulation.supplychain.role.inventory;
 
 import java.io.Serializable;
 

@@ -2,7 +2,6 @@ package nl.tudelft.simulation.supplychain.role.inventory;
 
 import java.io.Serializable;
 
-import nl.tudelft.simulation.supplychain.inventory.Inventory;
 import nl.tudelft.simulation.supplychain.product.Product;
 
 /**

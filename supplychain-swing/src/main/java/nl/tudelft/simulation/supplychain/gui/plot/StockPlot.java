@@ -13,9 +13,9 @@ import nl.tudelft.simulation.dsol.statistics.SimPersistent;
 import nl.tudelft.simulation.dsol.swing.charts.xy.XYChart;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.inventory.Inventory;
-import nl.tudelft.simulation.supplychain.inventory.InventoryUpdateData;
 import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
+import nl.tudelft.simulation.supplychain.role.inventory.InventoryUpdateData;
 
 /**
  * StockPlot.java. <br>

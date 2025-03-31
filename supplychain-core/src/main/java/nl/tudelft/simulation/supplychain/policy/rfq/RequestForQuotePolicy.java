@@ -6,12 +6,12 @@ import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.inventory.Inventory;
 import nl.tudelft.simulation.supplychain.message.trade.Quote;
 import nl.tudelft.simulation.supplychain.message.trade.RequestForQuote;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
 import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
 
 /**
  * The RequestForQuotehandler implements the business logic for a supplier who receives a RequestForQuote. The most simple
