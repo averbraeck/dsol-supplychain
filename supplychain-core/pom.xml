@@ -15,19 +15,19 @@
 	<name>Generic supplychain definitions package for supplychain simulation</name>
 	<description>Generic supplychain definitions package for supplychain simulation</description>
 
-	<dependencies>
-		<dependency>
-			<groupId>nl.tudelft.simulation</groupId>
-			<artifactId>dsol-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.djunits</groupId>
-			<artifactId>djunits</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-		</dependency>
-	</dependencies>
+  <dependencies>
+    <dependency>
+      <groupId>nl.tudelft.simulation</groupId>
+      <artifactId>dsol-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.djunits</groupId>
+      <artifactId>djunits</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+    </dependency>
+  </dependencies>
 
 </project>
