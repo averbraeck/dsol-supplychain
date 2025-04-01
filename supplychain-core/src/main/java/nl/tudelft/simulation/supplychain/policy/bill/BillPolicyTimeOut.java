@@ -6,8 +6,8 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
-import nl.tudelft.simulation.supplychain.message.trade.Bill;
-import nl.tudelft.simulation.supplychain.message.trade.Payment;
+import nl.tudelft.simulation.supplychain.content.Bill;
+import nl.tudelft.simulation.supplychain.content.Payment;
 import nl.tudelft.simulation.supplychain.money.BankAccount;
 import nl.tudelft.simulation.supplychain.policy.payment.PaymentPolicyEnum;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;

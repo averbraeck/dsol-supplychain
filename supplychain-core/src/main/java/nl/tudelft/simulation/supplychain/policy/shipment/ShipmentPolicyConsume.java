@@ -1,7 +1,7 @@
 package nl.tudelft.simulation.supplychain.policy.shipment;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.message.trade.Shipment;
+import nl.tudelft.simulation.supplychain.content.Shipment;
 
 /**
  * When a Shipment comes in, consume it. In other words and in terms of the supply chain simulation: do nothing...

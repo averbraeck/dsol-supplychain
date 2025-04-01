@@ -11,20 +11,20 @@ import org.djunits.value.vdouble.scalar.Time;
 import org.djutils.exceptions.Throw;
 import org.pmw.tinylog.Logger;
 
+import nl.tudelft.simulation.supplychain.content.Bill;
+import nl.tudelft.simulation.supplychain.content.InternalDemand;
+import nl.tudelft.simulation.supplychain.content.OrderBasedOnQuote;
+import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
+import nl.tudelft.simulation.supplychain.content.OrderStandalone;
+import nl.tudelft.simulation.supplychain.content.Payment;
+import nl.tudelft.simulation.supplychain.content.ProductionOrder;
+import nl.tudelft.simulation.supplychain.content.Quote;
+import nl.tudelft.simulation.supplychain.content.RequestForQuote;
+import nl.tudelft.simulation.supplychain.content.Shipment;
+import nl.tudelft.simulation.supplychain.content.YellowPageAnswer;
+import nl.tudelft.simulation.supplychain.content.YellowPageRequest;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.message.trade.Bill;
-import nl.tudelft.simulation.supplychain.message.trade.InternalDemand;
-import nl.tudelft.simulation.supplychain.message.trade.OrderBasedOnQuote;
-import nl.tudelft.simulation.supplychain.message.trade.OrderConfirmation;
-import nl.tudelft.simulation.supplychain.message.trade.OrderStandalone;
-import nl.tudelft.simulation.supplychain.message.trade.Payment;
-import nl.tudelft.simulation.supplychain.message.trade.ProductionOrder;
-import nl.tudelft.simulation.supplychain.message.trade.Quote;
-import nl.tudelft.simulation.supplychain.message.trade.RequestForQuote;
-import nl.tudelft.simulation.supplychain.message.trade.Shipment;
 import nl.tudelft.simulation.supplychain.message.trade.TradeMessage;
-import nl.tudelft.simulation.supplychain.message.trade.YellowPageAnswer;
-import nl.tudelft.simulation.supplychain.message.trade.YellowPageRequest;
 
 /**
  * <p>

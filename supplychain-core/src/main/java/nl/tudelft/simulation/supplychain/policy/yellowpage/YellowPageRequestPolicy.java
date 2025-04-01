@@ -13,8 +13,8 @@ import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Actor;
-import nl.tudelft.simulation.supplychain.message.trade.YellowPageAnswer;
-import nl.tudelft.simulation.supplychain.message.trade.YellowPageRequest;
+import nl.tudelft.simulation.supplychain.content.YellowPageAnswer;
+import nl.tudelft.simulation.supplychain.content.YellowPageRequest;
 import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
 import nl.tudelft.simulation.supplychain.role.yellowpage.YellowPageRole;
 

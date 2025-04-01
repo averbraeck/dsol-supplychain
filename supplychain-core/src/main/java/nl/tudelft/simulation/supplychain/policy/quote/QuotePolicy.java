@@ -8,7 +8,7 @@ import java.util.TreeSet;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.message.trade.Quote;
+import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
 
 /**

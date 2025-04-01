@@ -7,11 +7,10 @@ import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Role;
+import nl.tudelft.simulation.supplychain.content.OrderBasedOnQuote;
+import nl.tudelft.simulation.supplychain.content.Quote;
+import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.message.store.trade.TradeMessageStoreInterface;
-import nl.tudelft.simulation.supplychain.message.trade.Order;
-import nl.tudelft.simulation.supplychain.message.trade.OrderBasedOnQuote;
-import nl.tudelft.simulation.supplychain.message.trade.Quote;
-import nl.tudelft.simulation.supplychain.message.trade.RequestForQuote;
 
 /**
  * The QuoteHandlerAll just waits patiently till all the Quotes are in for each RequestForQuote that has been sent out. When

@@ -1,6 +1,6 @@
 package nl.tudelft.simulation.supplychain.policy.productionorder;
 
-import nl.tudelft.simulation.supplychain.message.trade.ProductionOrder;
+import nl.tudelft.simulation.supplychain.content.ProductionOrder;
 import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
 import nl.tudelft.simulation.supplychain.role.producing.ProducingRole;
 

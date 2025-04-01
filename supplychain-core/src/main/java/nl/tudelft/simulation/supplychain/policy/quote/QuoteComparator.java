@@ -9,7 +9,7 @@ import org.djutils.exceptions.Throw;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.message.trade.Quote;
+import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.money.Money;
 
 /**

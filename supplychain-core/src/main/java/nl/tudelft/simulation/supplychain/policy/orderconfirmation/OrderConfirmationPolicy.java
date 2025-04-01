@@ -4,8 +4,8 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.message.trade.InternalDemand;
-import nl.tudelft.simulation.supplychain.message.trade.OrderConfirmation;
+import nl.tudelft.simulation.supplychain.content.InternalDemand;
+import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
 import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
 
 /**
