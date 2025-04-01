@@ -86,7 +86,7 @@ public class OrderConfirmationPolicyFine extends OrderConfirmationPolicy
      */
     protected void checkShipment(final OrderConfirmation orderConfirmation)
     {
-        if (getActor().getMessageStore().getMessageList(orderConfirmation.getInternalDemandId(), Shipment.class).isEmpty())
+        if (getActor().getContentStore().getMessageList(orderConfirmation.getInternalDemandId(), Shipment.class).isEmpty())
         {
 
             // there is still an order, but no shipment... we fine!

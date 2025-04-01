@@ -118,7 +118,7 @@ public abstract class SupplyChainPolicy<T extends TradeMessage> extends ContentH
         }
         long id = message.getInternalDemandId();
         // get the internal demand to retrieve the product
-        List<InternalDemand> storedIDs = getRole().getActor().getMessageStore().getMessageList(id, InternalDemand.class);
+        List<InternalDemand> storedIDs = getRole().getActor().getContentStore().getMessageList(id, InternalDemand.class);
         if (storedIDs.size() == 0)
         {
             return false;

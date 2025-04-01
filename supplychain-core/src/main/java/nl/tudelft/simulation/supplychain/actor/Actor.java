@@ -14,9 +14,9 @@ import org.djutils.event.EventProducer;
 
 import nl.tudelft.simulation.dsol.animation.Locatable;
 import nl.tudelft.simulation.supplychain.content.Content;
+import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.message.store.trade.TradeMessageStoreInterface;
 
 /**
  * The Actor interface defines the behavior of a 'communicating' object, that is able to exchange messages with other actors and
@@ -53,7 +53,7 @@ public interface Actor extends EventProducer, Locatable, Identifiable, Serializa
      * Initialize all roles with their autonomous processes.
      */
     void init();
-    
+
     /**
      * Receive content, e.g. a message, from another actor, and handle it (storing or handling, depending on the
      * MessageReceiver). When the content is not intended for this actor, a log warning is given, and the content is not
@@ -94,10 +94,10 @@ public interface Actor extends EventProducer, Locatable, Identifiable, Serializa
     String getLocationDescription();
 
     /**
-     * Return the MessageStore for the Actor.
-     * @return the messageStore.
+     * Return the ContentStore for the Actor.
+     * @return the content store.
      */
-    TradeMessageStoreInterface getMessageStore();
+    ContentStoreInterface getContentStore();
 
     /**
      * Return the model that this actor is a part of.

@@ -71,7 +71,7 @@ public class QuotePolicyTimeout extends QuotePolicy
             return false;
         }
         long internalDemandId = quote.getInternalDemandId();
-        TradeMessageStoreInterface messageStore = getActor().getMessageStore();
+        TradeMessageStoreInterface messageStore = getActor().getContentStore();
         int numberQuotes = messageStore.getMessageList(internalDemandId, Quote.class).size();
         int numberRFQs = messageStore.getMessageList(internalDemandId, RequestForQuote.class).size();
         // when the first quote comes in, schedule the timeout
@@ -111,7 +111,7 @@ public class QuotePolicyTimeout extends QuotePolicy
         if (this.unansweredIDs.contains(internalDemandId))
         {
             this.unansweredIDs.remove(internalDemandId);
-            TradeMessageStoreInterface messageStore = getActor().getMessageStore();
+            TradeMessageStoreInterface messageStore = getActor().getContentStore();
             List<Quote> quotes = messageStore.getMessageList(internalDemandId, Quote.class);
 
             // the size of the quotes is at least one

@@ -77,7 +77,7 @@ public class YellowPageAnswerPolicy extends SupplyChainPolicy<YellowPageAnswer>
         {
             return false;
         }
-        TradeMessageStoreInterface messageStore = getActor().getMessageStore();
+        TradeMessageStoreInterface messageStore = getActor().getContentStore();
         YellowPageRequest ypRequest = ypAnswer.getYellowPageRequest();
         List<InternalDemand> internalDemandList =
                 messageStore.getMessageList(ypRequest.getInternalDemandId(), InternalDemand.class);

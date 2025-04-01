@@ -59,7 +59,7 @@ public class OrderConfirmationPolicy extends SupplyChainPolicy<OrderConfirmation
             try
             {
                 // TODO: place some business logic here to handle the problem
-                oldID = getActor().getMessageStore()
+                oldID = getActor().getContentStore()
                         .getMessageList(orderConfirmation.getInternalDemandId(), InternalDemand.class).get(0);
 
                 if (oldID == null)
@@ -81,7 +81,7 @@ public class OrderConfirmationPolicy extends SupplyChainPolicy<OrderConfirmation
             sendMessage(newID, Duration.ZERO);
 
             // also clean the messageStore for the old internal demand
-            getActor().getMessageStore().removeAllMessages(orderConfirmation.getInternalDemandId());
+            getActor().getContentStore().removeAllMessages(orderConfirmation.getInternalDemandId());
         }
         return true;
     }
