@@ -24,7 +24,7 @@ import nl.tudelft.simulation.supplychain.product.Product;
  * @param latestDeliveryDate the latest delivery date
  */
 public record InternalDemand(Actor sender, Actor receiver, Time timestamp, long uniqueId, long groupingId, Product product,
-        double amount, Time earliestDeliveryDate, Time latestDeliveryDate) implements Content
+        double amount, Time earliestDeliveryDate, Time latestDeliveryDate) implements GroupedContent, ProductContent
 {
     public InternalDemand(final Actor sender, final Product product, final double amount, final Time earliestDeliveryDate,
             final Time latestDeliveryDate)

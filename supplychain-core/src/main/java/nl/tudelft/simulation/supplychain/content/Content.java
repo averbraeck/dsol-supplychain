@@ -7,7 +7,7 @@ import org.djunits.value.vdouble.scalar.Time;
 import nl.tudelft.simulation.supplychain.actor.Actor;
 
 /**
- * A message, which can be sent from a sender to a receiver. Extend this interface to add content.
+ * A message, which can be sent from a sender to a receiver. Extend this interface to add fields.
  * <p>
  * Copyright (c) 2022-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
