@@ -15,9 +15,8 @@ import org.djutils.metadata.MetaData;
 import org.djutils.metadata.ObjectDescriptor;
 
 import nl.tudelft.simulation.supplychain.content.Content;
+import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
-import nl.tudelft.simulation.supplychain.message.store.trade.TradeMessageStoreInterface;
-import nl.tudelft.simulation.supplychain.message.trade.TradeMessage;
 
 /**
  * SupplyChainActor is the abstract class for an Actor that implements the behavior of a 'communicating' object, that is able to
@@ -59,7 +58,7 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
     private Bounds2d bounds = new Bounds2d(-1.0, 1.0, -1.0, 1.0);
 
     /** the store for the content to use. */
-    private final TradeMessageStoreInterface messageStore;
+    private final ContentStoreInterface contentStore;
 
     /** the event to indicate that information has been sent. E.g., for animation. */
     public static final EventType SEND_CONTENT_EVENT = new EventType("SEND_CONTENT_EVENT",
@@ -72,11 +71,11 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
      * @param model the model
      * @param location the location of the actor
      * @param locationDescription the location description of the actor (e.g., a city, country)
-     * @param messageStore the message store for messages
+     * @param contentStore the message store for messages
      * @throws ActorAlreadyDefinedException when the actor was already registered in the model
      */
     public SupplyChainActor(final String id, final String name, final SupplyChainModelInterface model,
-            final DirectedPoint2d location, final String locationDescription, final TradeMessageStoreInterface messageStore)
+            final DirectedPoint2d location, final String locationDescription, final ContentStoreInterface contentStore)
             throws ActorAlreadyDefinedException
     {
         Throw.whenNull(model, "model cannot be null");
@@ -85,14 +84,14 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
         Throw.whenNull(name, "name cannot be null");
         Throw.whenNull(location, "location cannot be null");
         Throw.whenNull(locationDescription, "locationDescription cannot be null");
-        Throw.whenNull(messageStore, "messageStore cannot be null");
+        Throw.whenNull(contentStore, "messageStore cannot be null");
         this.id = id;
         this.name = name;
         this.locationDescription = locationDescription;
         this.model = model;
         this.location = location;
-        this.messageStore = messageStore;
-        this.messageStore.setOwner(this);
+        this.contentStore = contentStore;
+        this.contentStore.setOwner(this);
         model.registerActor(this);
     }
 
@@ -160,10 +159,7 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
                 CategoryLogger.always().warn(toString() + " does not have a handler for " + content.getClass().getSimpleName());
             }
         }
-        if (content instanceof TradeMessage)
-        {
-            this.messageStore.addMessage((TradeMessage) content, false);
-        }
+        this.contentStore.addContent(content, false);
     }
 
     @Override
@@ -174,10 +170,7 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
             CategoryLogger.always().warn("Message " + content + " not originating from sender " + toString());
         }
         getSimulator().scheduleEventRel(delay, content.receiver(), "receiveContent", new Object[] {content});
-        if (content instanceof TradeMessage)
-        {
-            this.messageStore.addMessage((TradeMessage) content, true);
-        }
+        this.contentStore.addContent(content, true);
         fireEvent(SEND_CONTENT_EVENT, new Object[] {content});
     }
 
@@ -204,9 +197,9 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
     }
 
     @Override
-    public TradeMessageStoreInterface getMessageStore()
+    public ContentStoreInterface getContentStore()
     {
-        return this.messageStore;
+        return this.contentStore;
     }
 
     @Override
