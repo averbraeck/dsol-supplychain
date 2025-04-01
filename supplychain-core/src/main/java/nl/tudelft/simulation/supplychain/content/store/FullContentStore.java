@@ -298,11 +298,7 @@ public class FullContentStore implements ContentStoreInterface
                 }
             }
         }
-        else if (!sent && content instanceof Bill)
-        {
-            // don't do anything when the bill arrives
-            // wait for payment to possibly clear some data
-        }
+        // if (!sent && content instanceof Bill): // don't do anything when the bill arrives, wait for payment
         else if (sent && content instanceof Payment)
         {
             // remove the bill
