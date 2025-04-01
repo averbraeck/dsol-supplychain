@@ -1,6 +1,7 @@
 package nl.tudelft.simulation.supplychain.content.store;
 
 import java.io.Serializable;
+import java.util.List;
 
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.content.Content;
@@ -20,8 +21,8 @@ public interface ContentStoreInterface extends Serializable
 {
     /**
      * Set the owner for the content store after is has been created. The reason for explicitly having to set the owner and not
-     * include the owner in the constructor is that the Actor needs a ContentStore in its constructor, so the
-     * ContentStore cannot be constructed with the owner.
+     * include the owner in the constructor is that the Actor needs a ContentStore in its constructor, so the ContentStore
+     * cannot be constructed with the owner.
      * @param owner the owner
      */
     void setOwner(Actor owner);
@@ -48,8 +49,36 @@ public interface ContentStoreInterface extends Serializable
     void removeSentReceivedContent(Content content, boolean sent);
 
     /**
-     * Return the owner.
-     * @return the owner
+     * Remove all contents belonging to a groupingId from the store. No error content is given when no contents belonging to the
+     * groupingId were found.
+     * @param groupingId the grouping identifier for the transaction
+     */
+    void removeAllContents(long groupingId);
+
+    /**
+     * Method getContentList returns a list of Content objects of class 'contentClass' based on the groupingId.
+     * @param groupingId the grouping identifier for the transaction
+     * @param contentClass the class of the content to look for
+     * @return a list of content items of class 'contentClass' belonging to the groupingId
+     * @param <T> the type of content we are looking for
+     */
+    <T extends Content> List<T> getContentList(long groupingId, Class<T> contentClass);
+
+    /**
+     * Method getContentList returns the Content object of class 'contentClass' based on the groupingId, for either sent or
+     * received items.
+     * @param groupingId the identifier of the grouping for which the contents need to be retrieved
+     * @param contentClass the class of the content to look for
+     * @param sent indicates whether the content was sent or received
+     * @return a list of content items of class 'contentClass' belonging to the groupingId
+     * @param <T> the type of content we are looking for
+     */
+    <T extends Content> List<T> getContentList(long groupingId, Class<T> contentClass, boolean sent);
+
+    /**
+     * Return the owner of this content store.
+     * @return the owner of this content store
      */
     Actor getOwner();
+
 }

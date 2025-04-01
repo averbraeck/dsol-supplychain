@@ -1,5 +1,7 @@
 package nl.tudelft.simulation.supplychain.content.store;
 
+import java.util.List;
+
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.content.Content;
 
@@ -49,6 +51,27 @@ public class ContentStoreEmpty implements ContentStoreInterface
     public void removeSentReceivedContent(final Content content, final boolean sent)
     {
         // do nothing
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void removeAllContents(final long groupingId)
+    {
+        // do nothing
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public <T extends Content> List<T> getContentList(final long groupingId, final Class<T> contentClass)
+    {
+        return List.of();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public <T extends Content> List<T> getContentList(final long groupingId, final Class<T> contentClass, final boolean sent)
+    {
+        return List.of();
     }
 
     @Override
