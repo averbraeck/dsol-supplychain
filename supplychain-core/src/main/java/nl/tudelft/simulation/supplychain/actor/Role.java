@@ -71,17 +71,6 @@ public abstract class Role<R extends Role<R>> extends LocalEventProducer impleme
     }
 
     /**
-     * Initialize the role with the autonomous processes.
-     */
-    public void init()
-    {
-        for (var process : this.registeredAutonomousProcesses)
-        {
-            process.init();
-        }
-    }
-
-    /**
      * Check whether all handlers for content that are necessary have been registered with this role, as well as all autonomous
      * processes that should have been registered.
      * @return whether all handlers and processes have been properly registered with the role

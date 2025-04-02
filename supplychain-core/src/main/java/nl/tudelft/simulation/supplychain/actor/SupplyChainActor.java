@@ -128,15 +128,6 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
     }
 
     @Override
-    public void init()
-    {
-        for (var role : this.roles)
-        {
-            role.init();
-        }
-    }
-
-    @Override
     public void receiveContent(final Content content)
     {
         if (!this.rolesComplete)

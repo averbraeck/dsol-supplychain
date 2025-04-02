@@ -28,12 +28,6 @@ public abstract class AutonomousProcess<R extends Role<R>>
         Throw.whenNull(role, "role cannot be null");
         this.role = role;
     }
-    
-    /**
-     * Initialize the processing at the start of the simulation. This method needs to schedule the autonomous activities that
-     * need to take place, one-time or repeatedly.
-     */
-    public abstract void init();
 
     /**
      * Return the specific Role (R) to which this process belongs.

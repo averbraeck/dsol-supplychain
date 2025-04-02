@@ -52,11 +52,6 @@ public class FixedCostProcess extends AutonomousProcess<FinancingRole>
         this.description = description;
         this.interval = interval;
         this.amount = amount;
-    }
-
-    @Override
-    public void init()
-    {
         schedule();
     }
 

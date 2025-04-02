@@ -50,11 +50,6 @@ public interface Actor extends EventProducer, Locatable, Identifiable, Serializa
     boolean checkRolesComplete();
 
     /**
-     * Initialize all roles with their autonomous processes.
-     */
-    void init();
-
-    /**
      * Receive content, e.g. a message, from another actor, and handle it (storing or handling, depending on the
      * MessageReceiver). When the content is not intended for this actor, a log warning is given, and the content is not
      * processed.

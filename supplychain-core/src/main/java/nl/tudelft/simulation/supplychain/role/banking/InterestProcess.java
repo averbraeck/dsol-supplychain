@@ -24,12 +24,7 @@ public class InterestProcess extends AutonomousProcess<BankingRole>
     public InterestProcess(final BankingRole role)
     {
         super(role);
-    }
-
-    @Override
-    public void init()
-    {
-        getRole().getSimulator().scheduleEventNow(this, "interest", null);
+        role.getSimulator().scheduleEventNow(this, "interest", null);
     }
 
     /**
