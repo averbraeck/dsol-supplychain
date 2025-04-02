@@ -219,6 +219,22 @@ public class FullContentStore implements ContentStoreInterface
         return result;
     }
 
+    @Override
+    public boolean contains(final Content content)
+    {
+        var sentList = this.sentContentMap.get(content.getClass());
+        if (sentList != null && sentList.contains(content))
+        {
+            return true;
+        }
+        var recdList = this.receivedContentMap.get(content.getClass());
+        if (recdList != null && recdList.contains(content))
+        {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * @param content the content to remove
      * @param sent indicates whether the content is sent or received
@@ -406,7 +422,6 @@ public class FullContentStore implements ContentStoreInterface
                 }
             }
         }
-
     }
 
     /**

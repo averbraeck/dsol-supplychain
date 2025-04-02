@@ -76,6 +76,24 @@ public interface ContentStoreInterface extends Serializable
     <T extends Content> List<T> getContentList(long groupingId, Class<T> contentClass, boolean sent);
 
     /**
+     * Return whether the store contains the given content.
+     * @param content the content to look up
+     * @return whether the store contains the given content
+     */
+    boolean contains(Content content);
+    
+    /**
+     * Return whether the store contains a message of the given class with this groupingId.
+     * @param groupingId the groupingId to look up
+     * @param contentClass the content class to look up
+     * @return whether the store contains a message of the given class with this groupingId
+     */
+    default boolean contains(final long groupingId, final Class<? extends Content> contentClass)
+    {
+        return getContentList(groupingId, contentClass).size() > 0;
+    }
+    
+    /**
      * Return the owner of this content store.
      * @return the owner of this content store
      */

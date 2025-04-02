@@ -53,25 +53,28 @@ public class ContentStoreEmpty implements ContentStoreInterface
         // do nothing
     }
 
-    /** {@inheritDoc} */
     @Override
     public void removeAllContents(final long groupingId)
     {
         // do nothing
     }
 
-    /** {@inheritDoc} */
     @Override
     public <T extends Content> List<T> getContentList(final long groupingId, final Class<T> contentClass)
     {
         return List.of();
     }
 
-    /** {@inheritDoc} */
     @Override
     public <T extends Content> List<T> getContentList(final long groupingId, final Class<T> contentClass, final boolean sent)
     {
         return List.of();
+    }
+
+    @Override
+    public boolean contains(final Content content)
+    {
+        return false;
     }
 
     @Override
