@@ -6,4 +6,4 @@
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-package nl.tudelft.simulation.supplychain.policy.payment;
+package nl.tudelft.simulation.supplychain.handler.payment;

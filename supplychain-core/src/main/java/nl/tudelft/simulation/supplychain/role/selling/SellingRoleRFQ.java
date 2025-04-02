@@ -1,7 +1,7 @@
 package nl.tudelft.simulation.supplychain.role.selling;
 
+import nl.tudelft.simulation.supplychain.handler.payment.PaymentPolicy;
 import nl.tudelft.simulation.supplychain.policy.order.OrderPolicy;
-import nl.tudelft.simulation.supplychain.policy.payment.PaymentPolicy;
 import nl.tudelft.simulation.supplychain.policy.rfq.RequestForQuotePolicy;
 
 /**

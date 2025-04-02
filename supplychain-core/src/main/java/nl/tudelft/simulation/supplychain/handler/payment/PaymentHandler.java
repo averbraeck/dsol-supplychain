@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.policy.payment;
+package nl.tudelft.simulation.supplychain.handler.payment;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Payment;

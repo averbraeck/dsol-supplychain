@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.policy.payment;
+package nl.tudelft.simulation.supplychain.handler.payment;
 
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Time;
@@ -18,7 +18,7 @@ import nl.tudelft.simulation.supplychain.money.MoneyUnit;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class PaymentPolicyFine extends PaymentPolicy
+public class PaymentHandlerFine extends PaymentPolicy
 {
     /** true for debug. */
     private static final boolean DEBUG = false;
@@ -39,7 +39,7 @@ public class PaymentPolicyFine extends PaymentPolicy
      * @param fineMarginPerDay the fine margin per day
      * @param fixedFinePerDay the fixed fine per day
      */
-    public PaymentPolicyFine(final Role owner, final BankAccount bankAccount, final double fineMarginPerDay,
+    public PaymentHandlerFine(final Role owner, final BankAccount bankAccount, final double fineMarginPerDay,
             final Money fixedFinePerDay)
     {
         super(owner, bankAccount);
@@ -78,7 +78,7 @@ public class PaymentPolicyFine extends PaymentPolicy
                     payment.getSender().getBankAccount().withdrawFromBalance(fine);
                     payment.getReceiver().getBankAccount().addToBalance(fine);
 
-                    if (PaymentPolicyFine.DEBUG)
+                    if (PaymentHandlerFine.DEBUG)
                     {
                         System.out.println("DEBUG -- PAYMENTFINEHANDLER: FINE IMPOSED: " + fine);
                     }

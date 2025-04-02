@@ -15,6 +15,8 @@ import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.dsol.swing.charts.xy.XYChart;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
+import nl.tudelft.simulation.supplychain.handler.payment.PaymentPolicy;
+import nl.tudelft.simulation.supplychain.handler.payment.PaymentPolicyEnum;
 import nl.tudelft.simulation.supplychain.message.store.trade.TradeMessageStoreInterface;
 import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.BankAccount;
@@ -24,8 +26,6 @@ import nl.tudelft.simulation.supplychain.policy.internaldemand.InternalDemandPol
 import nl.tudelft.simulation.supplychain.policy.order.OrderPolicy;
 import nl.tudelft.simulation.supplychain.policy.order.OrderPolicyStock;
 import nl.tudelft.simulation.supplychain.policy.orderconfirmation.OrderConfirmationPolicy;
-import nl.tudelft.simulation.supplychain.policy.payment.PaymentPolicy;
-import nl.tudelft.simulation.supplychain.policy.payment.PaymentPolicyEnum;
 import nl.tudelft.simulation.supplychain.policy.quote.QuoteComparatorEnum;
 import nl.tudelft.simulation.supplychain.policy.quote.QuotePolicy;
 import nl.tudelft.simulation.supplychain.policy.quote.QuotePolicyAll;
