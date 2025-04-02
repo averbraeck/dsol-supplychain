@@ -3,7 +3,8 @@ package nl.tudelft.simulation.supplychain.handler.demand;
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Demand;
-import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
+import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.buying.BuyingRole;
 import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
 
 /**
@@ -15,7 +16,7 @@ import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public abstract class DemandHandler extends ContentHandler<Demand>
+public abstract class DemandHandler extends ContentHandler<Demand, BuyingRole>
 {
     /** */
     private static final long serialVersionUID = 20221201L;
