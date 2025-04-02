@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.role.producing;
+package nl.tudelft.simulation.supplychain.role.manufacturing;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -18,17 +18,17 @@ import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
 
 /**
- * The ResourceProductionService simulates a manufacturing or assembly process that is constrained by the (non-)availability of
- * resources. <br>
- * TODO: decide on cycle times, setup times, linked resources, capacity, cleaning times, batch sizes, maintenance, etc. KPIs
- * that should be calculated are B1 value and material completeness.
+ * The DelayProductionService starts production at the latest possible moment to meet the delivery date of the production order.
+ * Two versions are available: one that waits till all the raw materials are available. If not, production is delayed until all
+ * materials of the BoM are available in the right quantities. The other version is a greedy one, it takes all the materials it
+ * needs from the moment production should start, and delays if necessary to get the missing materials.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class ResourceProductionService extends ProductionService
+public class ManufacturingServiceDelay extends ManufacturingService
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
@@ -54,9 +54,8 @@ public class ResourceProductionService extends ProductionService
      * @param greedy if true, immediately start picking raw materials when production has to start.
      * @param profitMargin the fraction that is added to the cost of the materials.
      */
-    public ResourceProductionService(final WarehousingRole owner, final Product product,
-            final DistContinuousDuration productionTime, final boolean fixedTime, final boolean greedy,
-            final double profitMargin)
+    public ManufacturingServiceDelay(final WarehousingRole owner, final Product product, final DistContinuousDuration productionTime,
+            final boolean fixedTime, final boolean greedy, final double profitMargin)
     {
         super(owner, product);
         this.productionTime = productionTime;

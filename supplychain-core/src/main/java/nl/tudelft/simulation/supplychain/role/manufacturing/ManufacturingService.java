@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.role.producing;
+package nl.tudelft.simulation.supplychain.role.manufacturing;
 
 import java.io.Serializable;
 
@@ -19,7 +19,7 @@ import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public abstract class ProductionService implements Serializable
+public abstract class ManufacturingService implements Serializable
 {
     /** */
     private static final long serialVersionUID = 20221201L;
@@ -35,7 +35,7 @@ public abstract class ProductionService implements Serializable
      * @param owner the role that owns the production service.
      * @param product the product of the production service.
      */
-    public ProductionService(final WarehousingRole owner, final Product product)
+    public ManufacturingService(final WarehousingRole owner, final Product product)
     {
         Throw.whenNull(owner, "owner cannot be null");
         Throw.whenNull(product, "product cannot be null");

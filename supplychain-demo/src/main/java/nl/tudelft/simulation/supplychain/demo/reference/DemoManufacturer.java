@@ -48,8 +48,8 @@ import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Manufacturer;
 import nl.tudelft.simulation.supplychain.reference.Search;
 import nl.tudelft.simulation.supplychain.role.buying.BuyingRoleSearch;
-import nl.tudelft.simulation.supplychain.role.producing.DelayProductionService;
-import nl.tudelft.simulation.supplychain.role.producing.ProductionService;
+import nl.tudelft.simulation.supplychain.role.manufacturing.ManufacturingServiceDelay;
+import nl.tudelft.simulation.supplychain.role.manufacturing.ManufacturingService;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
 import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
 import nl.tudelft.simulation.supplychain.role.warehousing.RestockingServiceSafety;
@@ -171,7 +171,7 @@ public class DemoManufacturer extends Manufacturer
 
         // MANUFACTURING
 
-        ProductionService productionService = new DelayProductionService(this, super.getStock(), product,
+        ManufacturingService productionService = new ManufacturingServiceDelay(this, super.getStock(), product,
                 new DistContinuousDuration(new DistUniform(stream, 5.0, 10.0), DurationUnit.DAY), true, true, 0.2);
         getProduction().addProductionService(productionService);
 

@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.role.producing;
+package nl.tudelft.simulation.supplychain.role.manufacturing;
 
 import nl.tudelft.simulation.supplychain.actor.Actor;
 
@@ -10,18 +10,18 @@ import nl.tudelft.simulation.supplychain.actor.Actor;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public interface ProducingActor extends Actor
+public interface ManufacturingActor extends Actor
 {
     /**
      * Return the ProducingRole for this actor.
      * @return the ProducingRole for this actor
      */
-    ProducingRole getProducingRole();
+    ManufacturingRole getProducingRole();
 
     /**
      * Set the ProducingRole for this actor.
      * @param producingRole the new ProducingRole for this actor
      */
-    void setProducingRole(ProducingRole producingRole);
+    void setProducingRole(ManufacturingRole producingRole);
 
 }

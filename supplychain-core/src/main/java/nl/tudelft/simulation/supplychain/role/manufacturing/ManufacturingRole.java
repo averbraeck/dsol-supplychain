@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.role.producing;
+package nl.tudelft.simulation.supplychain.role.manufacturing;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -20,19 +20,19 @@ import nl.tudelft.simulation.supplychain.product.Product;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public abstract class ProducingRole extends Role
+public abstract class ManufacturingRole extends Role
 {
     /** */
     private static final long serialVersionUID = 20221206L;
 
     /** the production services per product for this role. */
-    private Map<Product, ProductionService> productionServices = new LinkedHashMap<>();
+    private Map<Product, ManufacturingService> productionServices = new LinkedHashMap<>();
 
     /**
      * Create a ProducingRole object for an actor.
      * @param owner the owner of this role
      */
-    public ProducingRole(final ProducingActor owner)
+    public ManufacturingRole(final ManufacturingActor owner)
     {
         super("producing", owner, new ContentReceiverDirect());
     }
@@ -41,7 +41,7 @@ public abstract class ProducingRole extends Role
      * Add a production service.
      * @param productionService the service to add
      */
-    public void addProductionService(final ProductionService productionService)
+    public void addProductionService(final ManufacturingService productionService)
     {
         this.productionServices.put(productionService.getProduct(), productionService);
     }
@@ -69,7 +69,7 @@ public abstract class ProducingRole extends Role
      * Method getProductionServices.
      * @return returns the production services
      */
-    public Map<Product, ProductionService> getProductionServices()
+    public Map<Product, ManufacturingService> getProductionServices()
     {
         return this.productionServices;
     }

@@ -2,7 +2,7 @@ package nl.tudelft.simulation.supplychain.handler.productionorder;
 
 import nl.tudelft.simulation.supplychain.content.ProductionOrder;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
-import nl.tudelft.simulation.supplychain.role.producing.ProducingRole;
+import nl.tudelft.simulation.supplychain.role.manufacturing.ManufacturingRole;
 
 /**
  * Handles ProductionOrders.
@@ -18,13 +18,13 @@ public class ProductionOrderHandler extends ContentHandler<ProductionOrder>
     private static final long serialVersionUID = 20221201L;
 
     /** the producing role. */
-    private final ProducingRole producingRole;
+    private final ManufacturingRole producingRole;
 
     /**
      * constructs a new ProductionOrderHandler.
      * @param owner the owner of the production order handler
      */
-    public ProductionOrderHandler(final ProducingRole owner)
+    public ProductionOrderHandler(final ManufacturingRole owner)
     {
         super("ProductionOrderHandler", owner, ProductionOrder.class);
         this.producingRole = owner;

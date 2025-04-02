@@ -13,7 +13,7 @@ import nl.tudelft.simulation.supplychain.message.store.trade.ContentStoreInterfa
 import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.supplychain.role.producing.ProducingRole;
+import nl.tudelft.simulation.supplychain.role.manufacturing.ManufacturingRole;
 
 /**
  * Reference implementation for a manufacturer.
@@ -29,7 +29,7 @@ public class Manufacturer extends DistributionCenter
     private static final long serialVersionUID = 20221201L;
 
     /** the production capabilities of this manufacturer. */
-    private ProducingRole producingRole;
+    private ManufacturingRole producingRole;
 
     /**
      * @param id String, the unique id of the supplier
@@ -54,7 +54,7 @@ public class Manufacturer extends DistributionCenter
      * Return the producing role.
      * @return the producing role
      */
-    public ProducingRole getProducingRole()
+    public ManufacturingRole getProducingRole()
     {
         return this.producingRole;
     }
@@ -63,7 +63,7 @@ public class Manufacturer extends DistributionCenter
      * Set the producing role.
      * @param producingRole the new producing role
      */
-    public void setProducingRole(final ProducingRole producingRole)
+    public void setProducingRole(final ManufacturingRole producingRole)
     {
         Throw.whenNull(this.producingRole, "producingRole cannot be null");
         Throw.when(this.producingRole != null, IllegalStateException.class, "producingRole already initialized");
