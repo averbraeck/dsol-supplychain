@@ -22,7 +22,7 @@ import nl.tudelft.simulation.supplychain.transport.TransportOption;
 import nl.tudelft.simulation.supplychain.transport.TransportOptionProvider;
 
 /**
- * The DemandPolicyRFQ is a simple implementation of the business logic to handle a request for new products through
+ * The DemandHandlerRFQ is a simple implementation of the business logic to handle a request for new products through
  * sending out a number of RFQs to a list of preselected suppliers. When receiving the demand, it just creates a number
  * of RFQs based on a table that maps Products onto a list of Actors, and sends them out, all at the same time, after a given
  * time delay.
@@ -32,7 +32,7 @@ import nl.tudelft.simulation.supplychain.transport.TransportOptionProvider;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class DemandPolicyRFQ extends DemandPolicy
+public class DemandHandlerRFQ extends DemandHandler
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
@@ -50,7 +50,7 @@ public class DemandPolicyRFQ extends DemandPolicy
     private final Duration cutoffDuration;
 
     /**
-     * Constructs a new DemandPolicyRFQ.
+     * Constructs a new DemandHandlerRFQ.
      * @param owner the owner of the demand
      * @param transportOptionProvider the provider of transport options betwween two locations
      * @param transportChoiceProvider the provider to choose between transport options
@@ -58,11 +58,11 @@ public class DemandPolicyRFQ extends DemandPolicy
      * @param cutoffDuration the maximum time after which the RFQ will stop collecting quotes
      * @param stock the stock for being able to change the ordered amount
      */
-    public DemandPolicyRFQ(final Role owner, final TransportOptionProvider transportOptionProvider,
+    public DemandHandlerRFQ(final Role owner, final TransportOptionProvider transportOptionProvider,
             final TransportChoiceProvider transportChoiceProvider, final DistContinuousDuration handlingTime,
             final Duration cutoffDuration, final Inventory stock)
     {
-        super("DemandPolicyRFQ", owner, handlingTime, stock);
+        super("DemandHandlerRFQ", owner, handlingTime, stock);
         Throw.whenNull(transportOptionProvider, "transportOptionProvider cannot be null");
         Throw.whenNull(transportChoiceProvider, "transportChoiceProvider cannot be null");
         Throw.whenNull(cutoffDuration, "cutoffDuration cannot be null");

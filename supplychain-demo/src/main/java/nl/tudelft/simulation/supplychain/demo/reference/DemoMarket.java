@@ -22,7 +22,7 @@ import nl.tudelft.simulation.supplychain.actor.messaging.devices.reference.WebAp
 import nl.tudelft.simulation.supplychain.actor.unit.dist.DistConstantDuration;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.handler.demand.InternalDemandPolicyYP;
+import nl.tudelft.simulation.supplychain.handler.demand.InternalDemandHandlerYP;
 import nl.tudelft.simulation.supplychain.handler.payment.PaymentPolicyEnum;
 import nl.tudelft.simulation.supplychain.message.store.trade.LeanTradeMessageStore;
 import nl.tudelft.simulation.supplychain.messagehandlers.HandleAllMessages;
@@ -92,7 +92,7 @@ public class DemoMarket extends Customer
 
         DistContinuousDuration administrativeDelayInternalDemand =
                 new DistContinuousDuration(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-        InternalDemandPolicyYP demandHandler = new InternalDemandPolicyYP(this, administrativeDelayInternalDemand,
+        InternalDemandHandlerYP demandHandler = new InternalDemandHandlerYP(this, administrativeDelayInternalDemand,
                 ypCustomre, new Length(1E6, LengthUnit.METER), 1000, null);
 
         DistContinuousDuration administrativeDelayYellowPageAnswer =

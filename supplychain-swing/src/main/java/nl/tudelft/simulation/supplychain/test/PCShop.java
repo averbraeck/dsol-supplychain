@@ -15,7 +15,7 @@ import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.dsol.swing.charts.xy.XYChart;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
-import nl.tudelft.simulation.supplychain.handler.demand.InternalDemandPolicyRFQ;
+import nl.tudelft.simulation.supplychain.handler.demand.InternalDemandHandlerRFQ;
 import nl.tudelft.simulation.supplychain.handler.payment.PaymentPolicy;
 import nl.tudelft.simulation.supplychain.handler.payment.PaymentPolicyEnum;
 import nl.tudelft.simulation.supplychain.message.store.trade.TradeMessageStoreInterface;
@@ -126,9 +126,9 @@ public class PCShop extends Retailer
         // BUY PRODUCTS WHEN THERE IS INTERNAL DEMAND
         //
         
-        // tell PCShop to use the InternalDemandPolicy for all products
-        InternalDemandPolicyRFQ demandPolicy =
-                new InternalDemandPolicyRFQ(this, new Duration(1.0, DurationUnit.HOUR), getInventory());
+        // tell PCShop to use the InternalDemandHandler for all products
+        InternalDemandHandlerRFQ demandPolicy =
+                new InternalDemandHandlerRFQ(this, new Duration(1.0, DurationUnit.HOUR), getInventory());
         for (Product product : getInventory().getProducts())
         {
             demandPolicy.addSupplier(product, this.manufacturer);

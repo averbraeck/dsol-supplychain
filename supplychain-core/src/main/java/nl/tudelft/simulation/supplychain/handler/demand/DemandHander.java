@@ -7,7 +7,7 @@ import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
 import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
 
 /**
- * The abstract DemandPolicy class provides the general methods that all DemandPolicy classes need, such as
+ * The abstract DemandHandler class provides the general methods that all DemandHandler classes need, such as
  * checking whether the message is really an Demand.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
@@ -29,13 +29,13 @@ public abstract class DemandHandler extends ContentHandler<Demand>
     protected Inventory inventory;
 
     /**
-     * Construct a new DemandPolicy.
+     * Construct a new DemandHandler.
      * @param id the id of the policy
      * @param owner the Role that has this policy.
      * @param handlingTime the distribution of the time to handle an demand
      * @param inventory the inventory for being able to change the ordered amount
      */
-    public DemandPolicy(final String id, final Role owner,
+    public DemandHandler(final String id, final Role owner,
             final DistContinuousDuration handlingTime, final Inventory inventory)
     {
         super(id, owner, Demand.class);

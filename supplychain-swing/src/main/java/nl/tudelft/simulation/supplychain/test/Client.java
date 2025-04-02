@@ -21,7 +21,7 @@ import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.handler.demand.InternalDemandPolicyRFQ;
+import nl.tudelft.simulation.supplychain.handler.demand.InternalDemandHandlerRFQ;
 import nl.tudelft.simulation.supplychain.handler.payment.PaymentPolicyEnum;
 import nl.tudelft.simulation.supplychain.message.store.trade.TradeMessageStoreInterface;
 import nl.tudelft.simulation.supplychain.money.Bank;
@@ -110,9 +110,9 @@ public class Client extends Customer
         dg.addDemandGenerator(this.product, demand);
         super.setDemandGeneration(dg);
         //
-        // tell Client to use the InternalDemandPolicy
-        InternalDemandPolicyRFQ demandPolicy =
-                new InternalDemandPolicyRFQ(this, new Duration(24.0, DurationUnit.HOUR), null); // XXX: Why does it need stock?
+        // tell Client to use the InternalDemandHandler
+        InternalDemandHandlerRFQ demandPolicy =
+                new InternalDemandHandlerRFQ(this, new Duration(24.0, DurationUnit.HOUR), null); // XXX: Why does it need stock?
         demandPolicy.addSupplier(this.product, this.retailer);
         //
         // tell Client to use the QuotePolicy to handle quotes

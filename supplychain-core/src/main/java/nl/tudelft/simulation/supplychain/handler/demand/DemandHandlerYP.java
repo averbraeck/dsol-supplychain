@@ -10,7 +10,7 @@ import nl.tudelft.simulation.supplychain.content.YellowPageRequest;
 import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
 
 /**
- * The DemandPolicyYP is a simple implementation of the business logic to handle a request for new products through a
+ * The DemandHandlerYP is a simple implementation of the business logic to handle a request for new products through a
  * yellow page request. When receiving the demand, it just creates an YP request, without a given time delay.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
@@ -18,7 +18,7 @@ import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class DemandPolicyYP extends DemandPolicy
+public class DemandHandlerYP extends DemandHandler
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
@@ -33,7 +33,7 @@ public class DemandPolicyYP extends DemandPolicy
     private int maximumNumber;
 
     /**
-     * Constructs a new DemandPolicyYP.
+     * Constructs a new DemandHandlerYP.
      * @param owner the owner of the demand
      * @param handlingTime the handling time distribution delay to use
      * @param yp the Actor that provides the yp service
@@ -41,10 +41,10 @@ public class DemandPolicyYP extends DemandPolicy
      * @param maximumNumber the max number of suppliers to return
      * @param stock the stock for being able to change the ordered amount
      */
-    public DemandPolicyYP(final Role owner, final DistContinuousDuration handlingTime,
+    public DemandHandlerYP(final Role owner, final DistContinuousDuration handlingTime,
             final Actor yp, final Length maximumDistance, final int maximumNumber, final Inventory stock)
     {
-        super("DemandPolicyYP", owner, handlingTime, stock);
+        super("DemandHandlerYP", owner, handlingTime, stock);
         this.yp = yp;
         this.maximumDistance = maximumDistance;
         this.maximumNumber = maximumNumber;

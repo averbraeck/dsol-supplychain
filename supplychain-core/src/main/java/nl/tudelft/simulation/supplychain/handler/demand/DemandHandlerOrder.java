@@ -21,7 +21,7 @@ import nl.tudelft.simulation.supplychain.transport.TransportOption;
 import nl.tudelft.simulation.supplychain.transport.TransportOptionProvider;
 
 /**
- * The DemandPolicyOrder is a simple implementation of the business logic to handle a request for new products through
+ * The DemandHandlerOrder is a simple implementation of the business logic to handle a request for new products through
  * direct ordering at a known supplier. When receiving the demand, it just creates an Order based on a table that maps
  * Products onto Actors, and sends it after a given time delay.
  * <p>
@@ -30,7 +30,7 @@ import nl.tudelft.simulation.supplychain.transport.TransportOptionProvider;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class DemandPolicyOrder extends DemandPolicy
+public class DemandHandlerOrder extends DemandHandler
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
@@ -45,18 +45,18 @@ public class DemandPolicyOrder extends DemandPolicy
     private final TransportChoiceProvider transportChoiceProvider;
 
     /**
-     * Constructs a new DemandPolicyOrder.
+     * Constructs a new DemandHandlerOrder.
      * @param owner the owner of the demand
      * @param transportOptionProvider the provider of transport options betwween two locations
      * @param transportChoiceProvider the provider to choose between transport options
      * @param handlingTime the handling time distribution
      * @param stock the stock for being able to change the ordered amount
      */
-    public DemandPolicyOrder(final BuyingRole owner, final TransportOptionProvider transportOptionProvider,
+    public DemandHandlerOrder(final BuyingRole owner, final TransportOptionProvider transportOptionProvider,
             final TransportChoiceProvider transportChoiceProvider, final DistContinuousDuration handlingTime,
             final Inventory stock)
     {
-        super("DemandPolicyOrder", owner, handlingTime, stock);
+        super("DemandHandlerOrder", owner, handlingTime, stock);
         Throw.whenNull(transportOptionProvider, "transportOptionProvider cannot be null");
         Throw.whenNull(transportChoiceProvider, "transportChoiceProvider cannot be null");
         this.transportOptionProvider = transportOptionProvider;

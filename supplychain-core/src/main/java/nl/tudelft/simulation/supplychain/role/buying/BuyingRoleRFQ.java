@@ -1,6 +1,6 @@
 package nl.tudelft.simulation.supplychain.role.buying;
 
-import nl.tudelft.simulation.supplychain.handler.demand.DemandPolicyRFQ;
+import nl.tudelft.simulation.supplychain.handler.demand.DemandHandlerRFQ;
 import nl.tudelft.simulation.supplychain.policy.bill.BillPolicy;
 import nl.tudelft.simulation.supplychain.policy.orderconfirmation.OrderConfirmationPolicy;
 import nl.tudelft.simulation.supplychain.policy.quote.QuotePolicy;
@@ -29,7 +29,7 @@ public class BuyingRoleRFQ extends BuyingRole
      * @param shipmentPolicy the shipment handler
      * @param billPolicy the bill handler
      */
-    public BuyingRoleRFQ(final BuyingActor owner, final DemandPolicyRFQ demandPolicy, final QuotePolicy quotePolicy,
+    public BuyingRoleRFQ(final BuyingActor owner, final DemandHandlerRFQ demandPolicy, final QuotePolicy quotePolicy,
             final OrderConfirmationPolicy orderConfirmationPolicy, final ShipmentPolicy shipmentPolicy,
             final BillPolicy billPolicy)
     {
