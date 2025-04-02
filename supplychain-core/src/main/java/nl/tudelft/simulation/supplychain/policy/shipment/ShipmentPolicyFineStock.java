@@ -64,7 +64,7 @@ public class ShipmentPolicyFineStock extends ShipmentPolicyStock
 
                 /*-
                  * TODO: send the bill for the fine
-                 * Bill bill = new Bill(getOwner(), shipment.getSender(), shipment.getInternalDemandID(), shipment.getOrder(),
+                 * Bill bill = new Bill(getOwner(), shipment.getSender(), shipment.getDemandID(), shipment.getOrder(),
                  * getOwner().getSimulatorTime() + (14.0 * day), fine, "FINE");
                  * sendMessage(bill, Duration.ZERO);
                  */

@@ -19,7 +19,7 @@ import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
  * @param receiver the receiver of the shipment
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
- * @param groupingId the id used to group multiple messages, such as the internalDemandId or the orderId
+ * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
  * @param order the order for which this was the confirmation
  * @param totalCargoValue the total value of the cargo
  */

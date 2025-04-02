@@ -46,7 +46,7 @@ public class RestockingServiceOscillation extends RestockingServiceFixed
     @Override
     protected void checkInventoryLevel()
     {
-        // just create an internal demand and send it to the owner
+        // just create an demand and send it to the owner
         double orderAmount = 0.0;
         double stockLevel = getInventory().getActualAmount(getProduct()) + getInventory().getOrderedAmount(getProduct());
         if (isIncludeClaims())
@@ -65,7 +65,7 @@ public class RestockingServiceOscillation extends RestockingServiceFixed
 
         if (orderAmount > 0.0)
         {
-            super.createInternalDemand(orderAmount);
+            super.createDemand(orderAmount);
         }
     }
 

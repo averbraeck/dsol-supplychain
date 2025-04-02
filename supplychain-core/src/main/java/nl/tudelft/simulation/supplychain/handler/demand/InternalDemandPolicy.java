@@ -2,25 +2,25 @@ package nl.tudelft.simulation.supplychain.handler.demand;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.content.InternalDemand;
+import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
 import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
 
 /**
- * The abstract InternalDemandPolicy class provides the general methods that all InternalDemandPolicy classes need, such as
- * checking whether the message is really an InternalDemand.
+ * The abstract DemandPolicy class provides the general methods that all DemandPolicy classes need, such as
+ * checking whether the message is really an Demand.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public abstract class InternalDemandHandler extends ContentHandler<InternalDemand>
+public abstract class DemandHandler extends ContentHandler<Demand>
 {
     /** */
     private static final long serialVersionUID = 20221201L;
 
-    /** the handling time distribution to handle internal demand. */
+    /** the handling time distribution to handle demand. */
     @SuppressWarnings("checkstyle:visibilitymodifier")
     protected DistContinuousDuration handlingTime;
 
@@ -29,16 +29,16 @@ public abstract class InternalDemandHandler extends ContentHandler<InternalDeman
     protected Inventory inventory;
 
     /**
-     * Construct a new InternalDemandPolicy.
+     * Construct a new DemandPolicy.
      * @param id the id of the policy
      * @param owner the Role that has this policy.
-     * @param handlingTime the distribution of the time to handle an internal demand
+     * @param handlingTime the distribution of the time to handle an demand
      * @param inventory the inventory for being able to change the ordered amount
      */
-    public InternalDemandPolicy(final String id, final Role owner,
+    public DemandPolicy(final String id, final Role owner,
             final DistContinuousDuration handlingTime, final Inventory inventory)
     {
-        super(id, owner, InternalDemand.class);
+        super(id, owner, Demand.class);
         this.handlingTime = handlingTime;
         this.inventory = inventory;
     }

@@ -41,7 +41,7 @@ public class OrderPolicyStock extends OrderPolicy<Order>
     public boolean handleContent(final Order order)
     {
         // send out the confirmation
-        OrderConfirmation orderConfirmation = new OrderConfirmation(getActor(), order.getSender(), order.getInternalDemandId(),
+        OrderConfirmation orderConfirmation = new OrderConfirmation(getActor(), order.getSender(), order.getDemandId(),
                 order, OrderConfirmation.CONFIRMED);
         sendMessage(orderConfirmation, Duration.ZERO);
 

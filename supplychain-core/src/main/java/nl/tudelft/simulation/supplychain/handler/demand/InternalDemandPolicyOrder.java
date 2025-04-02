@@ -9,7 +9,7 @@ import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Actor;
-import nl.tudelft.simulation.supplychain.content.InternalDemand;
+import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.OrderStandalone;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
@@ -21,8 +21,8 @@ import nl.tudelft.simulation.supplychain.transport.TransportOption;
 import nl.tudelft.simulation.supplychain.transport.TransportOptionProvider;
 
 /**
- * The InternalDemandPolicyOrder is a simple implementation of the business logic to handle a request for new products through
- * direct ordering at a known supplier. When receiving the internal demand, it just creates an Order based on a table that maps
+ * The DemandPolicyOrder is a simple implementation of the business logic to handle a request for new products through
+ * direct ordering at a known supplier. When receiving the demand, it just creates an Order based on a table that maps
  * Products onto Actors, and sends it after a given time delay.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
@@ -30,7 +30,7 @@ import nl.tudelft.simulation.supplychain.transport.TransportOptionProvider;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class InternalDemandPolicyOrder extends InternalDemandPolicy
+public class DemandPolicyOrder extends DemandPolicy
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
@@ -45,18 +45,18 @@ public class InternalDemandPolicyOrder extends InternalDemandPolicy
     private final TransportChoiceProvider transportChoiceProvider;
 
     /**
-     * Constructs a new InternalDemandPolicyOrder.
-     * @param owner the owner of the internal demand
+     * Constructs a new DemandPolicyOrder.
+     * @param owner the owner of the demand
      * @param transportOptionProvider the provider of transport options betwween two locations
      * @param transportChoiceProvider the provider to choose between transport options
      * @param handlingTime the handling time distribution
      * @param stock the stock for being able to change the ordered amount
      */
-    public InternalDemandPolicyOrder(final BuyingRole owner, final TransportOptionProvider transportOptionProvider,
+    public DemandPolicyOrder(final BuyingRole owner, final TransportOptionProvider transportOptionProvider,
             final TransportChoiceProvider transportChoiceProvider, final DistContinuousDuration handlingTime,
             final Inventory stock)
     {
-        super("InternalDemandPolicyOrder", owner, handlingTime, stock);
+        super("DemandPolicyOrder", owner, handlingTime, stock);
         Throw.whenNull(transportOptionProvider, "transportOptionProvider cannot be null");
         Throw.whenNull(transportChoiceProvider, "transportChoiceProvider cannot be null");
         this.transportOptionProvider = transportOptionProvider;
@@ -74,32 +74,32 @@ public class InternalDemandPolicyOrder extends InternalDemandPolicy
     }
 
     @Override
-    public boolean handleContent(final InternalDemand internalDemand)
+    public boolean handleContent(final Demand demand)
     {
-        if (!isValidMessage(internalDemand))
+        if (!isValidMessage(demand))
         {
             return false;
         }
         // resolve the suplier
-        SupplierRecord supplierRecord = this.suppliers.get(internalDemand.getProduct());
+        SupplierRecord supplierRecord = this.suppliers.get(demand.getProduct());
         if (supplierRecord == null)
         {
-            Logger.warn("checkContent", "InternalDemand for actor " + getRole() + " contains product "
-                    + internalDemand.getProduct().toString() + " without a supplier");
+            Logger.warn("checkContent", "Demand for actor " + getRole() + " contains product "
+                    + demand.getProduct().toString() + " without a supplier");
             return false;
         }
         // create an immediate order
         if (super.inventory != null)
         {
-            super.inventory.changeOrderedAmount(internalDemand.getProduct(), internalDemand.getAmount());
+            super.inventory.changeOrderedAmount(demand.getProduct(), demand.getAmount());
         }
         SellingActor supplier = supplierRecord.getSupplier();
-        Money price = supplierRecord.getUnitPrice().multiplyBy(internalDemand.getAmount());
+        Money price = supplierRecord.getUnitPrice().multiplyBy(demand.getAmount());
         Set<TransportOption> transportOptions = this.transportOptionProvider.provideTransportOptions(supplier, getActor());
         TransportOption transportOption =
-                this.transportChoiceProvider.chooseTransportOptions(transportOptions, internalDemand.getProduct().getSku());
-        Order order = new OrderStandalone(getRole().getActor(), supplier, internalDemand, internalDemand.getLatestDeliveryDate(),
-                internalDemand.getProduct(), internalDemand.getAmount(), price, transportOption);
+                this.transportChoiceProvider.chooseTransportOptions(transportOptions, demand.getProduct().getSku());
+        Order order = new OrderStandalone(getRole().getActor(), supplier, demand, demand.getLatestDeliveryDate(),
+                demand.getProduct(), demand.getAmount(), price, transportOption);
         // and send it out after the handling time
         sendMessage(order, this.handlingTime.draw());
         return true;

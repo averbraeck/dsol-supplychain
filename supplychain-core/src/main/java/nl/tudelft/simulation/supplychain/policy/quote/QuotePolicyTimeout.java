@@ -31,7 +31,7 @@ public class QuotePolicyTimeout extends QuotePolicy
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
 
-    /** a set of internal demand IDs for which we did not yet answer. */
+    /** a set of demand IDs for which we did not yet answer. */
     private Set<Serializable> unansweredIDs = new LinkedHashSet<Serializable>();
 
     /**
@@ -69,17 +69,17 @@ public class QuotePolicyTimeout extends QuotePolicy
         {
             return false;
         }
-        long internalDemandId = quote.getInternalDemandId();
+        long demandId = quote.getDemandId();
         TradeMessageStoreInterface messageStore = getActor().getContentStore();
-        int numberQuotes = messageStore.getMessageList(internalDemandId, Quote.class).size();
-        int numberRFQs = messageStore.getMessageList(internalDemandId, RequestForQuote.class).size();
+        int numberQuotes = messageStore.getMessageList(demandId, Quote.class).size();
+        int numberRFQs = messageStore.getMessageList(demandId, RequestForQuote.class).size();
         // when the first quote comes in, schedule the timeout
         if (numberQuotes == 1)
         {
             try
             {
-                this.unansweredIDs.add(internalDemandId);
-                Serializable[] args = new Serializable[] {internalDemandId};
+                this.unansweredIDs.add(demandId);
+                Serializable[] args = new Serializable[] {demandId};
 
                 // calculate the actual time out
                 Time time = Time.max(getSimulator().getAbsSimulatorTime(), quote.getRequestForQuote().getCutoffDate());
@@ -94,7 +94,7 @@ public class QuotePolicyTimeout extends QuotePolicy
         // look if all quotes are there for the RFQs that we sent out
         if (numberQuotes == numberRFQs)
         {
-            createOrder(internalDemandId);
+            createOrder(demandId);
         }
         return true;
     }
@@ -103,15 +103,15 @@ public class QuotePolicyTimeout extends QuotePolicy
      * All quotes are in, or time is over. Select the best quote, and place an order. The set of unansweredIDs is used to
      * determine if we already answered with an Order -- in many cases, the createOrder method is scheduled twice: once when all
      * the quotes are in, and once when the timeout is there.
-     * @param internalDemandId the original demand linked to the quotes
+     * @param demandId the original demand linked to the quotes
      */
-    protected void createOrder(final long internalDemandId)
+    protected void createOrder(final long demandId)
     {
-        if (this.unansweredIDs.contains(internalDemandId))
+        if (this.unansweredIDs.contains(demandId))
         {
-            this.unansweredIDs.remove(internalDemandId);
+            this.unansweredIDs.remove(demandId);
             TradeMessageStoreInterface messageStore = getActor().getContentStore();
-            List<Quote> quotes = messageStore.getMessageList(internalDemandId, Quote.class);
+            List<Quote> quotes = messageStore.getMessageList(demandId, Quote.class);
 
             // the size of the quotes is at least one
             // since the invocation of this method is scheduled after a first

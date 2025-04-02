@@ -12,7 +12,7 @@ import nl.tudelft.simulation.jstats.distributions.DistContinuous;
 import nl.tudelft.simulation.jstats.distributions.DistDiscrete;
 import nl.tudelft.simulation.jstats.distributions.DistDiscreteConstant;
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
-import nl.tudelft.simulation.supplychain.content.InternalDemand;
+import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 import nl.tudelft.simulation.supplychain.product.Product;
 
@@ -106,7 +106,7 @@ public class DemandGeneratingProcess extends AutonomousProcess<ConsumingRole>
     }
 
     /**
-     * Generate internal demand and send it to the BuyingActor.
+     * Generate demand and send it to the BuyingActor.
      */
     protected void generateDemand()
     {
@@ -114,19 +114,19 @@ public class DemandGeneratingProcess extends AutonomousProcess<ConsumingRole>
         {
             double amount = this.amountDistribution instanceof DistContinuous
                     ? ((DistContinuous) this.amountDistribution).draw() : ((DistDiscrete) this.amountDistribution).draw();
-            InternalDemand demand = new InternalDemand(getRole().getActor(), this.product, amount,
+            Demand demand = new Demand(getRole().getActor(), this.product, amount,
                     getRole().getSimulator().getAbsSimulatorTime().plus(this.earliestDeliveryDurationDistribution.draw()),
                     getRole().getSimulator().getAbsSimulatorTime().plus(this.latestDeliveryDurationDistribution.draw()));
             getRole().getActor().sendContent(demand, getRole().getAdministrativeDelay().draw());
             getRole().getSimulator().scheduleEventRel(this.intervalDistribution.draw(), this, "generateDemand", null);
 
-            // we might collect some statistics for the internal demand
+            // we might collect some statistics for the demand
             getRole().getActor().fireEvent(new TimedEvent<Time>(ConsumingRole.DEMAND_GENERATED_EVENT, demand,
                     getRole().getSimulator().getAbsSimulatorTime()));
         }
         catch (Exception e)
         {
-            Logger.error(e, "createInternalDemand");
+            Logger.error(e, "createDemand");
         }
     }
 

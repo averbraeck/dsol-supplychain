@@ -21,7 +21,7 @@ import nl.tudelft.simulation.supplychain.transport.TransportOption;
  * @param receiver the receiver of the standalone order
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
- * @param groupingId the id used to group multiple messages, such as the internalDemandId or the orderId
+ * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
  * @param deliveryDate the intended delivery date of the products
  * @param product the ordered product
  * @param amount the amount of the product, in units for that product

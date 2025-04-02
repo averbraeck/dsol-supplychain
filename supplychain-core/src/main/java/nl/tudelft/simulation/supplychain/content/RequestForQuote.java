@@ -20,31 +20,31 @@ import nl.tudelft.simulation.supplychain.transport.TransportOption;
  * @param receiver the receiver of the RFQ
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
- * @param groupingId the id used to group multiple messages, such as the internalDemandId or the orderId
- * @param internalDemand internal demand that triggered the process
+ * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
+ * @param demand demand that triggered the process
  * @param preferredTransportOption the preferred transport option for moving the product from sender to receiver
  * @param cutoffDuration after how much time will the RFQ stop collecting quotes?
  */
 public record RequestForQuote(BuyingActor sender, SellingActor receiver, Time timestamp, long uniqueId, long groupingId,
-        InternalDemand internalDemand, TransportOption preferredTransportOption, Duration cutoffDuration)
+        Demand demand, TransportOption preferredTransportOption, Duration cutoffDuration)
         implements GroupedContent, ProductContent
 {
-    public RequestForQuote(final BuyingActor sender, final SellingActor receiver, final InternalDemand internalDemand,
+    public RequestForQuote(final BuyingActor sender, final SellingActor receiver, final Demand demand,
             final TransportOption preferredTransportOption, final Duration cutoffDuration)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), internalDemand.groupingId(),
-                internalDemand, preferredTransportOption, cutoffDuration);
+        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), demand.groupingId(),
+                demand, preferredTransportOption, cutoffDuration);
     }
 
     @Override
     public Product product()
     {
-        return this.internalDemand.product();
+        return this.demand.product();
     }
 
     @Override
     public double amount()
     {
-        return this.internalDemand.amount();
+        return this.demand.amount();
     }
 }

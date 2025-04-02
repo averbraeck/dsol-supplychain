@@ -17,19 +17,19 @@ import nl.tudelft.simulation.supplychain.product.Product;
  * @param receiver the receiver of the production order
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
- * @param groupingId the id used to group multiple messages, such as the internalDemandId or the orderId
- * @param internalDemand the internal demand that triggers this production order
+ * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
+ * @param demand the demand that triggers this production order
  * @param product the ordered product
  * @param amount the amount of the product, in units for that product
  * @param dateReady the intended date when the products should be ready
  */
 public record ProductionOrder(Actor sender, Actor receiver, Time timestamp, long uniqueId, long groupingId,
-        InternalDemand internalDemand, Product product, double amount, Time dateReady) implements GroupedContent, ProductContent
+        Demand demand, Product product, double amount, Time dateReady) implements GroupedContent, ProductContent
 {
-    public ProductionOrder(final Actor sender, final Actor receiver, final InternalDemand internalDemand, final Time dateReady)
+    public ProductionOrder(final Actor sender, final Actor receiver, final Demand demand, final Time dateReady)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), internalDemand.groupingId(),
-                internalDemand, internalDemand.product(), internalDemand.amount(), dateReady);
+        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), demand.groupingId(),
+                demand, demand.product(), demand.amount(), dateReady);
     }
 
 }

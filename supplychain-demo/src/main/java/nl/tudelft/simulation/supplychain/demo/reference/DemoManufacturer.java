@@ -119,7 +119,7 @@ public class DemoManufacturer extends Manufacturer
 
         DistContinuousDuration administrativeDelayInternalDemand =
                 new DistContinuousDuration(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-        InternalDemandPolicyYP internalDemandHandler = new InternalDemandPolicyYP(this, administrativeDelayInternalDemand,
+        InternalDemandPolicyYP demandHandler = new InternalDemandPolicyYP(this, administrativeDelayInternalDemand,
                 ypProduction, new Length(1E6, LengthUnit.METER), 1000, super.inventory);
 
         DistContinuousDuration administrativeDelayYellowPageAnswer =
@@ -138,7 +138,7 @@ public class DemoManufacturer extends Manufacturer
         DistContinuousDuration paymentDelay = new DistContinuousDuration(new DistConstant(stream, 0.0), DurationUnit.HOUR);
         BillPolicy billHandler = new BillPolicy(this, this.getBankAccount(), PaymentPolicyEnum.PAYMENT_ON_TIME, paymentDelay);
 
-        BuyingRoleYP buyingRole = new BuyingRoleYP(this, simulator, internalDemandHandler, ypAnswerHandler, quoteHandler,
+        BuyingRoleYP buyingRole = new BuyingRoleYP(this, simulator, demandHandler, ypAnswerHandler, quoteHandler,
                 orderConfirmationHandler, shipmentHandler, billHandler);
         this.setBuyingRole(buyingRole);
 

@@ -39,7 +39,7 @@ public class OrderPolicyMake extends OrderPolicy<Order>
     public boolean handleContent(final Order order)
     {
         // send out the confirmation
-        OrderConfirmation orderConfirmation = new OrderConfirmation(getActor(), order.getSender(), order.getInternalDemandId(),
+        OrderConfirmation orderConfirmation = new OrderConfirmation(getActor(), order.getSender(), order.getDemandId(),
                 order, OrderConfirmation.CONFIRMED);
         sendMessage(orderConfirmation, Duration.ZERO);
 
@@ -47,7 +47,7 @@ public class OrderPolicyMake extends OrderPolicy<Order>
                 getActor().getName(), orderConfirmation);
 
         // this is MTO, so we don't keep stock of this product. Therefore, produce it.
-        ProductionOrder productionOrder = new ProductionOrder(getActor(), order.getInternalDemandId(), order.getDeliveryDate(),
+        ProductionOrder productionOrder = new ProductionOrder(getActor(), order.getDemandId(), order.getDeliveryDate(),
                 order.getProduct(), order.getAmount());
         sendMessage(productionOrder);
 

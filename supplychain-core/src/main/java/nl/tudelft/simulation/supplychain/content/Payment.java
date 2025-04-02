@@ -15,7 +15,7 @@ import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
  * @param receiver the receiver of the payment
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
- * @param groupingId the id used to group multiple messages, such as the internalDemandId or the orderId
+ * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
  * @param bill the bill to which this payment belongs
  */
 public record Payment(FinancingActor sender, FinancingActor receiver, Time timestamp, long uniqueId, long groupingId, Bill bill)

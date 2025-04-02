@@ -10,7 +10,7 @@ import org.pmw.tinylog.Logger;
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.content.InternalDemand;
+import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.content.YellowPageAnswer;
 import nl.tudelft.simulation.supplychain.content.YellowPageRequest;
@@ -79,15 +79,15 @@ public class YellowPageAnswerHandler extends ContentHandler<YellowPageAnswer>
         }
         TradeMessageStoreInterface messageStore = getActor().getContentStore();
         YellowPageRequest ypRequest = ypAnswer.getYellowPageRequest();
-        List<InternalDemand> internalDemandList =
-                messageStore.getMessageList(ypRequest.getInternalDemandId(), InternalDemand.class);
-        if (internalDemandList.size() == 0) // we send it to ourselves, so it is 2x in the content store
+        List<Demand> demandList =
+                messageStore.getMessageList(ypRequest.getDemandId(), Demand.class);
+        if (demandList.size() == 0) // we send it to ourselves, so it is 2x in the content store
         {
-            Logger.warn("YPAnswerHandler - Actor '{}' could not find InternalDemandID '{}' for YPAnswer '{}'",
-                    getActor().getName(), ypRequest.getInternalDemandId(), ypAnswer.toString());
+            Logger.warn("YPAnswerHandler - Actor '{}' could not find DemandID '{}' for YPAnswer '{}'",
+                    getActor().getName(), ypRequest.getDemandId(), ypAnswer.toString());
             return false;
         }
-        InternalDemand internalDemand = internalDemandList.get(0);
+        Demand demand = demandList.get(0);
         List<Actor> potentialSuppliers = ypAnswer.getSuppliers();
         Duration delay = this.handlingTime.draw();
         for (Actor supplier : potentialSuppliers)
@@ -96,7 +96,7 @@ public class YellowPageAnswerHandler extends ContentHandler<YellowPageAnswer>
             TransportOption transportOption =
                     this.transportChoiceProvider.chooseTransportOptions(transportOptions, ypRequest.getProduct().getSku());
             RequestForQuote rfq =
-                    new RequestForQuote(getActor(), supplier, internalDemand, transportOption, this.cutoffDuration);
+                    new RequestForQuote(getActor(), supplier, demand, transportOption, this.cutoffDuration);
             sendMessage(rfq, delay);
         }
         return true;

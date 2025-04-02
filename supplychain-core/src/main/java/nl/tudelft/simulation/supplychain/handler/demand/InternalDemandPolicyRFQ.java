@@ -13,7 +13,7 @@ import org.pmw.tinylog.Logger;
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.content.InternalDemand;
+import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
@@ -22,8 +22,8 @@ import nl.tudelft.simulation.supplychain.transport.TransportOption;
 import nl.tudelft.simulation.supplychain.transport.TransportOptionProvider;
 
 /**
- * The InternalDemandPolicyRFQ is a simple implementation of the business logic to handle a request for new products through
- * sending out a number of RFQs to a list of preselected suppliers. When receiving the internal demand, it just creates a number
+ * The DemandPolicyRFQ is a simple implementation of the business logic to handle a request for new products through
+ * sending out a number of RFQs to a list of preselected suppliers. When receiving the demand, it just creates a number
  * of RFQs based on a table that maps Products onto a list of Actors, and sends them out, all at the same time, after a given
  * time delay.
  * <p>
@@ -32,7 +32,7 @@ import nl.tudelft.simulation.supplychain.transport.TransportOptionProvider;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class InternalDemandPolicyRFQ extends InternalDemandPolicy
+public class DemandPolicyRFQ extends DemandPolicy
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
@@ -50,19 +50,19 @@ public class InternalDemandPolicyRFQ extends InternalDemandPolicy
     private final Duration cutoffDuration;
 
     /**
-     * Constructs a new InternalDemandPolicyRFQ.
-     * @param owner the owner of the internal demand
+     * Constructs a new DemandPolicyRFQ.
+     * @param owner the owner of the demand
      * @param transportOptionProvider the provider of transport options betwween two locations
      * @param transportChoiceProvider the provider to choose between transport options
      * @param handlingTime the distribution of the time to react on the YP answer
      * @param cutoffDuration the maximum time after which the RFQ will stop collecting quotes
      * @param stock the stock for being able to change the ordered amount
      */
-    public InternalDemandPolicyRFQ(final Role owner, final TransportOptionProvider transportOptionProvider,
+    public DemandPolicyRFQ(final Role owner, final TransportOptionProvider transportOptionProvider,
             final TransportChoiceProvider transportChoiceProvider, final DistContinuousDuration handlingTime,
             final Duration cutoffDuration, final Inventory stock)
     {
-        super("InternalDemandPolicyRFQ", owner, handlingTime, stock);
+        super("DemandPolicyRFQ", owner, handlingTime, stock);
         Throw.whenNull(transportOptionProvider, "transportOptionProvider cannot be null");
         Throw.whenNull(transportChoiceProvider, "transportChoiceProvider cannot be null");
         Throw.whenNull(cutoffDuration, "cutoffDuration cannot be null");
@@ -102,35 +102,35 @@ public class InternalDemandPolicyRFQ extends InternalDemandPolicy
     }
 
     @Override
-    public boolean handleContent(final InternalDemand internalDemand)
+    public boolean handleContent(final Demand demand)
     {
-        if (!isValidMessage(internalDemand))
+        if (!isValidMessage(demand))
         {
             Logger.warn("handleContent",
-                    "InternalDemand " + internalDemand.toString() + " for actor " + getRole() + " not considered valid.");
+                    "Demand " + demand.toString() + " for actor " + getRole() + " not considered valid.");
             return false;
         }
         // resolve the suplier
-        Set<Actor> supplierSet = this.suppliers.get(internalDemand.getProduct());
+        Set<Actor> supplierSet = this.suppliers.get(demand.getProduct());
         if (supplierSet == null)
         {
-            Logger.warn("handleContent", "InternalDemand for actor " + getRole() + " contains product "
-                    + internalDemand.getProduct().toString() + " without any suppliers.");
+            Logger.warn("handleContent", "Demand for actor " + getRole() + " contains product "
+                    + demand.getProduct().toString() + " without any suppliers.");
             return false;
         }
         // create an RFQ for each of the suppliers
         if (super.inventory != null)
         {
-            super.inventory.changeOrderedAmount(internalDemand.getProduct(), internalDemand.getAmount());
+            super.inventory.changeOrderedAmount(demand.getProduct(), demand.getAmount());
         }
         Duration delay = this.handlingTime.draw();
         for (Actor supplier : supplierSet)
         {
             Set<TransportOption> transportOptions = this.transportOptionProvider.provideTransportOptions(supplier, getActor());
             TransportOption transportOption =
-                    this.transportChoiceProvider.chooseTransportOptions(transportOptions, internalDemand.getProduct().getSku());
+                    this.transportChoiceProvider.chooseTransportOptions(transportOptions, demand.getProduct().getSku());
             RequestForQuote rfq =
-                    new RequestForQuote(getActor(), supplier, internalDemand, transportOption, this.cutoffDuration);
+                    new RequestForQuote(getActor(), supplier, demand, transportOption, this.cutoffDuration);
             sendMessage(rfq, delay);
         }
         return true;

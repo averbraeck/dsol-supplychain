@@ -127,11 +127,11 @@ public class PCShop extends Retailer
         //
         
         // tell PCShop to use the InternalDemandPolicy for all products
-        InternalDemandPolicyRFQ internalDemandPolicy =
+        InternalDemandPolicyRFQ demandPolicy =
                 new InternalDemandPolicyRFQ(this, new Duration(1.0, DurationUnit.HOUR), getInventory());
         for (Product product : getInventory().getProducts())
         {
-            internalDemandPolicy.addSupplier(product, this.manufacturer);
+            demandPolicy.addSupplier(product, this.manufacturer);
         }
         //
         // tell PCShop to use the QuotePolicy to handle quotes
@@ -149,7 +149,7 @@ public class PCShop extends Retailer
         ShipmentPolicy shipmentPolicy = new ShipmentPolicyStock(this, getInventory());
         //
         // add the Policys to the buying role for PCShop
-        BuyingRoleYP buyingRole = new BuyingRoleYP(this, getSimulator(), internalDemandPolicy, quotePolicy,
+        BuyingRoleYP buyingRole = new BuyingRoleYP(this, getSimulator(), demandPolicy, quotePolicy,
                 confirmationPolicy, shipmentPolicy, billPolicy);
         super.setBuyingRole(buyingRole);
         //

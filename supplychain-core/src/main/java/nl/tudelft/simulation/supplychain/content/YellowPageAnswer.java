@@ -19,7 +19,7 @@ import nl.tudelft.simulation.supplychain.role.yellowpage.YellowPageActor;
  * @param receiver the receiver of the yellow page answer
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
- * @param groupingId the id used to group multiple messages, such as the internalDemandId or the orderId
+ * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
  * @param ypRequest the request that triggered this YP answer
  * @param actorList the suppliers of the requested product or service
  */

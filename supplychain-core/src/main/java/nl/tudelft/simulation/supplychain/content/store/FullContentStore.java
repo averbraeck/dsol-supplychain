@@ -13,7 +13,7 @@ import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.content.Bill;
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.GroupedContent;
-import nl.tudelft.simulation.supplychain.content.InternalDemand;
+import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.content.OrderBasedOnQuote;
 import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
@@ -151,15 +151,15 @@ public class FullContentStore implements ContentStoreInterface
             removeContentList(contentMap, Shipment.class);
             removeContentList(contentMap, Bill.class);
             removeContentList(contentMap, Payment.class);
-            removeContentList(contentMap, InternalDemand.class);
+            removeContentList(contentMap, Demand.class);
             removeContentList(contentMap, ProductionOrder.class);
         }
     }
 
     /**
-     * Private, local method to remove all the content from one of the lists in the internalDemandMap for a certain groupingId
+     * Private, local method to remove all the content from one of the lists in the demandMap for a certain groupingId
      * for a certain content type.
-     * @param contentMap the Map for one internal demand ID to clean
+     * @param contentMap the Map for one demand ID to clean
      * @param contentType the content type to search for
      */
     private synchronized void removeContentList(final Map<Class<? extends Content>, List<? super Content>> contentMap,
@@ -179,7 +179,7 @@ public class FullContentStore implements ContentStoreInterface
 
     /**
      * Method getContentList returns a list of Content objects of type contentClass based on the groupingId.
-     * @param groupingId the identifier of the InternalDemand belonging to the content
+     * @param groupingId the identifier of the Demand belonging to the content
      * @param contentClass the content class to look for
      * @return returns a list of content items of class contentClass based on the groupingId
      */

@@ -1,6 +1,6 @@
 package nl.tudelft.simulation.supplychain.role.buying;
 
-import nl.tudelft.simulation.supplychain.handler.demand.InternalDemandPolicyYP;
+import nl.tudelft.simulation.supplychain.handler.demand.DemandPolicyYP;
 import nl.tudelft.simulation.supplychain.policy.bill.BillPolicy;
 import nl.tudelft.simulation.supplychain.policy.orderconfirmation.OrderConfirmationPolicy;
 import nl.tudelft.simulation.supplychain.policy.quote.QuotePolicy;
@@ -23,20 +23,20 @@ public class BuyingRoleYP extends BuyingRole
     /**
      * Construct a new BuyingRole for Demand - YPAnswer - Quote - Confirmation - Shipment - Bill.
      * @param owner the actor to which this role belongs
-     * @param internalDemandPolicy the internal demand handler, results in sending out an RFQ
+     * @param demandPolicy the demand handler, results in sending out an RFQ
      * @param ypAnswerPolicy the yellow page answer handler
      * @param quotePolicy the quote handler
      * @param orderConfirmationPolicy the order confirmation handler
      * @param shipmentPolicy the shipment handler
      * @param billPolicy the bill handler
      */
-    public BuyingRoleYP(final BuyingActor owner, final InternalDemandPolicyYP internalDemandPolicy,
+    public BuyingRoleYP(final BuyingActor owner, final DemandPolicyYP demandPolicy,
             final YellowPageAnswerPolicy ypAnswerPolicy, final QuotePolicy quotePolicy,
             final OrderConfirmationPolicy orderConfirmationPolicy, final ShipmentPolicy shipmentPolicy,
             final BillPolicy billPolicy)
     {
         super(owner);
-        setContentHandler(internalDemandPolicy);
+        setContentHandler(demandPolicy);
         setContentHandler(ypAnswerPolicy);
         setContentHandler(quotePolicy);
         setContentHandler(orderConfirmationPolicy);

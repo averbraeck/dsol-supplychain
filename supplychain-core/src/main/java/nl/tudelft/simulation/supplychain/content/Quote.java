@@ -20,7 +20,7 @@ import nl.tudelft.simulation.supplychain.transport.TransportOption;
  * @param receiver the receiver of the quote
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
- * @param groupingId the id used to group multiple messages, such as the internalDemandId or the orderId
+ * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
  * @param requestForQuote the RFQ for which this is the quote
  * @param product the product of the quote, couldbe a replacement product
  * @param amount the amount of products, could be less than the requested amount in the RFQ

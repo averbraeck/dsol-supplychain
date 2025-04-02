@@ -101,7 +101,7 @@ public class Client extends Customer
         StreamInterface stream = getSimulator().getModel().getStream("default");
         Duration hour = new Duration(1.0, DurationUnit.HOUR);
         //
-        // create the internal demand for PCs
+        // create the demand for PCs
         DemandGeneratingProcess demand = new DemandGeneratingProcess(this.product,
                 new DistContinuousDuration(new DistExponential(stream, 24.0), DurationUnit.HOUR), new DistConstant(stream, 1.0),
                 new DistConstantDuration(Duration.ZERO), new DistConstantDuration(new Duration(14.0, DurationUnit.DAY)));
@@ -111,9 +111,9 @@ public class Client extends Customer
         super.setDemandGeneration(dg);
         //
         // tell Client to use the InternalDemandPolicy
-        InternalDemandPolicyRFQ internalDemandPolicy =
+        InternalDemandPolicyRFQ demandPolicy =
                 new InternalDemandPolicyRFQ(this, new Duration(24.0, DurationUnit.HOUR), null); // XXX: Why does it need stock?
-        internalDemandPolicy.addSupplier(this.product, this.retailer);
+        demandPolicy.addSupplier(this.product, this.retailer);
         //
         // tell Client to use the QuotePolicy to handle quotes
         QuotePolicy quotePolicy = new QuotePolicyAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE,
@@ -130,7 +130,7 @@ public class Client extends Customer
         ShipmentPolicy shipmentPolicy = new ShipmentPolicyConsume(this);
         //
         // add the Policys to the buying role for Client
-        BuyingRoleYP buyingRole = new BuyingRoleYP(this, super.simulator, internalDemandPolicy, quotePolicy,
+        BuyingRoleYP buyingRole = new BuyingRoleYP(this, super.simulator, demandPolicy, quotePolicy,
                 confirmationPolicy, shipmentPolicy, billPolicy);
         super.setBuyingRole(buyingRole);
 

@@ -19,7 +19,7 @@ import nl.tudelft.simulation.supplychain.transport.TransportOption;
  * @param receiver the receiver of the quote-based order
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
- * @param groupingId the id used to group multiple messages, such as the internalDemandId or the orderId
+ * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
  * @param quote the quote on which the order is based
  * @param deliveryDate the intended delivery date of the products
  * @param transportOption the accepted transport option

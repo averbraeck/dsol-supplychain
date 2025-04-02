@@ -51,7 +51,7 @@ public class RestockingServiceFixed extends AbstractRestockingService
     @Override
     protected void checkInventoryLevel()
     {
-        // just create an internal demand and send it to the owner
+        // just create an demand and send it to the owner
         double orderAmount = 0.0;
         if (this.ceiling)
         {
@@ -69,7 +69,7 @@ public class RestockingServiceFixed extends AbstractRestockingService
         }
         if (orderAmount > 0.0)
         {
-            createInternalDemand(orderAmount);
+            createDemand(orderAmount);
         }
     }
 

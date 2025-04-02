@@ -86,7 +86,7 @@ public abstract class OrderPolicy<O extends Order> extends SupplyChainPolicy<O>
                 // available: make shipment and ship to customer
                 Money unitPrice = this.stock.getUnitPrice(product);
                 double actualAmount = this.stock.removeFromInventory(product, amount);
-                Shipment shipment = new Shipment(getActor(), order.getSender(), order.getInternalDemandId(), order, product,
+                Shipment shipment = new Shipment(getActor(), order.getSender(), order.getDemandId(), order, product,
                         actualAmount, unitPrice.multiplyBy(actualAmount));
                 shipment.setInTransit(true);
 
@@ -95,7 +95,7 @@ public abstract class OrderPolicy<O extends Order> extends SupplyChainPolicy<O>
                 sendMessage(shipment, transportTime);
 
                 // send a bill when the shipment leaves...
-                Bill bill = new Bill(getActor(), order.getSender(), order.getInternalDemandId(), order,
+                Bill bill = new Bill(getActor(), order.getSender(), order.getDemandId(), order,
                         getSimulator().getAbsSimulatorTime().plus(new Duration(14.0, DurationUnit.DAY)),
                         shipment.getTotalCargoValue(), "SALE");
 

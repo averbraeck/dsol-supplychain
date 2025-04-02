@@ -86,7 +86,7 @@ public class OrderConfirmationPolicyFine extends OrderConfirmationPolicy
      */
     protected void checkShipment(final OrderConfirmation orderConfirmation)
     {
-        if (getActor().getContentStore().getMessageList(orderConfirmation.getInternalDemandId(), Shipment.class).isEmpty())
+        if (getActor().getContentStore().getMessageList(orderConfirmation.getDemandId(), Shipment.class).isEmpty())
         {
 
             // there is still an order, but no shipment... we fine!
@@ -96,7 +96,7 @@ public class OrderConfirmationPolicyFine extends OrderConfirmationPolicy
             // TODO: send a bill for the fine instead of direct booking through the bank
             System.err.println("BILL FOR SUPPLIER ORDERCONF FINE, ACTOR " + getOwner());
             // send the bill for the fine
-            Bill bill = new Bill(getOwner(), orderConfirmation.getSender(), orderConfirmation.getInternalDemandID(),
+            Bill bill = new Bill(getOwner(), orderConfirmation.getSender(), orderConfirmation.getDemandID(),
                     orderConfirmation.getOrder(), getOwner().getSimulatorTime().plus(new Duration(14.0, DurationUnit.DAY)),
                     fine, "FINE - LATE PAYMENT");
             sendMessage(bill, Duration.ZERO);

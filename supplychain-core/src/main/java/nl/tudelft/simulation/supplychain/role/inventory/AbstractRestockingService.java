@@ -7,7 +7,7 @@ import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Actor;
-import nl.tudelft.simulation.supplychain.content.InternalDemand;
+import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.product.Product;
 
@@ -87,15 +87,15 @@ public abstract class AbstractRestockingService implements RestockingServiceInte
     protected abstract void checkInventoryLevel();
 
     /**
-     * Creates an internal demand order.
+     * Creates an demand order.
      * @param orderAmount the amount to order or manufacture
      */
-    protected void createInternalDemand(final double orderAmount)
+    protected void createDemand(final double orderAmount)
     {
         Actor owner = this.inventory.getOwner();
-        InternalDemand internalDemand = new InternalDemand(owner, this.product, orderAmount, owner.getSimulatorTime(),
+        Demand demand = new Demand(owner, this.product, orderAmount, owner.getSimulatorTime(),
                 owner.getSimulatorTime().plus(this.maxDeliveryDuration));
-        owner.sendContent(internalDemand, Duration.ZERO);
+        owner.sendContent(demand, Duration.ZERO);
     }
 
     /**

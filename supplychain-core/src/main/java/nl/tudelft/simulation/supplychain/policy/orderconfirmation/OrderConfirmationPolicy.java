@@ -4,7 +4,7 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.content.InternalDemand;
+import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
 import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
 
@@ -55,33 +55,33 @@ public class OrderConfirmationHandler extends ContentHandler<OrderConfirmation>
                 System.out.println("OrderConfirmationHandler: handleContent: !orderConfirmation.isAccepted()");
             }
 
-            InternalDemand oldID = null;
+            Demand oldID = null;
             try
             {
                 // TODO: place some business logic here to handle the problem
                 oldID = getActor().getContentStore()
-                        .getMessageList(orderConfirmation.getInternalDemandId(), InternalDemand.class).get(0);
+                        .getMessageList(orderConfirmation.getDemandId(), Demand.class).get(0);
 
                 if (oldID == null)
                 {
                     Logger.warn("handleContent",
-                            "Could not find InternalDemand for OrderConfirmation " + orderConfirmation.toString());
+                            "Could not find Demand for OrderConfirmation " + orderConfirmation.toString());
                     return false;
                 }
             }
             catch (Exception exception)
             {
                 Logger.warn("handleContent",
-                        "Could not find InternalDemand for OrderConfirmation " + orderConfirmation.toString());
+                        "Could not find Demand for OrderConfirmation " + orderConfirmation.toString());
                 return false;
             }
 
-            InternalDemand newID = new InternalDemand(oldID.getSender(), oldID.getProduct(), oldID.getAmount(),
+            Demand newID = new Demand(oldID.getSender(), oldID.getProduct(), oldID.getAmount(),
                     oldID.getEarliestDeliveryDate(), oldID.getLatestDeliveryDate());
             sendMessage(newID, Duration.ZERO);
 
-            // also clean the messageStore for the old internal demand
-            getActor().getContentStore().removeAllMessages(orderConfirmation.getInternalDemandId());
+            // also clean the messageStore for the old demand
+            getActor().getContentStore().removeAllMessages(orderConfirmation.getDemandId());
         }
         return true;
     }

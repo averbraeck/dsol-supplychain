@@ -8,9 +8,9 @@ import nl.tudelft.simulation.supplychain.content.Content;
 
 /**
  * A ContentStore is taking care of storing content for later use, for instance for matching purposes. It acts as an ERP or
- * database system for the supply chain actor. In this implementation, all the content are linked to an InternalDemand, as this
+ * database system for the supply chain actor. In this implementation, all the content are linked to an Demand, as this
  * sets off the whole chain of content, no matter whether it is a purchase, internal production, or stock replenishment: in all
- * cases the InternalDemand triggers all the other content.
+ * cases the Demand triggers all the other content.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.

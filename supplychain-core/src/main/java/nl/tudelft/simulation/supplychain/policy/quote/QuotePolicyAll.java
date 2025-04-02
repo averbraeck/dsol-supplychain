@@ -65,7 +65,7 @@ public class QuotePolicyAll extends QuotePolicy
             return false;
         }
         // look if all quotes are there for the RFQs that we sent out
-        long id = quote.getInternalDemandId();
+        long id = quote.getDemandId();
         TradeMessageStoreInterface messageStore = getActor().getContentStore();
         if (messageStore.getMessageList(id, Quote.class).size() == messageStore.getMessageList(id, RequestForQuote.class)
                 .size())

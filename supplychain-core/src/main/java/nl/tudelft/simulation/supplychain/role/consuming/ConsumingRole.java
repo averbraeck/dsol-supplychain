@@ -11,7 +11,7 @@ import org.djutils.metadata.ObjectDescriptor;
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Content;
-import nl.tudelft.simulation.supplychain.content.InternalDemand;
+import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 import nl.tudelft.simulation.supplychain.product.Product;
@@ -32,7 +32,7 @@ public class ConsumingRole extends Role<ConsumingRole>
 
     /** an event fired in case demand has been generated. */
     public static final EventType DEMAND_GENERATED_EVENT = new EventType("DEMAND_GENERATED_EVENT",
-            new MetaData("demand", "generated demand", new ObjectDescriptor("demand", "demand", InternalDemand.class)));
+            new MetaData("demand", "generated demand", new ObjectDescriptor("demand", "demand", Demand.class)));
 
     /** map of Product - Demand pairs. */
     private Map<Product, DemandGeneratingProcess> demandGenerators = new LinkedHashMap<Product, DemandGeneratingProcess>();
