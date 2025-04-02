@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
+import org.djutils.exceptions.Throw;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.SimRuntimeException;
@@ -52,6 +53,8 @@ public class BillHandler extends ContentHandler<Bill, FinancingRole>
             final DistContinuousDuration paymentDelay)
     {
         super("BillHandler", owner, Bill.class);
+        Throw.whenNull(paymentPolicy, "paymentPolicy cannot be null");
+        Throw.whenNull(paymentDelay, "paymentDelay cannot be null");
         this.paymentPolicy = paymentPolicy;
         this.paymentDelay = paymentDelay;
     }
