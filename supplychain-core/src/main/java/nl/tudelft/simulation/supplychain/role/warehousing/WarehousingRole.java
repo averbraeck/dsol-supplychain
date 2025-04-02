@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.role.inventory;
+package nl.tudelft.simulation.supplychain.role.warehousing;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -21,7 +21,7 @@ import nl.tudelft.simulation.supplychain.product.ProductAmount;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public abstract class InventoryRole extends Role
+public abstract class WarehousingRole extends Role
 {
     /** */
     private static final long serialVersionUID = 20221206L;
@@ -37,7 +37,7 @@ public abstract class InventoryRole extends Role
      * Create an InventoryRole object for an actor, with an empty inventory.
      * @param owner the owner of this role
      */
-    public InventoryRole(final InventoryActor owner)
+    public WarehousingRole(final WarehousingActor owner)
     {
         super("inventory", owner, new ContentReceiverDirect());
         this.inventory = new Inventory(this);
@@ -48,7 +48,7 @@ public abstract class InventoryRole extends Role
      * @param owner the owner of this role
      * @param initialInventory the Inventory to use within this role
      */
-    public InventoryRole(final InventoryActor owner, final List<ProductAmount> initialInventory)
+    public WarehousingRole(final WarehousingActor owner, final List<ProductAmount> initialInventory)
     {
         super("inventory", owner, new ContentReceiverDirect());
         Throw.whenNull(initialInventory, "initialInventory cannot be null");

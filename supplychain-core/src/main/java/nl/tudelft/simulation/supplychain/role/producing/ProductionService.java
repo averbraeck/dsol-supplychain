@@ -7,8 +7,8 @@ import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.supplychain.content.ProductionOrder;
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
-import nl.tudelft.simulation.supplychain.role.inventory.InventoryRole;
+import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
 
 /**
  * The abstract class ProductionService implements the ProductionService and is a simple starting point for the production of
@@ -25,7 +25,7 @@ public abstract class ProductionService implements Serializable
     private static final long serialVersionUID = 20221201L;
 
     /** The actor that owns the production service. */
-    private InventoryRole owner;
+    private WarehousingRole owner;
 
     /** The product of the production service. */
     private Product product;
@@ -35,7 +35,7 @@ public abstract class ProductionService implements Serializable
      * @param owner the role that owns the production service.
      * @param product the product of the production service.
      */
-    public ProductionService(final InventoryRole owner, final Product product)
+    public ProductionService(final WarehousingRole owner, final Product product)
     {
         Throw.whenNull(owner, "owner cannot be null");
         Throw.whenNull(product, "product cannot be null");
@@ -68,7 +68,7 @@ public abstract class ProductionService implements Serializable
      * Return the role with inventory.
      * @return the actor with inventory
      */
-    public InventoryRole getOwner()
+    public WarehousingRole getOwner()
     {
         return this.owner;
     }

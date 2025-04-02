@@ -11,7 +11,7 @@ import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.OrderBasedOnQuote;
 import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
 import nl.tudelft.simulation.supplychain.content.ProductionOrder;
-import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
+import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
 
 /**
  * <p>

@@ -13,8 +13,8 @@ import nl.tudelft.simulation.supplychain.content.Shipment;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
+import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
 
 /**
  * The OrderHandler contains the business logic for handling an incoming Order. It will send out a positive or negative

@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.role.inventory;
+package nl.tudelft.simulation.supplychain.role.warehousing;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
     private final Actor owner;
 
     /** the InventoryRole of the owner. */
-    private final InventoryRole inventoryRole;
+    private final WarehousingRole inventoryRole;
 
     /** record keeping of the inventory. */
     private Map<Product, InventoryRecord> inventoryRecords = new LinkedHashMap<Product, InventoryRecord>();
@@ -59,7 +59,7 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
      * Create a new Inventory for an actor.
      * @param inventoryRole the Role that physically handles the inventory.
      */
-    public Inventory(final InventoryRole inventoryRole)
+    public Inventory(final WarehousingRole inventoryRole)
     {
         Throw.whenNull(inventoryRole, "inventoryRole cannot be null");
         this.owner = inventoryRole.getActor();
@@ -71,7 +71,7 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
      * @param inventoryRole the Role that physically handles the inventory.
      * @param initialInventory the initial inventory
      */
-    public Inventory(final InventoryRole inventoryRole, final List<ProductAmount> initialInventory)
+    public Inventory(final WarehousingRole inventoryRole, final List<ProductAmount> initialInventory)
     {
         this(inventoryRole);
         Throw.whenNull(initialInventory, "initialInventory cannot be null");

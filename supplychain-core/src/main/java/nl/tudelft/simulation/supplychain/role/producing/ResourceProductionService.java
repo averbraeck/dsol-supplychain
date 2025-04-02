@@ -15,7 +15,7 @@ import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.content.ProductionOrder;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.supplychain.role.inventory.InventoryRole;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
 
 /**
  * The ResourceProductionService simulates a manufacturing or assembly process that is constrained by the (non-)availability of
@@ -54,7 +54,7 @@ public class ResourceProductionService extends ProductionService
      * @param greedy if true, immediately start picking raw materials when production has to start.
      * @param profitMargin the fraction that is added to the cost of the materials.
      */
-    public ResourceProductionService(final InventoryRole owner, final Product product,
+    public ResourceProductionService(final WarehousingRole owner, final Product product,
             final DistContinuousDuration productionTime, final boolean fixedTime, final boolean greedy,
             final double profitMargin)
     {

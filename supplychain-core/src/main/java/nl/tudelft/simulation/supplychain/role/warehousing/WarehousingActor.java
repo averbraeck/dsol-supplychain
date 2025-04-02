@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.role.inventory;
+package nl.tudelft.simulation.supplychain.role.warehousing;
 
 import nl.tudelft.simulation.supplychain.actor.Actor;
 
@@ -10,18 +10,18 @@ import nl.tudelft.simulation.supplychain.actor.Actor;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public interface InventoryActor extends Actor
+public interface WarehousingActor extends Actor
 {
     /**
      * Return the InventoryRole for this actor.
      * @return the InventoryRole for this actor
      */
-    InventoryRole getInventoryRole();
+    WarehousingRole getInventoryRole();
 
     /**
      * Set the InventoryRole for this actor.
      * @param inventoryRole the new InventoryRole for this actor
      */
-    void setInventoryRole(InventoryRole inventoryRole);
+    void setInventoryRole(WarehousingRole inventoryRole);
 
 }

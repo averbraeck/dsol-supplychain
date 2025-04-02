@@ -13,8 +13,8 @@ import nl.tudelft.simulation.supplychain.message.store.trade.ContentStoreInterfa
 import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.role.buying.BuyingRole;
-import nl.tudelft.simulation.supplychain.role.inventory.InventoryRole;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
 
 /**
  * Reference implementation for a Retailer.
@@ -36,7 +36,7 @@ public class Retailer extends SupplyChainActor implements Serializable
     private SellingRole sellingRole = null;
 
     /** the role to keep inventory. */
-    private InventoryRole inventoryRole = null;
+    private WarehousingRole inventoryRole = null;
 
     /**
      * @param id String, the unique id of the retaler
@@ -103,7 +103,7 @@ public class Retailer extends SupplyChainActor implements Serializable
      * Return the inventory role.
      * @return the inventory role
      */
-    public InventoryRole getInventoryRole()
+    public WarehousingRole getInventoryRole()
     {
         return this.inventoryRole;
     }
@@ -112,7 +112,7 @@ public class Retailer extends SupplyChainActor implements Serializable
      * Set the inventory role.
      * @param inventoryRole the new inventory role
      */
-    public void setInventoryRole(final InventoryRole inventoryRole)
+    public void setInventoryRole(final WarehousingRole inventoryRole)
     {
         Throw.whenNull(inventoryRole, "inventoryRole cannot be null");
         Throw.when(this.inventoryRole != null, IllegalStateException.class, "inventoryRole already initialized");

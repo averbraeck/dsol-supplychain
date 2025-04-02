@@ -8,7 +8,7 @@ import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Shipment;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.money.MoneyUnit;
-import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
+import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
 
 /**
  * A stocking Shipment handler where a check is performed whether the shipment was delivered on time. If not, a fine is imposed.

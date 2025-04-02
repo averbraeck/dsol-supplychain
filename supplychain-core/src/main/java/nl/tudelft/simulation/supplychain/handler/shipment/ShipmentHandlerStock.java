@@ -3,7 +3,7 @@ package nl.tudelft.simulation.supplychain.handler.shipment;
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Shipment;
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
+import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
 
 /**
  * When a Shipment comes in, it just has to be added to the Stock.

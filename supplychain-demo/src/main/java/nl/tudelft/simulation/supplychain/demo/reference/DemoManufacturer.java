@@ -48,11 +48,11 @@ import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Manufacturer;
 import nl.tudelft.simulation.supplychain.reference.Search;
 import nl.tudelft.simulation.supplychain.role.buying.BuyingRoleSearch;
-import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
-import nl.tudelft.simulation.supplychain.role.inventory.RestockingServiceSafety;
 import nl.tudelft.simulation.supplychain.role.producing.DelayProductionService;
 import nl.tudelft.simulation.supplychain.role.producing.ProductionService;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
+import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
+import nl.tudelft.simulation.supplychain.role.warehousing.RestockingServiceSafety;
 import nl.tudelft.simulation.supplychain.transport.TransportMode;
 
 /**

@@ -10,7 +10,7 @@ import org.pmw.tinylog.Logger;
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.OrderBasedOnQuote;
 import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
-import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
+import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
 
 /**
  * The most simple form of an OrderHandler that takes the orders from stock is one that sends out an OrderConfirmation right
