@@ -1,5 +1,5 @@
 /**
- * Policies for handling incoming Yellow Page (YP) Requests and YP Answers.
+ * Policies for handling incoming Search Requests and Search Answers.
  * <p>
  * Copyright (c) 2022-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.

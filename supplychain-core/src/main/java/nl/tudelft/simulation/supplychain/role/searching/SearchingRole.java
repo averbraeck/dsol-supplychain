@@ -44,7 +44,7 @@ public class SearchingRole extends Role<SearchingRole>
 
     /**
      * Create a new Search role.
-     * @param owner the actor that owns the YP role
+     * @param owner the actor that owns the Search role
      */
     public SearchingRole(final SearchingActor owner)
     {

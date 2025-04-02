@@ -21,7 +21,7 @@ public class BuyingRoleSearch extends BuyingRole
     private static final long serialVersionUID = 20221205L;
 
     /**
-     * Construct a new BuyingRole for Demand - YPAnswer - Quote - Confirmation - Shipment - Bill.
+     * Construct a new BuyingRole for Demand - SearchAnswer - Quote - Confirmation - Shipment - Bill.
      * @param owner the actor to which this role belongs
      * @param demandPolicy the demand handler, results in sending out an RFQ
      * @param searchAnswerPolicy the search answer handler

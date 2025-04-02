@@ -53,7 +53,7 @@ public class DemandHandlerRFQ extends DemandHandler
      * @param owner the owner of the demand
      * @param transportOptionProvider the provider of transport options betwween two locations
      * @param transportChoiceProvider the provider to choose between transport options
-     * @param handlingTime the distribution of the time to react on the YP answer
+     * @param handlingTime the distribution of the time to react on the Search answer
      * @param cutoffDuration the maximum time after which the RFQ will stop collecting quotes
      * @param stock the stock for being able to change the ordered amount
      */

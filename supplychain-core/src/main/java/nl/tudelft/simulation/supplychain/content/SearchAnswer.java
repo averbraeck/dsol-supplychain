@@ -8,7 +8,7 @@ import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.role.searching.SearchingActor;
 
 /**
- * The SearchAnswer is the answer from a Yellow Page actor to a SearchRequest. It contains a list of actors that might sell a
+ * The SearchAnswer is the answer from a Search actor to a SearchRequest. It contains a list of actors that might sell a
  * product or service that was asked for in the SearchRequest.
  * <p>
  * Copyright (c) 2025-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
@@ -20,7 +20,7 @@ import nl.tudelft.simulation.supplychain.role.searching.SearchingActor;
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
- * @param searchRequest the request that triggered this YP answer
+ * @param searchRequest the request that triggered this Search answer
  * @param actorList the suppliers of the requested product or service
  */
 public record SearchAnswer(SearchingActor sender, Actor receiver, Time timestamp, long uniqueId, long groupingId,

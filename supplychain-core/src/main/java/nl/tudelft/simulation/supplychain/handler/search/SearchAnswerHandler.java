@@ -52,7 +52,7 @@ public class SearchAnswerHandler extends ContentHandler<SearchAnswer, BuyingRole
      * @param owner the owner of the policy
      * @param transportOptionProvider the provider of transport options betwween two locations
      * @param transportChoiceProvider the provider to choose between transport options
-     * @param handlingTime the distribution of the time to react on the YP answer
+     * @param handlingTime the distribution of the time to react on the Search answer
      * @param cutoffDuration the maximum time after which the RFQ will stop collecting quotes
      */
     public SearchAnswerHandler(final BuyingRole owner, final TransportOptionProvider transportOptionProvider,
@@ -82,8 +82,8 @@ public class SearchAnswerHandler extends ContentHandler<SearchAnswer, BuyingRole
         List<Demand> demandList = messageStore.getContentList(searchRequest.groupingId(), Demand.class);
         if (demandList.size() == 0) // we send it to ourselves, so it is 2x in the content store
         {
-            Logger.warn("YPAnswerHandler - Actor '{}' could not find groupingId '{}' for YPAnswer '{}'", getActor().getName(),
-                    searchRequest.groupingId(), searchAnswer.toString());
+            Logger.warn("SearchAnswerHandler - Actor '{}' could not find groupingId '{}' for SearchAnswer '{}'",
+                    getActor().getName(), searchRequest.groupingId(), searchAnswer.toString());
             return false;
         }
         Demand demand = demandList.get(0);

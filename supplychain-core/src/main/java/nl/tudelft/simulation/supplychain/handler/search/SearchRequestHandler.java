@@ -38,7 +38,7 @@ public class SearchRequestHandler extends ContentHandler<SearchRequest, Searchin
     /**
      * Constructs a new SearchRequestHandler.
      * @param owner the owner of the policy
-     * @param handlingTime the distribution of the time to react on the YP request
+     * @param handlingTime the distribution of the time to react on the Search request
      */
     public SearchRequestHandler(final SearchingRole owner, final DistContinuousDuration handlingTime)
     {
