@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.policy.rfq;
+package nl.tudelft.simulation.supplychain.handler.rfq;
 
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
@@ -9,7 +9,7 @@ import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.money.Money;
-import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
+import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
 
@@ -31,7 +31,7 @@ public class RequestForQuoteHandler extends ContentHandler<RequestForQuote>
     /** the inventory on which checks can take place. */
     private Inventory inventory;
 
-    /** the reaction time of the policy in simulation time units. */
+    /** the reaction time of the handler in simulation time units. */
     private DistContinuousDuration handlingTime;
 
     /** the profit margin to use in the quotes, 1.0 is no profit. */
@@ -42,7 +42,7 @@ public class RequestForQuoteHandler extends ContentHandler<RequestForQuote>
 
     /**
      * Construct a new RFQ handler.
-     * @param owner the role belonging to this policy
+     * @param owner the role belonging to this handler
      * @param inventory the stock to check for products when quoting
      * @param profitMargin the profit margin to use; 1.0 is no profit
      * @param handlingTime the distribution of the time to react on the RFQ

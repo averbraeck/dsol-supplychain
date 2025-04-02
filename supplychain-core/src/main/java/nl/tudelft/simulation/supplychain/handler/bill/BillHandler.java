@@ -137,11 +137,12 @@ public class BillHandler extends ContentHandler<Bill, FinancingRole>
     }
 
     /**
-     * @param paymentHandler The paymentHandler to set.
+     * Change the payment policy.
+     * @param paymentPolicy The payment policy to set.
      */
-    public void setPaymentHandler(final PaymentPolicyEnum paymentHandler)
+    public void setPaymentPolicy(final PaymentPolicyEnum paymentPolicy)
     {
-        this.paymentPolicy = paymentHandler;
+        this.paymentPolicy = paymentPolicy;
     }
 
 }

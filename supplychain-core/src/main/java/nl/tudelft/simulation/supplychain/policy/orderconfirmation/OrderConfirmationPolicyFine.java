@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.policy.orderconfirmation;
+package nl.tudelft.simulation.supplychain.handler.orderconfirmation;
 
 import java.io.Serializable;
 

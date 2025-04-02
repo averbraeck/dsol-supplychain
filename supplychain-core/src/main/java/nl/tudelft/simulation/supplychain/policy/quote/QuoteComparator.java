@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.policy.quote;
+package nl.tudelft.simulation.supplychain.handler.quote;
 
 import java.io.Serializable;
 import java.util.Comparator;

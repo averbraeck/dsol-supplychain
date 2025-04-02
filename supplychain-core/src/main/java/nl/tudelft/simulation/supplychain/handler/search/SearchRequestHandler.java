@@ -32,12 +32,12 @@ public class SearchRequestHandler extends ContentHandler<SearchRequest, Searchin
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
 
-    /** the handling time of the policy in simulation time units. */
+    /** the handling time of the handler in simulation time units. */
     private DistContinuousDuration handlingTime;
 
     /**
      * Constructs a new SearchRequestHandler.
-     * @param owner the owner of the policy
+     * @param owner the owner of the handler
      * @param handlingTime the distribution of the time to react on the Search request
      */
     public SearchRequestHandler(final SearchingRole owner, final DistContinuousDuration handlingTime)

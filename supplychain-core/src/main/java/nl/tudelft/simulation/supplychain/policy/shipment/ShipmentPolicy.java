@@ -1,8 +1,8 @@
-package nl.tudelft.simulation.supplychain.policy.shipment;
+package nl.tudelft.simulation.supplychain.handler.shipment;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Shipment;
-import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
+import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 
 /**
  * When a Shipment comes in, it has to be handled.
@@ -19,8 +19,8 @@ public abstract class ShipmentHandler extends ContentHandler<Shipment>
 
     /**
      * Construct a new ShipmentHandler.
-     * @param id the id of the policy
-     * @param owner the owner of the policy
+     * @param id the id of the handler
+     * @param owner the owner of the handler
      */
     public ShipmentHandler(final String id, final Role owner)
     {

@@ -42,7 +42,7 @@ public class PaymentHandlerFine extends PaymentHandler
     @Override
     public String getId()
     {
-        return "PaymentPolicyFine";
+        return "PaymentHandlerFine";
     }
 
     @Override

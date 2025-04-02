@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.policy.order;
+package nl.tudelft.simulation.supplychain.handler.order;
 
 import java.io.Serializable;
 
@@ -22,19 +22,19 @@ import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class OrderPolicyStock extends OrderPolicy<Order>
+public class OrderHandlerStock extends OrderHandler<Order>
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
 
     /**
      * Construct a new OrderHandler that takes the goods from stock when ordered.
-     * @param owner the owner of the policy
+     * @param owner the owner of the handler
      * @param stock the stock to use to handle the incoming order
      */
-    public OrderPolicyStock(final Role owner, final Inventory stock)
+    public OrderHandlerStock(final Role owner, final Inventory stock)
     {
-        super("OrderPolicyStock", owner, stock, Order.class);
+        super("OrderHandlerStock", owner, stock, Order.class);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.policy.shipment;
+package nl.tudelft.simulation.supplychain.handler.shipment;
 
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;

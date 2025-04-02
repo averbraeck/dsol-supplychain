@@ -13,7 +13,7 @@ import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public abstract class SellingRole extends Role
+public abstract class SellingRole extends Role<SellingRole>
 {
     /** */
     private static final long serialVersionUID = 20221206L;

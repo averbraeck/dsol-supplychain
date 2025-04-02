@@ -25,24 +25,24 @@ import nl.tudelft.simulation.supplychain.actor.yellowpage.Topic;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.handler.demand.InternalDemandHandlerYP;
-import nl.tudelft.simulation.supplychain.handler.payment.PaymentPolicy;
+import nl.tudelft.simulation.supplychain.handler.order.OrderHandler;
+import nl.tudelft.simulation.supplychain.handler.order.OrderHandlerNoStock;
+import nl.tudelft.simulation.supplychain.handler.order.OrderHandlerStock;
+import nl.tudelft.simulation.supplychain.handler.payment.PaymentHandler;
 import nl.tudelft.simulation.supplychain.handler.payment.PaymentPolicyEnum;
 import nl.tudelft.simulation.supplychain.handler.search.SearchAnswerHandler;
 import nl.tudelft.simulation.supplychain.message.store.trade.LeanTradeMessageStore;
 import nl.tudelft.simulation.supplychain.messagehandlers.HandleAllMessages;
 import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.Money;
-import nl.tudelft.simulation.supplychain.policy.bill.BillHandler;
-import nl.tudelft.simulation.supplychain.policy.order.OrderPolicy;
-import nl.tudelft.simulation.supplychain.policy.order.OrderPolicyNoStock;
-import nl.tudelft.simulation.supplychain.policy.order.OrderPolicyStock;
-import nl.tudelft.simulation.supplychain.policy.orderconfirmation.OrderConfirmationHandler;
-import nl.tudelft.simulation.supplychain.policy.quote.QuoteComparatorEnum;
-import nl.tudelft.simulation.supplychain.policy.quote.QuoteHandler;
-import nl.tudelft.simulation.supplychain.policy.quote.QuoteHandlerAll;
-import nl.tudelft.simulation.supplychain.policy.rfq.RequestForQuoteHandler;
-import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentHandler;
-import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentHandlerConsume;
+import nl.tudelft.simulation.supplychain.handler.bill.BillHandler;
+import nl.tudelft.simulation.supplychain.handler.orderconfirmation.OrderConfirmationHandler;
+import nl.tudelft.simulation.supplychain.handler.quote.QuoteComparatorEnum;
+import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandler;
+import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandlerAll;
+import nl.tudelft.simulation.supplychain.handler.rfq.RequestForQuoteHandler;
+import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandler;
+import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandlerConsume;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Retailer;
 import nl.tudelft.simulation.supplychain.reference.Search;
@@ -139,13 +139,13 @@ public class DemoRetailer extends Retailer
         RequestForQuoteHandler rfqHandler = new RequestForQuoteHandler(this, super.inventory, 1.2,
                 new DistConstantDuration(new Duration(1.23, DurationUnit.HOUR)), TransportMode.PLANE);
 
-        OrderPolicy orderHandler;
+        OrderHandler orderHandler;
         if (mts)
-            orderHandler = new OrderPolicyStock(this, super.inventory);
+            orderHandler = new OrderHandlerStock(this, super.inventory);
         else
-            orderHandler = new OrderPolicyNoStock(this, super.inventory);
+            orderHandler = new OrderHandlerNoStock(this, super.inventory);
 
-        PaymentPolicy paymentHandler = new PaymentPolicy(this, super.bankAccount);
+        PaymentHandler paymentHandler = new PaymentHandler(this, super.bankAccount);
 
         SellingRole sellingRole = new SellingRole(this, this.simulator, rfqHandler, orderHandler, paymentHandler);
         super.setSellingRole(sellingRole);
@@ -156,7 +156,7 @@ public class DemoRetailer extends Retailer
         while (stockIter.hasNext())
         {
             Product stockProduct = stockIter.next();
-            // the restocking policy will generate InternalDemand, handled by the BuyingRole
+            // the restocking handler will generate InternalDemand, handled by the BuyingRole
             new RestockingServiceSafety(super.inventory, stockProduct, new Duration(24.0, DurationUnit.HOUR), false, initialStock,
                     true, 2.0 * initialStock, new Duration(14.0, DurationUnit.DAY));
         }

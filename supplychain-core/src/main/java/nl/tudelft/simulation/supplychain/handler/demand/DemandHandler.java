@@ -25,8 +25,8 @@ public abstract class DemandHandler extends ContentHandler<Demand, BuyingRole>
 
     /**
      * Construct a new DemandHandler.
-     * @param id the id of the policy
-     * @param owner the Role that has this policy.
+     * @param id the id of the handler
+     * @param owner the Role that has this handler.
      * @param handlingTime the distribution of the time to handle an demand
      */
     public DemandHandler(final String id, final BuyingRole owner, final DistContinuousDuration handlingTime)

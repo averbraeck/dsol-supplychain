@@ -18,14 +18,14 @@ import nl.tudelft.simulation.supplychain.actor.unit.dist.DistConstantDuration;
 import nl.tudelft.simulation.supplychain.actor.yellowpage.Topic;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.handler.payment.PaymentPolicy;
+import nl.tudelft.simulation.supplychain.handler.order.OrderHandler;
+import nl.tudelft.simulation.supplychain.handler.order.OrderHandlerStock;
+import nl.tudelft.simulation.supplychain.handler.payment.PaymentHandler;
 import nl.tudelft.simulation.supplychain.message.store.trade.LeanTradeMessageStore;
 import nl.tudelft.simulation.supplychain.messagehandlers.HandleAllMessages;
 import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.Money;
-import nl.tudelft.simulation.supplychain.policy.order.OrderPolicy;
-import nl.tudelft.simulation.supplychain.policy.order.OrderPolicyStock;
-import nl.tudelft.simulation.supplychain.policy.rfq.RequestForQuoteHandler;
+import nl.tudelft.simulation.supplychain.handler.rfq.RequestForQuoteHandler;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Supplier;
 import nl.tudelft.simulation.supplychain.reference.Search;
@@ -86,9 +86,9 @@ public class DemoSupplier extends Supplier
         RequestForQuoteHandler rfqHandler = new RequestForQuoteHandler(this, super.inventory, 1.2,
                 new DistConstantDuration(new Duration(1.23, DurationUnit.HOUR)), TransportMode.PLANE);
 
-        OrderPolicy orderHandler = new OrderPolicyStock(this, super.inventory);
+        OrderHandler orderHandler = new OrderHandlerStock(this, super.inventory);
 
-        PaymentPolicy paymentHandler = new PaymentPolicy(this, super.bankAccount);
+        PaymentHandler paymentHandler = new PaymentHandler(this, super.bankAccount);
 
         SellingRole sellingRole = new SellingRole(this, this.simulator, rfqHandler, orderHandler, paymentHandler);
         super.setSellingRole(sellingRole);
@@ -99,7 +99,7 @@ public class DemoSupplier extends Supplier
         while (stockIter.hasNext())
         {
             Product stockProduct = stockIter.next();
-            // the restocking policy will generate InternalDemand, handled by the BuyingRole
+            // the restocking handler will generate InternalDemand, handled by the BuyingRole
             new RestockingServiceSafety(super.inventory, stockProduct, new Duration(24.0, DurationUnit.HOUR), false, initialStock,
                     true, 2.0 * initialStock, new Duration(14.0, DurationUnit.DAY));
         }

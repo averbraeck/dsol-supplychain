@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.policy.shipment;
+package nl.tudelft.simulation.supplychain.handler.shipment;
 
 /**
  * ShipmentPaymentSequence.java.

@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.policy.quote;
+package nl.tudelft.simulation.supplychain.handler.quote;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -9,7 +9,7 @@ import java.util.TreeSet;
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Quote;
-import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
+import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 
 /**
  * The abstract QuoteHandler can be extended into several ways how to deal with Quotes. One is the QuoteHandlerAll that waits
@@ -43,7 +43,7 @@ public abstract class QuoteHandler extends ContentHandler<Quote>
 
     /**
      * Constructor of the QuoteHandler with a one of the predefined comparators for quotes.
-     * @param id the id of the policy
+     * @param id the id of the handler
      * @param owner the role for this QuoteHandler.
      * @param comparatorType the predefined sorting comparator type.
      * @param handlingTime the time to handle the quotes
@@ -62,7 +62,7 @@ public abstract class QuoteHandler extends ContentHandler<Quote>
 
     /**
      * Constructor of the QuoteHandler with a user defined comparator for quotes.
-     * @param id the id of the policy
+     * @param id the id of the handler
      * @param owner the role for this QuoteHandler.
      * @param comparator the predefined sorting comparator type.
      * @param handlingTime the time to handle the quotes

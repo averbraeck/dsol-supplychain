@@ -55,8 +55,8 @@ public abstract class ContentReceiver implements Identifiable, Serializable
     /**
      * This is the core dispatching method for the processing of content that was received.
      * @param content the content to process
-     * @param contentHandler the policy to execute on the conntent
-     * @param <C> The content type to ensure that the content and policy align
+     * @param contentHandler the handler to execute on the conntent
+     * @param <C> The content type to ensure that the content and handler align
      */
     public abstract <C extends Content> void receiveContent(C content, ContentHandler<C, ?> contentHandler);
 

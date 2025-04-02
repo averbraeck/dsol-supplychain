@@ -10,16 +10,16 @@ package nl.tudelft.simulation.supplychain.handler.bill;
  */
 public enum PaymentPolicyEnum
 {
-    /** The payment policy to for payment at the exact right date. */
+    /** The payment handler to for payment at the exact right date. */
     PAYMENT_ON_TIME,
 
-    /** The payment policy to indicate the payment will be done late. */
+    /** The payment handler to indicate the payment will be done late. */
     PAYMENT_EARLY,
 
-    /** The payment policy to indicate the payment will be done early. */
+    /** The payment handler to indicate the payment will be done early. */
     PAYMENT_LATE,
 
-    /** The payment policy for payment right now, without waiting. */
+    /** The payment handler for payment right now, without waiting. */
     PAYMENT_IMMEDIATE;
 
 }

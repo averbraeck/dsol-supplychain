@@ -1,9 +1,9 @@
 package nl.tudelft.simulation.supplychain.role.buying;
 
 import nl.tudelft.simulation.supplychain.handler.demand.DemandHandlerOrder;
-import nl.tudelft.simulation.supplychain.policy.bill.BillHandler;
-import nl.tudelft.simulation.supplychain.policy.orderconfirmation.OrderConfirmationHandler;
-import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentHandler;
+import nl.tudelft.simulation.supplychain.handler.bill.BillHandler;
+import nl.tudelft.simulation.supplychain.handler.orderconfirmation.OrderConfirmationHandler;
+import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandler;
 
 /**
  * The direct buying role is a role that organizes the buying based on a single supplier, and continues from there.
@@ -21,20 +21,20 @@ public class BuyingRoleDirect extends BuyingRole
     /**
      * Construct a new BuyingRole for Generic Demand - Confirmation - Shipment - Bill.
      * @param owner the actor to which this role belongs
-     * @param demandPolicy the demand handler
-     * @param orderConfirmationPolicy the order confirmation handler
-     * @param shipmentPolicy the shipment handler
-     * @param billPolicy the bill handler
+     * @param demandHandler the demand handler
+     * @param orderConfirmationHandler the order confirmation handler
+     * @param shipmentHandler the shipment handler
+     * @param billHandler the bill handler
      */
-    public BuyingRoleDirect(final BuyingActor owner, final DemandHandlerOrder demandPolicy,
-            final OrderConfirmationHandler orderConfirmationPolicy, final ShipmentHandler shipmentPolicy,
-            final BillHandler billPolicy)
+    public BuyingRoleDirect(final BuyingActor owner, final DemandHandlerOrder demandHandler,
+            final OrderConfirmationHandler orderConfirmationHandler, final ShipmentHandler shipmentHandler,
+            final BillHandler billHandler)
     {
         super(owner);
-        setContentHandler(demandPolicy);
-        setContentHandler(orderConfirmationPolicy);
-        setContentHandler(shipmentPolicy);
-        setContentHandler(billPolicy);
+        setContentHandler(demandHandler);
+        setContentHandler(orderConfirmationHandler);
+        setContentHandler(shipmentHandler);
+        setContentHandler(billHandler);
     }
 
     @Override

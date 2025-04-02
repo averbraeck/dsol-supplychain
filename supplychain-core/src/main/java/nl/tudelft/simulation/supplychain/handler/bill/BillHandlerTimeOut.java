@@ -33,7 +33,7 @@ public class BillHandlerTimeOut extends BillHandler
     /**
      * Construct a new BillHandlerTimeOut.
      * @param owner the owner
-     * @param paymentPolicy the payment policy
+     * @param paymentPolicy the payment handler
      * @param paymentDelay the payment delay
      * @param maximumTimeOut the maximum time out for a bill
      */
@@ -46,7 +46,7 @@ public class BillHandlerTimeOut extends BillHandler
 
     /**
      * Construct a new BillHandlerTimeOut that takes care of paying exactly on time.
-     * @param owner the owner of the policy.
+     * @param owner the owner of the handler.
      * @param maximumTimeOut the maximum time out for a bill
      */
     public BillHandlerTimeOut(final FinancingRole owner, final Duration maximumTimeOut)

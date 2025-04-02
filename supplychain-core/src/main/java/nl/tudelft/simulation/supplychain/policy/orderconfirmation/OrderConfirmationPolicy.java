@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.policy.orderconfirmation;
+package nl.tudelft.simulation.supplychain.handler.orderconfirmation;
 
 import org.djunits.value.vdouble.scalar.Duration;
 import org.pmw.tinylog.Logger;
@@ -6,13 +6,13 @@ import org.pmw.tinylog.Logger;
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
-import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
+import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 
 /**
  * The OrderConfirmationHandler is a simple implementation of the business logic for a OrderConfirmation that comes in. When the
  * confirmation is positive: just ignore it. When it is negative: it is more difficult. The easiest is to go to the 'next'
  * option, e.g. to the next Quote when there were quotes. It is also possible to redo the entire ordering process from scratch.
- * The latter strategy is implemented in this version of the policy.
+ * The latter strategy is implemented in this version of the handler.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
@@ -29,7 +29,7 @@ public class OrderConfirmationHandler extends ContentHandler<OrderConfirmation>
 
     /**
      * Constructs a new OrderConfirmationHandler.
-     * @param owner the owner of the policy.
+     * @param owner the owner of the handler.
      */
     public OrderConfirmationHandler(final Role owner)
     {

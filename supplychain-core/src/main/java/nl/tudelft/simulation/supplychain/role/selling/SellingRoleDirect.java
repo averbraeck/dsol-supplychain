@@ -1,7 +1,7 @@
 package nl.tudelft.simulation.supplychain.role.selling;
 
-import nl.tudelft.simulation.supplychain.handler.payment.PaymentPolicy;
-import nl.tudelft.simulation.supplychain.policy.order.OrderPolicy;
+import nl.tudelft.simulation.supplychain.handler.order.OrderHandler;
+import nl.tudelft.simulation.supplychain.handler.payment.PaymentHandler;
 
 /**
  * The selling role is a role that can handle several types of message content: order and payment in the minimum form. Depending
@@ -21,14 +21,14 @@ public class SellingRoleDirect extends SellingRole
     /**
      * Constructs a new SellingRole for Order - Payment.
      * @param owner the owner this role
-     * @param orderPolicy the order handler
-     * @param paymentPolicy the payment handler
+     * @param orderHandler the order handler
+     * @param paymentHandler the payment handler
      */
-    public SellingRoleDirect(final SellingActor owner, final OrderPolicy<?> orderPolicy, final PaymentPolicy paymentPolicy)
+    public SellingRoleDirect(final SellingActor owner, final OrderHandler<?> orderHandler, final PaymentHandler paymentHandler)
     {
         super(owner);
-        setContentHandler(orderPolicy);
-        setContentHandler(paymentPolicy);
+        setContentHandler(orderHandler);
+        setContentHandler(paymentHandler);
     }
 
     @Override

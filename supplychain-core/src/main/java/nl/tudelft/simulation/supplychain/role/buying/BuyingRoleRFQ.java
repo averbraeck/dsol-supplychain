@@ -2,9 +2,9 @@ package nl.tudelft.simulation.supplychain.role.buying;
 
 import nl.tudelft.simulation.supplychain.handler.bill.BillHandler;
 import nl.tudelft.simulation.supplychain.handler.demand.DemandHandlerRFQ;
-import nl.tudelft.simulation.supplychain.policy.orderconfirmation.OrderConfirmationHandler;
-import nl.tudelft.simulation.supplychain.policy.quote.QuoteHandler;
-import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentHandler;
+import nl.tudelft.simulation.supplychain.handler.orderconfirmation.OrderConfirmationHandler;
+import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandler;
+import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandler;
 
 /**
  * The buying role based on a RFQ is a role that organizes the buying based on a RequestForQuote that is sent to a fixed set of

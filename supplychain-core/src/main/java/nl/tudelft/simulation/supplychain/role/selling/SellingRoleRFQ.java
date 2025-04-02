@@ -1,8 +1,8 @@
 package nl.tudelft.simulation.supplychain.role.selling;
 
-import nl.tudelft.simulation.supplychain.handler.payment.PaymentPolicy;
-import nl.tudelft.simulation.supplychain.policy.order.OrderPolicy;
-import nl.tudelft.simulation.supplychain.policy.rfq.RequestForQuoteHandler;
+import nl.tudelft.simulation.supplychain.handler.order.OrderHandler;
+import nl.tudelft.simulation.supplychain.handler.payment.PaymentHandler;
+import nl.tudelft.simulation.supplychain.handler.rfq.RequestForQuoteHandler;
 
 /**
  * The selling role is a role that can handle several types of message content: order and payment in the minimum form. Depending
@@ -22,17 +22,17 @@ public class SellingRoleRFQ extends SellingRole
     /**
      * Constructs a new SellingRole for RFQ - Order - Payment.
      * @param owner the owner this role
-     * @param rfqPolicy the Request for Quote handler
-     * @param orderPolicy the order handler
-     * @param paymentPolicy the payment handler
+     * @param rfqHandler the Request for Quote handler
+     * @param orderHandler the order handler
+     * @param paymentHandler the payment handler
      */
-    public SellingRoleRFQ(final SellingActor owner, final RequestForQuoteHandler rfqPolicy, final OrderPolicy<?> orderPolicy,
-            final PaymentPolicy paymentPolicy)
+    public SellingRoleRFQ(final SellingActor owner, final RequestForQuoteHandler rfqHandler, final OrderHandler<?> orderHandler,
+            final PaymentHandler paymentHandler)
     {
         super(owner);
-        setContentHandler(rfqPolicy);
-        setContentHandler(orderPolicy);
-        setContentHandler(paymentPolicy);
+        setContentHandler(rfqHandler);
+        setContentHandler(orderHandler);
+        setContentHandler(paymentHandler);
     }
 
     @Override

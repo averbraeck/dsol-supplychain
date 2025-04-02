@@ -14,14 +14,14 @@ import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.dsol.swing.charts.xy.XYChart;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
-import nl.tudelft.simulation.supplychain.handler.payment.PaymentPolicy;
+import nl.tudelft.simulation.supplychain.handler.order.OrderHandler;
+import nl.tudelft.simulation.supplychain.handler.order.OrderHandlerStock;
+import nl.tudelft.simulation.supplychain.handler.payment.PaymentHandler;
 import nl.tudelft.simulation.supplychain.message.store.trade.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.BankAccount;
 import nl.tudelft.simulation.supplychain.money.Money;
-import nl.tudelft.simulation.supplychain.policy.order.OrderPolicy;
-import nl.tudelft.simulation.supplychain.policy.order.OrderPolicyStock;
-import nl.tudelft.simulation.supplychain.policy.rfq.RequestForQuoteHandler;
+import nl.tudelft.simulation.supplychain.handler.rfq.RequestForQuoteHandler;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Supplier;
 import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
@@ -82,18 +82,18 @@ public class Factory extends Supplier
      */
     public void init() throws RemoteException
     {
-        // tell Factory to use the RFQPolicy to handle RFQs
-        RequestForQuoteHandler rfqPolicy = new RequestForQuoteHandler(this, getInventory(), 1.2,
+        // tell Factory to use the RFQHandler to handle RFQs
+        RequestForQuoteHandler rfqHandler = new RequestForQuoteHandler(this, getInventory(), 1.2,
                 new DistConstantDuration(new Duration(1.23, DurationUnit.HOUR)), TransportMode.PLANE);
         //
-        // create an order Policy
-        OrderPolicy orderPolicy = new OrderPolicyStock(this, getInventory());
+        // create an order Handler
+        OrderHandler orderHandler = new OrderHandlerStock(this, getInventory());
         //
         // hopefully, Factory will get payments in the end
-        PaymentPolicy paymentPolicy = new PaymentPolicy(this, getBankAccount());
+        PaymentHandler paymentHandler = new PaymentHandler(this, getBankAccount());
         //
-        // add the Policys to the SellingRole
-        SellingRole sellingRole = new SellingRoleRFQ(this, getSimulator(), rfqPolicy, orderPolicy, paymentPolicy);
+        // add the Handlers to the SellingRole
+        SellingRole sellingRole = new SellingRoleRFQ(this, getSimulator(), rfqHandler, orderHandler, paymentHandler);
         super.setSellingRole(sellingRole);
         //
         // CHARTS

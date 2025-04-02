@@ -19,7 +19,7 @@ public class PaymentHandler extends ContentHandler<Payment, FinancingRole>
 
     /**
      * Constructs a new PaymentHandler.
-     * @param owner the owner of the policy.
+     * @param owner the owner of the handler.
      */
     public PaymentHandler(final FinancingRole owner)
     {

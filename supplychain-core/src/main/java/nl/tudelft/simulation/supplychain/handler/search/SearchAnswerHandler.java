@@ -42,7 +42,7 @@ public class SearchAnswerHandler extends ContentHandler<SearchAnswer, BuyingRole
     /** the provider to choose between transport options. */
     private final TransportChoiceProvider transportChoiceProvider;
 
-    /** the handling time of the policy in simulation time units. */
+    /** the handling time of the handler in simulation time units. */
     private DistContinuousDuration handlingTime;
 
     /** the maximum time after which the RFQ will stop collecting quotes. */
@@ -50,7 +50,7 @@ public class SearchAnswerHandler extends ContentHandler<SearchAnswer, BuyingRole
 
     /**
      * Constructs a new SearchAnswerHandler.
-     * @param owner the owner of the policy
+     * @param owner the owner of the handler
      * @param transportOptionProvider the provider of transport options betwween two locations
      * @param transportChoiceProvider the provider to choose between transport options
      * @param handlingTime the distribution of the time to react on the Search answer

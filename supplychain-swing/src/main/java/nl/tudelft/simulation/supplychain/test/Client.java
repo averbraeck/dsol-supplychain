@@ -27,13 +27,13 @@ import nl.tudelft.simulation.supplychain.message.store.trade.ContentStoreInterfa
 import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.BankAccount;
 import nl.tudelft.simulation.supplychain.money.Money;
-import nl.tudelft.simulation.supplychain.policy.bill.BillHandler;
-import nl.tudelft.simulation.supplychain.policy.orderconfirmation.OrderConfirmationHandler;
-import nl.tudelft.simulation.supplychain.policy.quote.QuoteHandler;
-import nl.tudelft.simulation.supplychain.policy.quote.QuoteComparatorEnum;
-import nl.tudelft.simulation.supplychain.policy.quote.QuoteHandlerAll;
-import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentHandler;
-import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentHandlerConsume;
+import nl.tudelft.simulation.supplychain.handler.bill.BillHandler;
+import nl.tudelft.simulation.supplychain.handler.orderconfirmation.OrderConfirmationHandler;
+import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandler;
+import nl.tudelft.simulation.supplychain.handler.quote.QuoteComparatorEnum;
+import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandlerAll;
+import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandler;
+import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandlerConsume;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Customer;
 import nl.tudelft.simulation.supplychain.reference.Retailer;
@@ -111,27 +111,27 @@ public class Client extends Customer
         super.setDemandGeneration(dg);
         //
         // tell Client to use the InternalDemandHandler
-        InternalDemandHandlerRFQ demandPolicy =
+        InternalDemandHandlerRFQ demandHandler =
                 new InternalDemandHandlerRFQ(this, new Duration(24.0, DurationUnit.HOUR), null); // XXX: Why does it need stock?
-        demandPolicy.addSupplier(this.product, this.retailer);
+        demandHandler.addSupplier(this.product, this.retailer);
         //
         // tell Client to use the QuoteHandler to handle quotes
-        QuoteHandler quotePolicy = new QuoteHandlerAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE,
+        QuoteHandler quoteHandler = new QuoteHandlerAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE,
                 new DistConstantDuration(new Duration(2.0, DurationUnit.HOUR)), 0.4, 0.1);
         //
-        // Client has the standard order confirmation Policy
-        OrderConfirmationHandler confirmationPolicy = new OrderConfirmationHandler(this);
+        // Client has the standard order confirmation Handler
+        OrderConfirmationHandler confirmationHandler = new OrderConfirmationHandler(this);
         //
         // Client will get a bill in the end
-        BillHandler billPolicy = new BillHandler(this, getBankAccount(), PaymentPolicyEnum.PAYMENT_IMMEDIATE,
+        BillHandler billHandler = new BillHandler(this, getBankAccount(), PaymentPolicyEnum.PAYMENT_IMMEDIATE,
                 new DistConstantDuration(Duration.ZERO));
         //
         // hopefully, Client will get laptop shipments
-        ShipmentHandler shipmentPolicy = new ShipmentHandlerConsume(this);
+        ShipmentHandler shipmentHandler = new ShipmentHandlerConsume(this);
         //
-        // add the Policys to the buying role for Client
-        BuyingRoleSearch buyingRole = new BuyingRoleSearch(this, super.simulator, demandPolicy, quotePolicy,
-                confirmationPolicy, shipmentPolicy, billPolicy);
+        // add the Handlers to the buying role for Client
+        BuyingRoleSearch buyingRole = new BuyingRoleSearch(this, super.simulator, demandHandler, quoteHandler,
+                confirmationHandler, shipmentHandler, billHandler);
         super.setBuyingRole(buyingRole);
 
         //

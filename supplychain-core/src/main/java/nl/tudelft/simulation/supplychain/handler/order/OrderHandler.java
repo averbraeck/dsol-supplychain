@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.policy.order;
+package nl.tudelft.simulation.supplychain.handler.order;
 
 import java.io.Serializable;
 
@@ -8,11 +8,13 @@ import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Bill;
+import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.content.Shipment;
+import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.money.Money;
-import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
+import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
 
 /**
  * The OrderHandler contains the business logic for handling an incoming Order. It will send out a positive or negative
@@ -34,25 +36,25 @@ import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
- * @param <O> The specific order type (if any) for which this policy applies
+ * @param <O> The specific order type (if any) for which this handler applies
  */
-public abstract class OrderPolicy<O extends Order> extends SupplyChainPolicy<O>
+public abstract class OrderHandler<O extends Order> extends ContentHandler<O, SellingRole>
 {
     /** */
-    private static final long serialVersionUID = 20221201L;
-
-    /** access to the owner's stock to look at availability of products. */
+    private static final long serialVersionUID = 1L;
+    
+    /** access to the owner's stocContentHandlerlability of products. */
     @SuppressWarnings("checkstyle:visibilitymodifier")
     protected Inventory stock;
 
     /**
      * Construct a new OrderHandler. The OrderHandler is abstract, so this constructor can not be called directly.
-     * @param id the id of the policy
-     * @param owner the owner of the policy
+     * @param id the id of the handler
+     * @param owner the owner of the handler
      * @param stock the stock to use to handle the incoming order
      * @param messageClass the specific order message class
      */
-    public OrderPolicy(final String id, final Role owner, final Inventory stock, final Class<O> messageClass)
+    public OrderHandler(final String id, final SellingRole owner, final Inventory stock, final Class<O> messageClass)
     {
         super(id, owner, messageClass);
         this.stock = stock;
@@ -68,8 +70,8 @@ public abstract class OrderPolicy<O extends Order> extends SupplyChainPolicy<O>
      */
     protected void ship(final Order order)
     {
-        Product product = order.getProduct();
-        double amount = order.getAmount();
+        Product product = order.product();
+        double amount = order.amount();
         try
         {
             if (this.stock.getActualAmount(product) < amount)

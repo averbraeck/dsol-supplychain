@@ -1,7 +1,7 @@
-package nl.tudelft.simulation.supplychain.policy.productionorder;
+package nl.tudelft.simulation.supplychain.handler.productionorder;
 
 import nl.tudelft.simulation.supplychain.content.ProductionOrder;
-import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
+import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.role.producing.ProducingRole;
 
 /**
@@ -24,9 +24,9 @@ public class ProductionOrderHandler extends ContentHandler<ProductionOrder>
      * constructs a new ProductionOrderHandler.
      * @param owner the owner of the production order handler
      */
-    public ProductionOrderPolicy(final ProducingRole owner)
+    public ProductionOrderHandler(final ProducingRole owner)
     {
-        super("ProductionOrderPolicy", owner, ProductionOrder.class);
+        super("ProductionOrderHandler", owner, ProductionOrder.class);
         this.producingRole = owner;
     }
 
