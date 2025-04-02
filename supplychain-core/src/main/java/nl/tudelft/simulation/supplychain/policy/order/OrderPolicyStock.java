@@ -43,7 +43,7 @@ public class OrderPolicyStock extends OrderPolicy<Order>
         // send out the confirmation
         OrderConfirmation orderConfirmation =
                 new OrderConfirmation(getActor(), order.getSender(), order.getDemandId(), order, OrderConfirmation.CONFIRMED);
-        sendMessage(orderConfirmation, Duration.ZERO);
+        sendContent(orderConfirmation, Duration.ZERO);
 
         Logger.trace("t={} - MTS ORDER CONFIRMATION of actor '{}': sent '{}'", getSimulator().getSimulatorTime(),
                 getActor().getName(), orderConfirmation);

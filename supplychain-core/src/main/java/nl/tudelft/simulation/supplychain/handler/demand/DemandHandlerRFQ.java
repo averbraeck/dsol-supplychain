@@ -103,7 +103,7 @@ public class DemandHandlerRFQ extends DemandHandler
     @Override
     public boolean handleContent(final Demand demand)
     {
-        if (!isValidMessage(demand))
+        if (!isValidContent(demand))
         {
             Logger.warn("handleContent", "Demand " + demand.toString() + " for actor " + getRole() + " not considered valid.");
             return false;
@@ -128,7 +128,7 @@ public class DemandHandlerRFQ extends DemandHandler
             TransportOption transportOption =
                     this.transportChoiceProvider.chooseTransportOptions(transportOptions, demand.getProduct().getSku());
             RequestForQuote rfq = new RequestForQuote(getActor(), supplier, demand, transportOption, this.cutoffDuration);
-            sendMessage(rfq, delay);
+            sendContent(rfq, delay);
         }
         return true;
     }

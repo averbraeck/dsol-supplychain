@@ -1,7 +1,6 @@
 package nl.tudelft.simulation.supplychain.handler.demand;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
-import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.role.buying.BuyingRole;
@@ -36,7 +35,7 @@ public abstract class DemandHandler extends ContentHandler<Demand, BuyingRole>
      * @param handlingTime the distribution of the time to handle an demand
      * @param inventory the inventory for being able to change the ordered amount
      */
-    public DemandHandler(final String id, final Role owner, final DistContinuousDuration handlingTime,
+    public DemandHandler(final String id, final BuyingRole owner, final DistContinuousDuration handlingTime,
             final Inventory inventory)
     {
         super(id, owner, Demand.class);

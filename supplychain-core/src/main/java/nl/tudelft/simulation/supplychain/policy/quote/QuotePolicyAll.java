@@ -60,7 +60,7 @@ public class QuotePolicyAll extends QuotePolicy
     @Override
     public boolean handleContent(final Quote quote)
     {
-        if (!isValidMessage(quote))
+        if (!isValidContent(quote))
         {
             return false;
         }
@@ -95,7 +95,7 @@ public class QuotePolicyAll extends QuotePolicy
 
             Order order = new OrderBasedOnQuote(getActor(), bestQuote.getSender(), bestQuote.getProposedDeliveryDate(),
                     bestQuote, bestQuote.getTransportOption());
-            sendMessage(order, getHandlingTime().draw());
+            sendContent(order, getHandlingTime().draw());
         }
         return true;
     }

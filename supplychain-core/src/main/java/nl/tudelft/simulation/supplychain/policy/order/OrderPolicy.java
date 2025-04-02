@@ -91,7 +91,7 @@ public abstract class OrderPolicy<O extends Order> extends SupplyChainPolicy<O>
 
                 Duration transportTime = order.getTransportOption().estimatedTotalTransportDuration(product.getSku());
                 Logger.trace("OrderHandlerStock: transportation delay for order: {} is: {}", order, transportTime);
-                sendMessage(shipment, transportTime);
+                sendContent(shipment, transportTime);
 
                 // send a bill when the shipment leaves...
                 Bill bill = new Bill(getActor(), order.getSender(), order.getDemandId(), order,
@@ -117,6 +117,6 @@ public abstract class OrderPolicy<O extends Order> extends SupplyChainPolicy<O>
     protected void sendBill(final Bill bill)
     {
         // send after accepting the order.
-        sendMessage(bill, new Duration(1.0, DurationUnit.MINUTE));
+        sendContent(bill, new Duration(1.0, DurationUnit.MINUTE));
     }
 }

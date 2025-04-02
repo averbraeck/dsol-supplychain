@@ -99,7 +99,7 @@ public class OrderConfirmationPolicyFine extends OrderConfirmationPolicy
             Bill bill = new Bill(getOwner(), orderConfirmation.getSender(), orderConfirmation.getDemandID(),
                     orderConfirmation.getOrder(), getOwner().getSimulatorTime().plus(new Duration(14.0, DurationUnit.DAY)),
                     fine, "FINE - LATE PAYMENT");
-            sendMessage(bill, Duration.ZERO);
+            sendContent(bill, Duration.ZERO);
             */
 
             orderConfirmation.getSender().getFinancingRole().getBankAccount().withdrawFromBalance(fine);

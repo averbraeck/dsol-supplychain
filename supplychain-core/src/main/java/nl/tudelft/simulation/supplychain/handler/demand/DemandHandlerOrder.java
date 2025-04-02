@@ -76,7 +76,7 @@ public class DemandHandlerOrder extends DemandHandler
     @Override
     public boolean handleContent(final Demand demand)
     {
-        if (!isValidMessage(demand))
+        if (!isValidContent(demand))
         {
             return false;
         }
@@ -101,7 +101,7 @@ public class DemandHandlerOrder extends DemandHandler
         Order order = new OrderStandalone(getRole().getActor(), supplier, demand, demand.getLatestDeliveryDate(),
                 demand.getProduct(), demand.getAmount(), price, transportOption);
         // and send it out after the handling time
-        sendMessage(order, this.handlingTime.draw());
+        sendContent(order, this.handlingTime.draw());
         return true;
     }
 

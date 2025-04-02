@@ -44,7 +44,7 @@ public class OrderConfirmationHandler extends ContentHandler<OrderConfirmation>
     @Override
     public boolean handleContent(final OrderConfirmation orderConfirmation)
     {
-        if (!isValidMessage(orderConfirmation))
+        if (!isValidContent(orderConfirmation))
         {
             return false;
         }
@@ -75,7 +75,7 @@ public class OrderConfirmationHandler extends ContentHandler<OrderConfirmation>
 
             Demand newID = new Demand(oldID.getSender(), oldID.getProduct(), oldID.getAmount(), oldID.getEarliestDeliveryDate(),
                     oldID.getLatestDeliveryDate());
-            sendMessage(newID, Duration.ZERO);
+            sendContent(newID, Duration.ZERO);
 
             // also clean the messageStore for the old demand
             getActor().getContentStore().removeAllMessages(orderConfirmation.getDemandId());

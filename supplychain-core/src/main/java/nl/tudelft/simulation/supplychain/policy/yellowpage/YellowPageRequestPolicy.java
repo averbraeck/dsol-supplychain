@@ -50,7 +50,7 @@ public class YellowPageRequestHandler extends ContentHandler<YellowPageRequest>
     @Override
     public boolean handleContent(final YellowPageRequest ypRequest)
     {
-        if (!isValidMessage(ypRequest))
+        if (!isValidContent(ypRequest))
         {
             return false;
         }
@@ -67,7 +67,7 @@ public class YellowPageRequestHandler extends ContentHandler<YellowPageRequest>
         List<Actor> potentialSuppliers = new ArrayList<>(suppliers.values());
         YellowPageAnswer ypAnswer =
                 new YellowPageAnswer(getActor(), ypRequest.getSender(), ypRequest.getDemandId(), potentialSuppliers, ypRequest);
-        sendMessage(ypAnswer, this.handlingTime.draw());
+        sendContent(ypAnswer, this.handlingTime.draw());
         return true;
     }
 

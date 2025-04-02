@@ -65,7 +65,7 @@ public class QuotePolicyTimeout extends QuotePolicy
     @Override
     public boolean handleContent(final Quote quote)
     {
-        if (!isValidMessage(quote))
+        if (!isValidContent(quote))
         {
             return false;
         }
@@ -121,7 +121,7 @@ public class QuotePolicyTimeout extends QuotePolicy
             {
                 Order order = new OrderBasedOnQuote(getActor(), bestQuote.getSender(), bestQuote.getProposedDeliveryDate(),
                         bestQuote, bestQuote.getTransportOption());
-                sendMessage(order, this.getHandlingTime().draw());
+                sendContent(order, this.getHandlingTime().draw());
             }
         }
     }

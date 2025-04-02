@@ -4,9 +4,9 @@ import org.djunits.value.vdouble.scalar.Length;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Actor;
-import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.YellowPageRequest;
+import nl.tudelft.simulation.supplychain.role.buying.BuyingRole;
 import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
 
 /**
@@ -41,7 +41,7 @@ public class DemandHandlerYP extends DemandHandler
      * @param maximumNumber the max number of suppliers to return
      * @param stock the stock for being able to change the ordered amount
      */
-    public DemandHandlerYP(final Role owner, final DistContinuousDuration handlingTime, final Actor yp,
+    public DemandHandlerYP(final BuyingRole owner, final DistContinuousDuration handlingTime, final Actor yp,
             final Length maximumDistance, final int maximumNumber, final Inventory stock)
     {
         super("DemandHandlerYP", owner, handlingTime, stock);
@@ -53,19 +53,19 @@ public class DemandHandlerYP extends DemandHandler
     @Override
     public boolean handleContent(final Demand demand)
     {
-        if (!isValidMessage(demand))
+        if (!isValidContent(demand))
         {
             return false;
         }
         if (super.inventory != null)
         {
-            super.inventory.changeOrderedAmount(demand.getProduct(), demand.getAmount());
+            super.inventory.changeOrderedAmount(demand.product(), demand.amount());
         }
         // create a YellowPageRequest
-        YellowPageRequest ypRequest = new YellowPageRequest(getActor(), this.yp, demand.getUniqueId(), demand.getProduct(),
+        YellowPageRequest ypRequest = new YellowPageRequest(getActor(), this.yp, demand.uniqueId(), demand.product(),
                 this.maximumDistance, this.maximumNumber);
         // and send it out immediately
-        sendMessage(ypRequest, this.handlingTime.draw());
+        getRole().getActor().sendContent(ypRequest, this.handlingTime.draw());
         return true;
     }
 }

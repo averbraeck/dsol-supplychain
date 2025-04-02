@@ -73,7 +73,7 @@ public class YellowPageAnswerHandler extends ContentHandler<YellowPageAnswer>
     @Override
     public boolean handleContent(final YellowPageAnswer ypAnswer)
     {
-        if (!isValidMessage(ypAnswer))
+        if (!isValidContent(ypAnswer))
         {
             return false;
         }
@@ -95,7 +95,7 @@ public class YellowPageAnswerHandler extends ContentHandler<YellowPageAnswer>
             TransportOption transportOption =
                     this.transportChoiceProvider.chooseTransportOptions(transportOptions, ypRequest.getProduct().getSku());
             RequestForQuote rfq = new RequestForQuote(getActor(), supplier, demand, transportOption, this.cutoffDuration);
-            sendMessage(rfq, delay);
+            sendContent(rfq, delay);
         }
         return true;
     }

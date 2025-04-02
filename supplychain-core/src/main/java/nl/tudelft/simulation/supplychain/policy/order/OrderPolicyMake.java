@@ -41,7 +41,7 @@ public class OrderPolicyMake extends OrderPolicy<Order>
         // send out the confirmation
         OrderConfirmation orderConfirmation =
                 new OrderConfirmation(getActor(), order.getSender(), order.getDemandId(), order, OrderConfirmation.CONFIRMED);
-        sendMessage(orderConfirmation, Duration.ZERO);
+        sendContent(orderConfirmation, Duration.ZERO);
 
         Logger.trace("t={} - MTO ORDER CONFIRMATION of actor '{}': sent '{}'", getSimulator().getSimulatorTime(),
                 getActor().getName(), orderConfirmation);
@@ -49,7 +49,7 @@ public class OrderPolicyMake extends OrderPolicy<Order>
         // this is MTO, so we don't keep stock of this product. Therefore, produce it.
         ProductionOrder productionOrder = new ProductionOrder(getActor(), order.getDemandId(), order.getDeliveryDate(),
                 order.getProduct(), order.getAmount());
-        sendMessage(productionOrder);
+        sendContent(productionOrder);
 
         // production should get an mto stock
         // tell the stock that we claimed some amount

@@ -71,7 +71,7 @@ public class RequestForQuoteHandler extends ContentHandler<RequestForQuote>
     @Override
     public boolean handleContent(final RequestForQuote rfq)
     {
-        if (!isValidMessage(rfq))
+        if (!isValidContent(rfq))
         {
             return false;
         }
@@ -87,7 +87,7 @@ public class RequestForQuoteHandler extends ContentHandler<RequestForQuote>
         // construct the quote
         Quote quote = new Quote(getActor(), rfq.getSender(), rfq, product, rfq.getAmount(), price, proposedShippingDate,
                 rfq.getPreferredTransportOption(), getSimulator().getAbsSimulatorTime().plus(this.validityDuration));
-        sendMessage(quote, this.handlingTime.draw());
+        sendContent(quote, this.handlingTime.draw());
         return true;
     }
 

@@ -32,7 +32,7 @@ public class ShipmentPolicyConsume extends ShipmentPolicy
     @Override
     public boolean handleContent(final Shipment shipment)
     {
-        if (!isValidMessage(shipment))
+        if (!isValidContent(shipment))
         {
             return false;
         }
