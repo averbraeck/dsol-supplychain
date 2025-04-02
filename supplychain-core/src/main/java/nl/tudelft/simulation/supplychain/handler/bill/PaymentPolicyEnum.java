@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.policy.payment;
+package nl.tudelft.simulation.supplychain.handler.bill;
 
 /**
  * The different payment policies that this BillHandler class can use.
