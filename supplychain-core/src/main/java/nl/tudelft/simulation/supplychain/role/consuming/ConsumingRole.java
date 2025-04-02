@@ -1,28 +1,20 @@
 package nl.tudelft.simulation.supplychain.role.consuming;
 
-import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.djunits.value.vdouble.scalar.Time;
 import org.djutils.event.EventType;
-import org.djutils.event.TimedEvent;
-import org.pmw.tinylog.Logger;
+import org.djutils.metadata.MetaData;
+import org.djutils.metadata.ObjectDescriptor;
 
-import nl.tudelft.simulation.jstats.distributions.DistContinuous;
-import nl.tudelft.simulation.jstats.distributions.DistDiscrete;
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.content.Bill;
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.InternalDemand;
-import nl.tudelft.simulation.supplychain.content.Payment;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
-import nl.tudelft.simulation.supplychain.role.financing.FixedCostProcess;
 
 /**
  * The consuming role is a role for customers, markets, and other actors that have an autonomous generation of demand for
@@ -39,7 +31,8 @@ public class ConsumingRole extends Role<ConsumingRole>
     private static final long serialVersionUID = 20221206L;
 
     /** an event fired in case demand has been generated. */
-    public static final EventType DEMAND_GENERATED_EVENT = new EventType("DEMAND_GENERATED_EVENT");
+    public static final EventType DEMAND_GENERATED_EVENT = new EventType("DEMAND_GENERATED_EVENT",
+            new MetaData("demand", "generated demand", new ObjectDescriptor("demand", "demand", InternalDemand.class)));
 
     /** map of Product - Demand pairs. */
     private Map<Product, DemandGeneratingProcess> demandGenerators = new LinkedHashMap<Product, DemandGeneratingProcess>();
@@ -51,7 +44,7 @@ public class ConsumingRole extends Role<ConsumingRole>
     private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of();
 
     /** the necessary content handlers. */
-    private static Set<Class<? extends AutonomousProcess<FinancingRole>>> necessaryAutonomousProcesses =
+    private static Set<Class<? extends AutonomousProcess<ConsumingRole>>> necessaryAutonomousProcesses =
             Set.of(DemandGeneratingProcess.class);
 
     /**
@@ -65,21 +58,12 @@ public class ConsumingRole extends Role<ConsumingRole>
     }
 
     /**
-     * @param product the product
-     * @param demand the demand
+     * Add a demand generator for a product.
+     * @param demandGenerator the demand generator
      */
-    public void addDemandGenerator(final Product product, final DemandGeneratingProcess demand)
+    public void addDemandGenerator(final DemandGeneratingProcess demandGenerator)
     {
-        this.demandGenerators.put(product, demand);
-        try
-        {
-            Serializable[] args = {product, demand};
-            getSimulator().scheduleEventRel(demand.getIntervalDistribution().draw(), this, "createInternalDemand", args);
-        }
-        catch (Exception e)
-        {
-            Logger.error(e, "addDemandGenerator");
-        }
+        this.demandGenerators.put(demandGenerator.getProduct(), demandGenerator);
     }
 
     /**
@@ -98,39 +82,6 @@ public class ConsumingRole extends Role<ConsumingRole>
     public void removeDemandGenerator(final Product product)
     {
         this.demandGenerators.remove(product);
-    }
-
-    /**
-     * @param product the product
-     * @param demand the demand
-     */
-    protected void createInternalDemand(final Product product, final DemandGeneratingProcess demand)
-    {
-        // is the (same) demand still there?
-        if (this.demandGenerators.get(product).equals(demand))
-        {
-            try
-            {
-                double amount = demand.getAmountDistribution() instanceof DistContinuous
-                        ? ((DistContinuous) demand.getAmountDistribution()).draw()
-                        : ((DistDiscrete) demand.getAmountDistribution()).draw();
-                InternalDemand id = new InternalDemand(getActor(), product, amount,
-                        getSimulator().getAbsSimulatorTime().plus(demand.getEarliestDeliveryDurationDistribution().draw()),
-                        getSimulator().getAbsSimulatorTime().plus(demand.getLatestDeliveryDurationDistribution().draw()));
-                getActor().sendContent(id, this.administrativeDelay.draw());
-                Serializable[] args = {product, demand};
-                Time time = getSimulator().getAbsSimulatorTime().plus(demand.getIntervalDistribution().draw());
-                getSimulator().scheduleEventAbs(time, this, "createInternalDemand", args);
-
-                // we might collect some statistics for the internal demand
-                getActor().fireEvent(
-                        new TimedEvent<Time>(ConsumingRole.DEMAND_GENERATED_EVENT, id, getSimulator().getAbsSimulatorTime()));
-            }
-            catch (Exception e)
-            {
-                Logger.error(e, "createInternalDemand");
-            }
-        }
     }
 
     @Override
@@ -159,6 +110,20 @@ public class ConsumingRole extends Role<ConsumingRole>
     public String toString()
     {
         return getId();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    protected Set<Class<? extends Content>> getNecessaryContentHandlers()
+    {
+        return necessaryContentHandlers;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    protected Set<Class<? extends AutonomousProcess<ConsumingRole>>> getNecessaryAutonomousProcesses()
+    {
+        return necessaryAutonomousProcesses;
     }
 
 }

@@ -2,6 +2,9 @@ package nl.tudelft.simulation.supplychain.role.consuming;
 
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
+import org.djunits.value.vdouble.scalar.Time;
+import org.djutils.event.TimedEvent;
+import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.jstats.distributions.Dist;
 import nl.tudelft.simulation.jstats.distributions.DistConstant;
@@ -9,8 +12,7 @@ import nl.tudelft.simulation.jstats.distributions.DistContinuous;
 import nl.tudelft.simulation.jstats.distributions.DistDiscrete;
 import nl.tudelft.simulation.jstats.distributions.DistDiscreteConstant;
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
-import nl.tudelft.simulation.jstats.streams.Java2Random;
-import nl.tudelft.simulation.jstats.streams.StreamInterface;
+import nl.tudelft.simulation.supplychain.content.InternalDemand;
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 import nl.tudelft.simulation.supplychain.product.Product;
 
@@ -44,20 +46,21 @@ public class DemandGeneratingProcess extends AutonomousProcess<ConsumingRole>
      * @param role the role to which this process belongs
      * @param product the product
      * @param interval the distribution for the demand generation interval
-     * @param amount the amount of product to order
+     * @param amountDistribution the amount of product to order (discrete or continuous)
      * @param earliestDeliveryDurationDistribution the earliest delivery date distribution
      * @param latestDeliveryDurationDistribution the latest delivery date distribution
      */
     public DemandGeneratingProcess(final ConsumingRole role, final Product product, final DistContinuousDuration interval,
-            final DistContinuous amount, final DistContinuousDuration earliestDeliveryDurationDistribution,
+            final Dist amountDistribution, final DistContinuousDuration earliestDeliveryDurationDistribution,
             final DistContinuousDuration latestDeliveryDurationDistribution)
     {
         super(role);
         this.product = product;
         this.intervalDistribution = interval;
-        this.amountDistribution = amount;
+        this.amountDistribution = amountDistribution;
         this.earliestDeliveryDurationDistribution = earliestDeliveryDurationDistribution;
         this.latestDeliveryDurationDistribution = latestDeliveryDurationDistribution;
+        role.getSimulator().scheduleEventRel(this.intervalDistribution.draw(), this, "generateDemand", null);
     }
 
     /**
@@ -87,27 +90,6 @@ public class DemandGeneratingProcess extends AutonomousProcess<ConsumingRole>
      * @param product the product
      * @param interval the distribution for the demand generation interval
      * @param amount the amount of product to order
-     * @param earliestDeliveryDurationDistribution the earliest delivery date distribution
-     * @param latestDeliveryDurationDistribution the latest delivery date distribution
-     */
-    public DemandGeneratingProcess(final ConsumingRole role, final Product product, final DistContinuousDuration interval,
-            final DistDiscrete amount, final DistContinuousDuration earliestDeliveryDurationDistribution,
-            final DistContinuousDuration latestDeliveryDurationDistribution)
-    {
-        super(role);
-        this.product = product;
-        this.intervalDistribution = interval;
-        this.amountDistribution = amount;
-        this.earliestDeliveryDurationDistribution = earliestDeliveryDurationDistribution;
-        this.latestDeliveryDurationDistribution = latestDeliveryDurationDistribution;
-    }
-
-    /**
-     * Make a demand generating process.
-     * @param role the role to which this process belongs
-     * @param product the product
-     * @param interval the distribution for the demand generation interval
-     * @param amount the amount of product to order
      * @param earliestDeliveryDuration the earliest delivery date
      * @param latestDeliveryDuration the latest delivery date
      */
@@ -124,7 +106,33 @@ public class DemandGeneratingProcess extends AutonomousProcess<ConsumingRole>
     }
 
     /**
-     * @return the amount distribution.
+     * Generate internal demand and send it to the BuyingActor.
+     */
+    protected void generateDemand()
+    {
+        try
+        {
+            double amount = this.amountDistribution instanceof DistContinuous
+                    ? ((DistContinuous) this.amountDistribution).draw() : ((DistDiscrete) this.amountDistribution).draw();
+            InternalDemand demand = new InternalDemand(getRole().getActor(), this.product, amount,
+                    getRole().getSimulator().getAbsSimulatorTime().plus(this.earliestDeliveryDurationDistribution.draw()),
+                    getRole().getSimulator().getAbsSimulatorTime().plus(this.latestDeliveryDurationDistribution.draw()));
+            getRole().getActor().sendContent(demand, getRole().getAdministrativeDelay().draw());
+            getRole().getSimulator().scheduleEventRel(this.intervalDistribution.draw(), this, "generateDemand", null);
+
+            // we might collect some statistics for the internal demand
+            getRole().getActor().fireEvent(new TimedEvent<Time>(ConsumingRole.DEMAND_GENERATED_EVENT, demand,
+                    getRole().getSimulator().getAbsSimulatorTime()));
+        }
+        catch (Exception e)
+        {
+            Logger.error(e, "createInternalDemand");
+        }
+    }
+
+    /**
+     * Return the amount distribution (discrete or continuous).
+     * @return the amount distribution
      */
     public Dist getAmountDistribution()
     {
@@ -132,7 +140,8 @@ public class DemandGeneratingProcess extends AutonomousProcess<ConsumingRole>
     }
 
     /**
-     * @return the interval.
+     * Return the demand generation interval distribution.
+     * @return the demand generation interval distribution
      */
     public DistContinuousDuration getIntervalDistribution()
     {
@@ -140,7 +149,8 @@ public class DemandGeneratingProcess extends AutonomousProcess<ConsumingRole>
     }
 
     /**
-     * @return the product.
+     * Return the product to be generated.
+     * @return the product to be generated
      */
     public Product getProduct()
     {
@@ -148,7 +158,8 @@ public class DemandGeneratingProcess extends AutonomousProcess<ConsumingRole>
     }
 
     /**
-     * @return the earliestDeliveryDate.
+     * Return the earliest delivery date distribution function (returns a Duration).
+     * @return the earliest delivery date distribution function (returns a Duration)
      */
     public DistContinuousDuration getEarliestDeliveryDurationDistribution()
     {
@@ -156,7 +167,8 @@ public class DemandGeneratingProcess extends AutonomousProcess<ConsumingRole>
     }
 
     /**
-     * @return the latestDeliveryDate.
+     * Return the latest delivery date distribution function (returns a Duration).
+     * @return the latest delivery date distribution function (returns a Duration)
      */
     public DistContinuousDuration getLatestDeliveryDurationDistribution()
     {
