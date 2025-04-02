@@ -50,7 +50,7 @@ public abstract class QuoteHandler extends ContentHandler<Quote>
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the margin within which the offered amount may differ from the requested amount.
      */
-    public QuotePolicy(final String id, final Role owner, final QuoteComparatorEnum comparatorType,
+    public QuoteHandler(final String id, final Role owner, final QuoteComparatorEnum comparatorType,
             final DistContinuousDuration handlingTime, final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super(id, owner, Quote.class);
@@ -69,7 +69,7 @@ public abstract class QuoteHandler extends ContentHandler<Quote>
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the margin within which the offered amount may differ from the requested amount.
      */
-    public QuotePolicy(final String id, final Role owner, final Comparator<Quote> comparator,
+    public QuoteHandler(final String id, final Role owner, final Comparator<Quote> comparator,
             final DistContinuousDuration handlingTime, final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super(id, owner, Quote.class);
@@ -128,7 +128,7 @@ public abstract class QuoteHandler extends ContentHandler<Quote>
                         }
                         else
                         {
-                            if (QuotePolicy.DEBUG)
+                            if (QuoteHandler.DEBUG)
                             {
                                 System.err.println("QuoteHandler: quote: + prop delivery date: "
                                         + quote.getProposedDeliveryDate() + " earliest delivery date: "
@@ -142,7 +142,7 @@ public abstract class QuoteHandler extends ContentHandler<Quote>
                     }
                     else
                     {
-                        if (QuotePolicy.DEBUG)
+                        if (QuoteHandler.DEBUG)
                         {
                             System.err.println("DEBUG -- QuoteHandler: " + " Quote: " + quote + " has invalid amount : "
                                     + quote.getAmount() + ">" + quote.getRequestForQuote().getAmount());
@@ -151,7 +151,7 @@ public abstract class QuoteHandler extends ContentHandler<Quote>
                 }
                 else
                 {
-                    if (QuotePolicy.DEBUG)
+                    if (QuoteHandler.DEBUG)
                     {
                         System.err.println("DEBUG -- QuoteHandler: " + " Price of quote: " + quote + " is too high: "
                                 + (((quote.getPrice().getAmount() / quote.getAmount()))
@@ -162,7 +162,7 @@ public abstract class QuoteHandler extends ContentHandler<Quote>
             }
             else
             {
-                if (QuotePolicy.DEBUG)
+                if (QuoteHandler.DEBUG)
                 {
                     System.err.println("DEBUG -- QuoteHandler: " + " Quote: " + quote + " is invalid (before simtime) : "
                             + quote.getValidityTime() + " < " + getSimulator().getSimulatorTime());

@@ -22,16 +22,16 @@ import nl.tudelft.simulation.supplychain.message.store.trade.ContentStoreInterfa
 import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.BankAccount;
 import nl.tudelft.simulation.supplychain.money.Money;
-import nl.tudelft.simulation.supplychain.policy.bill.BillPolicy;
+import nl.tudelft.simulation.supplychain.policy.bill.BillHandler;
 import nl.tudelft.simulation.supplychain.policy.order.OrderPolicy;
 import nl.tudelft.simulation.supplychain.policy.order.OrderPolicyStock;
-import nl.tudelft.simulation.supplychain.policy.orderconfirmation.OrderConfirmationPolicy;
+import nl.tudelft.simulation.supplychain.policy.orderconfirmation.OrderConfirmationHandler;
 import nl.tudelft.simulation.supplychain.policy.quote.QuoteComparatorEnum;
-import nl.tudelft.simulation.supplychain.policy.quote.QuotePolicy;
-import nl.tudelft.simulation.supplychain.policy.quote.QuotePolicyAll;
-import nl.tudelft.simulation.supplychain.policy.rfq.RequestForQuotePolicy;
-import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentPolicy;
-import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentPolicyStock;
+import nl.tudelft.simulation.supplychain.policy.quote.QuoteHandler;
+import nl.tudelft.simulation.supplychain.policy.quote.QuoteHandlerAll;
+import nl.tudelft.simulation.supplychain.policy.rfq.RequestForQuoteHandler;
+import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentHandler;
+import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentHandlerStock;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Retailer;
 import nl.tudelft.simulation.supplychain.reference.Supplier;
@@ -99,7 +99,7 @@ public class PCShop extends Retailer
     public void init() throws RemoteException
     {
         // tell PCshop to use the RFQPolicy to handle RFQs
-        RequestForQuotePolicy rfqPolicy = new RequestForQuotePolicy(this, getInventory(), 1.2,
+        RequestForQuoteHandler rfqPolicy = new RequestForQuoteHandler(this, getInventory(), 1.2,
                 new DistConstantDuration(new Duration(1.23, DurationUnit.HOUR)), TransportMode.PLANE);
         //
         // create an order Policy
@@ -134,19 +134,19 @@ public class PCShop extends Retailer
             demandPolicy.addSupplier(product, this.manufacturer);
         }
         //
-        // tell PCShop to use the QuotePolicy to handle quotes
-        QuotePolicy quotePolicy = new QuotePolicyAll(this, QuoteComparatorEnum.SORT_DATE_PRICE_DISTANCE,
+        // tell PCShop to use the QuoteHandler to handle quotes
+        QuoteHandler quotePolicy = new QuoteHandlerAll(this, QuoteComparatorEnum.SORT_DATE_PRICE_DISTANCE,
                 new Duration(1.0, DurationUnit.HOUR), 0.4, 0.1);
         //
         // PCShop has the standard order confirmation Policy
-        OrderConfirmationPolicy confirmationPolicy = new OrderConfirmationPolicy(this);
+        OrderConfirmationHandler confirmationPolicy = new OrderConfirmationHandler(this);
         //
         // PCShop will get a bill in the end
-        BillPolicy billPolicy = new BillPolicy(this, getBankAccount(), PaymentPolicyEnum.PAYMENT_IMMEDIATE,
+        BillHandler billPolicy = new BillHandler(this, getBankAccount(), PaymentPolicyEnum.PAYMENT_IMMEDIATE,
                 new DistConstantDuration(Duration.ZERO));
         //
         // hopefully, PCShop will get laptop shipments, put them in stock
-        ShipmentPolicy shipmentPolicy = new ShipmentPolicyStock(this, getInventory());
+        ShipmentHandler shipmentPolicy = new ShipmentHandlerStock(this, getInventory());
         //
         // add the Policys to the buying role for PCShop
         BuyingRoleSearch buyingRole = new BuyingRoleSearch(this, getSimulator(), demandPolicy, quotePolicy,

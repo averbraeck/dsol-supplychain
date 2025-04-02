@@ -16,6 +16,7 @@ import nl.tudelft.simulation.supplychain.content.SearchRequest;
 import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.role.buying.BuyingRole;
+import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 import nl.tudelft.simulation.supplychain.transport.TransportChoiceProvider;
 import nl.tudelft.simulation.supplychain.transport.TransportOption;
 import nl.tudelft.simulation.supplychain.transport.TransportOptionProvider;
@@ -93,8 +94,9 @@ public class SearchAnswerHandler extends ContentHandler<SearchAnswer, BuyingRole
         {
             Set<TransportOption> transportOptions = this.transportOptionProvider.provideTransportOptions(supplier, getActor());
             TransportOption transportOption =
-                    this.transportChoiceProvider.chooseTransportOptions(transportOptions, searchRequest.getProduct().getSku());
-            RequestForQuote rfq = new RequestForQuote(getActor(), supplier, demand, transportOption, this.cutoffDuration);
+                    this.transportChoiceProvider.chooseTransportOptions(transportOptions, searchRequest.product().getSku());
+            RequestForQuote rfq = new RequestForQuote(getRole().getActor(), (SellingActor) supplier, demand, transportOption,
+                    this.cutoffDuration);
             sendContent(rfq, delay);
         }
         return true;

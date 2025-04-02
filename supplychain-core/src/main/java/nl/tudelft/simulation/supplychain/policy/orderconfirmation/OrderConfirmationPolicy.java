@@ -31,9 +31,9 @@ public class OrderConfirmationHandler extends ContentHandler<OrderConfirmation>
      * Constructs a new OrderConfirmationHandler.
      * @param owner the owner of the policy.
      */
-    public OrderConfirmationPolicy(final Role owner)
+    public OrderConfirmationHandler(final Role owner)
     {
-        super("OrderConfirmationPolicy", owner, OrderConfirmation.class);
+        super("OrderConfirmationHandler", owner, OrderConfirmation.class);
     }
 
     /**
@@ -50,7 +50,7 @@ public class OrderConfirmationHandler extends ContentHandler<OrderConfirmation>
         }
         if (!orderConfirmation.isAccepted())
         {
-            if (OrderConfirmationPolicy.DEBUG)
+            if (OrderConfirmationHandler.DEBUG)
             {
                 System.out.println("OrderConfirmationHandler: handleContent: !orderConfirmation.isAccepted()");
             }

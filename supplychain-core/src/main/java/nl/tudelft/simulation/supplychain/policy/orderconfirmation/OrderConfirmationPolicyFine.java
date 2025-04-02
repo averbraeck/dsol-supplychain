@@ -20,7 +20,7 @@ import nl.tudelft.simulation.supplychain.money.MoneyUnit;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class OrderConfirmationPolicyFine extends OrderConfirmationPolicy
+public class OrderConfirmationHandlerFine extends OrderConfirmationHandler
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 11L;
@@ -41,7 +41,7 @@ public class OrderConfirmationPolicyFine extends OrderConfirmationPolicy
      * @param fineMargin the margin
      * @param fixedFine the fixed fine
      */
-    public OrderConfirmationPolicyFine(final Role owner, final Duration maximumTimeOut, final double fineMargin,
+    public OrderConfirmationHandlerFine(final Role owner, final Duration maximumTimeOut, final double fineMargin,
             final Money fixedFine)
     {
         super(owner);
@@ -53,7 +53,7 @@ public class OrderConfirmationPolicyFine extends OrderConfirmationPolicy
     @Override
     public String getId()
     {
-        return "OrderConfirmationPolicyFine";
+        return "OrderConfirmationHandlerFine";
     }
 
     @Override

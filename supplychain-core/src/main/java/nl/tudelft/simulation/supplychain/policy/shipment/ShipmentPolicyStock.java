@@ -13,7 +13,7 @@ import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class ShipmentPolicyStock extends ShipmentPolicy
+public class ShipmentHandlerStock extends ShipmentHandler
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
@@ -26,9 +26,9 @@ public class ShipmentPolicyStock extends ShipmentPolicy
      * @param owner the owner of the policy
      * @param stock the stock to use for storing the incoming cargo
      */
-    public ShipmentPolicyStock(final Role owner, final Inventory stock)
+    public ShipmentHandlerStock(final Role owner, final Inventory stock)
     {
-        super("ShipmentPolicyStock", owner);
+        super("ShipmentHandlerStock", owner);
         this.stock = stock;
     }
 

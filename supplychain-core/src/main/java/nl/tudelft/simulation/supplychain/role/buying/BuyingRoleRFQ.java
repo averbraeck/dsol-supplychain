@@ -1,10 +1,10 @@
 package nl.tudelft.simulation.supplychain.role.buying;
 
+import nl.tudelft.simulation.supplychain.handler.bill.BillHandler;
 import nl.tudelft.simulation.supplychain.handler.demand.DemandHandlerRFQ;
-import nl.tudelft.simulation.supplychain.policy.bill.BillPolicy;
-import nl.tudelft.simulation.supplychain.policy.orderconfirmation.OrderConfirmationPolicy;
-import nl.tudelft.simulation.supplychain.policy.quote.QuotePolicy;
-import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentPolicy;
+import nl.tudelft.simulation.supplychain.policy.orderconfirmation.OrderConfirmationHandler;
+import nl.tudelft.simulation.supplychain.policy.quote.QuoteHandler;
+import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentHandler;
 
 /**
  * The buying role based on a RFQ is a role that organizes the buying based on a RequestForQuote that is sent to a fixed set of
@@ -23,22 +23,22 @@ public class BuyingRoleRFQ extends BuyingRole
     /**
      * Constructs a new BuyingRole for Demand - Quote - Confirmation - Shipment - Bill.
      * @param owner the actor to which this role belongs
-     * @param demandPolicy the demand handler, results in sending out an RFQ
-     * @param quotePolicy the quote handler
-     * @param orderConfirmationPolicy the order confirmation handler
-     * @param shipmentPolicy the shipment handler
-     * @param billPolicy the bill handler
+     * @param demandHandler the demand handler, results in sending out an RFQ
+     * @param quoteHandler the quote handler
+     * @param orderConfirmationHandler the order confirmation handler
+     * @param shipmentHandler the shipment handler
+     * @param billHandler the bill handler
      */
-    public BuyingRoleRFQ(final BuyingActor owner, final DemandHandlerRFQ demandPolicy, final QuotePolicy quotePolicy,
-            final OrderConfirmationPolicy orderConfirmationPolicy, final ShipmentPolicy shipmentPolicy,
-            final BillPolicy billPolicy)
+    public BuyingRoleRFQ(final BuyingActor owner, final DemandHandlerRFQ demandHandler, final QuoteHandler quoteHandler,
+            final OrderConfirmationHandler orderConfirmationHandler, final ShipmentHandler shipmentHandler,
+            final BillHandler billHandler)
     {
         super(owner);
-        setContentHandler(demandPolicy);
-        setContentHandler(quotePolicy);
-        setContentHandler(orderConfirmationPolicy);
-        setContentHandler(shipmentPolicy);
-        setContentHandler(billPolicy);
+        setContentHandler(demandHandler);
+        setContentHandler(quoteHandler);
+        setContentHandler(orderConfirmationHandler);
+        setContentHandler(shipmentHandler);
+        setContentHandler(billHandler);
     }
 
     @Override

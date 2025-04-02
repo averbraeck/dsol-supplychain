@@ -21,7 +21,7 @@ import nl.tudelft.simulation.supplychain.message.store.trade.ContentStoreInterfa
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class QuotePolicyAll extends QuotePolicy
+public class QuoteHandlerAll extends QuoteHandler
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
@@ -37,10 +37,10 @@ public class QuotePolicyAll extends QuotePolicy
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the margin within which the offered amount may differ from the requested amount.
      */
-    public QuotePolicyAll(final Role owner, final Comparator<Quote> comparator, final DistContinuousDuration handlingTime,
+    public QuoteHandlerAll(final Role owner, final Comparator<Quote> comparator, final DistContinuousDuration handlingTime,
             final double maximumPriceMargin, final double minimumAmountMargin)
     {
-        super("QuotePolicyAll", owner, comparator, handlingTime, maximumPriceMargin, minimumAmountMargin);
+        super("QuoteHandlerAll", owner, comparator, handlingTime, maximumPriceMargin, minimumAmountMargin);
     }
 
     /**
@@ -51,10 +51,10 @@ public class QuotePolicyAll extends QuotePolicy
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the minimal amount margin
      */
-    public QuotePolicyAll(final Role owner, final QuoteComparatorEnum comparatorType, final DistContinuousDuration handlingTime,
+    public QuoteHandlerAll(final Role owner, final QuoteComparatorEnum comparatorType, final DistContinuousDuration handlingTime,
             final double maximumPriceMargin, final double minimumAmountMargin)
     {
-        super("QuotePolicyAll", owner, comparatorType, handlingTime, maximumPriceMargin, minimumAmountMargin);
+        super("QuoteHandlerAll", owner, comparatorType, handlingTime, maximumPriceMargin, minimumAmountMargin);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class QuotePolicyAll extends QuotePolicy
         {
             // All quotes are in. Select the best and place an order
 
-            if (QuotePolicyAll.DEBUG)
+            if (QuoteHandlerAll.DEBUG)
             {
                 System.err.println("t=" + getSimulator().getSimulatorTime() + " DEBUG -- QuoteHandlerAll of actor " + getActor()
                         + ", size=" + messageStore.getContentList(id, Quote.class).size());
@@ -87,7 +87,7 @@ public class QuotePolicyAll extends QuotePolicy
                 return false;
             }
 
-            if (QuotePolicyAll.DEBUG)
+            if (QuoteHandlerAll.DEBUG)
             {
                 System.err.println("t=" + getSimulator().getSimulatorTime() + " DEBUG -- QuoteHandlerAll of actor " + getActor()
                         + ", bestQuote=" + bestQuote);

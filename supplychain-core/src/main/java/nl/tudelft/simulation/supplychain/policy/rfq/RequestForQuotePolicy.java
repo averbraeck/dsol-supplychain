@@ -48,10 +48,10 @@ public class RequestForQuoteHandler extends ContentHandler<RequestForQuote>
      * @param handlingTime the distribution of the time to react on the RFQ
      * @param validityDuration 
      */
-    public RequestForQuotePolicy(final Role owner, final Inventory inventory, final double profitMargin,
+    public RequestForQuoteHandler(final Role owner, final Inventory inventory, final double profitMargin,
             final DistContinuousDuration handlingTime, final Duration validityDuration)
     {
-        super("RequestForQuotePolicy", owner, RequestForQuote.class);
+        super("RequestForQuoteHandler", owner, RequestForQuote.class);
         Throw.whenNull(inventory, "inventory cannot be null");
         Throw.whenNull(handlingTime, "handlingTime cannot be null");
         Throw.whenNull(profitMargin, "profitMargin cannot be null");

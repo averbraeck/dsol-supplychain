@@ -39,7 +39,7 @@ public class SearchingRole extends Role<SearchingRole>
     /** the necessary content handlers. */
     private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of(SearchRequest.class);
 
-    /** the necessary content handlers. */
+    /** the necessary autonomous processes. */
     private static Set<Class<? extends AutonomousProcess<SearchingRole>>> necessaryAutonomousProcesses = Set.of();
 
     /**

@@ -1,9 +1,9 @@
 package nl.tudelft.simulation.supplychain.role.buying;
 
 import nl.tudelft.simulation.supplychain.handler.demand.DemandHandlerOrder;
-import nl.tudelft.simulation.supplychain.policy.bill.BillPolicy;
-import nl.tudelft.simulation.supplychain.policy.orderconfirmation.OrderConfirmationPolicy;
-import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentPolicy;
+import nl.tudelft.simulation.supplychain.policy.bill.BillHandler;
+import nl.tudelft.simulation.supplychain.policy.orderconfirmation.OrderConfirmationHandler;
+import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentHandler;
 
 /**
  * The direct buying role is a role that organizes the buying based on a single supplier, and continues from there.
@@ -27,8 +27,8 @@ public class BuyingRoleDirect extends BuyingRole
      * @param billPolicy the bill handler
      */
     public BuyingRoleDirect(final BuyingActor owner, final DemandHandlerOrder demandPolicy,
-            final OrderConfirmationPolicy orderConfirmationPolicy, final ShipmentPolicy shipmentPolicy,
-            final BillPolicy billPolicy)
+            final OrderConfirmationHandler orderConfirmationPolicy, final ShipmentHandler shipmentPolicy,
+            final BillHandler billPolicy)
     {
         super(owner);
         setContentHandler(demandPolicy);

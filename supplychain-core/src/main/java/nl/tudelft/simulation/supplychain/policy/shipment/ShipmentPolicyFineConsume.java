@@ -18,7 +18,7 @@ import nl.tudelft.simulation.supplychain.money.MoneyUnit;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class ShipmentPolicyFineConsume extends ShipmentPolicyConsume
+public class ShipmentHandlerFineConsume extends ShipmentHandlerConsume
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 11L;
@@ -39,7 +39,7 @@ public class ShipmentPolicyFineConsume extends ShipmentPolicyConsume
      * @param fineMarginPerDay the fine margin per day
      * @param fixedFinePerDay the fixed fine per day
      */
-    public ShipmentPolicyFineConsume(final Role owner, final Duration maximumTimeOut, final double fineMarginPerDay,
+    public ShipmentHandlerFineConsume(final Role owner, final Duration maximumTimeOut, final double fineMarginPerDay,
             final Money fixedFinePerDay)
     {
         super(owner);

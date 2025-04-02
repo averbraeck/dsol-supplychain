@@ -18,7 +18,7 @@ import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class ShipmentPolicyFineStock extends ShipmentPolicyStock
+public class ShipmentHandlerFineStock extends ShipmentHandlerStock
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 11L;
@@ -40,7 +40,7 @@ public class ShipmentPolicyFineStock extends ShipmentPolicyStock
      * @param fineMarginPerDay the fine margin per day
      * @param fixedFinePerDay the fixed fine per day
      */
-    public ShipmentPolicyFineStock(final Role owner, final Inventory stock, final Duration maximumTimeOut,
+    public ShipmentHandlerFineStock(final Role owner, final Inventory stock, final Duration maximumTimeOut,
             final double fineMarginPerDay, final Money fixedFinePerDay)
     {
         super(owner, stock);

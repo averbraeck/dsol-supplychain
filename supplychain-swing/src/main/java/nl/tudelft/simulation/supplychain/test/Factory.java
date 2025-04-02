@@ -21,7 +21,7 @@ import nl.tudelft.simulation.supplychain.money.BankAccount;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.policy.order.OrderPolicy;
 import nl.tudelft.simulation.supplychain.policy.order.OrderPolicyStock;
-import nl.tudelft.simulation.supplychain.policy.rfq.RequestForQuotePolicy;
+import nl.tudelft.simulation.supplychain.policy.rfq.RequestForQuoteHandler;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Supplier;
 import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
@@ -83,7 +83,7 @@ public class Factory extends Supplier
     public void init() throws RemoteException
     {
         // tell Factory to use the RFQPolicy to handle RFQs
-        RequestForQuotePolicy rfqPolicy = new RequestForQuotePolicy(this, getInventory(), 1.2,
+        RequestForQuoteHandler rfqPolicy = new RequestForQuoteHandler(this, getInventory(), 1.2,
                 new DistConstantDuration(new Duration(1.23, DurationUnit.HOUR)), TransportMode.PLANE);
         //
         // create an order Policy

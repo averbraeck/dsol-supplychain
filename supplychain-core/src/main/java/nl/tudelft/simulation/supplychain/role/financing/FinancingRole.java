@@ -37,7 +37,7 @@ public class FinancingRole extends Role<FinancingRole>
     /** the necessary content handlers. */
     private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of(Bill.class, Payment.class);
 
-    /** the necessary content handlers. */
+    /** the necessary autonomous processes. */
     private static Set<Class<? extends AutonomousProcess<FinancingRole>>> necessaryAutonomousProcesses =
             Set.of(FixedCostProcess.class);
 

@@ -43,7 +43,7 @@ public class ConsumingRole extends Role<ConsumingRole>
     /** the necessary content handlers. */
     private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of();
 
-    /** the necessary content handlers. */
+    /** the necessary autonomous processes. */
     private static Set<Class<? extends AutonomousProcess<ConsumingRole>>> necessaryAutonomousProcesses =
             Set.of(DemandGeneratingProcess.class);
 

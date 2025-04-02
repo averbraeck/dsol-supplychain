@@ -24,18 +24,18 @@ import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.handler.demand.InternalDemandHandlerYP;
 import nl.tudelft.simulation.supplychain.handler.payment.PaymentPolicyEnum;
-import nl.tudelft.simulation.supplychain.handler.search.SearchAnswerPolicy;
+import nl.tudelft.simulation.supplychain.handler.search.SearchAnswerHandler;
 import nl.tudelft.simulation.supplychain.message.store.trade.LeanTradeMessageStore;
 import nl.tudelft.simulation.supplychain.messagehandlers.HandleAllMessages;
 import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.Money;
-import nl.tudelft.simulation.supplychain.policy.bill.BillPolicy;
-import nl.tudelft.simulation.supplychain.policy.orderconfirmation.OrderConfirmationPolicy;
+import nl.tudelft.simulation.supplychain.policy.bill.BillHandler;
+import nl.tudelft.simulation.supplychain.policy.orderconfirmation.OrderConfirmationHandler;
 import nl.tudelft.simulation.supplychain.policy.quote.QuoteComparatorEnum;
-import nl.tudelft.simulation.supplychain.policy.quote.QuotePolicy;
-import nl.tudelft.simulation.supplychain.policy.quote.QuotePolicyAll;
-import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentPolicy;
-import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentPolicyConsume;
+import nl.tudelft.simulation.supplychain.policy.quote.QuoteHandler;
+import nl.tudelft.simulation.supplychain.policy.quote.QuoteHandlerAll;
+import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentHandler;
+import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentHandlerConsume;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Customer;
 import nl.tudelft.simulation.supplychain.reference.Search;
@@ -97,19 +97,19 @@ public class DemoMarket extends Customer
 
         DistContinuousDuration administrativeDelaySearchAnswer =
                 new DistContinuousDuration(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-        SearchAnswerPolicy searchAnswerHandler = new SearchAnswerPolicy(this, administrativeDelaySearchAnswer);
+        SearchAnswerHandler searchAnswerHandler = new SearchAnswerHandler(this, administrativeDelaySearchAnswer);
 
         DistContinuousDuration administrativeDelayQuote =
                 new DistContinuousDuration(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-        QuotePolicy quoteHandler =
-                new QuotePolicyAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE, administrativeDelayQuote, 0.5, 0);
+        QuoteHandler quoteHandler =
+                new QuoteHandlerAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE, administrativeDelayQuote, 0.5, 0);
 
-        OrderConfirmationPolicy orderConfirmationHandler = new OrderConfirmationPolicy(this);
+        OrderConfirmationHandler orderConfirmationHandler = new OrderConfirmationHandler(this);
 
-        ShipmentPolicy shipmentHandler = new ShipmentPolicyConsume(this);
+        ShipmentHandler shipmentHandler = new ShipmentHandlerConsume(this);
 
         DistContinuousDuration paymentDelay = new DistContinuousDuration(new DistConstant(stream, 0.0), DurationUnit.HOUR);
-        BillPolicy billHandler = new BillPolicy(this, this.getBankAccount(), PaymentPolicyEnum.PAYMENT_ON_TIME, paymentDelay);
+        BillHandler billHandler = new BillHandler(this, this.getBankAccount(), PaymentPolicyEnum.PAYMENT_ON_TIME, paymentDelay);
 
         BuyingRoleSearch buyingRole = new BuyingRoleSearch(this, simulator, demandHandler, searchAnswerHandler, quoteHandler,
                 orderConfirmationHandler, shipmentHandler, billHandler);

@@ -26,7 +26,7 @@ import nl.tudelft.simulation.supplychain.message.store.trade.ContentStoreInterfa
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class QuotePolicyTimeout extends QuotePolicy
+public class QuoteHandlerTimeout extends QuoteHandler
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
@@ -42,10 +42,10 @@ public class QuotePolicyTimeout extends QuotePolicy
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the margin within which the offered amount may differ from the requested amount.
      */
-    public QuotePolicyTimeout(final Role owner, final Comparator<Quote> comparator, final DistContinuousDuration handlingTime,
+    public QuoteHandlerTimeout(final Role owner, final Comparator<Quote> comparator, final DistContinuousDuration handlingTime,
             final double maximumPriceMargin, final double minimumAmountMargin)
     {
-        super("QuotePolicyTimeout", owner, comparator, handlingTime, maximumPriceMargin, minimumAmountMargin);
+        super("QuoteHandlerTimeout", owner, comparator, handlingTime, maximumPriceMargin, minimumAmountMargin);
     }
 
     /**
@@ -56,10 +56,10 @@ public class QuotePolicyTimeout extends QuotePolicy
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the minimal amount margin
      */
-    public QuotePolicyTimeout(final Role owner, final QuoteComparatorEnum comparatorType,
+    public QuoteHandlerTimeout(final Role owner, final QuoteComparatorEnum comparatorType,
             final DistContinuousDuration handlingTime, final double maximumPriceMargin, final double minimumAmountMargin)
     {
-        super("QuotePolicyTimeout", owner, comparatorType, handlingTime, maximumPriceMargin, minimumAmountMargin);
+        super("QuoteHandlerTimeout", owner, comparatorType, handlingTime, maximumPriceMargin, minimumAmountMargin);
     }
 
     @Override

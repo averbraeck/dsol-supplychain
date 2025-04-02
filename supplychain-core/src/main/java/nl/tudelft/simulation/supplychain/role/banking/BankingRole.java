@@ -49,7 +49,7 @@ public class BankingRole extends Role<BankingRole>
     /** the necessary content handlers. */
     private static Set<Class<? extends Content>> necessaryContentHandlers = Collections.emptySet();
 
-    /** the necessary content handlers. */
+    /** the necessary autonomous processes. */
     private static Set<Class<? extends AutonomousProcess<BankingRole>>> necessaryAutonomousProcesses =
             Set.of(InterestProcess.class);
 

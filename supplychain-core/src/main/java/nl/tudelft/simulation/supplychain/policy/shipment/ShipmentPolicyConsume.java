@@ -11,7 +11,7 @@ import nl.tudelft.simulation.supplychain.content.Shipment;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class ShipmentPolicyConsume extends ShipmentPolicy
+public class ShipmentHandlerConsume extends ShipmentHandler
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
@@ -20,9 +20,9 @@ public class ShipmentPolicyConsume extends ShipmentPolicy
      * Construct a new ShipmentHandlerConsume handler.
      * @param owner the owner of the policy
      */
-    public ShipmentPolicyConsume(final Role owner)
+    public ShipmentHandlerConsume(final Role owner)
     {
-        super("ShipmentPolicyConsume", owner);
+        super("ShipmentHandlerConsume", owner);
     }
 
     /**

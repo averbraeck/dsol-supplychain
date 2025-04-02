@@ -25,7 +25,7 @@ import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.policy.order.OrderPolicy;
 import nl.tudelft.simulation.supplychain.policy.order.OrderPolicyStock;
-import nl.tudelft.simulation.supplychain.policy.rfq.RequestForQuotePolicy;
+import nl.tudelft.simulation.supplychain.policy.rfq.RequestForQuoteHandler;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Supplier;
 import nl.tudelft.simulation.supplychain.reference.Search;
@@ -83,7 +83,7 @@ public class DemoSupplier extends Supplier
 
         // SELLING HANDLERS
 
-        RequestForQuotePolicy rfqHandler = new RequestForQuotePolicy(this, super.inventory, 1.2,
+        RequestForQuoteHandler rfqHandler = new RequestForQuoteHandler(this, super.inventory, 1.2,
                 new DistConstantDuration(new Duration(1.23, DurationUnit.HOUR)), TransportMode.PLANE);
 
         OrderPolicy orderHandler = new OrderPolicyStock(this, super.inventory);

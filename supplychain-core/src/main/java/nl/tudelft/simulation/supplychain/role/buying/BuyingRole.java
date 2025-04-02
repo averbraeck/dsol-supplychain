@@ -1,8 +1,11 @@
 package nl.tudelft.simulation.supplychain.role.buying;
 
+import java.util.Set;
+
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
+import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 
 /**
  * The buying role is a role that can handle several types of message content: demand, order confirmation, bill, and shipment.
@@ -19,6 +22,9 @@ public abstract class BuyingRole extends Role<BuyingRole>
 {
     /** */
     private static final long serialVersionUID = 20221206L;
+
+    /** the necessary autonomous processes. */
+    private static Set<Class<? extends AutonomousProcess<BuyingRole>>> necessaryAutonomousProcesses = Set.of();
 
     /**
      * Create a BuyingRole object for an actor with a default message receiver.
@@ -43,6 +49,13 @@ public abstract class BuyingRole extends Role<BuyingRole>
     public BuyingActor getActor()
     {
         return (BuyingActor) super.getActor();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    protected Set<Class<? extends AutonomousProcess<BuyingRole>>> getNecessaryAutonomousProcesses()
+    {
+        return necessaryAutonomousProcesses;
     }
 
 }

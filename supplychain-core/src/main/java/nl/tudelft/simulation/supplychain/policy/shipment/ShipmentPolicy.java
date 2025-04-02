@@ -18,11 +18,11 @@ public abstract class ShipmentHandler extends ContentHandler<Shipment>
     private static final long serialVersionUID = 20221205L;
 
     /**
-     * Construct a new ShipmentPolicy.
+     * Construct a new ShipmentHandler.
      * @param id the id of the policy
      * @param owner the owner of the policy
      */
-    public ShipmentPolicy(final String id, final Role owner)
+    public ShipmentHandler(final String id, final Role owner)
     {
         super(id, owner, Shipment.class);
     }
