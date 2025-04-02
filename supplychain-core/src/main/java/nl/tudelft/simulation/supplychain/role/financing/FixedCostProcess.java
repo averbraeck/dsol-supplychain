@@ -19,9 +19,6 @@ import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
  */
 public class FixedCostProcess extends AutonomousProcess<FinancingRole>
 {
-    /** the supply chain actor with a FinancingRole. */
-    private FinancingRole role;
-
     /** the description of the type of fixed cost. */
     private String description;
 
@@ -48,7 +45,6 @@ public class FixedCostProcess extends AutonomousProcess<FinancingRole>
         Throw.whenNull(interval, "interval cannot be null");
         Throw.when(interval.le0(), IllegalArgumentException.class, "interval duration cannot be <= 0");
         Throw.whenNull(amount, "amount cannot be null");
-        this.role = role;
         this.description = description;
         this.interval = interval;
         this.amount = amount;
@@ -60,7 +56,7 @@ public class FixedCostProcess extends AutonomousProcess<FinancingRole>
      */
     private void schedule()
     {
-        this.fixedAmountEvent = this.role.getSimulator().scheduleEventRel(this.interval, this, "bookFixedCost", null);
+        this.fixedAmountEvent = getSimulator().scheduleEventRel(this.interval, this, "bookFixedCost", null);
     }
 
     /**
@@ -76,7 +72,7 @@ public class FixedCostProcess extends AutonomousProcess<FinancingRole>
         if (this.fixedAmountEvent != null)
         {
             // cancel the previous event
-            this.role.getSimulator().cancelEvent(this.fixedAmountEvent);
+            getSimulator().cancelEvent(this.fixedAmountEvent);
         }
         schedule();
     }
@@ -96,7 +92,7 @@ public class FixedCostProcess extends AutonomousProcess<FinancingRole>
      */
     protected void bookFixedCost()
     {
-        this.role.getBank().withdrawFromBalance(this.role.getActor(), this.amount);
+        getRole().getBank().withdrawFromBalance(getActor(), this.amount);
         schedule();
     }
 
@@ -125,14 +121,5 @@ public class FixedCostProcess extends AutonomousProcess<FinancingRole>
     public Duration getInterval()
     {
         return this.interval;
-    }
-
-    /**
-     * Return the FinancingRole to which these fixed costs apply.
-     * @return the FinancingRole to which these fixed costs apply
-     */
-    public FinancingRole getOwner()
-    {
-        return this.role;
     }
 }

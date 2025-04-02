@@ -16,7 +16,6 @@ import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
  */
 public class InterestProcess extends AutonomousProcess<BankingRole>
 {
-
     /**
      * Create the autonomous interest process.
      * @param role the BankingRole to which this process belongs
@@ -46,7 +45,7 @@ public class InterestProcess extends AutonomousProcess<BankingRole>
                         account.getValue().multiplyBy(getRole().getAnnualInterestRatePos() / 365.0));
             }
         }
-        getRole().getSimulator().scheduleEventRel(new Duration(1.0, DurationUnit.DAY), this, "interest", null);
+        getSimulator().scheduleEventRel(new Duration(1.0, DurationUnit.DAY), this, "interest", null);
     }
 
 }

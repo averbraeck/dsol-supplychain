@@ -9,10 +9,10 @@ import org.djutils.exceptions.Throw;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.Actor;
+import nl.tudelft.simulation.supplychain.actor.ActorMethods;
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.ProductContent;
-import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.product.Product;
 
 /**
@@ -25,7 +25,7 @@ import nl.tudelft.simulation.supplychain.product.Product;
  * @param <C> the content class for which this handler applies
  * @param <R> the role that owns this handler
  */
-public abstract class ContentHandler<C extends Content, R extends Role<R>> implements Identifiable, Serializable
+public abstract class ContentHandler<C extends Content, R extends Role<R>> implements Identifiable, Serializable, ActorMethods
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221126L;
@@ -206,18 +206,10 @@ public abstract class ContentHandler<C extends Content, R extends Role<R>> imple
      * Convenience method: return the Actor that owns this handler.
      * @return the Actor that owns this handler
      */
+    @Override
     public Actor getActor()
     {
         return getRole().getActor();
-    }
-
-    /**
-     * Return the simulator.
-     * @return the simulator
-     */
-    public SupplyChainSimulatorInterface getSimulator()
-    {
-        return getActor().getSimulator();
     }
 
     /**

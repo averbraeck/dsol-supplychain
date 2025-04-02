@@ -114,15 +114,14 @@ public class DemandGeneratingProcess extends AutonomousProcess<ConsumingRole>
         {
             double amount = this.amountDistribution instanceof DistContinuous
                     ? ((DistContinuous) this.amountDistribution).draw() : ((DistDiscrete) this.amountDistribution).draw();
-            Demand demand = new Demand(getRole().getActor(), this.product, amount,
-                    getRole().getSimulator().getAbsSimulatorTime().plus(this.earliestDeliveryDurationDistribution.draw()),
-                    getRole().getSimulator().getAbsSimulatorTime().plus(this.latestDeliveryDurationDistribution.draw()));
-            getRole().getActor().sendContent(demand, getRole().getAdministrativeDelay().draw());
-            getRole().getSimulator().scheduleEventRel(this.intervalDistribution.draw(), this, "generateDemand", null);
+            Demand demand = new Demand(getActor(), this.product, amount,
+                    getSimulatorTime().plus(this.earliestDeliveryDurationDistribution.draw()),
+                    getSimulatorTime().plus(this.latestDeliveryDurationDistribution.draw()));
+            getActor().sendContent(demand, getRole().getAdministrativeDelay().draw());
+            getSimulator().scheduleEventRel(this.intervalDistribution.draw(), this, "generateDemand", null);
 
             // we might collect some statistics for the demand
-            getRole().getActor().fireEvent(new TimedEvent<Time>(ConsumingRole.DEMAND_GENERATED_EVENT, demand,
-                    getRole().getSimulator().getAbsSimulatorTime()));
+            getActor().fireEvent(new TimedEvent<Time>(ConsumingRole.DEMAND_GENERATED_EVENT, demand, getSimulatorTime()));
         }
         catch (Exception e)
         {

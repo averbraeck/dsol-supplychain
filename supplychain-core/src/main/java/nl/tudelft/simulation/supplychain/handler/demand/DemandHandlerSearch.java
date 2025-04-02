@@ -59,7 +59,7 @@ public class DemandHandlerSearch extends DemandHandler
         SearchRequest searchRequest = new SearchRequest(getActor(), this.searchingActor, demand.groupingId(),
                 this.maximumDistance, this.maximumNumber, demand.product());
         // and send it out immediately
-        getRole().getActor().sendContent(searchRequest, this.handlingTime.draw());
+        sendContent(searchRequest, this.handlingTime.draw());
         return true;
     }
 }

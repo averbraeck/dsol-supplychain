@@ -50,7 +50,7 @@ public class PaymentHandlerFine extends PaymentHandler
     {
         if (super.handleContent(payment))
         {
-            Time time = payment.sender().getSimulatorTime();
+            Time time = getSimulatorTime();
             if (time.gt(payment.bill().finalPaymentDate()))
             {
                 Money fine = this.fixedFinePerDay.plus(payment.bill().price().multiplyBy(this.fineMarginPerDay)

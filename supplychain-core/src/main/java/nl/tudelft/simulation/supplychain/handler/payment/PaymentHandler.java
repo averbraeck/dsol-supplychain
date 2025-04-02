@@ -33,7 +33,7 @@ public class PaymentHandler extends ContentHandler<Payment, FinancingRole>
         {
             return false;
         }
-        getRole().getBank().addToBalance(getRole().getActor(), payment.bill().price());
+        getRole().getBank().addToBalance(getActor(), payment.bill().price());
         return true;
     }
 

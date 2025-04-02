@@ -67,7 +67,7 @@ public class BillHandler extends ContentHandler<Bill, FinancingRole>
             return false;
         }
         // schedule the payment
-        Time currentTime = getSimulator().getAbsSimulatorTime();
+        Time currentTime = getSimulatorTime();
         Time paymentTime = bill.finalPaymentDate();
         switch (this.paymentPolicy)
         {
@@ -108,7 +108,7 @@ public class BillHandler extends ContentHandler<Bill, FinancingRole>
      */
     protected void pay(final Bill bill)
     {
-        if (getRole().getBank().getBalance(getRole().getActor()).lt(bill.price()))
+        if (getRole().getBank().getBalance(getActor()).lt(bill.price()))
         {
             // the bank account balance is not sufficient. Try one day later.
             try
@@ -123,9 +123,9 @@ public class BillHandler extends ContentHandler<Bill, FinancingRole>
             return;
         }
         // make a payment to send out
-        getRole().getBank().withdrawFromBalance(getRole().getActor(), bill.price());
+        getRole().getBank().withdrawFromBalance(getActor(), bill.price());
         Payment payment = new Payment(bill);
-        getRole().getActor().sendContent(payment, Duration.ZERO);
+        sendContent(payment);
     }
 
     /**

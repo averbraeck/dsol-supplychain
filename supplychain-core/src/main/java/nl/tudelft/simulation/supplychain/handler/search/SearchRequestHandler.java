@@ -53,7 +53,7 @@ public class SearchRequestHandler extends ContentHandler<SearchRequest, Searchin
         {
             return false;
         }
-        Set<Actor> supplierSet = ((SearchingRole) getRole()).getSuppliers(searchRequest.product());
+        Set<Actor> supplierSet = getRole().getSuppliers(searchRequest.product());
         if (supplierSet == null)
         {
             Logger.warn("Search '{}' has no supplier map for product {}", getActor().getName(),

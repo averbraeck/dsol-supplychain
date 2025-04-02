@@ -82,7 +82,7 @@ public class BillHandlerTimeOut extends BillHandler
     protected void checkPayment(final Bill bill)
     {
         // check if the bill is still in the content store and there is no payment with the same groupingID.
-        var store = getRole().getActor().getContentStore();
+        var store = getContentStore();
         if (store.contains(bill) && !store.contains(bill.groupingId(), Payment.class))
         {
             // sad moment, we have to pay...
@@ -96,9 +96,9 @@ public class BillHandlerTimeOut extends BillHandler
      */
     private void forcedPay(final Bill bill)
     {
-        getRole().getBank().withdrawFromBalance(getRole().getActor(), bill.price());
+        getRole().getBank().withdrawFromBalance(getActor(), bill.price());
         Payment payment = new Payment(bill);
-        getRole().getActor().sendContent(payment, Duration.ZERO);
+        sendContent(payment);
         if (this.debug)
         {
             System.out.println("DEBUG -- BILLTIMEOUTHANDLER: FORCED PAYMENT IMPOSED: ");

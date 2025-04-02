@@ -13,7 +13,6 @@ import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
-import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 
@@ -29,7 +28,7 @@ import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  * @param <R> the specific role
  */
-public abstract class Role<R extends Role<R>> extends LocalEventProducer implements Identifiable, Serializable
+public abstract class Role<R extends Role<R>> extends LocalEventProducer implements Identifiable, Serializable, ActorMethods
 {
     /** */
     private static final long serialVersionUID = 20221121L;
@@ -163,18 +162,10 @@ public abstract class Role<R extends Role<R>> extends LocalEventProducer impleme
      * Return the actor to which this role belongs.
      * @return the actor to which this role belongs
      */
+    @Override
     public Actor getActor()
     {
         return this.actor;
-    }
-
-    /**
-     * Return the simulator to schedule simulation events on.
-     * @return the simulator
-     */
-    public SupplyChainSimulatorInterface getSimulator()
-    {
-        return this.actor.getSimulator();
     }
 
     @Override

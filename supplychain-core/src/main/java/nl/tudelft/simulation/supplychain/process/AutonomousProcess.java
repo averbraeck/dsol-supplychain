@@ -2,6 +2,8 @@ package nl.tudelft.simulation.supplychain.process;
 
 import org.djutils.exceptions.Throw;
 
+import nl.tudelft.simulation.supplychain.actor.Actor;
+import nl.tudelft.simulation.supplychain.actor.ActorMethods;
 import nl.tudelft.simulation.supplychain.actor.Role;
 
 /**
@@ -14,7 +16,7 @@ import nl.tudelft.simulation.supplychain.actor.Role;
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  * @param <R> the role to which this autonomous process belongs
  */
-public abstract class AutonomousProcess<R extends Role<R>>
+public abstract class AutonomousProcess<R extends Role<R>> implements ActorMethods
 {
     /** the specific Role (R) to which this process belongs. */
     private final R role;
@@ -36,6 +38,12 @@ public abstract class AutonomousProcess<R extends Role<R>>
     protected R getRole()
     {
         return this.role;
+    }
+
+    @Override
+    public Actor getActor()
+    {
+        return this.role.getActor();
     }
 
 }
