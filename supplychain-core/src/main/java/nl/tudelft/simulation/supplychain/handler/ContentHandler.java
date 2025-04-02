@@ -12,6 +12,7 @@ import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.ProductContent;
+import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.product.Product;
 
 /**
@@ -22,8 +23,9 @@ import nl.tudelft.simulation.supplychain.product.Product;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  * @param <C> the content class for which this handler applies
+ * @param <R> the role that owns this handler
  */
-public abstract class ContentHandler<C extends Content> implements Identifiable, Serializable
+public abstract class ContentHandler<C extends Content, R extends Role<R>> implements Identifiable, Serializable
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221126L;
@@ -32,7 +34,7 @@ public abstract class ContentHandler<C extends Content> implements Identifiable,
     private final String id;
 
     /** the role that owns this handler. */
-    private final Role<?> role;
+    private final R role;
 
     /** the content class for which this handler applies. */
     private final Class<C> contentClass;
@@ -49,7 +51,7 @@ public abstract class ContentHandler<C extends Content> implements Identifiable,
      * @param role the role that owns this handler
      * @param contentClass the content type that this handler can process
      */
-    public ContentHandler(final String id, final Role<?> role, final Class<C> contentClass)
+    public ContentHandler(final String id, final R role, final Class<C> contentClass)
     {
         Throw.whenNull(id, "id cannot be null");
         Throw.whenNull(role, "role cannot be null");
@@ -195,7 +197,7 @@ public abstract class ContentHandler<C extends Content> implements Identifiable,
      * Return the role to which this handler belongs.
      * @return the role to which this handler belongs
      */
-    public Role<?> getRole()
+    public R getRole()
     {
         return this.role;
     }
@@ -209,6 +211,15 @@ public abstract class ContentHandler<C extends Content> implements Identifiable,
         return getRole().getActor();
     }
 
+    /**
+     * Return the simulator.
+     * @return the simulator
+     */
+    public SupplyChainSimulatorInterface getSimulator()
+    {
+        return getActor().getSimulator();
+    }
+    
     /**
      * Return the content class for which this handler applies.
      * @return the content class for which this handler applies

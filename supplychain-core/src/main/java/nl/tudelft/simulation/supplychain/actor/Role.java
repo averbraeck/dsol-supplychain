@@ -44,7 +44,7 @@ public abstract class Role<R extends Role<R>> extends LocalEventProducer impleme
     private final ContentReceiver contentReceiver;
 
     /** the handlers for incoming content. */
-    private final Map<Class<? extends Content>, ContentHandler<? extends Content>> contentHandlers = new LinkedHashMap<>();
+    private final Map<Class<? extends Content>, ContentHandler<? extends Content, R>> contentHandlers = new LinkedHashMap<>();
 
     /** the autonomous processes for this role. */
     private final Set<AutonomousProcess<R>> registeredAutonomousProcesses = new LinkedHashSet<>();
@@ -137,7 +137,7 @@ public abstract class Role<R extends Role<R>> extends LocalEventProducer impleme
      * Set a handler for a content type, possibly overwriting the previous content handler.
      * @param handler the handler to set for the implicit content type
      */
-    public void setContentHandler(final ContentHandler<? extends Content> handler)
+    public void setContentHandler(final ContentHandler<? extends Content, R> handler)
     {
         Throw.whenNull(handler, "handler cannot be null");
         this.contentHandlers.put(handler.getContentClass(), handler);
@@ -166,7 +166,7 @@ public abstract class Role<R extends Role<R>> extends LocalEventProducer impleme
         {
             return false;
         }
-        this.contentReceiver.receiveContent(content, (ContentHandler<C>) this.contentHandlers.get(content.getClass()));
+        this.contentReceiver.receiveContent(content, (ContentHandler<C, R>) this.contentHandlers.get(content.getClass()));
         return true;
     }
 
