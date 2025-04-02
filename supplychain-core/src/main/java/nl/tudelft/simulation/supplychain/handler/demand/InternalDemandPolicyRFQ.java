@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.policy.internaldemand;
+package nl.tudelft.simulation.supplychain.handler.demand;
 
 import java.util.HashSet;
 import java.util.LinkedHashMap;

@@ -1,7 +1,7 @@
 package nl.tudelft.simulation.supplychain.role.buying;
 
+import nl.tudelft.simulation.supplychain.handler.demand.InternalDemandPolicyYP;
 import nl.tudelft.simulation.supplychain.policy.bill.BillPolicy;
-import nl.tudelft.simulation.supplychain.policy.internaldemand.InternalDemandPolicyYP;
 import nl.tudelft.simulation.supplychain.policy.orderconfirmation.OrderConfirmationPolicy;
 import nl.tudelft.simulation.supplychain.policy.quote.QuotePolicy;
 import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentPolicy;

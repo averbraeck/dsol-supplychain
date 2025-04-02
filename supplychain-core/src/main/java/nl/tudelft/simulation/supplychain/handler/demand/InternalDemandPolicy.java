@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.policy.internaldemand;
+package nl.tudelft.simulation.supplychain.handler.demand;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Role;
