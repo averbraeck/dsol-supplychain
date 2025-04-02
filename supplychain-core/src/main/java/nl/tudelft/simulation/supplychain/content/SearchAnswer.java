@@ -8,8 +8,8 @@ import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.role.searching.SearchingActor;
 
 /**
- * The SearchAnswer is the answer from a Yellow Page actor to a SearchRequest. It contains a list of actors that might
- * sell a product or service that was asked for in the SearchRequest.
+ * The SearchAnswer is the answer from a Yellow Page actor to a SearchRequest. It contains a list of actors that might sell a
+ * product or service that was asked for in the SearchRequest.
  * <p>
  * Copyright (c) 2025-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
@@ -26,10 +26,9 @@ import nl.tudelft.simulation.supplychain.role.searching.SearchingActor;
 public record SearchAnswer(SearchingActor sender, Actor receiver, Time timestamp, long uniqueId, long groupingId,
         SearchRequest searchRequest, List<Actor> actorList) implements GroupedContent
 {
-    public SearchAnswer(final SearchingActor sender, final Actor receiver, final SearchRequest searchRequest,
-            final List<Actor> actorList)
+    public SearchAnswer(final SearchRequest searchRequest, final List<Actor> actorList)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), searchRequest.groupingId(),
-                searchRequest, actorList);
+        this(searchRequest.receiver(), searchRequest.sender(), searchRequest.sender().getSimulatorTime(),
+                searchRequest.sender().getModel().getUniqueMessageId(), searchRequest.groupingId(), searchRequest, actorList);
     }
 }
