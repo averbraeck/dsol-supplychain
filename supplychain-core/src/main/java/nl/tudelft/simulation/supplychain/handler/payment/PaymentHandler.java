@@ -1,9 +1,8 @@
 package nl.tudelft.simulation.supplychain.handler.payment;
 
-import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Payment;
-import nl.tudelft.simulation.supplychain.money.BankAccount;
-import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
+import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
 
 /**
  * The PaymentHandler is a simple implementation of the business logic for a Payment that comes in.
@@ -13,36 +12,28 @@ import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class PaymentHandler extends ContentHandler<Payment>
+public class PaymentHandler extends ContentHandler<Payment, FinancingRole>
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
 
-    /** the bank account to use. */
-    private BankAccount bankAccount = null;
-
     /**
      * Constructs a new PaymentHandler.
      * @param owner the owner of the policy.
-     * @param bankAccount the bankaccount to use.
      */
-    public PaymentPolicy(final Role owner, final BankAccount bankAccount)
+    public PaymentHandler(final FinancingRole owner)
     {
-        super("PaymentPolicy", owner, Payment.class);
-        this.bankAccount = bankAccount;
+        super("PaymentHandler", owner, Payment.class);
     }
 
     @Override
     public boolean handleContent(final Payment payment)
     {
-        if (!isValidMessage(payment))
+        if (!isValidContent(payment))
         {
             return false;
         }
-        // TODO: later, a check for the exact amount could be built in.
-        this.bankAccount.addToBalance(payment.getPayment());
-        payment.getBill().setPaid(true);
-
+        getRole().getBank().addToBalance(getRole().getActor(), payment.bill().price());
         return true;
     }
 
