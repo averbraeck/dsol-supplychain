@@ -1,15 +1,18 @@
 package nl.tudelft.simulation.supplychain.role.financing;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.djunits.value.vdouble.scalar.Duration;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
+import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
-import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
-import nl.tudelft.simulation.supplychain.money.BankAccount;
 import nl.tudelft.simulation.supplychain.money.Money;
+import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
+import nl.tudelft.simulation.supplychain.role.banking.BankingRole;
 
 /**
  * The FinancingRole manages the bank account of an organization and can take care of paying bills and receiving money.
@@ -19,40 +22,36 @@ import nl.tudelft.simulation.supplychain.money.Money;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class FinancingRole extends Role
+public class FinancingRole extends Role<FinancingRole>
 {
     /** */
     private static final long serialVersionUID = 20230413L;
 
-    /** the bank account of the actor. */
-    private final BankAccount bankAccount;
+    /** the bank of the actor. */
+    private final BankingRole bank;
 
     /** the fixed costs for this supply chain actor. */
     private List<FixedCostProcess> fixedCosts = new ArrayList<FixedCostProcess>();
+
+    /** the necessary content handlers. */
+    private static Set<Class<? extends Content>> necessaryContentHandlers = Collections.emptySet();
+
+    /** the necessary content handlers. */
+    private static Set<Class<? extends AutonomousProcess<FinancingRole>>> necessaryAutonomousProcesses =
+            Set.of(FixedCostProcess.class);
 
     /**
      * Create a new FinancingRole with an attached BankAccount.
      * @param id the id of the role
      * @param owner the actor that has this role
      * @param messageReceiver the message handler to use for processing the messages
-     * @param bankAccount the BankAccount
+     * @param bank the that holds the account of this organization
      */
     public FinancingRole(final String id, final FinancingActor owner, final ContentReceiver messageReceiver,
-            final BankAccount bankAccount)
+            final BankingRole bank)
     {
         super("financing", owner, messageReceiver);
-        this.bankAccount = bankAccount;
-    }
-
-    /**
-     * Create a new FinancingRole with an attached BankAccount.
-     * @param id the id of the role
-     * @param owner the actor that has this role
-     * @param bankAccount the BankAccount
-     */
-    public FinancingRole(final String id, final FinancingActor owner, final BankAccount bankAccount)
-    {
-        this(id, owner, new ContentReceiverDirect(), bankAccount);
+        this.bank = bank;
     }
 
     /**
@@ -68,12 +67,12 @@ public class FinancingRole extends Role
     }
 
     /**
-     * Return the bank account of the Actor.
-     * @return the bankAccount of the Actor.
+     * Return the bank of the Actor belonging to this role.
+     * @return the bank of the Actor belonging to this role.
      */
-    public BankAccount getBankAccount()
+    public BankingRole getBank()
     {
-        return this.bankAccount;
+        return this.bank;
     }
 
     /**
@@ -83,6 +82,18 @@ public class FinancingRole extends Role
     public List<FixedCostProcess> getFixedCosts()
     {
         return this.fixedCosts;
+    }
+
+    @Override
+    protected Set<Class<? extends Content>> getNecessaryContentHandlers()
+    {
+        return necessaryContentHandlers;
+    }
+
+    @Override
+    protected Set<Class<? extends AutonomousProcess<FinancingRole>>> getNecessaryAutonomousProcesses()
+    {
+        return necessaryAutonomousProcesses;
     }
 
 }

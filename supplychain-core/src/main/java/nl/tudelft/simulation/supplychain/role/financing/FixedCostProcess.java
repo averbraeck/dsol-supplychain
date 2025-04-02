@@ -1,12 +1,11 @@
 package nl.tudelft.simulation.supplychain.role.financing;
 
-import java.io.Serializable;
-
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.dsol.formalisms.eventscheduling.SimEventInterface;
 import nl.tudelft.simulation.supplychain.money.Money;
+import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 
 /**
  * When a supply chain actor is created, one or more FixedCost objects can be created to book fixed costs for e.g. personnel,
@@ -18,13 +17,10 @@ import nl.tudelft.simulation.supplychain.money.Money;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class FixedCostProcess implements Serializable
+public class FixedCostProcess extends AutonomousProcess<FinancingRole>
 {
-    /** the serial version uid. */
-    private static final long serialVersionUID = 20221127L;
-
     /** the supply chain actor with a FinancingRole. */
-    private FinancingRole owner;
+    private FinancingRole role;
 
     /** the description of the type of fixed cost. */
     private String description;
@@ -39,23 +35,37 @@ public class FixedCostProcess implements Serializable
     private SimEventInterface<Duration> fixedAmountEvent;
 
     /**
-     * Create a Fixed cost item for an actor.
-     * @param owner the FinancingRole to wich these fixed costs belong
+     * Create the autonomous process for a fixed cost item for an actor.
+     * @param role the FinancingRole to wich these fixed costs belong
      * @param description the description
      * @param interval the interval for booking fixed cost
      * @param amount the fixed cost per interval
      */
-    public FixedCostProcess(final FinancingRole owner, final String description, final Duration interval, final Money amount)
+    public FixedCostProcess(final FinancingRole role, final String description, final Duration interval, final Money amount)
     {
-        Throw.whenNull(owner, "owner cannot be null");
+        super(role);
         Throw.whenNull(description, "description cannot be null");
         Throw.whenNull(interval, "interval cannot be null");
         Throw.when(interval.le0(), IllegalArgumentException.class, "interval duration cannot be <= 0");
         Throw.whenNull(amount, "amount cannot be null");
-        this.owner = owner;
+        this.role = role;
         this.description = description;
-        this.changeInterval(interval);
-        this.changeAmount(amount);
+        this.interval = interval;
+        this.amount = amount;
+    }
+
+    @Override
+    public void init()
+    {
+        schedule();
+    }
+
+    /**
+     * Schedule the next withdrawal event.
+     */
+    private void schedule()
+    {
+        this.fixedAmountEvent = this.role.getSimulator().scheduleEventRel(this.interval, this, "bookFixedCost", null);
     }
 
     /**
@@ -71,9 +81,9 @@ public class FixedCostProcess implements Serializable
         if (this.fixedAmountEvent != null)
         {
             // cancel the previous event
-            this.owner.getSimulator().cancelEvent(this.fixedAmountEvent);
+            this.role.getSimulator().cancelEvent(this.fixedAmountEvent);
         }
-        this.fixedAmountEvent = this.owner.getSimulator().scheduleEventRel(this.interval, this, "bookFixedCost", null);
+        schedule();
     }
 
     /**
@@ -91,8 +101,8 @@ public class FixedCostProcess implements Serializable
      */
     protected void bookFixedCost()
     {
-        this.owner.getBankAccount().withdrawFromBalance(this.amount);
-        this.fixedAmountEvent = this.owner.getSimulator().scheduleEventRel(this.interval, this, "bookFixedCost", null);
+        this.role.getBank().withdrawFromBalance(this.role.getActor(), this.amount);
+        schedule();
     }
 
     /**
@@ -128,6 +138,6 @@ public class FixedCostProcess implements Serializable
      */
     public FinancingRole getOwner()
     {
-        return this.owner;
+        return this.role;
     }
 }
