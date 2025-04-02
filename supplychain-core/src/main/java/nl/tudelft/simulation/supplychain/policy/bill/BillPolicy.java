@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.policy.bill;
+package nl.tudelft.simulation.supplychain.handler.bill;
 
 import java.io.Serializable;
 
@@ -12,8 +12,8 @@ import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.content.Bill;
 import nl.tudelft.simulation.supplychain.content.Payment;
 import nl.tudelft.simulation.supplychain.money.BankAccount;
-import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
-import nl.tudelft.simulation.supplychain.policy.payment.PaymentPolicyEnum;
+import nl.tudelft.simulation.supplychain.handler.SupplyChainHandler;
+import nl.tudelft.simulation.supplychain.handler.payment.PaymentHandlerEnum;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
 
 /**
@@ -25,7 +25,7 @@ import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class BillPolicy extends SupplyChainPolicy<Bill>
+public class BillHandler extends ContentHandler<Bill>
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
@@ -34,36 +34,36 @@ public class BillPolicy extends SupplyChainPolicy<Bill>
     @SuppressWarnings("checkstyle:visibilitymodifier")
     protected BankAccount bankAccount;
 
-    /** the payment policy to use. */
-    private PaymentPolicyEnum paymentPolicy;
+    /** the payment handler to use. */
+    private PaymentHandlerEnum paymentHandler;
 
     /** the delay distribution to use with certain policies, to be added or subtracted. */
     private DistContinuousDuration paymentDelay;
 
     /**
      * Constructs a new BillHandler with possibilities to pay early or late.
-     * @param owner the owner of the policy.
+     * @param owner the owner of the handler.
      * @param bankAccount the bankaccount to use.
-     * @param paymentPolicy the payment policy to use (early, late, etc.).
+     * @param paymentHandler the payment handler to use (early, late, etc.).
      * @param paymentDelay the delay to use in early or late payment
      */
-    public BillPolicy(final FinancingRole owner, final BankAccount bankAccount, final PaymentPolicyEnum paymentPolicy,
+    public BillHandler(final FinancingRole owner, final BankAccount bankAccount, final PaymentHandlerEnum paymentHandler,
             final DistContinuousDuration paymentDelay)
     {
-        super("BillPolicy", owner, Bill.class);
+        super("BillHandler", owner, Bill.class);
         this.bankAccount = bankAccount;
-        this.paymentPolicy = paymentPolicy;
+        this.paymentHandler = paymentHandler;
         this.paymentDelay = paymentDelay;
     }
 
     /**
      * Constructs a new BillHandler that takes care of paying exactly on time.
-     * @param owner the owner of the policy.
+     * @param owner the owner of the handler.
      * @param bankAccount the bankaccount to use.
      */
-    public BillPolicy(final FinancingRole owner, final BankAccount bankAccount)
+    public BillHandler(final FinancingRole owner, final BankAccount bankAccount)
     {
-        this(owner, bankAccount, PaymentPolicyEnum.PAYMENT_ON_TIME, null);
+        this(owner, bankAccount, PaymentHandlerEnum.PAYMENT_ON_TIME, null);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class BillPolicy extends SupplyChainPolicy<Bill>
         Time currentTime = Time.ZERO;
         currentTime = getSimulator().getAbsSimulatorTime();
         Time paymentTime = bill.getFinalPaymentDate();
-        switch (this.paymentPolicy)
+        switch (this.paymentHandler)
         {
             case PAYMENT_ON_TIME:
                 // do nothing, we pay on the requested date
@@ -92,7 +92,7 @@ public class BillPolicy extends SupplyChainPolicy<Bill>
                 paymentTime = currentTime;
                 break;
             default:
-                Logger.warn("handleContant - unknown paymentPolicy: {}", this.paymentPolicy);
+                Logger.warn("handleContant - unknown paymentHandler: {}", this.paymentHandler);
                 break;
         }
         // check if payment is still possible, if it already should have taken place, schedule it immediately.
@@ -146,11 +146,11 @@ public class BillPolicy extends SupplyChainPolicy<Bill>
     }
 
     /**
-     * @param paymentPolicy The paymentPolicy to set.
+     * @param paymentHandler The paymentHandler to set.
      */
-    public void setPaymentPolicy(final PaymentPolicyEnum paymentPolicy)
+    public void setPaymentHandler(final PaymentHandlerEnum paymentHandler)
     {
-        this.paymentPolicy = paymentPolicy;
+        this.paymentHandler = paymentHandler;
     }
 
 }

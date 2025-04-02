@@ -28,7 +28,7 @@ import nl.tudelft.simulation.supplychain.role.yellowpage.YellowPageRole;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class YellowPageRequestPolicy extends SupplyChainPolicy<YellowPageRequest>
+public class YellowPageRequestHandler extends ContentHandler<YellowPageRequest>
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;

@@ -23,7 +23,7 @@ import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class RequestForQuotePolicy extends SupplyChainPolicy<RequestForQuote>
+public class RequestForQuoteHandler extends ContentHandler<RequestForQuote>
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;

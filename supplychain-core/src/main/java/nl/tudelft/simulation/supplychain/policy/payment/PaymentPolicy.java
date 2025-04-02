@@ -13,7 +13,7 @@ import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class PaymentPolicy extends SupplyChainPolicy<Payment>
+public class PaymentHandler extends ContentHandler<Payment>
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;

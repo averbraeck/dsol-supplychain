@@ -30,7 +30,7 @@ import nl.tudelft.simulation.supplychain.transport.TransportOptionProvider;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class YellowPageAnswerPolicy extends SupplyChainPolicy<YellowPageAnswer>
+public class YellowPageAnswerHandler extends ContentHandler<YellowPageAnswer>
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 120221203;

@@ -21,7 +21,7 @@ import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public abstract class QuotePolicy extends SupplyChainPolicy<Quote>
+public abstract class QuoteHandler extends ContentHandler<Quote>
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;

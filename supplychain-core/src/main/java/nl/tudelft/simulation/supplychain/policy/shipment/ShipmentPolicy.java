@@ -12,7 +12,7 @@ import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public abstract class ShipmentPolicy extends SupplyChainPolicy<Shipment>
+public abstract class ShipmentHandler extends ContentHandler<Shipment>
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221205L;

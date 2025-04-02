@@ -15,7 +15,7 @@ import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public abstract class InternalDemandPolicy extends SupplyChainPolicy<InternalDemand>
+public abstract class InternalDemandHandler extends ContentHandler<InternalDemand>
 {
     /** */
     private static final long serialVersionUID = 20221201L;

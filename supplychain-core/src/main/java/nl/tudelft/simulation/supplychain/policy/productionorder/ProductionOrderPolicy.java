@@ -12,7 +12,7 @@ import nl.tudelft.simulation.supplychain.role.producing.ProducingRole;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class ProductionOrderPolicy extends SupplyChainPolicy<ProductionOrder>
+public class ProductionOrderHandler extends ContentHandler<ProductionOrder>
 {
     /** Serial version ID. */
     private static final long serialVersionUID = 20221201L;
