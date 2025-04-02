@@ -22,10 +22,9 @@ import nl.tudelft.simulation.supplychain.transport.TransportOption;
 import nl.tudelft.simulation.supplychain.transport.TransportOptionProvider;
 
 /**
- * The DemandHandlerRFQ is a simple implementation of the business logic to handle a request for new products through
- * sending out a number of RFQs to a list of preselected suppliers. When receiving the demand, it just creates a number
- * of RFQs based on a table that maps Products onto a list of Actors, and sends them out, all at the same time, after a given
- * time delay.
+ * The DemandHandlerRFQ is a simple implementation of the business logic to handle a request for new products through sending
+ * out a number of RFQs to a list of preselected suppliers. When receiving the demand, it just creates a number of RFQs based on
+ * a table that maps Products onto a list of Actors, and sends them out, all at the same time, after a given time delay.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
@@ -106,16 +105,15 @@ public class DemandHandlerRFQ extends DemandHandler
     {
         if (!isValidMessage(demand))
         {
-            Logger.warn("handleContent",
-                    "Demand " + demand.toString() + " for actor " + getRole() + " not considered valid.");
+            Logger.warn("handleContent", "Demand " + demand.toString() + " for actor " + getRole() + " not considered valid.");
             return false;
         }
         // resolve the suplier
         Set<Actor> supplierSet = this.suppliers.get(demand.getProduct());
         if (supplierSet == null)
         {
-            Logger.warn("handleContent", "Demand for actor " + getRole() + " contains product "
-                    + demand.getProduct().toString() + " without any suppliers.");
+            Logger.warn("handleContent", "Demand for actor " + getRole() + " contains product " + demand.getProduct().toString()
+                    + " without any suppliers.");
             return false;
         }
         // create an RFQ for each of the suppliers
@@ -129,8 +127,7 @@ public class DemandHandlerRFQ extends DemandHandler
             Set<TransportOption> transportOptions = this.transportOptionProvider.provideTransportOptions(supplier, getActor());
             TransportOption transportOption =
                     this.transportChoiceProvider.chooseTransportOptions(transportOptions, demand.getProduct().getSku());
-            RequestForQuote rfq =
-                    new RequestForQuote(getActor(), supplier, demand, transportOption, this.cutoffDuration);
+            RequestForQuote rfq = new RequestForQuote(getActor(), supplier, demand, transportOption, this.cutoffDuration);
             sendMessage(rfq, delay);
         }
         return true;

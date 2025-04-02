@@ -56,7 +56,7 @@ public final class JsonActorFactory
     {
         return this.gson;
     }
-    
+
     /**
      * Register other type adapters in subclasses. Override method to do so.
      */

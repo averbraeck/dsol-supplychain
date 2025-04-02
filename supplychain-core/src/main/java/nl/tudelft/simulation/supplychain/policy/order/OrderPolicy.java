@@ -52,8 +52,7 @@ public abstract class OrderPolicy<O extends Order> extends SupplyChainPolicy<O>
      * @param stock the stock to use to handle the incoming order
      * @param messageClass the specific order message class
      */
-    public OrderPolicy(final String id, final Role owner, final Inventory stock,
-            final Class<O> messageClass)
+    public OrderPolicy(final String id, final Role owner, final Inventory stock, final Class<O> messageClass)
     {
         super(id, owner, messageClass);
         this.stock = stock;

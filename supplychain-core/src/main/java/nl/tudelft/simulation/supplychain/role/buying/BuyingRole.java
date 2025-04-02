@@ -5,11 +5,10 @@ import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 
 /**
- * The buying role is a role that can handle several types of message content: demand, order confirmation, bill, and
- * shipment. Depending on the extension of the BuyingRole, which actually indicates the type if DemandHandler used,
- * several other messages can be handled as well. For the DemandHandlerOrder, no extra types are necessary. For the
- * DemandhandlerRFQ, a Quote has to be handled as well. For an DemandhandlerYP, a YellowPageAnswer can be
- * received, and has to be handled.
+ * The buying role is a role that can handle several types of message content: demand, order confirmation, bill, and shipment.
+ * Depending on the extension of the BuyingRole, which actually indicates the type if DemandHandler used, several other messages
+ * can be handled as well. For the DemandHandlerOrder, no extra types are necessary. For the DemandhandlerRFQ, a Quote has to be
+ * handled as well. For an DemandhandlerYP, a YellowPageAnswer can be received, and has to be handled.
  * <p>
  * Copyright (c) 2022-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.

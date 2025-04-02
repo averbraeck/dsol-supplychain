@@ -219,7 +219,7 @@ public abstract class ContentHandler<C extends Content, R extends Role<R>> imple
     {
         return getActor().getSimulator();
     }
-    
+
     /**
      * Return the content class for which this handler applies.
      * @return the content class for which this handler applies

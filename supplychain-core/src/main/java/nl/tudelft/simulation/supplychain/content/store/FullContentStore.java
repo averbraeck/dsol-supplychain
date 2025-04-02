@@ -157,8 +157,8 @@ public class FullContentStore implements ContentStoreInterface
     }
 
     /**
-     * Private, local method to remove all the content from one of the lists in the demandMap for a certain groupingId
-     * for a certain content type.
+     * Private, local method to remove all the content from one of the lists in the demandMap for a certain groupingId for a
+     * certain content type.
      * @param contentMap the Map for one demand ID to clean
      * @param contentType the content type to search for
      */

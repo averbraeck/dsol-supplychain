@@ -34,9 +34,9 @@ public class RestockingServiceSafety extends RestockingServiceFixed
      * @param maxDeliveryTime the maximum delivery time to use
      */
     @SuppressWarnings("checkstyle:parameternumber")
-    public RestockingServiceSafety(final Inventory inventory, final Product product,
-            final DistContinuousDuration frequency, final boolean ceiling, final double amount, final boolean includeClaims,
-            final double safetyAmount, final Duration maxDeliveryTime)
+    public RestockingServiceSafety(final Inventory inventory, final Product product, final DistContinuousDuration frequency,
+            final boolean ceiling, final double amount, final boolean includeClaims, final double safetyAmount,
+            final Duration maxDeliveryTime)
     {
         super(inventory, product, frequency, ceiling, amount, includeClaims, maxDeliveryTime);
         this.safetyAmount = safetyAmount;

@@ -112,8 +112,8 @@ public class StochasticTransportOptionStep implements Identifiable, Serializable
     /**
      * Return the estimated time to load goods at the origin (including typical waiting times) for a given SKU.
      * @param sku the SKU to find the loading time for
-     * @return the estimated time to load goods at the origin (including typical waiting times), or null
-     *         when there is no stored loading time for the provided SKU
+     * @return the estimated time to load goods at the origin (including typical waiting times), or null when there is no stored
+     *         loading time for the provided SKU
      */
     public DistContinuousDuration getEstimatedLoadingTime(final Sku sku)
     {
@@ -123,8 +123,8 @@ public class StochasticTransportOptionStep implements Identifiable, Serializable
     /**
      * Return the estimated time to unload goods at the destination (including typical waiting times) for a given SKU.
      * @param sku the SKU to find the unloading time for
-     * @return the estimated time to unload goods at the destination (including typical waiting times),
-     *         or null when there is no stored unloading time for the provided SKU
+     * @return the estimated time to unload goods at the destination (including typical waiting times), or null when there is no
+     *         stored unloading time for the provided SKU
      */
     public DistContinuousDuration getEstimatedUnloadingTime(final Sku sku)
     {
@@ -134,8 +134,8 @@ public class StochasticTransportOptionStep implements Identifiable, Serializable
     /**
      * Return the estimated costs for loading and storing the goods at the origin location for a given SKU.
      * @param sku the SKU to find the loading cost for
-     * @return the estimated costs for loading and storing the goods at the origin location, or null when
-     *         there is no stored loading cost for the provided SKU
+     * @return the estimated costs for loading and storing the goods at the origin location, or null when there is no stored
+     *         loading cost for the provided SKU
      */
     public DistContinuousMoney getEstimatedLoadingCost(final Sku sku)
     {
@@ -145,8 +145,8 @@ public class StochasticTransportOptionStep implements Identifiable, Serializable
     /**
      * Return the estimated costs for loading and storing the goods at the destination location for a given SKU.
      * @param sku the SKU to find the unloading cost for
-     * @return the estimated costs for unloading and storing the goods at the destination location, or null
-     *         when there is no stored unloading cost for the provided SKU
+     * @return the estimated costs for unloading and storing the goods at the destination location, or null when there is no
+     *         stored unloading cost for the provided SKU
      */
     public DistContinuousMoney getEstimatedUnloadingCost(final Sku sku)
     {
@@ -156,8 +156,8 @@ public class StochasticTransportOptionStep implements Identifiable, Serializable
     /**
      * Return the estimated transport cost for the SKU per km, for the TransportStep's transport mode.
      * @param sku the SKU to find the transport cost for
-     * @return the estimated estimated transport cost for the SKU per km, for the TransportStep's transport
-     *         mode, or null when there is no stored cost for the provided SKU
+     * @return the estimated estimated transport cost for the SKU per km, for the TransportStep's transport mode, or null when
+     *         there is no stored cost for the provided SKU
      */
     public DistContinuousMoney getEstimatedTransportCostPerKm(final Sku sku)
     {
@@ -167,8 +167,7 @@ public class StochasticTransportOptionStep implements Identifiable, Serializable
     /**
      * Set a new estimated time to load goods at the origin (including typical waiting times).
      * @param sku the SKU to find the loading duration for
-     * @param estimatedLoadingTime new estimated time to load goods at the origin (including typical
-     *            waiting times)
+     * @param estimatedLoadingTime new estimated time to load goods at the origin (including typical waiting times)
      */
     public void setEstimatedLoadingTime(final Sku sku, final DistContinuousDuration estimatedLoadingTime)
     {
@@ -180,8 +179,7 @@ public class StochasticTransportOptionStep implements Identifiable, Serializable
     /**
      * Set a new estimated time to unload goods at the destination (including typical waiting times).
      * @param sku the SKU to set the unloading duration for
-     * @param estimatedUnloadingTime new estimated time to unload goods at the destination (including
-     *            typical waiting times)
+     * @param estimatedUnloadingTime new estimated time to unload goods at the destination (including typical waiting times)
      */
     public void setEstimatedUnloadingTime(final Sku sku, final DistContinuousDuration estimatedUnloadingTime)
     {
@@ -193,8 +191,7 @@ public class StochasticTransportOptionStep implements Identifiable, Serializable
     /**
      * Set a new cost estimate for loading and storing the goods at the origin location.
      * @param sku the SKU to set the loading cost for
-     * @param estimatedLoadingCost new cost estimate for loading and storing the goods at the origin
-     *            location
+     * @param estimatedLoadingCost new cost estimate for loading and storing the goods at the origin location
      */
     public void setEstimatedLoadingCost(final Sku sku, final DistContinuousMoney estimatedLoadingCost)
     {
@@ -206,8 +203,7 @@ public class StochasticTransportOptionStep implements Identifiable, Serializable
     /**
      * Set a new cost estimate for unloading and storing the goods at the destination location.
      * @param sku the SKU to set the unloading cost for
-     * @param estimatedUnloadingCost new cost estimate for unloading and storing the goods at the
-     *            destination location
+     * @param estimatedUnloadingCost new cost estimate for unloading and storing the goods at the destination location
      */
     public void setEstimatedUnloadingCost(final Sku sku, final DistContinuousMoney estimatedUnloadingCost)
     {
@@ -219,8 +215,8 @@ public class StochasticTransportOptionStep implements Identifiable, Serializable
     /**
      * Set a new estimated transport cost for the SKU per km, for the TransportStep's transport mode.
      * @param sku the SKU to find the transport cost for
-     * @param estimatedTransportCostPerKm the estimated estimated transport cost for the SKU per km, for
-     *            the TransportStep's transport mode
+     * @param estimatedTransportCostPerKm the estimated estimated transport cost for the SKU per km, for the TransportStep's
+     *            transport mode
      */
     public void setEstimatedTransportCostPerKm(final Sku sku, final DistContinuousMoney estimatedTransportCostPerKm)
     {

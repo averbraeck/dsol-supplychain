@@ -54,9 +54,8 @@ public class DelayProductionService extends ProductionService
      * @param greedy if true, immediately start picking raw materials when production has to start.
      * @param profitMargin the fraction that is added to the cost of the materials.
      */
-    public DelayProductionService(final InventoryRole owner, final Product product,
-            final DistContinuousDuration productionTime, final boolean fixedTime, final boolean greedy,
-            final double profitMargin)
+    public DelayProductionService(final InventoryRole owner, final Product product, final DistContinuousDuration productionTime,
+            final boolean fixedTime, final boolean greedy, final double profitMargin)
     {
         super(owner, product);
         this.productionTime = productionTime;

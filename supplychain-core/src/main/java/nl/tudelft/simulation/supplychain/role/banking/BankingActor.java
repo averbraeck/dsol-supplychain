@@ -13,13 +13,13 @@ import nl.tudelft.simulation.supplychain.actor.Actor;
 public interface BankingActor extends Actor
 {
     /**
-     * Return the BankingRole for this actor. 
+     * Return the BankingRole for this actor.
      * @return the BankingRole for this actor
      */
     BankingRole getBankingRole();
 
     /**
-     * Set the BankingRole for this actor. 
+     * Set the BankingRole for this actor.
      * @param bankingRole the new BankingRole for this actor
      */
     void setBankingRole(BankingRole bankingRole);

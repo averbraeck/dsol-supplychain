@@ -38,9 +38,8 @@ public class RestockingServiceFixed extends AbstractRestockingService
      * @param includeClaims whether to include the claims in the stock or not
      * @param maxDeliveryTime the maximum delivery time to use
      */
-    public RestockingServiceFixed(final Inventory inventory, final Product product,
-            final DistContinuousDuration frequency, final boolean ceiling, final double amount, final boolean includeClaims,
-            final Duration maxDeliveryTime)
+    public RestockingServiceFixed(final Inventory inventory, final Product product, final DistContinuousDuration frequency,
+            final boolean ceiling, final double amount, final boolean includeClaims, final Duration maxDeliveryTime)
     {
         super(inventory, product, frequency, maxDeliveryTime);
         this.ceiling = ceiling;

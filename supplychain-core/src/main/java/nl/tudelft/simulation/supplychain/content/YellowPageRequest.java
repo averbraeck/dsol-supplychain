@@ -31,29 +31,28 @@ public record YellowPageRequest(Actor sender, YellowPageActor receiver, Time tim
     public YellowPageRequest(final Actor sender, final YellowPageActor receiver, final Demand demand,
             final Length maximumDistance, final int maximumNumber, final Product product)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), demand.groupingId(),
-                demand, maximumDistance, maximumNumber, product);
+        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), demand.groupingId(), demand,
+                maximumDistance, maximumNumber, product);
     }
 
     public YellowPageRequest(final Actor sender, final YellowPageActor receiver, final Demand demand,
             final Length maximumDistance, final Product product)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), demand.groupingId(),
-                demand, maximumDistance, Integer.MAX_VALUE, product);
+        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), demand.groupingId(), demand,
+                maximumDistance, Integer.MAX_VALUE, product);
     }
 
-    public YellowPageRequest(final Actor sender, final YellowPageActor receiver, final Demand demand,
-            final int maximumNumber, final Product product)
-    {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), demand.groupingId(),
-                demand, Length.POS_MAXVALUE, maximumNumber, product);
-    }
-
-    public YellowPageRequest(final Actor sender, final YellowPageActor receiver, final Demand demand,
+    public YellowPageRequest(final Actor sender, final YellowPageActor receiver, final Demand demand, final int maximumNumber,
             final Product product)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), demand.groupingId(),
-                demand, Length.POS_MAXVALUE, Integer.MAX_VALUE, product);
+        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), demand.groupingId(), demand,
+                Length.POS_MAXVALUE, maximumNumber, product);
+    }
+
+    public YellowPageRequest(final Actor sender, final YellowPageActor receiver, final Demand demand, final Product product)
+    {
+        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), demand.groupingId(), demand,
+                Length.POS_MAXVALUE, Integer.MAX_VALUE, product);
     }
 
 }

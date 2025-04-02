@@ -42,8 +42,8 @@ public class QuotePolicyTimeout extends QuotePolicy
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the margin within which the offered amount may differ from the requested amount.
      */
-    public QuotePolicyTimeout(final Role owner, final Comparator<Quote> comparator,
-            final DistContinuousDuration handlingTime, final double maximumPriceMargin, final double minimumAmountMargin)
+    public QuotePolicyTimeout(final Role owner, final Comparator<Quote> comparator, final DistContinuousDuration handlingTime,
+            final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super("QuotePolicyTimeout", owner, comparator, handlingTime, maximumPriceMargin, minimumAmountMargin);
     }

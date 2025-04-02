@@ -79,12 +79,11 @@ public class YellowPageAnswerHandler extends ContentHandler<YellowPageAnswer>
         }
         TradeMessageStoreInterface messageStore = getActor().getContentStore();
         YellowPageRequest ypRequest = ypAnswer.getYellowPageRequest();
-        List<Demand> demandList =
-                messageStore.getMessageList(ypRequest.getDemandId(), Demand.class);
+        List<Demand> demandList = messageStore.getMessageList(ypRequest.getDemandId(), Demand.class);
         if (demandList.size() == 0) // we send it to ourselves, so it is 2x in the content store
         {
-            Logger.warn("YPAnswerHandler - Actor '{}' could not find DemandID '{}' for YPAnswer '{}'",
-                    getActor().getName(), ypRequest.getDemandId(), ypAnswer.toString());
+            Logger.warn("YPAnswerHandler - Actor '{}' could not find DemandID '{}' for YPAnswer '{}'", getActor().getName(),
+                    ypRequest.getDemandId(), ypAnswer.toString());
             return false;
         }
         Demand demand = demandList.get(0);
@@ -95,8 +94,7 @@ public class YellowPageAnswerHandler extends ContentHandler<YellowPageAnswer>
             Set<TransportOption> transportOptions = this.transportOptionProvider.provideTransportOptions(supplier, getActor());
             TransportOption transportOption =
                     this.transportChoiceProvider.chooseTransportOptions(transportOptions, ypRequest.getProduct().getSku());
-            RequestForQuote rfq =
-                    new RequestForQuote(getActor(), supplier, demand, transportOption, this.cutoffDuration);
+            RequestForQuote rfq = new RequestForQuote(getActor(), supplier, demand, transportOption, this.cutoffDuration);
             sendMessage(rfq, delay);
         }
         return true;

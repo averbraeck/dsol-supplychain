@@ -21,9 +21,9 @@ import nl.tudelft.simulation.supplychain.transport.TransportOption;
 import nl.tudelft.simulation.supplychain.transport.TransportOptionProvider;
 
 /**
- * The DemandHandlerOrder is a simple implementation of the business logic to handle a request for new products through
- * direct ordering at a known supplier. When receiving the demand, it just creates an Order based on a table that maps
- * Products onto Actors, and sends it after a given time delay.
+ * The DemandHandlerOrder is a simple implementation of the business logic to handle a request for new products through direct
+ * ordering at a known supplier. When receiving the demand, it just creates an Order based on a table that maps Products onto
+ * Actors, and sends it after a given time delay.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
@@ -84,8 +84,8 @@ public class DemandHandlerOrder extends DemandHandler
         SupplierRecord supplierRecord = this.suppliers.get(demand.getProduct());
         if (supplierRecord == null)
         {
-            Logger.warn("checkContent", "Demand for actor " + getRole() + " contains product "
-                    + demand.getProduct().toString() + " without a supplier");
+            Logger.warn("checkContent", "Demand for actor " + getRole() + " contains product " + demand.getProduct().toString()
+                    + " without a supplier");
             return false;
         }
         // create an immediate order
@@ -110,7 +110,6 @@ public class DemandHandlerOrder extends DemandHandler
     {
         return (BuyingRole) super.getRole();
     }
-
 
     /**
      * INNER CLASS FOR STORING RECORDS OF SUPPLIERS AND PRICE

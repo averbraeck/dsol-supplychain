@@ -76,7 +76,7 @@ public class BillHandlerTimeOut extends BillHandler
     }
 
     /**
-     * Check if this bill is paid. 
+     * Check if this bill is paid.
      * @param bill the bill
      */
     protected void checkPayment(final Bill bill)

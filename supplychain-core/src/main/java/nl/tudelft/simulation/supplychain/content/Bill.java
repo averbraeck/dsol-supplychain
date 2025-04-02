@@ -26,8 +26,8 @@ import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
 public record Bill(FinancingActor sender, FinancingActor receiver, Time timestamp, long uniqueId, long groupingId, Order order,
         Time finalPaymentDate, Money price, String description) implements GroupedContent
 {
-    public Bill(final FinancingActor sender, final FinancingActor receiver, final Order order,
-            final Time finalPaymentDate, final Money price, final String description)
+    public Bill(final FinancingActor sender, final FinancingActor receiver, final Order order, final Time finalPaymentDate,
+            final Money price, final String description)
     {
         this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), order.groupingId(), order,
                 finalPaymentDate, price, description);

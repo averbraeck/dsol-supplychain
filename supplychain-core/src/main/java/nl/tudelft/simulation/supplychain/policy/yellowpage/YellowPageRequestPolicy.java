@@ -65,8 +65,8 @@ public class YellowPageRequestHandler extends ContentHandler<YellowPageRequest>
                 pruneDistance(supplierSet, ypRequest.getMaximumDistance(), ypRequest.getSender().getLocation());
         pruneNumber(suppliers, ypRequest.getMaximumNumber());
         List<Actor> potentialSuppliers = new ArrayList<>(suppliers.values());
-        YellowPageAnswer ypAnswer = new YellowPageAnswer(getActor(), ypRequest.getSender(), ypRequest.getDemandId(),
-                potentialSuppliers, ypRequest);
+        YellowPageAnswer ypAnswer =
+                new YellowPageAnswer(getActor(), ypRequest.getSender(), ypRequest.getDemandId(), potentialSuppliers, ypRequest);
         sendMessage(ypAnswer, this.handlingTime.draw());
         return true;
     }

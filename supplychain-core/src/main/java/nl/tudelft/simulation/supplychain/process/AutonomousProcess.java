@@ -18,7 +18,7 @@ public abstract class AutonomousProcess<R extends Role<R>>
 {
     /** the specific Role (R) to which this process belongs. */
     private final R role;
-    
+
     /**
      * Create the Autonomous process.
      * @param role the specific Role (R) to which this process belongs
@@ -37,5 +37,5 @@ public abstract class AutonomousProcess<R extends Role<R>>
     {
         return this.role;
     }
-    
+
 }

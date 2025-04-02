@@ -23,13 +23,13 @@ import nl.tudelft.simulation.supplychain.product.Product;
  * @param amount the amount of the product, in units for that product
  * @param dateReady the intended date when the products should be ready
  */
-public record ProductionOrder(Actor sender, Actor receiver, Time timestamp, long uniqueId, long groupingId,
-        Demand demand, Product product, double amount, Time dateReady) implements GroupedContent, ProductContent
+public record ProductionOrder(Actor sender, Actor receiver, Time timestamp, long uniqueId, long groupingId, Demand demand,
+        Product product, double amount, Time dateReady) implements GroupedContent, ProductContent
 {
     public ProductionOrder(final Actor sender, final Actor receiver, final Demand demand, final Time dateReady)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), demand.groupingId(),
-                demand, demand.product(), demand.amount(), dateReady);
+        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), demand.groupingId(), demand,
+                demand.product(), demand.amount(), dateReady);
     }
 
 }

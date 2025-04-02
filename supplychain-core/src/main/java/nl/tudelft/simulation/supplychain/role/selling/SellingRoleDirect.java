@@ -24,8 +24,7 @@ public class SellingRoleDirect extends SellingRole
      * @param orderPolicy the order handler
      * @param paymentPolicy the payment handler
      */
-    public SellingRoleDirect(final SellingActor owner, final OrderPolicy<?> orderPolicy,
-            final PaymentPolicy paymentPolicy)
+    public SellingRoleDirect(final SellingActor owner, final OrderPolicy<?> orderPolicy, final PaymentPolicy paymentPolicy)
     {
         super(owner);
         setContentHandler(orderPolicy);

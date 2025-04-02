@@ -8,9 +8,9 @@ import nl.tudelft.simulation.supplychain.content.Content;
 
 /**
  * A ContentStore is taking care of storing content for later use, for instance for matching purposes. It acts as an ERP or
- * database system for the supply chain actor. In this implementation, all the content are linked to an Demand, as this
- * sets off the whole chain of content, no matter whether it is a purchase, internal production, or stock replenishment: in all
- * cases the Demand triggers all the other content.
+ * database system for the supply chain actor. In this implementation, all the content are linked to an Demand, as this sets off
+ * the whole chain of content, no matter whether it is a purchase, internal production, or stock replenishment: in all cases the
+ * Demand triggers all the other content.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
@@ -81,7 +81,7 @@ public interface ContentStoreInterface extends Serializable
      * @return whether the store contains the given content
      */
     boolean contains(Content content);
-    
+
     /**
      * Return whether the store contains a message of the given class with this groupingId.
      * @param groupingId the groupingId to look up
@@ -92,7 +92,7 @@ public interface ContentStoreInterface extends Serializable
     {
         return getContentList(groupingId, contentClass).size() > 0;
     }
-    
+
     /**
      * Return the owner of this content store.
      * @return the owner of this content store

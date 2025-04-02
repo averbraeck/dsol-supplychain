@@ -11,8 +11,8 @@ import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
 import nl.tudelft.simulation.supplychain.role.inventory.InventoryRole;
 
 /**
- * The abstract class ProductionService implements the ProductionService and is a simple starting point for the
- * production of goods. The bill of materials of the product determines the required raw materials to use.
+ * The abstract class ProductionService implements the ProductionService and is a simple starting point for the production of
+ * goods. The bill of materials of the product determines the required raw materials to use.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.

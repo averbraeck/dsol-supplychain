@@ -32,8 +32,8 @@ public record RequestForQuote(BuyingActor sender, SellingActor receiver, Time ti
     public RequestForQuote(final BuyingActor sender, final SellingActor receiver, final Demand demand,
             final TransportOption preferredTransportOption, final Duration cutoffDuration)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), demand.groupingId(),
-                demand, preferredTransportOption, cutoffDuration);
+        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), demand.groupingId(), demand,
+                preferredTransportOption, cutoffDuration);
     }
 
     @Override

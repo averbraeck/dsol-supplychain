@@ -33,8 +33,8 @@ public class DistributionCenter extends Retailer
      * @throws ActorAlreadyDefinedException when the actor was already registered in the model
      */
     @SuppressWarnings("checkstyle:parameternumber")
-    public DistributionCenter(final String id, final String name, final SupplyChainModelInterface model, final OrientedPoint2d location,
-            final String locationDescription, final Bank bank, final Money initialBalance,
+    public DistributionCenter(final String id, final String name, final SupplyChainModelInterface model,
+            final OrientedPoint2d location, final String locationDescription, final Bank bank, final Money initialBalance,
             final TradeMessageStoreInterface messageStore) throws ActorAlreadyDefinedException
     {
         super(id, name, model, location, locationDescription, bank, initialBalance, messageStore);

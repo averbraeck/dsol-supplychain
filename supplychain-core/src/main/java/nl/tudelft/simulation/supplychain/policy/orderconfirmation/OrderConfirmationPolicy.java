@@ -59,25 +59,22 @@ public class OrderConfirmationHandler extends ContentHandler<OrderConfirmation>
             try
             {
                 // TODO: place some business logic here to handle the problem
-                oldID = getActor().getContentStore()
-                        .getMessageList(orderConfirmation.getDemandId(), Demand.class).get(0);
+                oldID = getActor().getContentStore().getMessageList(orderConfirmation.getDemandId(), Demand.class).get(0);
 
                 if (oldID == null)
                 {
-                    Logger.warn("handleContent",
-                            "Could not find Demand for OrderConfirmation " + orderConfirmation.toString());
+                    Logger.warn("handleContent", "Could not find Demand for OrderConfirmation " + orderConfirmation.toString());
                     return false;
                 }
             }
             catch (Exception exception)
             {
-                Logger.warn("handleContent",
-                        "Could not find Demand for OrderConfirmation " + orderConfirmation.toString());
+                Logger.warn("handleContent", "Could not find Demand for OrderConfirmation " + orderConfirmation.toString());
                 return false;
             }
 
-            Demand newID = new Demand(oldID.getSender(), oldID.getProduct(), oldID.getAmount(),
-                    oldID.getEarliestDeliveryDate(), oldID.getLatestDeliveryDate());
+            Demand newID = new Demand(oldID.getSender(), oldID.getProduct(), oldID.getAmount(), oldID.getEarliestDeliveryDate(),
+                    oldID.getLatestDeliveryDate());
             sendMessage(newID, Duration.ZERO);
 
             // also clean the messageStore for the old demand
