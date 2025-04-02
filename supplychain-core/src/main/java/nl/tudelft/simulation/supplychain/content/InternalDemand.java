@@ -13,8 +13,10 @@ import nl.tudelft.simulation.supplychain.product.Product;
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
- * @param sender the sender of the internal demand
- * @param receiver the receiver of the internal demand (same actor)
+ * @param sender the sender of the internal demand. It is not specified further, since it can be, e.g., a ConsumingActor or
+ *            WaterhousingActor that sends the request.
+ * @param receiver the receiver of the internal demand (same actor). This is also not specified since the sender is not
+ *            specified. Yet, it will be typically handled by the BuyingActor role.
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
  * @param groupingId the id used to group multiple messages, such as the internalDemandId or the orderId
