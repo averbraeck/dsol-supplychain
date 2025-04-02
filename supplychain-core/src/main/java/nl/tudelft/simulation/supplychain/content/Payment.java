@@ -21,8 +21,9 @@ import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
 public record Payment(FinancingActor sender, FinancingActor receiver, Time timestamp, long uniqueId, long groupingId, Bill bill)
         implements GroupedContent
 {
-    public Payment(final FinancingActor sender, final FinancingActor receiver, final Bill bill)
+    public Payment(final Bill bill)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), bill.groupingId(), bill);
+        this(bill.receiver(), bill.sender(), bill.sender().getSimulatorTime(), bill.sender().getModel().getUniqueMessageId(),
+                bill.groupingId(), bill);
     }
 }

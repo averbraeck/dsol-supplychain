@@ -58,7 +58,7 @@ public abstract class ContentReceiver implements Identifiable, Serializable
      * @param contentHandler the policy to execute on the conntent
      * @param <C> The content type to ensure that the content and policy align
      */
-    public abstract <C extends Content> void receiveContent(C content, ContentHandler<C> contentHandler);
+    public abstract <C extends Content> void receiveContent(C content, ContentHandler<C, ?> contentHandler);
 
     @Override
     public String getId()
