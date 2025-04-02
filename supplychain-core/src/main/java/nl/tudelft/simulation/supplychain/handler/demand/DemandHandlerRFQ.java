@@ -59,9 +59,9 @@ public class DemandHandlerRFQ extends DemandHandler
      */
     public DemandHandlerRFQ(final Role owner, final TransportOptionProvider transportOptionProvider,
             final TransportChoiceProvider transportChoiceProvider, final DistContinuousDuration handlingTime,
-            final Duration cutoffDuration, final Inventory stock)
+            final Duration cutoffDuration)
     {
-        super("DemandHandlerRFQ", owner, handlingTime, stock);
+        super("DemandHandlerRFQ", owner, handlingTime);
         Throw.whenNull(transportOptionProvider, "transportOptionProvider cannot be null");
         Throw.whenNull(transportChoiceProvider, "transportChoiceProvider cannot be null");
         Throw.whenNull(cutoffDuration, "cutoffDuration cannot be null");
@@ -117,10 +117,6 @@ public class DemandHandlerRFQ extends DemandHandler
             return false;
         }
         // create an RFQ for each of the suppliers
-        if (super.inventory != null)
-        {
-            super.inventory.changeOrderedAmount(demand.getProduct(), demand.getAmount());
-        }
         Duration delay = this.handlingTime.draw();
         for (Actor supplier : supplierSet)
         {

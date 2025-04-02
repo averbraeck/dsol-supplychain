@@ -15,11 +15,11 @@ import nl.tudelft.simulation.supplychain.actor.messaging.devices.reference.WebAp
 import nl.tudelft.simulation.supplychain.actor.unit.dist.DistConstantDuration;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
+import nl.tudelft.simulation.supplychain.handler.search.SearchRequestPolicy;
 import nl.tudelft.simulation.supplychain.message.store.EmptyMessageStore;
-import nl.tudelft.simulation.supplychain.message.trade.YellowPageRequest;
+import nl.tudelft.simulation.supplychain.message.trade.SearchRequest;
 import nl.tudelft.simulation.supplychain.messagehandlers.HandleAllMessages;
 import nl.tudelft.simulation.supplychain.money.Bank;
-import nl.tudelft.simulation.supplychain.policy.yellowpage.YellowPageRequestPolicy;
 import nl.tudelft.simulation.supplychain.reference.YellowPage;
 
 /**
@@ -54,7 +54,7 @@ public class DemoYP extends YellowPage
 
         // YP MESSAGE HANDLING
 
-        addContentHandler(YellowPageRequest.class, new YellowPageRequestPolicy(this, new Duration(10.0, DurationUnit.MINUTE)));
+        addContentHandler(SearchRequest.class, new SearchRequestPolicy(this, new Duration(10.0, DurationUnit.MINUTE)));
 
         // ANIMATION
 

@@ -50,13 +50,11 @@ public class DemandHandlerOrder extends DemandHandler
      * @param transportOptionProvider the provider of transport options betwween two locations
      * @param transportChoiceProvider the provider to choose between transport options
      * @param handlingTime the handling time distribution
-     * @param stock the stock for being able to change the ordered amount
      */
     public DemandHandlerOrder(final BuyingRole owner, final TransportOptionProvider transportOptionProvider,
-            final TransportChoiceProvider transportChoiceProvider, final DistContinuousDuration handlingTime,
-            final Inventory stock)
+            final TransportChoiceProvider transportChoiceProvider, final DistContinuousDuration handlingTime)
     {
-        super("DemandHandlerOrder", owner, handlingTime, stock);
+        super("DemandHandlerOrder", owner, handlingTime);
         Throw.whenNull(transportOptionProvider, "transportOptionProvider cannot be null");
         Throw.whenNull(transportChoiceProvider, "transportChoiceProvider cannot be null");
         this.transportOptionProvider = transportOptionProvider;
@@ -88,17 +86,12 @@ public class DemandHandlerOrder extends DemandHandler
                     + " without a supplier");
             return false;
         }
-        // create an immediate order
-        if (super.inventory != null)
-        {
-            super.inventory.changeOrderedAmount(demand.getProduct(), demand.getAmount());
-        }
         SellingActor supplier = supplierRecord.getSupplier();
         Money price = supplierRecord.getUnitPrice().multiplyBy(demand.getAmount());
         Set<TransportOption> transportOptions = this.transportOptionProvider.provideTransportOptions(supplier, getActor());
         TransportOption transportOption =
                 this.transportChoiceProvider.chooseTransportOptions(transportOptions, demand.getProduct().getSku());
-        Order order = new OrderStandalone(getRole().getActor(), supplier, demand, demand.getLatestDeliveryDate(),
+        var order = new OrderStandalone(getRole().getActor(), supplier, demand, demand.getLatestDeliveryDate(),
                 demand.getProduct(), demand.getAmount(), price, transportOption);
         // and send it out after the handling time
         sendContent(order, this.handlingTime.draw());

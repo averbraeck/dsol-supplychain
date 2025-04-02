@@ -5,7 +5,7 @@ import org.djunits.value.vdouble.scalar.Length;
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.content.Demand;
-import nl.tudelft.simulation.supplychain.content.YellowPageRequest;
+import nl.tudelft.simulation.supplychain.content.SearchRequest;
 import nl.tudelft.simulation.supplychain.role.buying.BuyingRole;
 import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
 
@@ -18,7 +18,7 @@ import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class DemandHandlerYP extends DemandHandler
+public class DemandHandlerSearch extends DemandHandler
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
@@ -39,12 +39,11 @@ public class DemandHandlerYP extends DemandHandler
      * @param yp the Actor that provides the yp service
      * @param maximumDistance the search distance to use for all products
      * @param maximumNumber the max number of suppliers to return
-     * @param stock the stock for being able to change the ordered amount
      */
-    public DemandHandlerYP(final BuyingRole owner, final DistContinuousDuration handlingTime, final Actor yp,
-            final Length maximumDistance, final int maximumNumber, final Inventory stock)
+    public DemandHandlerSearch(final BuyingRole owner, final DistContinuousDuration handlingTime, final Actor yp,
+            final Length maximumDistance, final int maximumNumber)
     {
-        super("DemandHandlerYP", owner, handlingTime, stock);
+        super("DemandHandlerYP", owner, handlingTime);
         this.yp = yp;
         this.maximumDistance = maximumDistance;
         this.maximumNumber = maximumNumber;
@@ -57,15 +56,11 @@ public class DemandHandlerYP extends DemandHandler
         {
             return false;
         }
-        if (super.inventory != null)
-        {
-            super.inventory.changeOrderedAmount(demand.product(), demand.amount());
-        }
-        // create a YellowPageRequest
-        YellowPageRequest ypRequest = new YellowPageRequest(getActor(), this.yp, demand.uniqueId(), demand.product(),
+        // create a SearchRequest
+        SearchRequest searchRequest = new SearchRequest(getActor(), this.yp, demand.uniqueId(), demand.product(),
                 this.maximumDistance, this.maximumNumber);
         // and send it out immediately
-        getRole().getActor().sendContent(ypRequest, this.handlingTime.draw());
+        getRole().getActor().sendContent(searchRequest, this.handlingTime.draw());
         return true;
     }
 }

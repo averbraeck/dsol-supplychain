@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.policy.yellowpage;
+package nl.tudelft.simulation.supplychain.handler.search;
 
 import java.util.List;
 import java.util.Set;
@@ -12,8 +12,8 @@ import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
-import nl.tudelft.simulation.supplychain.content.YellowPageAnswer;
-import nl.tudelft.simulation.supplychain.content.YellowPageRequest;
+import nl.tudelft.simulation.supplychain.content.SearchAnswer;
+import nl.tudelft.simulation.supplychain.content.SearchRequest;
 import nl.tudelft.simulation.supplychain.message.store.trade.TradeMessageStoreInterface;
 import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
 import nl.tudelft.simulation.supplychain.transport.TransportChoiceProvider;
@@ -21,16 +21,16 @@ import nl.tudelft.simulation.supplychain.transport.TransportOption;
 import nl.tudelft.simulation.supplychain.transport.TransportOptionProvider;
 
 /**
- * The YellowPageAnswerHandler implements the business logic for a buyer who receives a YellowPageAnswer from a yellow page
+ * The SearchAnswerHandler implements the business logic for a buyer who receives a SearchAnswer from a yellow page
  * supply chain actor. The most simple version that is implemented here, sends out RFQs to <b>all </b> the actors that are
- * reported back inside the YellowPageAnswer.
+ * reported back inside the SearchAnswer.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class YellowPageAnswerHandler extends ContentHandler<YellowPageAnswer>
+public class SearchAnswerHandler extends ContentHandler<SearchAnswer>
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 120221203;
@@ -48,18 +48,18 @@ public class YellowPageAnswerHandler extends ContentHandler<YellowPageAnswer>
     private final Duration cutoffDuration;
 
     /**
-     * Constructs a new YellowPageAnswerHandler.
+     * Constructs a new SearchAnswerHandler.
      * @param owner the owner of the policy
      * @param transportOptionProvider the provider of transport options betwween two locations
      * @param transportChoiceProvider the provider to choose between transport options
      * @param handlingTime the distribution of the time to react on the YP answer
      * @param cutoffDuration the maximum time after which the RFQ will stop collecting quotes
      */
-    public YellowPageAnswerPolicy(final Role owner, final TransportOptionProvider transportOptionProvider,
+    public SearchAnswerPolicy(final Role owner, final TransportOptionProvider transportOptionProvider,
             final TransportChoiceProvider transportChoiceProvider, final DistContinuousDuration handlingTime,
             final Duration cutoffDuration)
     {
-        super("YellowPageAnswerPolicy", owner, YellowPageAnswer.class);
+        super("SearchAnswerPolicy", owner, SearchAnswer.class);
         Throw.whenNull(handlingTime, "handlingTime cannot be null");
         Throw.whenNull(transportOptionProvider, "transportOptionProvider cannot be null");
         Throw.whenNull(transportChoiceProvider, "transportChoiceProvider cannot be null");
@@ -71,29 +71,29 @@ public class YellowPageAnswerHandler extends ContentHandler<YellowPageAnswer>
     }
 
     @Override
-    public boolean handleContent(final YellowPageAnswer ypAnswer)
+    public boolean handleContent(final SearchAnswer searchAnswer)
     {
-        if (!isValidContent(ypAnswer))
+        if (!isValidContent(searchAnswer))
         {
             return false;
         }
         TradeMessageStoreInterface messageStore = getActor().getContentStore();
-        YellowPageRequest ypRequest = ypAnswer.getYellowPageRequest();
-        List<Demand> demandList = messageStore.getMessageList(ypRequest.getDemandId(), Demand.class);
+        SearchRequest searchRequest = searchAnswer.getSearchRequest();
+        List<Demand> demandList = messageStore.getMessageList(searchRequest.getDemandId(), Demand.class);
         if (demandList.size() == 0) // we send it to ourselves, so it is 2x in the content store
         {
             Logger.warn("YPAnswerHandler - Actor '{}' could not find DemandID '{}' for YPAnswer '{}'", getActor().getName(),
-                    ypRequest.getDemandId(), ypAnswer.toString());
+                    searchRequest.getDemandId(), searchAnswer.toString());
             return false;
         }
         Demand demand = demandList.get(0);
-        List<Actor> potentialSuppliers = ypAnswer.getSuppliers();
+        List<Actor> potentialSuppliers = searchAnswer.getSuppliers();
         Duration delay = this.handlingTime.draw();
         for (Actor supplier : potentialSuppliers)
         {
             Set<TransportOption> transportOptions = this.transportOptionProvider.provideTransportOptions(supplier, getActor());
             TransportOption transportOption =
-                    this.transportChoiceProvider.chooseTransportOptions(transportOptions, ypRequest.getProduct().getSku());
+                    this.transportChoiceProvider.chooseTransportOptions(transportOptions, searchRequest.getProduct().getSku());
             RequestForQuote rfq = new RequestForQuote(getActor(), supplier, demand, transportOption, this.cutoffDuration);
             sendContent(rfq, delay);
         }

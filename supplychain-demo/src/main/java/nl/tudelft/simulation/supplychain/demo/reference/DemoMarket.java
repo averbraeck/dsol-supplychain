@@ -24,6 +24,7 @@ import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.handler.demand.InternalDemandHandlerYP;
 import nl.tudelft.simulation.supplychain.handler.payment.PaymentPolicyEnum;
+import nl.tudelft.simulation.supplychain.handler.search.SearchAnswerPolicy;
 import nl.tudelft.simulation.supplychain.message.store.trade.LeanTradeMessageStore;
 import nl.tudelft.simulation.supplychain.messagehandlers.HandleAllMessages;
 import nl.tudelft.simulation.supplychain.money.Bank;
@@ -35,11 +36,10 @@ import nl.tudelft.simulation.supplychain.policy.quote.QuotePolicy;
 import nl.tudelft.simulation.supplychain.policy.quote.QuotePolicyAll;
 import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentPolicy;
 import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentPolicyConsume;
-import nl.tudelft.simulation.supplychain.policy.yellowpage.YellowPageAnswerPolicy;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Customer;
-import nl.tudelft.simulation.supplychain.reference.YellowPage;
-import nl.tudelft.simulation.supplychain.role.buying.BuyingRoleYP;
+import nl.tudelft.simulation.supplychain.reference.Search;
+import nl.tudelft.simulation.supplychain.role.buying.BuyingRoleSearch;
 import nl.tudelft.simulation.supplychain.role.consuming.DemandGeneratingProcess;
 import nl.tudelft.simulation.supplychain.role.consuming.DemandGeneratingProcess;
 
@@ -67,7 +67,7 @@ public class DemoMarket extends Customer
      * @param stream
      */
     public DemoMarket(String name, SupplyChainSimulatorInterface simulator, OrientedPoint3d position, Bank bank,
-            Money initialBankAccount, Product product, YellowPage ypCustomre, StreamInterface stream)
+            Money initialBankAccount, Product product, Search ypCustomre, StreamInterface stream)
     {
         super(name, simulator, position, bank, initialBankAccount, new LeanTradeMessageStore(simulator));
 
@@ -95,9 +95,9 @@ public class DemoMarket extends Customer
         InternalDemandHandlerYP demandHandler = new InternalDemandHandlerYP(this, administrativeDelayInternalDemand,
                 ypCustomre, new Length(1E6, LengthUnit.METER), 1000, null);
 
-        DistContinuousDuration administrativeDelayYellowPageAnswer =
+        DistContinuousDuration administrativeDelaySearchAnswer =
                 new DistContinuousDuration(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-        YellowPageAnswerPolicy ypAnswerHandler = new YellowPageAnswerPolicy(this, administrativeDelayYellowPageAnswer);
+        SearchAnswerPolicy searchAnswerHandler = new SearchAnswerPolicy(this, administrativeDelaySearchAnswer);
 
         DistContinuousDuration administrativeDelayQuote =
                 new DistContinuousDuration(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
@@ -111,7 +111,7 @@ public class DemoMarket extends Customer
         DistContinuousDuration paymentDelay = new DistContinuousDuration(new DistConstant(stream, 0.0), DurationUnit.HOUR);
         BillPolicy billHandler = new BillPolicy(this, this.getBankAccount(), PaymentPolicyEnum.PAYMENT_ON_TIME, paymentDelay);
 
-        BuyingRoleYP buyingRole = new BuyingRoleYP(this, simulator, demandHandler, ypAnswerHandler, quoteHandler,
+        BuyingRoleSearch buyingRole = new BuyingRoleSearch(this, simulator, demandHandler, searchAnswerHandler, quoteHandler,
                 orderConfirmationHandler, shipmentHandler, billHandler);
         this.setBuyingRole(buyingRole);
 

@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.role.yellowpage;
+package nl.tudelft.simulation.supplychain.role.searching;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,7 +14,7 @@ import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 import nl.tudelft.simulation.supplychain.product.Product;
 
 /**
- * YellowPageRole is a base implementation of providing information about other actors in the model. Actors can register
+ * SearchingRole is a base implementation of providing information about other actors in the model. Actors can register
  * themselves in the registry.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
@@ -22,7 +22,7 @@ import nl.tudelft.simulation.supplychain.product.Product;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class YellowPageRole extends Role
+public class SearchingRole extends Role
 {
     /** */
     private static final long serialVersionUID = 20221201L;
@@ -34,10 +34,10 @@ public class YellowPageRole extends Role
     private Map<Product, HashSet<Actor>> productDictionary = new LinkedHashMap<>();
 
     /**
-     * Create a new YellowPage role.
+     * Create a new Search role.
      * @param owner the actor that owns the YP role
      */
-    public YellowPageRole(final YellowPageActor owner)
+    public SearchingRole(final SearchingActor owner)
     {
         super("yp", owner, new ContentReceiverDirect());
     }

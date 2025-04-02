@@ -37,7 +37,7 @@ import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentPolicyConsume;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Customer;
 import nl.tudelft.simulation.supplychain.reference.Retailer;
-import nl.tudelft.simulation.supplychain.role.buying.BuyingRoleYP;
+import nl.tudelft.simulation.supplychain.role.buying.BuyingRoleSearch;
 import nl.tudelft.simulation.supplychain.role.consuming.DemandGeneratingProcess;
 import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
@@ -130,7 +130,7 @@ public class Client extends Customer
         ShipmentPolicy shipmentPolicy = new ShipmentPolicyConsume(this);
         //
         // add the Policys to the buying role for Client
-        BuyingRoleYP buyingRole = new BuyingRoleYP(this, super.simulator, demandPolicy, quotePolicy,
+        BuyingRoleSearch buyingRole = new BuyingRoleSearch(this, super.simulator, demandPolicy, quotePolicy,
                 confirmationPolicy, shipmentPolicy, billPolicy);
         super.setBuyingRole(buyingRole);
 

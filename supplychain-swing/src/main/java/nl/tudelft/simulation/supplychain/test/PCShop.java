@@ -35,7 +35,7 @@ import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentPolicyStock;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Retailer;
 import nl.tudelft.simulation.supplychain.reference.Supplier;
-import nl.tudelft.simulation.supplychain.role.buying.BuyingRoleYP;
+import nl.tudelft.simulation.supplychain.role.buying.BuyingRoleSearch;
 import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
 import nl.tudelft.simulation.supplychain.role.inventory.RestockingServiceSafety;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
@@ -149,7 +149,7 @@ public class PCShop extends Retailer
         ShipmentPolicy shipmentPolicy = new ShipmentPolicyStock(this, getInventory());
         //
         // add the Policys to the buying role for PCShop
-        BuyingRoleYP buyingRole = new BuyingRoleYP(this, getSimulator(), demandPolicy, quotePolicy,
+        BuyingRoleSearch buyingRole = new BuyingRoleSearch(this, getSimulator(), demandPolicy, quotePolicy,
                 confirmationPolicy, shipmentPolicy, billPolicy);
         super.setBuyingRole(buyingRole);
         //

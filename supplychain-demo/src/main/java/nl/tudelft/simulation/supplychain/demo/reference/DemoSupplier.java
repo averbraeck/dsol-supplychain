@@ -28,7 +28,7 @@ import nl.tudelft.simulation.supplychain.policy.order.OrderPolicyStock;
 import nl.tudelft.simulation.supplychain.policy.rfq.RequestForQuotePolicy;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Supplier;
-import nl.tudelft.simulation.supplychain.reference.YellowPage;
+import nl.tudelft.simulation.supplychain.reference.Search;
 import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
 import nl.tudelft.simulation.supplychain.role.inventory.RestockingServiceSafety;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
@@ -60,7 +60,7 @@ public class DemoSupplier extends Supplier
      */
     public DemoSupplier(final String name, final SupplyChainSimulatorInterface simulator, final OrientedPoint3d position,
             final Bank bank, final Money initialBankAccount, final Product product, final double initialStock,
-            final YellowPage ypProduction, final StreamInterface stream)
+            final Search ypProduction, final StreamInterface stream)
     {
         super(name, simulator, position, bank, initialBankAccount, new LeanTradeMessageStore(simulator));
 

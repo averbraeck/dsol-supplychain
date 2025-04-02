@@ -23,8 +23,8 @@ import nl.tudelft.simulation.supplychain.content.ProductionOrder;
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.content.Shipment;
-import nl.tudelft.simulation.supplychain.content.YellowPageAnswer;
-import nl.tudelft.simulation.supplychain.content.YellowPageRequest;
+import nl.tudelft.simulation.supplychain.content.SearchAnswer;
+import nl.tudelft.simulation.supplychain.content.SearchRequest;
 
 /**
  * FullContentStore.java.
@@ -140,8 +140,8 @@ public class FullContentStore implements ContentStoreInterface
         Map<Class<? extends Content>, List<? super Content>> contentMap = this.groupingContentMap.get(groupingId);
         if (contentMap != null)
         {
-            removeContentList(contentMap, YellowPageRequest.class);
-            removeContentList(contentMap, YellowPageAnswer.class);
+            removeContentList(contentMap, SearchRequest.class);
+            removeContentList(contentMap, SearchAnswer.class);
             removeContentList(contentMap, RequestForQuote.class);
             removeContentList(contentMap, Quote.class);
             removeContentList(contentMap, Order.class);

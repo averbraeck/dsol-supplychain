@@ -4,7 +4,6 @@ import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.role.buying.BuyingRole;
-import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
 
 /**
  * The abstract DemandHandler class provides the general methods that all DemandHandler classes need, such as checking whether
@@ -24,23 +23,16 @@ public abstract class DemandHandler extends ContentHandler<Demand, BuyingRole>
     @SuppressWarnings("checkstyle:visibilitymodifier")
     protected DistContinuousDuration handlingTime;
 
-    /** the inventory for changing 'ordered amount. */
-    @SuppressWarnings("checkstyle:visibilitymodifier")
-    protected Inventory inventory;
-
     /**
      * Construct a new DemandHandler.
      * @param id the id of the policy
      * @param owner the Role that has this policy.
      * @param handlingTime the distribution of the time to handle an demand
-     * @param inventory the inventory for being able to change the ordered amount
      */
-    public DemandHandler(final String id, final BuyingRole owner, final DistContinuousDuration handlingTime,
-            final Inventory inventory)
+    public DemandHandler(final String id, final BuyingRole owner, final DistContinuousDuration handlingTime)
     {
         super(id, owner, Demand.class);
         this.handlingTime = handlingTime;
-        this.inventory = inventory;
     }
 
     /**

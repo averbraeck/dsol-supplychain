@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.policy.yellowpage;
+package nl.tudelft.simulation.supplychain.handler.search;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,13 +13,13 @@ import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Actor;
-import nl.tudelft.simulation.supplychain.content.YellowPageAnswer;
-import nl.tudelft.simulation.supplychain.content.YellowPageRequest;
+import nl.tudelft.simulation.supplychain.content.SearchAnswer;
+import nl.tudelft.simulation.supplychain.content.SearchRequest;
 import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
-import nl.tudelft.simulation.supplychain.role.yellowpage.YellowPageRole;
+import nl.tudelft.simulation.supplychain.role.searching.SearchingRole;
 
 /**
- * The YellowPageRequestHandler implements the business logic for a yellow page actor who receives a YellowPageRequest and has
+ * The SearchRequestHandler implements the business logic for a yellow page actor who receives a SearchRequest and has
  * to look up supply chain actors within the boundaries of the request For the moment, these are max number, max distance, and
  * product.
  * <p>
@@ -28,7 +28,7 @@ import nl.tudelft.simulation.supplychain.role.yellowpage.YellowPageRole;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class YellowPageRequestHandler extends ContentHandler<YellowPageRequest>
+public class SearchRequestHandler extends ContentHandler<SearchRequest>
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
@@ -37,37 +37,37 @@ public class YellowPageRequestHandler extends ContentHandler<YellowPageRequest>
     private DistContinuousDuration handlingTime;
 
     /**
-     * Constructs a new YellowPageRequestHandler.
+     * Constructs a new SearchRequestHandler.
      * @param owner the owner of the policy
      * @param handlingTime the distribution of the time to react on the YP request
      */
-    public YellowPageRequestPolicy(final YellowPageRole owner, final DistContinuousDuration handlingTime)
+    public SearchRequestPolicy(final SearchingRole owner, final DistContinuousDuration handlingTime)
     {
-        super("YellowPageRequestPolicy", owner, YellowPageRequest.class);
+        super("SearchRequestPolicy", owner, SearchRequest.class);
         this.handlingTime = handlingTime;
     }
 
     @Override
-    public boolean handleContent(final YellowPageRequest ypRequest)
+    public boolean handleContent(final SearchRequest searchRequest)
     {
-        if (!isValidContent(ypRequest))
+        if (!isValidContent(searchRequest))
         {
             return false;
         }
-        Set<Actor> supplierSet = ((YellowPageRole) getRole()).getSuppliers(ypRequest.getProduct());
+        Set<Actor> supplierSet = ((SearchingRole) getRole()).getSuppliers(searchRequest.getProduct());
         if (supplierSet == null)
         {
-            Logger.warn("YellowPage '{}' has no supplier map for product {}", getActor().getName(),
-                    ypRequest.getProduct().getName());
+            Logger.warn("Search '{}' has no supplier map for product {}", getActor().getName(),
+                    searchRequest.getProduct().getName());
             return false;
         }
         SortedMap<Length, Actor> suppliers =
-                pruneDistance(supplierSet, ypRequest.getMaximumDistance(), ypRequest.getSender().getLocation());
-        pruneNumber(suppliers, ypRequest.getMaximumNumber());
+                pruneDistance(supplierSet, searchRequest.getMaximumDistance(), searchRequest.getSender().getLocation());
+        pruneNumber(suppliers, searchRequest.getMaximumNumber());
         List<Actor> potentialSuppliers = new ArrayList<>(suppliers.values());
-        YellowPageAnswer ypAnswer =
-                new YellowPageAnswer(getActor(), ypRequest.getSender(), ypRequest.getDemandId(), potentialSuppliers, ypRequest);
-        sendContent(ypAnswer, this.handlingTime.draw());
+        SearchAnswer searchAnswer =
+                new SearchAnswer(getActor(), searchRequest.getSender(), searchRequest.getDemandId(), potentialSuppliers, searchRequest);
+        sendContent(searchAnswer, this.handlingTime.draw());
         return true;
     }
 
@@ -113,9 +113,9 @@ public class YellowPageRequestHandler extends ContentHandler<YellowPageRequest>
     }
 
     @Override
-    public YellowPageRole getRole()
+    public SearchingRole getRole()
     {
-        return (YellowPageRole) super.getRole();
+        return (SearchingRole) super.getRole();
     }
 
 }
