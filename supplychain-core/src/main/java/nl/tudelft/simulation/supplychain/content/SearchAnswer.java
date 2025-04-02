@@ -15,8 +15,8 @@ import nl.tudelft.simulation.supplychain.role.searching.SearchingActor;
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
- * @param sender the sender of the yellow page answer
- * @param receiver the receiver of the yellow page answer
+ * @param sender the sender of the search answer
+ * @param receiver the receiver of the search answer
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId

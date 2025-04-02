@@ -103,7 +103,7 @@ public class BullwhipModel extends AbstractDSOLModel<Duration, SupplyChainSimula
             ing.setAnnualInterestRateNeg(0.080);
             ing.setAnnualInterestRatePos(0.025);
 
-            // we create two yellow page 'domains', one between the customers and the retailers,
+            // we create two search 'domains', one between the customers and the retailers,
             // and one between the retailers, manufacturers, and suppliers
             DemoYP ypCustomerMTS = new DemoYP("YP_customer_MTS", getSimulator(), new OrientedPoint3d(400, 40, 0), ing);
             DemoYP ypCustomerMTO = new DemoYP("YP_customer_MTO", getSimulator(), new OrientedPoint3d(500, 40, 0), ing);

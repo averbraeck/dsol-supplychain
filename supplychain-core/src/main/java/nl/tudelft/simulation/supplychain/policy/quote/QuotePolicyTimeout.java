@@ -14,7 +14,7 @@ import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.OrderBasedOnQuote;
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
-import nl.tudelft.simulation.supplychain.message.store.trade.TradeMessageStoreInterface;
+import nl.tudelft.simulation.supplychain.message.store.trade.ContentStoreInterface;
 
 /**
  * The QuoteHandlerTimeout handles quotes until a certain timeout is reached. When all Quotes are in, it reacts. It schedules
@@ -70,9 +70,9 @@ public class QuotePolicyTimeout extends QuotePolicy
             return false;
         }
         long demandId = quote.getDemandId();
-        TradeMessageStoreInterface messageStore = getActor().getContentStore();
-        int numberQuotes = messageStore.getMessageList(demandId, Quote.class).size();
-        int numberRFQs = messageStore.getMessageList(demandId, RequestForQuote.class).size();
+        ContentStoreInterface messageStore = getActor().getContentStore();
+        int numberQuotes = messageStore.getContentList(demandId, Quote.class).size();
+        int numberRFQs = messageStore.getContentList(demandId, RequestForQuote.class).size();
         // when the first quote comes in, schedule the timeout
         if (numberQuotes == 1)
         {
@@ -110,8 +110,8 @@ public class QuotePolicyTimeout extends QuotePolicy
         if (this.unansweredIDs.contains(demandId))
         {
             this.unansweredIDs.remove(demandId);
-            TradeMessageStoreInterface messageStore = getActor().getContentStore();
-            List<Quote> quotes = messageStore.getMessageList(demandId, Quote.class);
+            ContentStoreInterface messageStore = getActor().getContentStore();
+            List<Quote> quotes = messageStore.getContentList(demandId, Quote.class);
 
             // the size of the quotes is at least one
             // since the invocation of this method is scheduled after a first

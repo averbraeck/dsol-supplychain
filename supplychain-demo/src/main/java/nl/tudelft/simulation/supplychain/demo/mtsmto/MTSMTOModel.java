@@ -95,7 +95,7 @@ public class MTSMTOModel extends AbstractDSOLModel<Duration, SupplyChainAnimator
             ing.setAnnualInterestRateNeg(0.080);
             ing.setAnnualInterestRatePos(0.025);
 
-            // we create two yellow page 'domains', one between the customers and the retailers,
+            // we create two search 'domains', one between the customers and the retailers,
             // and one between the retailers, manufacturers, and suppliers
             DemoYP ypCustomerMTS = new DemoYP("YP_customer_MTS", getSimulator(), new OrientedPoint3d(-300, -270, 1), ing);
             DemoYP ypCustomerMTO = new DemoYP("YP_customer_MTO", getSimulator(), new OrientedPoint3d(-300, 30, 1), ing);

@@ -15,7 +15,7 @@ import nl.tudelft.simulation.dsol.swing.charts.xy.XYChart;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.handler.payment.PaymentPolicy;
-import nl.tudelft.simulation.supplychain.message.store.trade.TradeMessageStoreInterface;
+import nl.tudelft.simulation.supplychain.message.store.trade.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.BankAccount;
 import nl.tudelft.simulation.supplychain.money.Money;
@@ -61,7 +61,7 @@ public class Factory extends Supplier
     @SuppressWarnings("checkstyle:parameternumber")
     public Factory(final String id, final String name, final SupplyChainModelInterface model, final OrientedPoint2d location,
             final String locationDescription, final Bank bank, final Money initialBalance,
-            final TradeMessageStoreInterface messageStore, final Product product, final double amount)
+            final ContentStoreInterface messageStore, final Product product, final double amount)
             throws ActorAlreadyDefinedException, RemoteException, NamingException
     {
         super(id, name, model, location, locationDescription, bank, initialBalance, messageStore);

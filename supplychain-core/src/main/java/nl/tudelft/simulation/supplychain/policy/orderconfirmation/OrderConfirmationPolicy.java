@@ -59,7 +59,7 @@ public class OrderConfirmationHandler extends ContentHandler<OrderConfirmation>
             try
             {
                 // TODO: place some business logic here to handle the problem
-                oldID = getActor().getContentStore().getMessageList(orderConfirmation.getDemandId(), Demand.class).get(0);
+                oldID = getActor().getContentStore().getContentList(orderConfirmation.getDemandId(), Demand.class).get(0);
 
                 if (oldID == null)
                 {

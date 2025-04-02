@@ -15,20 +15,19 @@ import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.content.SearchAnswer;
 import nl.tudelft.simulation.supplychain.content.SearchRequest;
-import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
+import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.role.searching.SearchingRole;
 
 /**
- * The SearchRequestHandler implements the business logic for a yellow page actor who receives a SearchRequest and has
- * to look up supply chain actors within the boundaries of the request For the moment, these are max number, max distance, and
- * product.
+ * The SearchRequestHandler implements the business logic for a search actor who receives a SearchRequest and has to look up
+ * supply chain actors within the boundaries of the request For the moment, these are max number, max distance, and product.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class SearchRequestHandler extends ContentHandler<SearchRequest>
+public class SearchRequestHandler extends ContentHandler<SearchRequest, SearchingRole>
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
@@ -41,9 +40,9 @@ public class SearchRequestHandler extends ContentHandler<SearchRequest>
      * @param owner the owner of the policy
      * @param handlingTime the distribution of the time to react on the YP request
      */
-    public SearchRequestPolicy(final SearchingRole owner, final DistContinuousDuration handlingTime)
+    public SearchRequestHandler(final SearchingRole owner, final DistContinuousDuration handlingTime)
     {
-        super("SearchRequestPolicy", owner, SearchRequest.class);
+        super("SearchRequestHandler", owner, SearchRequest.class);
         this.handlingTime = handlingTime;
     }
 
@@ -54,19 +53,18 @@ public class SearchRequestHandler extends ContentHandler<SearchRequest>
         {
             return false;
         }
-        Set<Actor> supplierSet = ((SearchingRole) getRole()).getSuppliers(searchRequest.getProduct());
+        Set<Actor> supplierSet = ((SearchingRole) getRole()).getSuppliers(searchRequest.product());
         if (supplierSet == null)
         {
             Logger.warn("Search '{}' has no supplier map for product {}", getActor().getName(),
-                    searchRequest.getProduct().getName());
+                    searchRequest.product().getName());
             return false;
         }
         SortedMap<Length, Actor> suppliers =
-                pruneDistance(supplierSet, searchRequest.getMaximumDistance(), searchRequest.getSender().getLocation());
-        pruneNumber(suppliers, searchRequest.getMaximumNumber());
-        List<Actor> potentialSuppliers = new ArrayList<>(suppliers.values());
-        SearchAnswer searchAnswer =
-                new SearchAnswer(getActor(), searchRequest.getSender(), searchRequest.getDemandId(), potentialSuppliers, searchRequest);
+                pruneDistance(supplierSet, searchRequest.maximumDistance(), searchRequest.sender().getLocation());
+        pruneNumber(suppliers, searchRequest.maximumNumber());
+        List<Actor> actorList = new ArrayList<>(suppliers.values());
+        SearchAnswer searchAnswer = new SearchAnswer(searchRequest, actorList);
         sendContent(searchAnswer, this.handlingTime.draw());
         return true;
     }

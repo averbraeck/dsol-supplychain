@@ -3,11 +3,10 @@ package nl.tudelft.simulation.supplychain.handler.demand;
 import org.djunits.value.vdouble.scalar.Length;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
-import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.SearchRequest;
 import nl.tudelft.simulation.supplychain.role.buying.BuyingRole;
-import nl.tudelft.simulation.supplychain.role.inventory.Inventory;
+import nl.tudelft.simulation.supplychain.role.searching.SearchingActor;
 
 /**
  * The DemandHandlerYP is a simple implementation of the business logic to handle a request for new products through a yellow
@@ -23,8 +22,8 @@ public class DemandHandlerSearch extends DemandHandler
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
 
-    /** the yellow page actor to use. */
-    private Actor yp;
+    /** the search actor to use. */
+    private SearchingActor searchingActor;
 
     /** maximum distance to use in the search. */
     private Length maximumDistance;
@@ -36,15 +35,15 @@ public class DemandHandlerSearch extends DemandHandler
      * Constructs a new DemandHandlerYP.
      * @param owner the owner of the demand
      * @param handlingTime the handling time distribution delay to use
-     * @param yp the Actor that provides the yp service
+     * @param searchingActor the Actor that provides the searching service
      * @param maximumDistance the search distance to use for all products
      * @param maximumNumber the max number of suppliers to return
      */
-    public DemandHandlerSearch(final BuyingRole owner, final DistContinuousDuration handlingTime, final Actor yp,
-            final Length maximumDistance, final int maximumNumber)
+    public DemandHandlerSearch(final BuyingRole owner, final DistContinuousDuration handlingTime,
+            final SearchingActor searchingActor, final Length maximumDistance, final int maximumNumber)
     {
-        super("DemandHandlerYP", owner, handlingTime);
-        this.yp = yp;
+        super("DemandHandlerSearch", owner, handlingTime);
+        this.searchingActor = searchingActor;
         this.maximumDistance = maximumDistance;
         this.maximumNumber = maximumNumber;
     }
@@ -57,8 +56,8 @@ public class DemandHandlerSearch extends DemandHandler
             return false;
         }
         // create a SearchRequest
-        SearchRequest searchRequest = new SearchRequest(getActor(), this.yp, demand.uniqueId(), demand.product(),
-                this.maximumDistance, this.maximumNumber);
+        SearchRequest searchRequest = new SearchRequest(getActor(), this.searchingActor, demand.groupingId(),
+                this.maximumDistance, this.maximumNumber, demand.product());
         // and send it out immediately
         getRole().getActor().sendContent(searchRequest, this.handlingTime.draw());
         return true;

@@ -10,7 +10,7 @@ import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.OrderBasedOnQuote;
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
-import nl.tudelft.simulation.supplychain.message.store.trade.TradeMessageStoreInterface;
+import nl.tudelft.simulation.supplychain.message.store.trade.ContentStoreInterface;
 
 /**
  * The QuoteHandlerAll just waits patiently till all the Quotes are in for each RequestForQuote that has been sent out. When
@@ -66,8 +66,8 @@ public class QuotePolicyAll extends QuotePolicy
         }
         // look if all quotes are there for the RFQs that we sent out
         long id = quote.getDemandId();
-        TradeMessageStoreInterface messageStore = getActor().getContentStore();
-        if (messageStore.getMessageList(id, Quote.class).size() == messageStore.getMessageList(id, RequestForQuote.class)
+        ContentStoreInterface messageStore = getActor().getContentStore();
+        if (messageStore.getContentList(id, Quote.class).size() == messageStore.getContentList(id, RequestForQuote.class)
                 .size())
         {
             // All quotes are in. Select the best and place an order
@@ -75,10 +75,10 @@ public class QuotePolicyAll extends QuotePolicy
             if (QuotePolicyAll.DEBUG)
             {
                 System.err.println("t=" + getSimulator().getSimulatorTime() + " DEBUG -- QuoteHandlerAll of actor " + getActor()
-                        + ", size=" + messageStore.getMessageList(id, Quote.class).size());
+                        + ", size=" + messageStore.getContentList(id, Quote.class).size());
             }
 
-            List<Quote> quotes = messageStore.getMessageList(id, Quote.class);
+            List<Quote> quotes = messageStore.getContentList(id, Quote.class);
             Quote bestQuote = selectBestQuote(quotes);
             if (bestQuote == null)
             {

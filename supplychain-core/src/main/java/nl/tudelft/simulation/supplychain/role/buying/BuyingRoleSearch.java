@@ -8,7 +8,7 @@ import nl.tudelft.simulation.supplychain.policy.quote.QuotePolicy;
 import nl.tudelft.simulation.supplychain.policy.shipment.ShipmentPolicy;
 
 /**
- * The buying role with yellow pages is a role that organizes the buying based on a SearchRequest, and continues from there.
+ * The buying role with searchs is a role that organizes the buying based on a SearchRequest, and continues from there.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
@@ -24,7 +24,7 @@ public class BuyingRoleSearch extends BuyingRole
      * Construct a new BuyingRole for Demand - YPAnswer - Quote - Confirmation - Shipment - Bill.
      * @param owner the actor to which this role belongs
      * @param demandPolicy the demand handler, results in sending out an RFQ
-     * @param searchAnswerPolicy the yellow page answer handler
+     * @param searchAnswerPolicy the search answer handler
      * @param quotePolicy the quote handler
      * @param orderConfirmationPolicy the order confirmation handler
      * @param shipmentPolicy the shipment handler

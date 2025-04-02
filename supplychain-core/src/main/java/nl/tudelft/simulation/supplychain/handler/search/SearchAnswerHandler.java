@@ -9,28 +9,28 @@ import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Actor;
-import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.content.SearchAnswer;
 import nl.tudelft.simulation.supplychain.content.SearchRequest;
-import nl.tudelft.simulation.supplychain.message.store.trade.TradeMessageStoreInterface;
-import nl.tudelft.simulation.supplychain.policy.SupplyChainPolicy;
+import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
+import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.buying.BuyingRole;
 import nl.tudelft.simulation.supplychain.transport.TransportChoiceProvider;
 import nl.tudelft.simulation.supplychain.transport.TransportOption;
 import nl.tudelft.simulation.supplychain.transport.TransportOptionProvider;
 
 /**
- * The SearchAnswerHandler implements the business logic for a buyer who receives a SearchAnswer from a yellow page
- * supply chain actor. The most simple version that is implemented here, sends out RFQs to <b>all </b> the actors that are
- * reported back inside the SearchAnswer.
+ * The SearchAnswerHandler implements the business logic for a buyer who receives a SearchAnswer from a search supply chain
+ * actor. The most simple version that is implemented here, sends out RFQs to <b>all </b> the actors that are reported back
+ * inside the SearchAnswer.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class SearchAnswerHandler extends ContentHandler<SearchAnswer>
+public class SearchAnswerHandler extends ContentHandler<SearchAnswer, BuyingRole>
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 120221203;
@@ -55,11 +55,11 @@ public class SearchAnswerHandler extends ContentHandler<SearchAnswer>
      * @param handlingTime the distribution of the time to react on the YP answer
      * @param cutoffDuration the maximum time after which the RFQ will stop collecting quotes
      */
-    public SearchAnswerPolicy(final Role owner, final TransportOptionProvider transportOptionProvider,
+    public SearchAnswerHandler(final BuyingRole owner, final TransportOptionProvider transportOptionProvider,
             final TransportChoiceProvider transportChoiceProvider, final DistContinuousDuration handlingTime,
             final Duration cutoffDuration)
     {
-        super("SearchAnswerPolicy", owner, SearchAnswer.class);
+        super("SearchAnswerHandler", owner, SearchAnswer.class);
         Throw.whenNull(handlingTime, "handlingTime cannot be null");
         Throw.whenNull(transportOptionProvider, "transportOptionProvider cannot be null");
         Throw.whenNull(transportChoiceProvider, "transportChoiceProvider cannot be null");
@@ -77,17 +77,17 @@ public class SearchAnswerHandler extends ContentHandler<SearchAnswer>
         {
             return false;
         }
-        TradeMessageStoreInterface messageStore = getActor().getContentStore();
-        SearchRequest searchRequest = searchAnswer.getSearchRequest();
-        List<Demand> demandList = messageStore.getMessageList(searchRequest.getDemandId(), Demand.class);
+        ContentStoreInterface messageStore = getActor().getContentStore();
+        SearchRequest searchRequest = searchAnswer.searchRequest();
+        List<Demand> demandList = messageStore.getContentList(searchRequest.groupingId(), Demand.class);
         if (demandList.size() == 0) // we send it to ourselves, so it is 2x in the content store
         {
-            Logger.warn("YPAnswerHandler - Actor '{}' could not find DemandID '{}' for YPAnswer '{}'", getActor().getName(),
-                    searchRequest.getDemandId(), searchAnswer.toString());
+            Logger.warn("YPAnswerHandler - Actor '{}' could not find groupingId '{}' for YPAnswer '{}'", getActor().getName(),
+                    searchRequest.groupingId(), searchAnswer.toString());
             return false;
         }
         Demand demand = demandList.get(0);
-        List<Actor> potentialSuppliers = searchAnswer.getSuppliers();
+        List<Actor> potentialSuppliers = searchAnswer.actorList();
         Duration delay = this.handlingTime.draw();
         for (Actor supplier : potentialSuppliers)
         {

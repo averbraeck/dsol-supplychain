@@ -6,7 +6,7 @@ import org.djutils.exceptions.Throw;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
-import nl.tudelft.simulation.supplychain.message.store.trade.TradeMessageStoreInterface;
+import nl.tudelft.simulation.supplychain.message.store.trade.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.role.buying.BuyingActor;
 import nl.tudelft.simulation.supplychain.role.buying.BuyingRole;
 import nl.tudelft.simulation.supplychain.role.consuming.ConsumingActor;
@@ -42,7 +42,7 @@ public class Customer extends SupplyChainActor implements BuyingActor, Consuming
      */
     @SuppressWarnings("checkstyle:parameternumber")
     public Customer(final String id, final String name, final SupplyChainModelInterface model, final OrientedPoint2d location,
-            final String locationDescription, final TradeMessageStoreInterface messageStore) throws ActorAlreadyDefinedException
+            final String locationDescription, final ContentStoreInterface messageStore) throws ActorAlreadyDefinedException
     {
         super(id, name, model, location, locationDescription, messageStore);
     }

@@ -8,7 +8,7 @@ import org.djutils.exceptions.Throw;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
-import nl.tudelft.simulation.supplychain.message.store.trade.TradeMessageStoreInterface;
+import nl.tudelft.simulation.supplychain.message.store.trade.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.role.searching.SearchingRole;
@@ -26,7 +26,7 @@ public class Search extends SupplyChainActor implements Serializable
     /** */
     private static final long serialVersionUID = 20221206L;
 
-    /** The yellow page role. */
+    /** The search role. */
     private SearchingRole yellowPageRole = null;
 
     /**
@@ -43,14 +43,14 @@ public class Search extends SupplyChainActor implements Serializable
      */
     public Search(final String id, final String name, final SupplyChainModelInterface model, final OrientedPoint2d location,
             final String locationDescription, final Bank bank, final Money initialBalance,
-            final TradeMessageStoreInterface messageStore) throws ActorAlreadyDefinedException
+            final ContentStoreInterface messageStore) throws ActorAlreadyDefinedException
     {
         super(id, name, model, location, locationDescription, bank, initialBalance, messageStore);
     }
 
     /**
-     * Return the yellow page role.
-     * @return the yellow page role
+     * Return the search role.
+     * @return the search role
      */
     public SearchingRole getSearchingRole()
     {
@@ -58,8 +58,8 @@ public class Search extends SupplyChainActor implements Serializable
     }
 
     /**
-     * Set the yellow page role.
-     * @param yellowPageRole the new yellow page role
+     * Set the search role.
+     * @param yellowPageRole the new search role
      */
     public void setSearchingRole(final SearchingRole yellowPageRole)
     {

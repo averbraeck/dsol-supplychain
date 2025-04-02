@@ -9,7 +9,7 @@ import org.djutils.exceptions.Throw;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.content.Message;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
-import nl.tudelft.simulation.supplychain.message.store.trade.TradeMessageStoreInterface;
+import nl.tudelft.simulation.supplychain.message.store.trade.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
@@ -45,7 +45,7 @@ public class Manufacturer extends DistributionCenter
     @SuppressWarnings("checkstyle:parameternumber")
     public Manufacturer(final String id, final String name, final SupplyChainModelInterface model,
             final OrientedPoint2d location, final String locationDescription, final Bank bank, final Money initialBalance,
-            final TradeMessageStoreInterface messageStore) throws ActorAlreadyDefinedException
+            final ContentStoreInterface messageStore) throws ActorAlreadyDefinedException
     {
         super(id, name, model, location, locationDescription, bank, initialBalance, messageStore);
     }

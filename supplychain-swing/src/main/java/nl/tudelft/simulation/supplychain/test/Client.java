@@ -23,7 +23,7 @@ import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.handler.demand.InternalDemandHandlerRFQ;
 import nl.tudelft.simulation.supplychain.handler.payment.PaymentPolicyEnum;
-import nl.tudelft.simulation.supplychain.message.store.trade.TradeMessageStoreInterface;
+import nl.tudelft.simulation.supplychain.message.store.trade.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.BankAccount;
 import nl.tudelft.simulation.supplychain.money.Money;
@@ -78,7 +78,7 @@ public class Client extends Customer
     @SuppressWarnings("checkstyle:parameternumber")
     public Client(final String id, final String name, final SupplyChainModelInterface model, final OrientedPoint2d location,
             final String locationDescription, final Bank bank, final Money initialBalance,
-            final TradeMessageStoreInterface messageStore, final Product product, final Retailer retailer)
+            final ContentStoreInterface messageStore, final Product product, final Retailer retailer)
             throws ActorAlreadyDefinedException, RemoteException, NamingException
     {
         super(id, name, model, location, locationDescription, bank, initialBalance, messageStore);
