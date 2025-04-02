@@ -1,14 +1,15 @@
 package nl.tudelft.simulation.supplychain.role.financing;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 import org.djunits.value.vdouble.scalar.Duration;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
+import nl.tudelft.simulation.supplychain.content.Bill;
 import nl.tudelft.simulation.supplychain.content.Content;
+import nl.tudelft.simulation.supplychain.content.Payment;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
@@ -34,7 +35,7 @@ public class FinancingRole extends Role<FinancingRole>
     private List<FixedCostProcess> fixedCosts = new ArrayList<FixedCostProcess>();
 
     /** the necessary content handlers. */
-    private static Set<Class<? extends Content>> necessaryContentHandlers = Collections.emptySet();
+    private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of(Bill.class, Payment.class);
 
     /** the necessary content handlers. */
     private static Set<Class<? extends AutonomousProcess<FinancingRole>>> necessaryAutonomousProcesses =
