@@ -9,8 +9,8 @@ import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.message.store.trade.TradeMessageStoreInterface;
 import nl.tudelft.simulation.supplychain.role.buying.BuyingActor;
 import nl.tudelft.simulation.supplychain.role.buying.BuyingRole;
-import nl.tudelft.simulation.supplychain.role.demand.DemandGeneratingActor;
-import nl.tudelft.simulation.supplychain.role.demand.DemandGenerationRole;
+import nl.tudelft.simulation.supplychain.role.consuming.DemandGeneratingActor;
+import nl.tudelft.simulation.supplychain.role.consuming.DemandGenerationRole;
 
 /**
  * A Customer is an actor which usually orders (pulls) products from a Distributor. <br>

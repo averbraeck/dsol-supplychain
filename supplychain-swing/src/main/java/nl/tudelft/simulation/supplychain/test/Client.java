@@ -38,7 +38,7 @@ import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Customer;
 import nl.tudelft.simulation.supplychain.reference.Retailer;
 import nl.tudelft.simulation.supplychain.role.buying.BuyingRoleYP;
-import nl.tudelft.simulation.supplychain.role.demand.Demand;
+import nl.tudelft.simulation.supplychain.role.consuming.Demand;
 import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
 /**

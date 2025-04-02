@@ -40,8 +40,8 @@ import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Customer;
 import nl.tudelft.simulation.supplychain.reference.YellowPage;
 import nl.tudelft.simulation.supplychain.role.buying.BuyingRoleYP;
-import nl.tudelft.simulation.supplychain.role.demand.Demand;
-import nl.tudelft.simulation.supplychain.role.demand.DemandGenerationRolePeriodic;
+import nl.tudelft.simulation.supplychain.role.consuming.Demand;
+import nl.tudelft.simulation.supplychain.role.consuming.DemandGenerationRolePeriodic;
 
 /**
  * MtsMtomarket.java. <br>

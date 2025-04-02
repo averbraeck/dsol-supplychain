@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.role.demand;
+package nl.tudelft.simulation.supplychain.role.consuming;
 
 import nl.tudelft.simulation.supplychain.actor.Actor;
 
