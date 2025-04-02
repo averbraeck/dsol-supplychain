@@ -40,8 +40,8 @@ import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Customer;
 import nl.tudelft.simulation.supplychain.reference.YellowPage;
 import nl.tudelft.simulation.supplychain.role.buying.BuyingRoleYP;
-import nl.tudelft.simulation.supplychain.role.consuming.Demand;
-import nl.tudelft.simulation.supplychain.role.consuming.DemandGenerationRolePeriodic;
+import nl.tudelft.simulation.supplychain.role.consuming.DemandGeneratingProcess;
+import nl.tudelft.simulation.supplychain.role.consuming.DemandGeneratingProcess;
 
 /**
  * MtsMtomarket.java. <br>
@@ -80,7 +80,7 @@ public class DemoMarket extends Customer
 
         // DEMAND GENERATION
 
-        Demand demand = new Demand(product, new DistContinuousDuration(new DistExponential(stream, 8.0), DurationUnit.HOUR),
+        DemandGeneratingProcess demand = new DemandGeneratingProcess(product, new DistContinuousDuration(new DistExponential(stream, 8.0), DurationUnit.HOUR),
                 new DistConstant(stream, 1.0), new DistConstantDuration(Duration.ZERO),
                 new DistConstantDuration(new Duration(14.0, DurationUnit.DAY)));
         DemandGenerationRolePeriodic dg = new DemandGenerationRolePeriodic(this,

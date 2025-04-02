@@ -9,8 +9,8 @@ import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.message.store.trade.TradeMessageStoreInterface;
 import nl.tudelft.simulation.supplychain.role.buying.BuyingActor;
 import nl.tudelft.simulation.supplychain.role.buying.BuyingRole;
-import nl.tudelft.simulation.supplychain.role.consuming.DemandGeneratingActor;
-import nl.tudelft.simulation.supplychain.role.consuming.DemandGenerationRole;
+import nl.tudelft.simulation.supplychain.role.consuming.ConsumingActor;
+import nl.tudelft.simulation.supplychain.role.consuming.ConsumingRole;
 
 /**
  * A Customer is an actor which usually orders (pulls) products from a Distributor. <br>
@@ -20,7 +20,7 @@ import nl.tudelft.simulation.supplychain.role.consuming.DemandGenerationRole;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class Customer extends SupplyChainActor implements BuyingActor, DemandGeneratingActor
+public class Customer extends SupplyChainActor implements BuyingActor, ConsumingActor
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
@@ -29,7 +29,7 @@ public class Customer extends SupplyChainActor implements BuyingActor, DemandGen
     private BuyingRole buyingRole;
 
     /** The role to generate demand. */
-    private DemandGenerationRole demandGenerationRole;
+    private ConsumingRole demandGenerationRole;
 
     /**
      * @param id String, the unique id of the customer
@@ -66,7 +66,7 @@ public class Customer extends SupplyChainActor implements BuyingActor, DemandGen
      * Return the demand generation role.
      * @return the demand generation role
      */
-    public DemandGenerationRole getDemandGenerationRole()
+    public ConsumingRole getDemandGenerationRole()
     {
         return this.demandGenerationRole;
     }
@@ -75,7 +75,7 @@ public class Customer extends SupplyChainActor implements BuyingActor, DemandGen
      * Set the demand generation role.
      * @param demandGenerationRole the new demand generation role
      */
-    public void setDemandGenerationRole(final DemandGenerationRole demandGenerationRole)
+    public void setDemandGenerationRole(final ConsumingRole demandGenerationRole)
     {
         Throw.whenNull(demandGenerationRole, "demandGenerationRole cannot be null");
         Throw.when(this.demandGenerationRole != null, IllegalStateException.class, "demandGenerationRole already initialized");

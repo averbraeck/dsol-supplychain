@@ -1,7 +1,5 @@
 package nl.tudelft.simulation.supplychain.role.consuming;
 
-import java.io.Serializable;
-
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 
@@ -13,6 +11,7 @@ import nl.tudelft.simulation.jstats.distributions.DistDiscreteConstant;
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.jstats.streams.Java2Random;
 import nl.tudelft.simulation.jstats.streams.StreamInterface;
+import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 import nl.tudelft.simulation.supplychain.product.Product;
 
 /**
@@ -23,11 +22,8 @@ import nl.tudelft.simulation.supplychain.product.Product;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class Demand implements Serializable
+public class DemandGeneratingProcess extends AutonomousProcess<ConsumingRole>
 {
-    /** the serial version uid. */
-    private static final long serialVersionUID = 20221201L;
-
     /** the product. */
     private Product product;
 
@@ -43,20 +39,20 @@ public class Demand implements Serializable
     /** the latest delivery date relative to the current simulator time. */
     private DistContinuousDuration latestDeliveryDurationDistribution;
 
-    /** a default stream for DistConstant. */
-    private static StreamInterface stream = new Java2Random();
-
     /**
+     * Make a demand generating process.
+     * @param role the role to which this process belongs
      * @param product the product
      * @param interval the distribution for the demand generation interval
      * @param amount the amount of product to order
      * @param earliestDeliveryDurationDistribution the earliest delivery date distribution
      * @param latestDeliveryDurationDistribution the latest delivery date distribution
      */
-    public Demand(final Product product, final DistContinuousDuration interval, final DistContinuous amount,
-            final DistContinuousDuration earliestDeliveryDurationDistribution,
+    public DemandGeneratingProcess(final ConsumingRole role, final Product product, final DistContinuousDuration interval,
+            final DistContinuous amount, final DistContinuousDuration earliestDeliveryDurationDistribution,
             final DistContinuousDuration latestDeliveryDurationDistribution)
     {
+        super(role);
         this.product = product;
         this.intervalDistribution = interval;
         this.amountDistribution = amount;
@@ -65,58 +61,66 @@ public class Demand implements Serializable
     }
 
     /**
+     * Make a demand generating process.
+     * @param role the role to which this process belongs
      * @param product the product
      * @param interval the distribution for the demand generation interval
      * @param amount the amount of product to order
      * @param earliestDeliveryDuration the earliest delivery date
      * @param latestDeliveryDuration the latest delivery date
      */
-    public Demand(final Product product, final DistContinuousDuration interval, final double amount,
-            final Duration earliestDeliveryDuration, final Duration latestDeliveryDuration)
+    public DemandGeneratingProcess(final ConsumingRole role, final Product product, final DistContinuousDuration interval,
+            final double amount, final Duration earliestDeliveryDuration, final Duration latestDeliveryDuration)
     {
-        this.product = product;
-        this.intervalDistribution = interval;
-        this.amountDistribution = new DistConstant(Demand.stream, amount);
-        this.earliestDeliveryDurationDistribution =
-                new DistContinuousDuration(new DistConstant(Demand.stream, earliestDeliveryDuration.si), DurationUnit.SI);
-        this.latestDeliveryDurationDistribution =
-                new DistContinuousDuration(new DistConstant(Demand.stream, latestDeliveryDuration.si), DurationUnit.SI);
+        this(role, product, interval, new DistConstant(role.getActor().getModel().getDefaultStream(), amount),
+                new DistContinuousDuration(
+                        new DistConstant(role.getActor().getModel().getDefaultStream(), earliestDeliveryDuration.si),
+                        DurationUnit.SI),
+                new DistContinuousDuration(
+                        new DistConstant(role.getActor().getModel().getDefaultStream(), latestDeliveryDuration.si),
+                        DurationUnit.SI));
     }
 
     /**
+     * Make a demand generating process.
+     * @param role the role to which this process belongs
      * @param product the product
      * @param interval the distribution for the demand generation interval
      * @param amount the amount of product to order
-     * @param earliestDeliveryDate the earliest delivery date distribution
-     * @param latestDeliveryDate the latest delivery date distribution
+     * @param earliestDeliveryDurationDistribution the earliest delivery date distribution
+     * @param latestDeliveryDurationDistribution the latest delivery date distribution
      */
-    public Demand(final Product product, final DistContinuousDuration interval, final DistDiscrete amount,
-            final DistContinuousDuration earliestDeliveryDate, final DistContinuousDuration latestDeliveryDate)
+    public DemandGeneratingProcess(final ConsumingRole role, final Product product, final DistContinuousDuration interval,
+            final DistDiscrete amount, final DistContinuousDuration earliestDeliveryDurationDistribution,
+            final DistContinuousDuration latestDeliveryDurationDistribution)
     {
+        super(role);
         this.product = product;
         this.intervalDistribution = interval;
         this.amountDistribution = amount;
-        this.earliestDeliveryDurationDistribution = earliestDeliveryDate;
-        this.latestDeliveryDurationDistribution = latestDeliveryDate;
+        this.earliestDeliveryDurationDistribution = earliestDeliveryDurationDistribution;
+        this.latestDeliveryDurationDistribution = latestDeliveryDurationDistribution;
     }
 
     /**
+     * Make a demand generating process.
+     * @param role the role to which this process belongs
      * @param product the product
      * @param interval the distribution for the demand generation interval
      * @param amount the amount of product to order
-     * @param earliestDeliveryDate the earliest delivery date
-     * @param latestDeliveryDate the latest delivery date
+     * @param earliestDeliveryDuration the earliest delivery date
+     * @param latestDeliveryDuration the latest delivery date
      */
-    public Demand(final Product product, final DistContinuousDuration interval, final long amount,
-            final Duration earliestDeliveryDate, final Duration latestDeliveryDate)
+    public DemandGeneratingProcess(final ConsumingRole role, final Product product, final DistContinuousDuration interval,
+            final long amount, final Duration earliestDeliveryDuration, final Duration latestDeliveryDuration)
     {
-        this.product = product;
-        this.intervalDistribution = interval;
-        this.amountDistribution = new DistDiscreteConstant(Demand.stream, amount);
-        this.earliestDeliveryDurationDistribution =
-                new DistContinuousDuration(new DistConstant(Demand.stream, earliestDeliveryDate.si), DurationUnit.SI);
-        this.latestDeliveryDurationDistribution =
-                new DistContinuousDuration(new DistConstant(Demand.stream, latestDeliveryDate.si), DurationUnit.SI);
+        this(role, product, interval, new DistDiscreteConstant(role.getActor().getModel().getDefaultStream(), amount),
+                new DistContinuousDuration(
+                        new DistConstant(role.getActor().getModel().getDefaultStream(), earliestDeliveryDuration.si),
+                        DurationUnit.SI),
+                new DistContinuousDuration(
+                        new DistConstant(role.getActor().getModel().getDefaultStream(), latestDeliveryDuration.si),
+                        DurationUnit.SI));
     }
 
     /**

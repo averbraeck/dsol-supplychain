@@ -3,6 +3,7 @@ package nl.tudelft.simulation.supplychain.role.consuming;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.djunits.value.vdouble.scalar.Time;
 import org.djutils.event.EventType;
@@ -13,20 +14,26 @@ import nl.tudelft.simulation.jstats.distributions.DistContinuous;
 import nl.tudelft.simulation.jstats.distributions.DistDiscrete;
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Role;
+import nl.tudelft.simulation.supplychain.content.Bill;
+import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.InternalDemand;
+import nl.tudelft.simulation.supplychain.content.Payment;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
+import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
+import nl.tudelft.simulation.supplychain.role.financing.FixedCostProcess;
 
 /**
- * The demand generation role is a role for customers, markets, and other actors that have an autonomous generation of demand
- * for products. This is different from the InventoryRole, where demand generation is triggered by depletion of stock.
+ * The consuming role is a role for customers, markets, and other actors that have an autonomous generation of demand for
+ * products. This is different from the warehousing role, where demand generation is triggered by depletion of stock.
  * <p>
  * Copyright (c) 2022-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class DemandGenerationRole extends Role
+public class ConsumingRole extends Role<ConsumingRole>
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221206L;
@@ -35,18 +42,25 @@ public class DemandGenerationRole extends Role
     public static final EventType DEMAND_GENERATED_EVENT = new EventType("DEMAND_GENERATED_EVENT");
 
     /** map of Product - Demand pairs. */
-    private Map<Product, Demand> demandGenerators = new LinkedHashMap<Product, Demand>();
+    private Map<Product, DemandGeneratingProcess> demandGenerators = new LinkedHashMap<Product, DemandGeneratingProcess>();
 
     /** the administrative delay when sending messages. */
     private DistContinuousDuration administrativeDelay;
+
+    /** the necessary content handlers. */
+    private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of();
+
+    /** the necessary content handlers. */
+    private static Set<Class<? extends AutonomousProcess<FinancingRole>>> necessaryAutonomousProcesses =
+            Set.of(DemandGeneratingProcess.class);
 
     /**
      * @param owner the actor that has this role
      * @param administrativeDelay the administrative delay when sending messages
      */
-    public DemandGenerationRole(final DemandGeneratingActor owner, final DistContinuousDuration administrativeDelay)
+    public ConsumingRole(final ConsumingActor owner, final DistContinuousDuration administrativeDelay)
     {
-        super("demandGeneration", owner, new ContentReceiverDirect());
+        super("consuming", owner, new ContentReceiverDirect());
         this.administrativeDelay = administrativeDelay;
     }
 
@@ -54,7 +68,7 @@ public class DemandGenerationRole extends Role
      * @param product the product
      * @param demand the demand
      */
-    public void addDemandGenerator(final Product product, final Demand demand)
+    public void addDemandGenerator(final Product product, final DemandGeneratingProcess demand)
     {
         this.demandGenerators.put(product, demand);
         try
@@ -73,7 +87,7 @@ public class DemandGenerationRole extends Role
      * @param product the product to return the demand generator for
      * @return a demand, or null if it could not be found
      */
-    public Demand getDemandGenerator(final Product product)
+    public DemandGeneratingProcess getDemandGenerator(final Product product)
     {
         return this.demandGenerators.get(product);
     }
@@ -90,7 +104,7 @@ public class DemandGenerationRole extends Role
      * @param product the product
      * @param demand the demand
      */
-    protected void createInternalDemand(final Product product, final Demand demand)
+    protected void createInternalDemand(final Product product, final DemandGeneratingProcess demand)
     {
         // is the (same) demand still there?
         if (this.demandGenerators.get(product).equals(demand))
@@ -109,8 +123,8 @@ public class DemandGenerationRole extends Role
                 getSimulator().scheduleEventAbs(time, this, "createInternalDemand", args);
 
                 // we might collect some statistics for the internal demand
-                getActor().fireEvent(new TimedEvent<Time>(DemandGenerationRole.DEMAND_GENERATED_EVENT, id,
-                        getSimulator().getAbsSimulatorTime()));
+                getActor().fireEvent(
+                        new TimedEvent<Time>(ConsumingRole.DEMAND_GENERATED_EVENT, id, getSimulator().getAbsSimulatorTime()));
             }
             catch (Exception e)
             {

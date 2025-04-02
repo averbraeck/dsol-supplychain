@@ -38,7 +38,7 @@ import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Customer;
 import nl.tudelft.simulation.supplychain.reference.Retailer;
 import nl.tudelft.simulation.supplychain.role.buying.BuyingRoleYP;
-import nl.tudelft.simulation.supplychain.role.consuming.Demand;
+import nl.tudelft.simulation.supplychain.role.consuming.DemandGeneratingProcess;
 import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
 /**
@@ -102,7 +102,7 @@ public class Client extends Customer
         Duration hour = new Duration(1.0, DurationUnit.HOUR);
         //
         // create the internal demand for PCs
-        Demand demand = new Demand(this.product,
+        DemandGeneratingProcess demand = new DemandGeneratingProcess(this.product,
                 new DistContinuousDuration(new DistExponential(stream, 24.0), DurationUnit.HOUR), new DistConstant(stream, 1.0),
                 new DistConstantDuration(Duration.ZERO), new DistConstantDuration(new Duration(14.0, DurationUnit.DAY)));
         DemandGenerationRolePeriodic dg = new DemandGenerationRolePeriodic(this,
