@@ -25,7 +25,7 @@ public class ContentReceiverDirect extends ContentReceiver
     }
 
     @Override
-    public <C extends Content> void receiveContent(final C content, final ContentHandler<C> contentHandler)
+    public <C extends Content> void receiveContent(final C content, final ContentHandler<C, ?> contentHandler)
     {
         contentHandler.handleContent(content);
     }
