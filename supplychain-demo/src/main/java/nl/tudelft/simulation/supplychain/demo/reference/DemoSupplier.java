@@ -10,29 +10,29 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.djutils.draw.bounds.Bounds3d;
 import org.djutils.draw.point.OrientedPoint3d;
 
-import nl.tudelft.simulation.dsol.animation.D2.SingleImageRenderable;
+import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.jstats.streams.StreamInterface;
 import nl.tudelft.simulation.supplychain.actor.messaging.devices.reference.FaxDevice;
-import nl.tudelft.simulation.supplychain.actor.unit.dist.DistConstantDuration;
-import nl.tudelft.simulation.supplychain.actor.yellowpage.Topic;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.handler.order.OrderHandler;
 import nl.tudelft.simulation.supplychain.handler.order.OrderHandlerStock;
 import nl.tudelft.simulation.supplychain.handler.payment.PaymentHandler;
+import nl.tudelft.simulation.supplychain.handler.rfq.RequestForQuoteHandler;
 import nl.tudelft.simulation.supplychain.message.store.trade.LeanTradeMessageStore;
 import nl.tudelft.simulation.supplychain.messagehandlers.HandleAllMessages;
 import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.Money;
-import nl.tudelft.simulation.supplychain.handler.rfq.RequestForQuoteHandler;
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.supplychain.reference.Supplier;
 import nl.tudelft.simulation.supplychain.reference.Search;
+import nl.tudelft.simulation.supplychain.reference.Supplier;
+import nl.tudelft.simulation.supplychain.role.searching.Topic;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
 import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
 import nl.tudelft.simulation.supplychain.role.warehousing.RestockingServiceSafety;
 import nl.tudelft.simulation.supplychain.transport.TransportMode;
+import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
 /**
  * MtsMtomarket.java. <br>

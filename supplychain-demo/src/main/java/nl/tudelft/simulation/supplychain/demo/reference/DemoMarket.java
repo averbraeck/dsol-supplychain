@@ -11,7 +11,7 @@ import org.djunits.value.vdouble.scalar.Length;
 import org.djutils.draw.bounds.Bounds3d;
 import org.djutils.draw.point.OrientedPoint3d;
 
-import nl.tudelft.simulation.dsol.animation.D2.SingleImageRenderable;
+import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.jstats.distributions.DistConstant;
 import nl.tudelft.simulation.jstats.distributions.DistExponential;
@@ -19,29 +19,28 @@ import nl.tudelft.simulation.jstats.distributions.DistTriangular;
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.jstats.streams.StreamInterface;
 import nl.tudelft.simulation.supplychain.actor.messaging.devices.reference.WebApplication;
-import nl.tudelft.simulation.supplychain.actor.unit.dist.DistConstantDuration;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.handler.demand.DemandHandlerYP;
 import nl.tudelft.simulation.supplychain.handler.invoice.InvoiceHandler;
-import nl.tudelft.simulation.supplychain.handler.payment.PaymentPolicyEnum;
-import nl.tudelft.simulation.supplychain.handler.search.SearchAnswerHandler;
-import nl.tudelft.simulation.supplychain.message.store.trade.LeanTradeMessageStore;
-import nl.tudelft.simulation.supplychain.messagehandlers.HandleAllMessages;
-import nl.tudelft.simulation.supplychain.money.Bank;
-import nl.tudelft.simulation.supplychain.money.Money;
+import nl.tudelft.simulation.supplychain.handler.invoice.PaymentPolicyEnum;
 import nl.tudelft.simulation.supplychain.handler.orderconfirmation.OrderConfirmationHandler;
 import nl.tudelft.simulation.supplychain.handler.quote.QuoteComparatorEnum;
 import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandler;
 import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandlerAll;
+import nl.tudelft.simulation.supplychain.handler.search.SearchAnswerHandler;
 import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandler;
 import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandlerConsume;
+import nl.tudelft.simulation.supplychain.message.store.trade.LeanTradeMessageStore;
+import nl.tudelft.simulation.supplychain.messagehandlers.HandleAllMessages;
+import nl.tudelft.simulation.supplychain.money.Bank;
+import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Customer;
 import nl.tudelft.simulation.supplychain.reference.Search;
 import nl.tudelft.simulation.supplychain.role.consuming.DemandGeneratingProcess;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleSearch;
-import nl.tudelft.simulation.supplychain.role.consuming.DemandGeneratingProcess;
+import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
 /**
  * MtsMtomarket.java. <br>

@@ -2,9 +2,6 @@ package nl.tudelft.simulation.supplychain.gui;
 
 import java.rmi.RemoteException;
 
-import org.djunits.value.vdouble.scalar.Duration;
-
-import nl.tudelft.simulation.dsol.model.DSOLModel;
 import nl.tudelft.simulation.dsol.swing.gui.control.RunUntilPanel;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainAnimator;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;

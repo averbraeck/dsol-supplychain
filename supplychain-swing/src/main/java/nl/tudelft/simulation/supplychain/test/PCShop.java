@@ -1,7 +1,6 @@
 package nl.tudelft.simulation.supplychain.test;
 
 import java.rmi.RemoteException;
-import java.util.Iterator;
 
 import javax.naming.NamingException;
 
@@ -10,28 +9,28 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.djutils.draw.bounds.Bounds3d;
 import org.djutils.draw.point.OrientedPoint2d;
 
-import nl.tudelft.simulation.dsol.animation.D2.SingleImageRenderable;
+import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.dsol.swing.charts.xy.XYChart;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
+import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.handler.demand.DemandHandlerRFQ;
 import nl.tudelft.simulation.supplychain.handler.invoice.InvoiceHandler;
+import nl.tudelft.simulation.supplychain.handler.invoice.PaymentPolicyEnum;
 import nl.tudelft.simulation.supplychain.handler.order.OrderHandler;
 import nl.tudelft.simulation.supplychain.handler.order.OrderHandlerStock;
-import nl.tudelft.simulation.supplychain.handler.payment.PaymentHandler;
-import nl.tudelft.simulation.supplychain.handler.payment.PaymentPolicyEnum;
-import nl.tudelft.simulation.supplychain.message.store.trade.ContentStoreInterface;
-import nl.tudelft.simulation.supplychain.money.Bank;
-import nl.tudelft.simulation.supplychain.money.BankAccount;
-import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.handler.orderconfirmation.OrderConfirmationHandler;
+import nl.tudelft.simulation.supplychain.handler.payment.PaymentHandler;
 import nl.tudelft.simulation.supplychain.handler.quote.QuoteComparatorEnum;
 import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandler;
 import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandlerAll;
 import nl.tudelft.simulation.supplychain.handler.rfq.RequestForQuoteHandler;
 import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandler;
 import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandlerStock;
+import nl.tudelft.simulation.supplychain.money.Bank;
+import nl.tudelft.simulation.supplychain.money.BankAccount;
+import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Retailer;
 import nl.tudelft.simulation.supplychain.reference.Supplier;

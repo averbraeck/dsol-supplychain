@@ -8,8 +8,8 @@ import org.djutils.draw.point.OrientedPoint3d;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.animation.D2.Renderable2DInterface;
-import nl.tudelft.simulation.dsol.swing.animation.D2.AnimationPanel;
-import nl.tudelft.simulation.dsol.swing.animation.D2.InputListener;
+import nl.tudelft.simulation.dsol.swing.animation.d2.AnimationPanel;
+import nl.tudelft.simulation.dsol.swing.animation.d2.InputListener;
 import nl.tudelft.simulation.dsol.swing.introspection.gui.IntrospectionDialog;
 
 /**

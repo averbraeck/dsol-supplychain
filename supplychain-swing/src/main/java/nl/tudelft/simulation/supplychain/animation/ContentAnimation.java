@@ -10,7 +10,7 @@ import org.djutils.draw.point.OrientedPoint2d;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.animation.Locatable;
-import nl.tudelft.simulation.dsol.animation.D2.SingleImageRenderable;
+import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.message.trade.TradeMessage;
 

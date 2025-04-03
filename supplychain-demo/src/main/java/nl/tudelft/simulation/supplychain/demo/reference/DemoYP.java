@@ -9,18 +9,18 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.djutils.draw.bounds.Bounds3d;
 import org.djutils.draw.point.OrientedPoint3d;
 
-import nl.tudelft.simulation.dsol.animation.D2.SingleImageRenderable;
+import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.supplychain.actor.messaging.devices.reference.WebApplication;
-import nl.tudelft.simulation.supplychain.actor.unit.dist.DistConstantDuration;
+import nl.tudelft.simulation.supplychain.content.SearchRequest;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.handler.search.SearchRequestPolicy;
 import nl.tudelft.simulation.supplychain.message.store.EmptyMessageStore;
-import nl.tudelft.simulation.supplychain.message.trade.SearchRequest;
 import nl.tudelft.simulation.supplychain.messagehandlers.HandleAllMessages;
 import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.reference.YellowPage;
+import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
 /**
  * MtsMtoYP.java. <br>

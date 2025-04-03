@@ -10,7 +10,7 @@ import org.djutils.draw.point.OrientedPoint3d;
 import org.djutils.draw.point.Point3d;
 
 import nl.tudelft.simulation.dsol.animation.Locatable;
-import nl.tudelft.simulation.dsol.animation.D2.SingleImageRenderable;
+import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 
 /**

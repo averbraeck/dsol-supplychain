@@ -14,7 +14,7 @@ import org.djutils.draw.point.OrientedPoint2d;
 import org.djutils.draw.point.OrientedPoint3d;
 import org.djutils.draw.point.Point;
 
-import nl.tudelft.simulation.dsol.animation.D2.SingleImageRenderable;
+import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.supplychain.animation.ContentAnimator;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainAnimator;
