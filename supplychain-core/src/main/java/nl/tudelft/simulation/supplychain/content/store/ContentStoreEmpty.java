@@ -54,7 +54,7 @@ public class ContentStoreEmpty implements ContentStoreInterface
     }
 
     @Override
-    public void removeAllContents(final long groupingId)
+    public void removeAllContent(final long groupingId)
     {
         // do nothing
     }

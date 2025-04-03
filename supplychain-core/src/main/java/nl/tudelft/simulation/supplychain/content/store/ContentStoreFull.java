@@ -34,7 +34,7 @@ import nl.tudelft.simulation.supplychain.content.Shipment;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class FullContentStore implements ContentStoreInterface
+public class ContentStoreFull implements ContentStoreInterface
 {
     /** */
     private static final long serialVersionUID = 1L;
@@ -134,7 +134,7 @@ public class FullContentStore implements ContentStoreInterface
     }
 
     @Override
-    public void removeAllContents(final long groupingId)
+    public void removeAllContent(final long groupingId)
     {
         Throw.whenNull(this.owner, "ContentStore - owner has not been initialized");
         Map<Class<? extends Content>, List<? super Content>> contentMap = this.groupingContentMap.get(groupingId);

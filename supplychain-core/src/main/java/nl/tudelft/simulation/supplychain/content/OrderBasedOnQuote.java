@@ -2,6 +2,7 @@ package nl.tudelft.simulation.supplychain.content;
 
 import org.djunits.value.vdouble.scalar.Time;
 
+import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
@@ -45,4 +46,11 @@ public record OrderBasedOnQuote(PurchasingActor sender, SellingActor receiver, T
     {
         return this.quote.amount();
     }
+
+    @Override
+    public Money price()
+    {
+        return quote().price();
+    }
+    
 }

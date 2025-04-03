@@ -2,6 +2,7 @@ package nl.tudelft.simulation.supplychain.content;
 
 import org.djunits.value.vdouble.scalar.Time;
 
+import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.transport.TransportOption;
 
 /**
@@ -27,4 +28,10 @@ public interface Order extends GroupedContent, ProductContent
      * @return the accepted transport option
      */
     TransportOption transportOption();
+    
+    /**
+     * Return the price we plan to pay for the product.
+     * @return the price we plan to pay for the product
+     */
+    Money price();
 }

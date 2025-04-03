@@ -53,7 +53,7 @@ public interface ContentStoreInterface extends Serializable
      * groupingId were found.
      * @param groupingId the grouping identifier for the transaction
      */
-    void removeAllContents(long groupingId);
+    void removeAllContent(long groupingId);
 
     /**
      * Method getContentList returns a list of Content objects of class 'contentClass' based on the groupingId.
