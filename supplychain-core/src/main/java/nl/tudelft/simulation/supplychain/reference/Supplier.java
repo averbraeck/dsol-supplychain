@@ -2,7 +2,7 @@ package nl.tudelft.simulation.supplychain.reference;
 
 import java.io.Serializable;
 
-import org.djutils.draw.point.OrientedPoint2d;
+import org.djutils.draw.point.DirectedPoint2d;
 import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
@@ -46,7 +46,7 @@ public class Supplier extends SupplyChainActor implements Serializable
      * @throws ActorAlreadyDefinedException when the actor was already registered in the model
      */
     @SuppressWarnings("checkstyle:parameternumber")
-    public Supplier(final String id, final String name, final SupplyChainModelInterface model, final OrientedPoint2d location,
+    public Supplier(final String id, final String name, final SupplyChainModelInterface model, final DirectedPoint2d location,
             final String locationDescription, final Bank bank, final Money initialBalance,
             final ContentStoreInterface messageStore) throws ActorAlreadyDefinedException
     {

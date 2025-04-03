@@ -1,6 +1,6 @@
 package nl.tudelft.simulation.supplychain.reference;
 
-import org.djutils.draw.point.OrientedPoint2d;
+import org.djutils.draw.point.DirectedPoint2d;
 
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
@@ -34,7 +34,7 @@ public class DistributionCenter extends Retailer
      */
     @SuppressWarnings("checkstyle:parameternumber")
     public DistributionCenter(final String id, final String name, final SupplyChainModelInterface model,
-            final OrientedPoint2d location, final String locationDescription, final Bank bank, final Money initialBalance,
+            final DirectedPoint2d location, final String locationDescription, final Bank bank, final Money initialBalance,
             final ContentStoreInterface messageStore) throws ActorAlreadyDefinedException
     {
         super(id, name, model, location, locationDescription, bank, initialBalance, messageStore);

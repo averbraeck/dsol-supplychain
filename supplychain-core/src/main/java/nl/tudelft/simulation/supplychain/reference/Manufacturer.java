@@ -3,7 +3,7 @@ package nl.tudelft.simulation.supplychain.reference;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.djutils.draw.point.OrientedPoint2d;
+import org.djutils.draw.point.DirectedPoint2d;
 import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
@@ -44,7 +44,7 @@ public class Manufacturer extends DistributionCenter
      */
     @SuppressWarnings("checkstyle:parameternumber")
     public Manufacturer(final String id, final String name, final SupplyChainModelInterface model,
-            final OrientedPoint2d location, final String locationDescription, final Bank bank, final Money initialBalance,
+            final DirectedPoint2d location, final String locationDescription, final Bank bank, final Money initialBalance,
             final ContentStoreInterface messageStore) throws ActorAlreadyDefinedException
     {
         super(id, name, model, location, locationDescription, bank, initialBalance, messageStore);

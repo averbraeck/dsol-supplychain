@@ -6,7 +6,7 @@ import java.rmi.RemoteException;
 
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djutils.draw.bounds.Bounds3d;
-import org.djutils.draw.point.OrientedPoint2d;
+import org.djutils.draw.point.DirectedPoint2d;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.animation.Locatable;
@@ -121,7 +121,7 @@ public class ContentAnimation implements Locatable, Serializable
     }
 
     @Override
-    public OrientedPoint2d getLocation() throws RemoteException
+    public DirectedPoint2d getLocation() throws RemoteException
     {
         return this.linearInterpolation.getLocation(this.simulator.getSimulatorTime().si);
     }
