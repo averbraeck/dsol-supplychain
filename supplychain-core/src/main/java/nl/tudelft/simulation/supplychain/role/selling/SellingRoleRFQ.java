@@ -1,8 +1,10 @@
 package nl.tudelft.simulation.supplychain.role.selling;
 
-import nl.tudelft.simulation.supplychain.handler.order.OrderHandler;
-import nl.tudelft.simulation.supplychain.handler.payment.PaymentHandler;
-import nl.tudelft.simulation.supplychain.handler.rfq.RequestForQuoteHandler;
+import java.util.Set;
+
+import nl.tudelft.simulation.supplychain.content.Content;
+import nl.tudelft.simulation.supplychain.content.OrderBasedOnQuote;
+import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 
 /**
  * The selling role is a role that can handle several types of message content: order and payment in the minimum form. Depending
@@ -19,25 +21,28 @@ public class SellingRoleRFQ extends SellingRole
     /** the serial version uid. */
     private static final long serialVersionUID = 20221205L;
 
+    /** the necessary content handlers. */
+    private static Set<Class<? extends Content>> necessaryContentHandlers =
+            Set.of(RequestForQuote.class, OrderBasedOnQuote.class);
+
     /**
      * Constructs a new SellingRole for RFQ - Order - Payment.
      * @param owner the owner this role
-     * @param rfqHandler the Request for Quote handler
-     * @param orderHandler the order handler
-     * @param paymentHandler the payment handler
      */
-    public SellingRoleRFQ(final SellingActor owner, final RequestForQuoteHandler rfqHandler, final OrderHandler<?> orderHandler,
-            final PaymentHandler paymentHandler)
+    public SellingRoleRFQ(final SellingActor owner)
     {
         super(owner);
-        setContentHandler(rfqHandler);
-        setContentHandler(orderHandler);
-        setContentHandler(paymentHandler);
     }
 
     @Override
     public String getId()
     {
         return getActor().getName() + "-SELLING(RFQ)";
+    }
+
+    @Override
+    protected Set<Class<? extends Content>> getNecessaryContentHandlers()
+    {
+        return necessaryContentHandlers;
     }
 }

@@ -51,7 +51,6 @@ public abstract class PurchasingRole extends Role<PurchasingRole>
         return (PurchasingActor) super.getActor();
     }
 
-    /** {@inheritDoc} */
     @Override
     protected Set<Class<? extends AutonomousProcess<PurchasingRole>>> getNecessaryAutonomousProcesses()
     {

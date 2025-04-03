@@ -1,7 +1,10 @@
 package nl.tudelft.simulation.supplychain.role.selling;
 
+import java.util.Set;
+
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
+import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 
 /**
  * The selling role is a role that can handle several types of message content: order and payment in the minimum form. Depending
@@ -18,6 +21,9 @@ public abstract class SellingRole extends Role<SellingRole>
     /** */
     private static final long serialVersionUID = 20221206L;
 
+    /** the necessary autonomous processes. */
+    private static Set<Class<? extends AutonomousProcess<SellingRole>>> necessaryAutonomousProcesses = Set.of();
+
     /**
      * Create a SellingRole object for an actor.
      * @param owner the owner of this role
@@ -27,4 +33,9 @@ public abstract class SellingRole extends Role<SellingRole>
         super("selling", owner, new ContentReceiverDirect());
     }
 
+    @Override
+    protected Set<Class<? extends AutonomousProcess<SellingRole>>> getNecessaryAutonomousProcesses()
+    {
+        return necessaryAutonomousProcesses;
+    }
 }
