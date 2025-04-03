@@ -94,4 +94,13 @@ public abstract class WarehousingRole extends Role<WarehousingRole>
     {
         return this.inventory;
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public WarehousingActor getActor()
+    {
+        return (WarehousingActor) super.getActor();
+    }
+    
+    
 }

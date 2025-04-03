@@ -16,7 +16,6 @@ import org.djutils.event.TimedEvent;
 import org.djutils.exceptions.Throw;
 import org.pmw.tinylog.Logger;
 
-import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.content.Shipment;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
@@ -44,10 +43,10 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
     public static final EventType STOCK_FORECAST_UPDATE_EVENT = new EventType("STOCK_FORECAST_UPDATE_EVENT");
 
     /** the actow that owns the inventory. */
-    private final Actor owner;
+    private final WarehousingActor owner;
 
     /** the InventoryRole of the owner. */
-    private final WarehousingRole inventoryRole;
+    private final WarehousingRole warehousingRole;
 
     /** record keeping of the inventory. */
     private Map<Product, InventoryRecord> inventoryRecords = new LinkedHashMap<Product, InventoryRecord>();
@@ -57,23 +56,23 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
 
     /**
      * Create a new Inventory for an actor.
-     * @param inventoryRole the Role that physically handles the inventory.
+     * @param warehousingRole the Role that physically handles the inventory.
      */
-    public Inventory(final WarehousingRole inventoryRole)
+    public Inventory(final WarehousingRole warehousingRole)
     {
-        Throw.whenNull(inventoryRole, "inventoryRole cannot be null");
-        this.owner = inventoryRole.getActor();
-        this.inventoryRole = inventoryRole;
+        Throw.whenNull(warehousingRole, "inventoryRole cannot be null");
+        this.owner = warehousingRole.getActor();
+        this.warehousingRole = warehousingRole;
     }
 
     /**
      * Create a new Inventory for an actor, with an initial amount of products.
-     * @param inventoryRole the Role that physically handles the inventory.
+     * @param warehousingRole the Role that physically handles the inventory.
      * @param initialInventory the initial inventory
      */
-    public Inventory(final WarehousingRole inventoryRole, final List<ProductAmount> initialInventory)
+    public Inventory(final WarehousingRole warehousingRole, final List<ProductAmount> initialInventory)
     {
-        this(inventoryRole);
+        this(warehousingRole);
         Throw.whenNull(initialInventory, "initialInventory cannot be null");
         for (ProductAmount productAmount : initialInventory)
         {
@@ -87,7 +86,7 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
      * Return the actor who owns this inventory.
      * @return the actor who owns this inventory
      */
-    public Actor getOwner()
+    public WarehousingActor getOwner()
     {
         return this.owner;
     }
@@ -137,13 +136,13 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
      */
     public void addToInventory(final Shipment shipment)
     {
-        InventoryRecord inventoryRecord = this.inventoryRecords.get(shipment.getProduct());
+        InventoryRecord inventoryRecord = this.inventoryRecords.get(shipment.product());
         if (inventoryRecord == null)
         {
-            inventoryRecord = new InventoryRecord(this.owner, this.owner.getSimulator(), shipment.getProduct());
-            this.inventoryRecords.put(shipment.getProduct(), inventoryRecord);
+            inventoryRecord = new InventoryRecord(this.owner, this.owner.getSimulator(), shipment.product());
+            this.inventoryRecords.put(shipment.product(), inventoryRecord);
         }
-        inventoryRecord.addActualAmount(shipment.getAmount(), shipment.getTotalCargoValue().divideBy(shipment.getAmount()));
+        inventoryRecord.addActualAmount(shipment.amount(), shipment.totalCargoValue().divideBy(shipment.amount()));
         this.sendInventoryUpdateEvent(inventoryRecord);
     }
 
@@ -163,7 +162,7 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
         }
         // double unitprice = inventoryRecord.getUnitPrice();
         inventoryRecord.removeActualAmount(actualAmount);
-        this.inventoryRole.checkInventory(product);
+        this.warehousingRole.checkInventory(product);
         this.sendInventoryUpdateEvent(inventoryRecord);
         return actualAmount;
     }
@@ -227,7 +226,7 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
             return false;
         }
         inventoryRecord.changeClaimedAmount(delta);
-        this.inventoryRole.checkInventory(product);
+        this.warehousingRole.checkInventory(product);
         this.sendInventoryUpdateEvent(inventoryRecord);
         return true;
     }
@@ -282,7 +281,7 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
             return false;
         }
         inventoryRecord.changeOrderedAmount(delta);
-        this.inventoryRole.checkInventory(product);
+        this.warehousingRole.checkInventory(product);
         this.sendInventoryUpdateEvent(inventoryRecord);
         return true;
     }

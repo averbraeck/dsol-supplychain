@@ -1,6 +1,6 @@
 package nl.tudelft.simulation.supplychain.role.warehousing;
 
-import nl.tudelft.simulation.supplychain.actor.Actor;
+import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
 
 /**
  * InventoryActor is an interface to indicate that an Actor has a InventoryRole.
@@ -10,7 +10,7 @@ import nl.tudelft.simulation.supplychain.actor.Actor;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public interface WarehousingActor extends Actor
+public interface WarehousingActor extends FinancingActor
 {
     /**
      * Return the InventoryRole for this actor.

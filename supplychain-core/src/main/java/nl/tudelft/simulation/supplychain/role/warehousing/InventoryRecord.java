@@ -6,7 +6,6 @@ import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.pmw.tinylog.Logger;
 
-import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.money.MoneyUnit;
@@ -27,7 +26,7 @@ public class InventoryRecord implements Serializable
     private static final long serialVersionUID = 20221209L;
 
     /** the owner. */
-    private Actor owner = null;
+    private WarehousingActor owner = null;
 
     /** the simulator to schedule the depreciation. */
     private SupplyChainSimulatorInterface simulator = null;
@@ -55,7 +54,7 @@ public class InventoryRecord implements Serializable
      * @param simulator the simulator
      * @param product the product
      */
-    public InventoryRecord(final Actor owner, final SupplyChainSimulatorInterface simulator, final Product product)
+    public InventoryRecord(final WarehousingActor owner, final SupplyChainSimulatorInterface simulator, final Product product)
     {
         this.owner = owner;
         this.simulator = simulator;
@@ -214,7 +213,8 @@ public class InventoryRecord implements Serializable
         try
         {
             this.costprice = this.costprice.multiplyBy(1.0 - this.dailyDepreciation);
-            this.owner.getBankAccount().withdrawFromBalance(this.costprice.multiplyBy(this.dailyDepreciation));
+            this.owner.getFinancingRole().getBank().withdrawFromBalance(this.owner,
+                    this.costprice.multiplyBy(this.dailyDepreciation));
             this.simulator.scheduleEventRel(new Duration(1.0, DurationUnit.DAY), this, "depreciate", null);
         }
         catch (Exception exception)

@@ -54,7 +54,7 @@ public class ShipmentHandlerFineStock extends ShipmentHandlerStock
     {
         if (super.handleContent(shipment))
         {
-            Time time = shipment.getSender().getSimulatorTime();
+            Time time = getSimulatorTime();
             if ((time.gt(shipment.order().deliveryDate()))
                     && (time.lt(shipment.order().deliveryDate().plus(this.maximumTimeOut))))
             {
@@ -70,8 +70,8 @@ public class ShipmentHandlerFineStock extends ShipmentHandlerStock
                  */
 
                 // we are pragmatic -- just book it through the bank...
-                shipment.getSender().getBankAccount().withdrawFromBalance(fine);
-                shipment.getReceiver().getBankAccount().addToBalance(fine);
+                shipment.sender().getFinancingRole().getBank().withdrawFromBalance(shipment.sender(), fine);
+                shipment.receiver().getFinancingRole().getBank().addToBalance(shipment.receiver(), fine);
             }
             return true;
         }
