@@ -3,8 +3,8 @@ package nl.tudelft.simulation.supplychain.reference;
 import org.djutils.draw.point.OrientedPoint2d;
 
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
+import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
-import nl.tudelft.simulation.supplychain.message.store.trade.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.Money;
 

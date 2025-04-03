@@ -10,7 +10,7 @@ import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.OrderBasedOnQuote;
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
-import nl.tudelft.simulation.supplychain.message.store.trade.ContentStoreInterface;
+import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 
 /**
  * The QuoteHandlerAll just waits patiently till all the Quotes are in for each RequestForQuote that has been sent out. When

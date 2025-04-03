@@ -2,9 +2,9 @@ package nl.tudelft.simulation.supplychain.role.purchasing;
 
 import nl.tudelft.simulation.supplychain.handler.demand.DemandHandlerSearch;
 import nl.tudelft.simulation.supplychain.handler.invoice.InvoiceHandler;
-import nl.tudelft.simulation.supplychain.handler.search.SearchAnswerHandler;
 import nl.tudelft.simulation.supplychain.handler.orderconfirmation.OrderConfirmationHandler;
 import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandler;
+import nl.tudelft.simulation.supplychain.handler.search.SearchAnswerHandler;
 import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandler;
 
 /**

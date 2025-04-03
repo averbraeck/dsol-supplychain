@@ -10,10 +10,10 @@ import org.djutils.exceptions.Throw;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.Actor;
-import nl.tudelft.simulation.supplychain.content.Invoice;
 import nl.tudelft.simulation.supplychain.content.Content;
-import nl.tudelft.simulation.supplychain.content.GroupedContent;
 import nl.tudelft.simulation.supplychain.content.Demand;
+import nl.tudelft.simulation.supplychain.content.GroupedContent;
+import nl.tudelft.simulation.supplychain.content.Invoice;
 import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.content.OrderBasedOnQuote;
 import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
@@ -22,9 +22,9 @@ import nl.tudelft.simulation.supplychain.content.Payment;
 import nl.tudelft.simulation.supplychain.content.ProductionOrder;
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
-import nl.tudelft.simulation.supplychain.content.Shipment;
 import nl.tudelft.simulation.supplychain.content.SearchAnswer;
 import nl.tudelft.simulation.supplychain.content.SearchRequest;
+import nl.tudelft.simulation.supplychain.content.Shipment;
 
 /**
  * FullContentStore.java.

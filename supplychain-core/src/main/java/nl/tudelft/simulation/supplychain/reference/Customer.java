@@ -5,8 +5,8 @@ import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
+import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
-import nl.tudelft.simulation.supplychain.message.store.trade.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.role.consuming.ConsumingActor;
 import nl.tudelft.simulation.supplychain.role.consuming.ConsumingRole;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
