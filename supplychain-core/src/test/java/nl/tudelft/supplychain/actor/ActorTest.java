@@ -1,14 +1,14 @@
 package nl.tudelft.supplychain.actor;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.rmi.RemoteException;
 
 import org.djunits.value.vdouble.scalar.Time;
 import org.djutils.draw.bounds.Bounds3d;
-import org.djutils.draw.point.OrientedPoint2d;
+import org.djutils.draw.point.DirectedPoint2d;
 import org.djutils.exceptions.Try;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.actor.ActorNotFoundException;
@@ -37,12 +37,12 @@ public class ActorTest
     {
         SupplyChainSimulator simulator = new SupplyChainSimulator("sim", Time.ZERO);
         TestModel model = new TestModel(simulator);
-        TestActor actor = new TestActor("TA", "TestActor", model, new OrientedPoint2d(10, 10), "Dallas, TX");
+        TestActor actor = new TestActor("TA", "TestActor", model, new DirectedPoint2d(10, 10, 0), "Dallas, TX");
         assertEquals("TA", actor.getId());
         assertEquals("TestActor", actor.getName());
         assertEquals(model, actor.getModel());
         assertEquals(simulator, actor.getSimulator());
-        assertEquals(new OrientedPoint2d(10, 10), actor.getLocation());
+        assertEquals(new DirectedPoint2d(10, 10, 0), actor.getLocation());
         assertEquals("Dallas, TX", actor.getLocationDescription());
         assertEquals(0, actor.getEventListenerMap().size());
         assertEquals(-1.0, actor.getBounds().getMinX(), 0.0001);
@@ -55,20 +55,20 @@ public class ActorTest
         assertEquals(actor, model.getActor("TA"));
         assertEquals(0, actor.getRoles().size());
 
-        Try.testFail(() -> new TestActor(null, "TestActor", model, new OrientedPoint2d(10, 10), "Dallas, TX"),
+        Try.testFail(() -> new TestActor(null, "TestActor", model, new DirectedPoint2d(10, 10, 0), "Dallas, TX"),
                 NullPointerException.class);
-        Try.testFail(() -> new TestActor("", "TestActor", model, new OrientedPoint2d(10, 10), "Dallas, TX"),
+        Try.testFail(() -> new TestActor("", "TestActor", model, new DirectedPoint2d(10, 10, 0), "Dallas, TX"),
                 IllegalArgumentException.class);
-        Try.testFail(() -> new TestActor("TA", null, model, new OrientedPoint2d(10, 10), "Dallas, TX"),
+        Try.testFail(() -> new TestActor("TA", null, model, new DirectedPoint2d(10, 10, 0), "Dallas, TX"),
                 NullPointerException.class);
-        Try.testFail(() -> new TestActor("TA", "TestActor", null, new OrientedPoint2d(10, 10), "Dallas, TX"),
+        Try.testFail(() -> new TestActor("TA", "TestActor", null, new DirectedPoint2d(10, 10, 0), "Dallas, TX"),
                 NullPointerException.class);
         Try.testFail(() -> new TestActor("TA", "TestActor", model, null, "Dallas, TX"), NullPointerException.class);
-        Try.testFail(() -> new TestActor("TA", "TestActor", model, new OrientedPoint2d(10, 10), null),
+        Try.testFail(() -> new TestActor("TA", "TestActor", model, new DirectedPoint2d(10, 10, 0), null),
                 NullPointerException.class);
 
         Try.testFail(() -> model.getActor("XX"), ActorNotFoundException.class);
-        Try.testFail(() -> new TestActor("TA", "TestActor2", model, new OrientedPoint2d(10, 10), "Dallas, TX"),
+        Try.testFail(() -> new TestActor("TA", "TestActor2", model, new DirectedPoint2d(10, 10, 0), "Dallas, TX"),
                 ActorAlreadyDefinedException.class);
     }
 

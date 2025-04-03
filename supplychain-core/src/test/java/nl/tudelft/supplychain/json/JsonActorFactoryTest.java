@@ -1,14 +1,14 @@
 package nl.tudelft.supplychain.json;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.djunits.unit.DurationUnit;
 import org.djunits.unit.TimeUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
-import org.djutils.draw.point.OrientedPoint2d;
-import org.junit.Test;
+import org.djutils.draw.point.DirectedPoint2d;
+import org.junit.jupiter.api.Test;
 
 import com.google.gson.Gson;
 
@@ -74,7 +74,7 @@ public class JsonActorFactoryTest
         Gson gson = JsonActorFactory.instance(model);
         assertNotNull(gson);
         assertEquals(gson, JsonActorFactory.instance(model));
-        Actor actor = new TestActor("TA", "TestActor", model, new OrientedPoint2d(10, 10), "Dallas, TX");
+        Actor actor = new TestActor("TA", "TestActor", model, new DirectedPoint2d(10, 10, 0), "Dallas, TX");
         String as = gson.toJson(actor);
         assertNotNull(as);
         Actor a2 = gson.fromJson(as, Actor.class);

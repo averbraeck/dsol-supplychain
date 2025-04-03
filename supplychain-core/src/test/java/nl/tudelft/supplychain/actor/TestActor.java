@@ -1,11 +1,12 @@
 package nl.tudelft.supplychain.actor;
 
-import org.djutils.draw.point.OrientedPoint2d;
+import org.djutils.draw.bounds.Bounds3d;
+import org.djutils.draw.point.DirectedPoint2d;
 
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
+import nl.tudelft.simulation.supplychain.content.store.FullContentStore;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
-import nl.tudelft.simulation.supplychain.message.store.trade.TradeMessageStore;
 
 /**
  * TestActor reference implementaion to use in unit tests.
@@ -19,15 +20,17 @@ public class TestActor extends SupplyChainActor
 {
     private static final long serialVersionUID = 1L;
 
-    public TestActor(final String id, final String name, final SupplyChainModelInterface model, final OrientedPoint2d location,
+    public TestActor(final String id, final String name, final SupplyChainModelInterface model, final DirectedPoint2d location,
             final String locationDescription) throws ActorAlreadyDefinedException
     {
-        super(id, name, model, location, locationDescription, new TradeMessageStore());
+        super(id, name, model, location, locationDescription, new FullContentStore());
     }
 
+    /** {@inheritDoc} */
     @Override
-    public void checkNecessaryRoles()
+    public void setBounds(final Bounds3d bounds)
     {
-        // nothing to check, no roles
+        // nothing to do
     }
+
 }

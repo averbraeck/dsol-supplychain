@@ -1,18 +1,22 @@
 package nl.tudelft.supplychain.actor;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Set;
 
 import org.djunits.value.vdouble.scalar.Time;
-import org.djutils.draw.point.OrientedPoint2d;
-import org.junit.Test;
+import org.djutils.draw.point.DirectedPoint2d;
+import org.junit.jupiter.api.Test;
 
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.actor.Role;
+import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulator;
+import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 
 /**
  * RoleTest tests the method of the Role.
@@ -34,7 +38,7 @@ public class RoleTest
     {
         SupplyChainSimulator simulator = new SupplyChainSimulator("sim", Time.ZERO);
         TestModel model = new TestModel(simulator);
-        TestActor actor = new TestActor("TA", "TestActor", model, new OrientedPoint2d(10, 10), "Dallas, TX");
+        TestActor actor = new TestActor("TA", "TestActor", model, new DirectedPoint2d(10, 10, 0), "Dallas, TX");
         assertEquals(0, actor.getRoles().size());
         ContentReceiver messageReceiver = new ContentReceiverDirect();
         TestRole role = new TestRole("ROLE", actor, messageReceiver);
@@ -42,7 +46,7 @@ public class RoleTest
         assertTrue(actor.getRoles().contains(role));
     }
 
-    static class TestRole extends Role
+    static class TestRole extends Role<TestRole>
     {
         private static final long serialVersionUID = 1L;
 
@@ -50,5 +54,20 @@ public class RoleTest
         {
             super(id, actor, messageReceiver);
         }
+
+        /** {@inheritDoc} */
+        @Override
+        protected Set<Class<? extends Content>> getNecessaryContentHandlers()
+        {
+            return Set.of();
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        protected Set<Class<? extends AutonomousProcess<TestRole>>> getNecessaryAutonomousProcesses()
+        {
+            return Set.of();
+        }
+
     }
 }

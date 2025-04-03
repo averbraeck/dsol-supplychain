@@ -1,9 +1,9 @@
 package nl.tudelft.supplychain;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import nl.tudelft.simulation.supplychain.SupplyChainException;
 import nl.tudelft.simulation.supplychain.SupplyChainRuntimeException;
@@ -57,7 +57,7 @@ public class SupplyChainExceptionTest
         assertEquals(null, e1.getCause().getCause());
         assertEquals(0, e1.getSuppressed().length);
     }
-    
+
     /**
      * Test SupplyChainRuntimeException.
      */
