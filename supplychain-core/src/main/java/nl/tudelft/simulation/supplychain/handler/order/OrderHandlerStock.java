@@ -42,7 +42,7 @@ public class OrderHandlerStock extends OrderHandler<Order>
     {
         // send out the confirmation
         OrderConfirmation orderConfirmation =
-                new OrderConfirmation(getActor(), order.getSender(), order.getDemandId(), order, OrderConfirmation.CONFIRMED);
+                new OrderConfirmation(getActor(), order.getSender(), order.groupingId(), order, OrderConfirmation.CONFIRMED);
         sendContent(orderConfirmation, Duration.ZERO);
 
         Logger.trace("t={} - MTS ORDER CONFIRMATION of actor '{}': sent '{}'", getSimulator().getSimulatorTime(),

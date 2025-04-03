@@ -79,12 +79,12 @@ public class ManufacturingServiceResource extends ManufacturingService
         Duration ptime = this.productionTime.draw();
         if (!this.fixedTime)
         {
-            ptime = ptime.times(productionOrder.getAmount());
+            ptime = ptime.times(productionOrder.amount());
         }
-        Time startTime = productionOrder.getDateReady().minus(ptime);
+        Time startTime = productionOrder.dateReady().minus(ptime);
         startTime = Time.max(getOwner().getActor().getSimulatorTime(), startTime);
         // determine the needed raw materials
-        Product product = productionOrder.getProduct();
+        Product product = productionOrder.product();
         ImmutableMap<Product, Double> bom = product.getBillOfMaterials().getMaterials();
 
         HashMap<Product, Double> availableMaterials = new LinkedHashMap<>();
@@ -93,14 +93,14 @@ public class ManufacturingServiceResource extends ManufacturingService
         {
             Product raw = bomIter.next();
             double amount = bom.get(raw).doubleValue();
-            amount *= productionOrder.getAmount();
+            amount *= productionOrder.amount();
             availableMaterials.put(raw, Double.valueOf(amount));
         }
         // don't do anyting before production has to start
         Serializable[] args = new Serializable[] {productionOrder, ptime, availableMaterials};
         try
         {
-            System.out.println("DelayProduction: production started for product: " + productionOrder.getProduct());
+            System.out.println("DelayProduction: production started for product: " + productionOrder.product());
             getOwner().getSimulator().scheduleEventAbs(startTime, this, "startProduction", args);
         }
         catch (Exception e)
@@ -116,10 +116,10 @@ public class ManufacturingServiceResource extends ManufacturingService
         Duration ptime = this.productionTime.draw();
         if (!this.fixedTime)
         {
-            ptime = ptime.times(productionOrder.getAmount());
+            ptime = ptime.times(productionOrder.amount());
         }
 
-        Product product = productionOrder.getProduct();
+        Product product = productionOrder.product();
         ImmutableMap<Product, Double> bom = product.getBillOfMaterials().getMaterials();
 
         // check whether there is enough on stock for this order
@@ -129,7 +129,7 @@ public class ManufacturingServiceResource extends ManufacturingService
         {
             Product raw = bomIter.next();
             double amount = bom.get(raw).doubleValue();
-            amount *= productionOrder.getAmount();
+            amount *= productionOrder.amount();
             availableMaterials.put(raw, Double.valueOf(amount));
         }
 
@@ -198,9 +198,9 @@ public class ManufacturingServiceResource extends ManufacturingService
      */
     protected void endProduction(final ProductionOrder productionOrder)
     {
-        Product product = productionOrder.getProduct();
-        double amount = productionOrder.getAmount();
-        Money cost = productionOrder.getMaterialCost();
+        Product product = productionOrder.product();
+        double amount = productionOrder.amount();
+        Money cost = productionOrder.materialCost();
         getInventory().addToInventory(product, amount, cost.multiplyBy(this.profitMargin));
     }
 

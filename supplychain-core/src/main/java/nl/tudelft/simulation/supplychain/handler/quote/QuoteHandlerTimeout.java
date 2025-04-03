@@ -69,7 +69,7 @@ public class QuoteHandlerTimeout extends QuoteHandler
         {
             return false;
         }
-        long demandId = quote.getDemandId();
+        long demandId = quote.groupingId();
         ContentStoreInterface messageStore = getActor().getContentStore();
         int numberQuotes = messageStore.getContentList(demandId, Quote.class).size();
         int numberRFQs = messageStore.getContentList(demandId, RequestForQuote.class).size();

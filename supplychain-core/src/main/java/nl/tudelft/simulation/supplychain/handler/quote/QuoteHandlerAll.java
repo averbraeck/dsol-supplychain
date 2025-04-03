@@ -65,7 +65,7 @@ public class QuoteHandlerAll extends QuoteHandler
             return false;
         }
         // look if all quotes are there for the RFQs that we sent out
-        long id = quote.getDemandId();
+        long id = quote.groupingId();
         ContentStoreInterface messageStore = getActor().getContentStore();
         if (messageStore.getContentList(id, Quote.class).size() == messageStore.getContentList(id, RequestForQuote.class)
                 .size())

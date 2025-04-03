@@ -59,7 +59,7 @@ public class OrderConfirmationHandler extends ContentHandler<OrderConfirmation>
             try
             {
                 // TODO: place some business logic here to handle the problem
-                oldID = getActor().getContentStore().getContentList(orderConfirmation.getDemandId(), Demand.class).get(0);
+                oldID = getActor().getContentStore().getContentList(orderConfirmation.groupingId(), Demand.class).get(0);
 
                 if (oldID == null)
                 {
@@ -73,12 +73,12 @@ public class OrderConfirmationHandler extends ContentHandler<OrderConfirmation>
                 return false;
             }
 
-            Demand newID = new Demand(oldID.getSender(), oldID.getProduct(), oldID.getAmount(), oldID.getEarliestDeliveryDate(),
-                    oldID.getLatestDeliveryDate());
+            Demand newID = new Demand(oldID.sender(), oldID.product(), oldID.amount(), oldID.earliestDeliveryDate(),
+                    oldID.latestDeliveryDate());
             sendContent(newID, Duration.ZERO);
 
             // also clean the messageStore for the old demand
-            getActor().getContentStore().removeAllMessages(orderConfirmation.getDemandId());
+            getActor().getContentStore().removeAllMessages(orderConfirmation.groupingId());
         }
         return true;
     }

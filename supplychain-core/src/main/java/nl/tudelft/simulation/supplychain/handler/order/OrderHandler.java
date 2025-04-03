@@ -86,7 +86,7 @@ public abstract class OrderHandler<O extends Order> extends ContentHandler<O, Se
                 // available: make shipment and ship to customer
                 Money unitPrice = this.stock.getUnitPrice(product);
                 double actualAmount = this.stock.removeFromInventory(product, amount);
-                Shipment shipment = new Shipment(getActor(), order.getSender(), order.getDemandId(), order, product,
+                Shipment shipment = new Shipment(getActor(), order.getSender(), order.groupingId(), order, product,
                         actualAmount, unitPrice.multiplyBy(actualAmount));
                 shipment.setInTransit(true);
 
@@ -95,7 +95,7 @@ public abstract class OrderHandler<O extends Order> extends ContentHandler<O, Se
                 sendContent(shipment, transportTime);
 
                 // send a invoice when the shipment leaves...
-                Invoice invoice = new Invoice(getActor(), order.getSender(), order.getDemandId(), order,
+                Invoice invoice = new Invoice(getActor(), order.getSender(), order.groupingId(), order,
                         getSimulator().getAbsSimulatorTime().plus(new Duration(14.0, DurationUnit.DAY)),
                         shipment.getTotalCargoValue(), "SALE");
 

@@ -53,15 +53,15 @@ public abstract class ManufacturingRole extends Role
      */
     public boolean acceptProductionOrder(final ProductionOrder productionOrder)
     {
-        if (this.productionServices.containsKey(productionOrder.getProduct()))
+        if (this.productionServices.containsKey(productionOrder.product()))
         {
             Logger.trace("Production for actor '{}': acceptProductionOrder: production service found for product: {}",
-                    getActor().getName(), productionOrder.getProduct().getName());
-            this.productionServices.get(productionOrder.getProduct()).acceptProductionOrder(productionOrder);
+                    getActor().getName(), productionOrder.product().getName());
+            this.productionServices.get(productionOrder.product()).acceptProductionOrder(productionOrder);
             return true;
         }
         Logger.trace("Production for actor '{}': acceptProductionOrder: could not find production service for product: {}",
-                getActor().getName(), productionOrder.getProduct().getName());
+                getActor().getName(), productionOrder.product().getName());
         return false;
     }
 
