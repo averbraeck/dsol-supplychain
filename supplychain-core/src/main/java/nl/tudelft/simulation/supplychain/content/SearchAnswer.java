@@ -29,6 +29,6 @@ public record SearchAnswer(SearchingActor sender, Actor receiver, Time timestamp
     public SearchAnswer(final SearchRequest searchRequest, final List<Actor> actorList)
     {
         this(searchRequest.receiver(), searchRequest.sender(), searchRequest.sender().getSimulatorTime(),
-                searchRequest.sender().getModel().getUniqueMessageId(), searchRequest.groupingId(), searchRequest, actorList);
+                searchRequest.sender().getModel().getUniqueContentId(), searchRequest.groupingId(), searchRequest, actorList);
     }
 }

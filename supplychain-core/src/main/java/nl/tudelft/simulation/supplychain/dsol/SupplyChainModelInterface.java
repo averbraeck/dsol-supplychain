@@ -20,10 +20,10 @@ import nl.tudelft.simulation.supplychain.actor.ActorNotFoundException;
 public interface SupplyChainModelInterface extends DsolModel<Duration, SupplyChainSimulatorInterface>
 {
     /**
-     * Return a unique message id.
-     * @return a unique message id
+     * Return a unique content id.
+     * @return a unique content id
      */
-    long getUniqueMessageId();
+    long getUniqueContentId();
 
     /**
      * Calculate the distance between two points as a Length. The point could be in lat/lon, on an orthogonal grid, or based on

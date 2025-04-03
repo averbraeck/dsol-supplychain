@@ -30,7 +30,7 @@ public record OrderBasedOnQuote(PurchasingActor sender, SellingActor receiver, T
     public OrderBasedOnQuote(final PurchasingActor sender, final SellingActor receiver, final Time deliveryDate,
             final Quote quote, final TransportOption transportOption)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), quote.groupingId(), quote,
+        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), quote.groupingId(), quote,
                 deliveryDate, transportOption);
     }
 

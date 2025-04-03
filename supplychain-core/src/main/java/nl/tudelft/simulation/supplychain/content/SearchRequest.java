@@ -30,27 +30,27 @@ public record SearchRequest(Actor sender, SearchingActor receiver, Time timestam
     public SearchRequest(final Actor sender, final SearchingActor receiver, final long groupingId, final Length maximumDistance,
             final int maximumNumber, final Product product)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), groupingId, maximumDistance,
+        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), groupingId, maximumDistance,
                 maximumNumber, product);
     }
 
     public SearchRequest(final Actor sender, final SearchingActor receiver, final long groupingId, final Length maximumDistance,
             final Product product)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), groupingId, maximumDistance,
+        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), groupingId, maximumDistance,
                 Integer.MAX_VALUE, product);
     }
 
     public SearchRequest(final Actor sender, final SearchingActor receiver, final long groupingId, final int maximumNumber,
             final Product product)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), groupingId,
+        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), groupingId,
                 Length.POS_MAXVALUE, maximumNumber, product);
     }
 
     public SearchRequest(final Actor sender, final SearchingActor receiver, final long groupingId, final Product product)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), groupingId,
+        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), groupingId,
                 Length.POS_MAXVALUE, Integer.MAX_VALUE, product);
     }
 

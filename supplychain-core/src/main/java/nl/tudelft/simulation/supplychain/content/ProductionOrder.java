@@ -28,7 +28,7 @@ public record ProductionOrder(Actor sender, Actor receiver, Time timestamp, long
 {
     public ProductionOrder(final Actor sender, final Actor receiver, final Demand demand, final Time dateReady)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), demand.groupingId(), demand,
+        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), demand.groupingId(), demand,
                 demand.product(), demand.amount(), dateReady);
     }
 

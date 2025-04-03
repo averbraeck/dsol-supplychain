@@ -27,6 +27,6 @@ public record TestContentFields(Actor sender, Actor receiver, Time timestamp, lo
     public TestContentFields(final Actor sender, final Actor receiver, final Duration duration, final String name,
             final boolean yesno)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), duration, name, yesno);
+        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), duration, name, yesno);
     }
 }

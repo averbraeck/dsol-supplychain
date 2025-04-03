@@ -38,7 +38,7 @@ public record Quote(SellingActor sender, PurchasingActor receiver, Time timestam
             final Product product, final double amount, final Money price, final Time proposedShippingDate,
             final TransportOption transportOption, final Time validityTime)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), requestForQuote.groupingId(),
+        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), requestForQuote.groupingId(),
                 requestForQuote, product, amount, price, proposedShippingDate, transportOption, validityTime);
     }
 

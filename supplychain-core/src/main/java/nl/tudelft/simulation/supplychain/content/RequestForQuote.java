@@ -32,7 +32,7 @@ public record RequestForQuote(PurchasingActor sender, SellingActor receiver, Tim
     public RequestForQuote(final PurchasingActor sender, final SellingActor receiver, final Demand demand,
             final TransportOption preferredTransportOption, final Duration cutoffDuration)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), demand.groupingId(), demand,
+        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), demand.groupingId(), demand,
                 preferredTransportOption, cutoffDuration);
     }
 

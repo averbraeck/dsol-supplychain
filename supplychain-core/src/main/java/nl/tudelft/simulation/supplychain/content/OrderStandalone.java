@@ -34,8 +34,8 @@ public record OrderStandalone(PurchasingActor sender, SellingActor receiver, Tim
     public OrderStandalone(final PurchasingActor sender, final SellingActor receiver, final Time deliveryDate,
             final Product product, final double amount, final Money price, final TransportOption transportOption)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(),
-                sender.getModel().getUniqueMessageId(), deliveryDate, product, amount, price, transportOption);
+        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(),
+                sender.getModel().getUniqueContentId(), deliveryDate, product, amount, price, transportOption);
     }
 
 }

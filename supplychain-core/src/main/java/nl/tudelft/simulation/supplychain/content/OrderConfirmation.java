@@ -28,7 +28,7 @@ public record OrderConfirmation(SellingActor sender, PurchasingActor receiver, T
     public OrderConfirmation(final SellingActor sender, final PurchasingActor receiver, final Order order,
             final boolean confirmed)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), order.groupingId(), order,
+        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), order.groupingId(), order,
                 confirmed);
     }
 

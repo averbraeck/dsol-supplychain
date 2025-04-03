@@ -29,7 +29,7 @@ public record Invoice(FinancingActor sender, FinancingActor receiver, Time times
     public Invoice(final FinancingActor sender, final FinancingActor receiver, final Order order, final Time finalPaymentDate,
             final Money price, final String description)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), order.groupingId(), order,
+        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), order.groupingId(), order,
                 finalPaymentDate, price, description);
     }
 }

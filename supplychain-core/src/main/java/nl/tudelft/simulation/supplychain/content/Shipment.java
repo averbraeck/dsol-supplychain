@@ -28,7 +28,7 @@ public record Shipment(SellingActor sender, PurchasingActor receiver, Time times
 {
     public Shipment(final SellingActor sender, final PurchasingActor receiver, final Order order, final Money totalCargoValue)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), order.groupingId(), order,
+        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), order.groupingId(), order,
                 totalCargoValue);
     }
 

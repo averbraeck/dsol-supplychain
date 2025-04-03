@@ -54,7 +54,7 @@ public abstract class SupplyChainModel extends AbstractDsolModel<Duration, Suppl
     }
 
     @Override
-    public long getUniqueMessageId()
+    public long getUniqueContentId()
     {
         return this.uniqueMessageId.getAndIncrement();
     }

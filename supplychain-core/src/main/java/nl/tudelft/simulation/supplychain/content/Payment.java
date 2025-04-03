@@ -24,6 +24,6 @@ public record Payment(FinancingActor sender, FinancingActor receiver, Time times
     public Payment(final Invoice invoice)
     {
         this(invoice.receiver(), invoice.sender(), invoice.sender().getSimulatorTime(),
-                invoice.sender().getModel().getUniqueMessageId(), invoice.groupingId(), invoice);
+                invoice.sender().getModel().getUniqueContentId(), invoice.groupingId(), invoice);
     }
 }

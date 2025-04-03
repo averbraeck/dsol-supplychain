@@ -31,7 +31,7 @@ public record Demand(Actor sender, Actor receiver, Time timestamp, long uniqueId
     public Demand(final Actor sender, final Product product, final double amount, final Time earliestDeliveryDate,
             final Time latestDeliveryDate)
     {
-        this(sender, sender, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(),
-                sender.getModel().getUniqueMessageId(), product, amount, earliestDeliveryDate, latestDeliveryDate);
+        this(sender, sender, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(),
+                sender.getModel().getUniqueContentId(), product, amount, earliestDeliveryDate, latestDeliveryDate);
     }
 }
