@@ -8,9 +8,9 @@ import org.djutils.draw.point.Point2d;
 import org.djutils.exceptions.Throw;
 import org.pmw.tinylog.Logger;
 
-import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.money.Money;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 
 /**
  * Class for comparing quotes.
@@ -35,7 +35,7 @@ public class QuoteComparator implements Comparator<Quote>, Serializable
      * @param owner the supply chain actor
      * @param comparatorType the type of comparator to use
      */
-    public QuoteComparator(final Role owner, final QuoteComparatorEnum comparatorType)
+    public QuoteComparator(final PurchasingRole owner, final QuoteComparatorEnum comparatorType)
     {
         super();
         Throw.whenNull(owner, "owner cannot be null");
@@ -47,14 +47,14 @@ public class QuoteComparator implements Comparator<Quote>, Serializable
     @Override
     public int compare(final Quote quote1, final Quote quote2)
     {
-        Money price0 = quote1.getPrice();
-        Money price1 = quote2.getPrice();
-        int priceCompare = Double.compare(price0.getAmount(), price1.getAmount());
-        Time date0 = quote1.getProposedDeliveryDate();
-        Time date1 = quote2.getProposedDeliveryDate();
+        Money price1 = quote1.price();
+        Money price2 = quote2.price();
+        int priceCompare = Double.compare(price1.getAmount(), price2.getAmount());
+        Time date0 = quote1.proposedDeliveryDate();
+        Time date1 = quote2.proposedDeliveryDate();
         int dateCompare = Double.compare(date0.si, date1.si);
-        double distance0 = quote1.getSender().getLocation().distance(this.ownerPosition);
-        double distance1 = quote2.getSender().getLocation().distance(this.ownerPosition);
+        double distance0 = quote1.sender().getLocation().distance(this.ownerPosition);
+        double distance1 = quote2.sender().getLocation().distance(this.ownerPosition);
         int distanceCompare = Double.compare(distance0, distance1);
         switch (this.comparatorType)
         {

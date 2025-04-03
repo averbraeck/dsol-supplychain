@@ -1,6 +1,5 @@
 package nl.tudelft.simulation.supplychain.content;
 
-import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.supplychain.product.Product;
@@ -23,17 +22,16 @@ import nl.tudelft.simulation.supplychain.transport.TransportOption;
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
  * @param demand demand that triggered the process
  * @param preferredTransportOption the preferred transport option for moving the product from sender to receiver
- * @param cutoffDuration after how much time will the RFQ stop collecting quotes?
+ * @param cutoffDate after what point in time will the RFQ stop collecting quotes?
  */
 public record RequestForQuote(PurchasingActor sender, SellingActor receiver, Time timestamp, long uniqueId, long groupingId,
-        Demand demand, TransportOption preferredTransportOption, Duration cutoffDuration)
-        implements GroupedContent, ProductContent
+        Demand demand, TransportOption preferredTransportOption, Time cutoffDate) implements GroupedContent, ProductContent
 {
     public RequestForQuote(final PurchasingActor sender, final SellingActor receiver, final Demand demand,
-            final TransportOption preferredTransportOption, final Duration cutoffDuration)
+            final TransportOption preferredTransportOption, final Time cutoffDate)
     {
         this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), demand.groupingId(), demand,
-                preferredTransportOption, cutoffDuration);
+                preferredTransportOption, cutoffDate);
     }
 
     @Override
@@ -47,4 +45,21 @@ public record RequestForQuote(PurchasingActor sender, SellingActor receiver, Tim
     {
         return this.demand.amount();
     }
+
+    /**
+     * @return earliestDeliveryDate the earliest delivery date
+     */
+    public Time earliestDeliveryDate()
+    {
+        return demand().earliestDeliveryDate();
+    }
+
+    /**
+     * @return latestDeliveryDate the latest delivery date
+     */
+    public Time latestDeliveryDate()
+    {
+        return demand().latestDeliveryDate();
+    }
+
 }

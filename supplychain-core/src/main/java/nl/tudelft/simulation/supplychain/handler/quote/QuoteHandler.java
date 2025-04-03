@@ -7,9 +7,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
-import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 
 /**
  * The abstract QuoteHandler can be extended into several ways how to deal with Quotes. One is the QuoteHandlerAll that waits
@@ -21,7 +21,7 @@ import nl.tudelft.simulation.supplychain.handler.ContentHandler;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public abstract class QuoteHandler extends ContentHandler<Quote>
+public abstract class QuoteHandler extends ContentHandler<Quote, PurchasingRole>
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
@@ -50,7 +50,7 @@ public abstract class QuoteHandler extends ContentHandler<Quote>
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the margin within which the offered amount may differ from the requested amount.
      */
-    public QuoteHandler(final String id, final Role owner, final QuoteComparatorEnum comparatorType,
+    public QuoteHandler(final String id, final PurchasingRole owner, final QuoteComparatorEnum comparatorType,
             final DistContinuousDuration handlingTime, final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super(id, owner, Quote.class);
@@ -69,7 +69,7 @@ public abstract class QuoteHandler extends ContentHandler<Quote>
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the margin within which the offered amount may differ from the requested amount.
      */
-    public QuoteHandler(final String id, final Role owner, final Comparator<Quote> comparator,
+    public QuoteHandler(final String id, final PurchasingRole owner, final Comparator<Quote> comparator,
             final DistContinuousDuration handlingTime, final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super(id, owner, Quote.class);
@@ -111,15 +111,15 @@ public abstract class QuoteHandler extends ContentHandler<Quote>
         {
             Quote quote = quoteIterator.next();
             // only take valid quotes...
-            if (quote.getValidityTime().gt(getSimulator().getAbsSimulatorTime()) && quote.getAmount() > 0.0)
+            if (quote.validityTime().gt(getSimulator().getAbsSimulatorTime()) && quote.amount() > 0.0)
             {
-                if (((quote.getPrice().getAmount() / quote.getAmount()))
-                        / quote.getProduct().getUnitMarketPrice().getAmount() <= (1.0 + this.maximumPriceMargin))
+                if (((quote.price().getAmount() / quote.amount()))
+                        / quote.product().getUnitMarketPrice().getAmount() <= (1.0 + this.maximumPriceMargin))
                 {
-                    if (quote.getAmount() <= quote.getRequestForQuote().getAmount() && ((quote.getRequestForQuote().getAmount()
-                            / quote.getAmount()) <= (1.0 + this.minimumAmountMargin)))
+                    if (quote.amount() <= quote.requestForQuote().amount()
+                            && ((quote.requestForQuote().amount() / quote.amount()) <= (1.0 + this.minimumAmountMargin)))
                     {
-                        if ((quote.getProposedDeliveryDate().le(quote.getRequestForQuote().getLatestDeliveryDate())))
+                        if ((quote.proposedDeliveryDate().le(quote.requestForQuote().latestDeliveryDate())))
                         // && (quote.getProposedDeliveryDate() >= quote
                         // .getRequestForQuote()
                         // .getEarliestDeliveryDate()))
@@ -130,10 +130,9 @@ public abstract class QuoteHandler extends ContentHandler<Quote>
                         {
                             if (QuoteHandler.DEBUG)
                             {
-                                System.err.println("QuoteHandler: quote: + prop delivery date: "
-                                        + quote.getProposedDeliveryDate() + " earliest delivery date: "
-                                        + quote.getRequestForQuote().getEarliestDeliveryDate() + " latest delivery date: "
-                                        + quote.getRequestForQuote().getLatestDeliveryDate());
+                                System.err.println("QuoteHandler: quote: + prop delivery date: " + quote.proposedDeliveryDate()
+                                        + " earliest delivery date: " + quote.requestForQuote().earliestDeliveryDate()
+                                        + " latest delivery date: " + quote.requestForQuote().latestDeliveryDate());
                                 System.err.println("Quote: " + quote);
                                 System.err.println("Owner of quote handler: " + getActor().getName());
                             }
@@ -145,7 +144,7 @@ public abstract class QuoteHandler extends ContentHandler<Quote>
                         if (QuoteHandler.DEBUG)
                         {
                             System.err.println("DEBUG -- QuoteHandler: " + " Quote: " + quote + " has invalid amount : "
-                                    + quote.getAmount() + ">" + quote.getRequestForQuote().getAmount());
+                                    + quote.amount() + ">" + quote.requestForQuote().amount());
                         }
                     }
                 }
@@ -154,8 +153,8 @@ public abstract class QuoteHandler extends ContentHandler<Quote>
                     if (QuoteHandler.DEBUG)
                     {
                         System.err.println("DEBUG -- QuoteHandler: " + " Price of quote: " + quote + " is too high: "
-                                + (((quote.getPrice().getAmount() / quote.getAmount()))
-                                        / quote.getProduct().getUnitMarketPrice().getAmount() + "> "
+                                + (((quote.price().getAmount() / quote.amount()))
+                                        / quote.product().getUnitMarketPrice().getAmount() + "> "
                                         + (1.0 + this.maximumPriceMargin)));
                     }
                 }
@@ -165,7 +164,7 @@ public abstract class QuoteHandler extends ContentHandler<Quote>
                 if (QuoteHandler.DEBUG)
                 {
                     System.err.println("DEBUG -- QuoteHandler: " + " Quote: " + quote + " is invalid (before simtime) : "
-                            + quote.getValidityTime() + " < " + getSimulator().getSimulatorTime());
+                            + quote.validityTime() + " < " + getSimulator().getSimulatorTime());
                 }
             }
         }

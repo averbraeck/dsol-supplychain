@@ -123,7 +123,7 @@ public class DemandHandlerRFQ extends DemandHandler
             TransportOption transportOption =
                     this.transportChoiceProvider.chooseTransportOptions(transportOptions, demand.product().getSku());
             RequestForQuote rfq = new RequestForQuote(getRole().getActor(), (SellingActor) supplier, demand, transportOption,
-                    this.cutoffDuration);
+                    getSimulatorTime().plus(this.cutoffDuration));
             sendContent(rfq, delay);
         }
         return true;

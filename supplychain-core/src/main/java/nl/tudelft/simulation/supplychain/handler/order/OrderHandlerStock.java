@@ -8,6 +8,7 @@ import org.djunits.value.vdouble.scalar.Time;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
+import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.content.OrderBasedOnQuote;
 import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
 import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
@@ -42,21 +43,20 @@ public class OrderHandlerStock extends OrderHandler<Order>
     {
         // send out the confirmation
         OrderConfirmation orderConfirmation =
-                new OrderConfirmation(getActor(), order.getSender(), order.groupingId(), order, OrderConfirmation.CONFIRMED);
+                new OrderConfirmation(getRole().getActor(), order.sender(), order.groupingId(), order, true);
         sendContent(orderConfirmation, Duration.ZERO);
 
         Logger.trace("t={} - MTS ORDER CONFIRMATION of actor '{}': sent '{}'", getSimulator().getSimulatorTime(),
                 getActor().getName(), orderConfirmation);
 
         // tell the stock that we claimed some amount
-        this.stock.changeClaimedAmount(order.getProduct(), order.getAmount());
+        this.stock.changeClaimedAmount(order.product(), order.amount());
 
         // wait till the right time to start shipping
         try
         {
-            Duration transportationDuration =
-                    order.getTransportOption().estimatedTotalTransportDuration(order.getProduct().getSku());
-            Time proposedShippingDate = ((OrderBasedOnQuote) order).getQuote().getProposedShippingDate();
+            Duration transportationDuration = order.transportOption().estimatedTotalTransportDuration(order.product().getSku());
+            Time proposedShippingDate = ((OrderBasedOnQuote) order).quote().proposedShippingDate();
             Time scheduledShippingTime = proposedShippingDate.minus(transportationDuration);
 
             // start shipping 8 hours from now at the earliest

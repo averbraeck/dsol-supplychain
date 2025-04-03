@@ -5,7 +5,7 @@ import org.djutils.draw.point.DirectedPoint2d;
 
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
-import nl.tudelft.simulation.supplychain.content.store.FullContentStore;
+import nl.tudelft.simulation.supplychain.content.store.ContentStoreFull;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 
 /**
@@ -23,7 +23,7 @@ public class TestActor extends SupplyChainActor
     public TestActor(final String id, final String name, final SupplyChainModelInterface model, final DirectedPoint2d location,
             final String locationDescription) throws ActorAlreadyDefinedException
     {
-        super(id, name, model, location, locationDescription, new FullContentStore());
+        super(id, name, model, location, locationDescription, new ContentStoreFull());
     }
 
     /** {@inheritDoc} */

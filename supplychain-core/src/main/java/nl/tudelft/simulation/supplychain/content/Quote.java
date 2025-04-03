@@ -25,21 +25,21 @@ import nl.tudelft.simulation.supplychain.transport.TransportOption;
  * @param product the product of the quote, couldbe a replacement product
  * @param amount the amount of products, could be less than the requested amount in the RFQ
  * @param price the quotation price
- * @param proposedShippingDate the intended shipping date of the products
+ * @param proposedDeliveryDate the intended delivery date of the products
  * @param transportOption the transport option offered
  * @param validityTime the time on the simulator clock until which the quote is valid
  */
 public record Quote(SellingActor sender, PurchasingActor receiver, Time timestamp, long uniqueId, long groupingId,
-        RequestForQuote requestForQuote, Product product, double amount, Money price, Time proposedShippingDate,
+        RequestForQuote requestForQuote, Product product, double amount, Money price, Time proposedDeliveryDate,
         TransportOption transportOption, Time validityTime) implements GroupedContent, ProductContent
 {
     @SuppressWarnings("checkstyle:parameternumber")
     public Quote(final SellingActor sender, final PurchasingActor receiver, final RequestForQuote requestForQuote,
-            final Product product, final double amount, final Money price, final Time proposedShippingDate,
+            final Product product, final double amount, final Money price, final Time proposedDeliveryDate,
             final TransportOption transportOption, final Time validityTime)
     {
         this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), requestForQuote.groupingId(),
-                requestForQuote, product, amount, price, proposedShippingDate, transportOption, validityTime);
+                requestForQuote, product, amount, price, proposedDeliveryDate, transportOption, validityTime);
     }
 
 }

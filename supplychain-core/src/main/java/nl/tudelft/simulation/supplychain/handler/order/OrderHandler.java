@@ -82,22 +82,22 @@ public abstract class OrderHandler<O extends Order> extends ContentHandler<O, Se
             else
             {
                 // tell the stock that we got the claimed amount
-                this.stock.changeClaimedAmount(order.getProduct(), -order.getAmount());
+                this.stock.changeClaimedAmount(order.product(), -order.amount());
                 // available: make shipment and ship to customer
                 Money unitPrice = this.stock.getUnitPrice(product);
                 double actualAmount = this.stock.removeFromInventory(product, amount);
-                Shipment shipment = new Shipment(getActor(), order.getSender(), order.groupingId(), order, product,
+                Shipment shipment = new Shipment(getRole().getActor(), order.sender(), order.groupingId(), order, product,
                         actualAmount, unitPrice.multiplyBy(actualAmount));
                 shipment.setInTransit(true);
 
-                Duration transportTime = order.getTransportOption().estimatedTotalTransportDuration(product.getSku());
+                Duration transportTime = order.transportOption().estimatedTotalTransportDuration(product.getSku());
                 Logger.trace("OrderHandlerStock: transportation delay for order: {} is: {}", order, transportTime);
                 sendContent(shipment, transportTime);
 
                 // send a invoice when the shipment leaves...
-                Invoice invoice = new Invoice(getActor(), order.getSender(), order.groupingId(), order,
-                        getSimulator().getAbsSimulatorTime().plus(new Duration(14.0, DurationUnit.DAY)),
-                        shipment.getTotalCargoValue(), "SALE");
+                Invoice invoice = new Invoice(getActor(), order.sender(), order.groupingId(), order,
+                        getSimulatorTime().plus(new Duration(14.0, DurationUnit.DAY)),
+                        shipment.totalCargoValue(), "SALE");
 
                 // ... by scheduling it based on the transportation delay
                 Serializable[] args = new Serializable[] {invoice};

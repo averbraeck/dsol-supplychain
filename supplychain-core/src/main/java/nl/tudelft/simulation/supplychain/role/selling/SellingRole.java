@@ -38,4 +38,13 @@ public abstract class SellingRole extends Role<SellingRole>
     {
         return necessaryAutonomousProcesses;
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public SellingActor getActor()
+    {
+        return (SellingActor) super.getActor();
+    }
+    
+    
 }

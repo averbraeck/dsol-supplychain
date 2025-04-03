@@ -6,11 +6,12 @@ import java.util.List;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
-import nl.tudelft.simulation.supplychain.actor.Role;
+import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.content.OrderBasedOnQuote;
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 
 /**
  * The QuoteHandlerAll just waits patiently till all the Quotes are in for each RequestForQuote that has been sent out. When
@@ -37,8 +38,8 @@ public class QuoteHandlerAll extends QuoteHandler
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the margin within which the offered amount may differ from the requested amount.
      */
-    public QuoteHandlerAll(final Role owner, final Comparator<Quote> comparator, final DistContinuousDuration handlingTime,
-            final double maximumPriceMargin, final double minimumAmountMargin)
+    public QuoteHandlerAll(final PurchasingRole owner, final Comparator<Quote> comparator,
+            final DistContinuousDuration handlingTime, final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super("QuoteHandlerAll", owner, comparator, handlingTime, maximumPriceMargin, minimumAmountMargin);
     }
@@ -51,7 +52,7 @@ public class QuoteHandlerAll extends QuoteHandler
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the minimal amount margin
      */
-    public QuoteHandlerAll(final Role owner, final QuoteComparatorEnum comparatorType,
+    public QuoteHandlerAll(final PurchasingRole owner, final QuoteComparatorEnum comparatorType,
             final DistContinuousDuration handlingTime, final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super("QuoteHandlerAll", owner, comparatorType, handlingTime, maximumPriceMargin, minimumAmountMargin);
@@ -93,8 +94,8 @@ public class QuoteHandlerAll extends QuoteHandler
                         + ", bestQuote=" + bestQuote);
             }
 
-            Order order = new OrderBasedOnQuote(getActor(), bestQuote.getSender(), bestQuote.getProposedDeliveryDate(),
-                    bestQuote, bestQuote.getTransportOption());
+            Order order = new OrderBasedOnQuote(getRole().getActor(), bestQuote.sender(), bestQuote.proposedDeliveryDate(),
+                    bestQuote, bestQuote.transportOption());
             sendContent(order, getHandlingTime().draw());
         }
         return true;

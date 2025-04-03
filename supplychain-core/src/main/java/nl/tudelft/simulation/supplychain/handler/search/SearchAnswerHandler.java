@@ -96,7 +96,7 @@ public class SearchAnswerHandler extends ContentHandler<SearchAnswer, Purchasing
             TransportOption transportOption =
                     this.transportChoiceProvider.chooseTransportOptions(transportOptions, searchRequest.product().getSku());
             RequestForQuote rfq = new RequestForQuote(getRole().getActor(), (SellingActor) supplier, demand, transportOption,
-                    this.cutoffDuration);
+                    getSimulatorTime().plus(this.cutoffDuration));
             sendContent(rfq, delay);
         }
         return true;

@@ -5,12 +5,12 @@ import org.djunits.value.vdouble.scalar.Time;
 import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
-import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
 import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
 
 /**
@@ -23,7 +23,7 @@ import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class RequestForQuoteHandler extends ContentHandler<RequestForQuote>
+public class RequestForQuoteHandler extends ContentHandler<RequestForQuote, SellingRole>
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
@@ -46,9 +46,10 @@ public class RequestForQuoteHandler extends ContentHandler<RequestForQuote>
      * @param inventory the stock to check for products when quoting
      * @param profitMargin the profit margin to use; 1.0 is no profit
      * @param handlingTime the distribution of the time to react on the RFQ
-     * @param validityDuration
+     * @param validityDuration the validity duration of the quote
      */
-    public RequestForQuoteHandler(final Role owner, final Inventory inventory, final double profitMargin,
+    public RequestForQuoteHandler(
+            final SellingRole owner, final Inventory inventory, final double profitMargin,
             final DistContinuousDuration handlingTime, final Duration validityDuration)
     {
         super("RequestForQuoteHandler", owner, RequestForQuote.class);
@@ -75,18 +76,18 @@ public class RequestForQuoteHandler extends ContentHandler<RequestForQuote>
         {
             return false;
         }
-        Product product = rfq.getProduct();
+        Product product = rfq.product();
         // calculate the expected transportation time
-        Duration shippingDuration = rfq.getPreferredTransportOption().estimatedTotalTransportDuration(product.getSku());
-        Money transportCosts = rfq.getPreferredTransportOption().estimatedTotalTransportCost(product.getSku());
+        Duration shippingDuration = rfq.preferredTransportOption().estimatedTotalTransportDuration(product.getSku());
+        Money transportCosts = rfq.preferredTransportOption().estimatedTotalTransportCost(product.getSku());
         // react with a Quote. First calculate the price
-        Money price = this.inventory.getUnitPrice(product).multiplyBy(rfq.getAmount() * this.profitMargin).plus(transportCosts);
+        Money price = this.inventory.getUnitPrice(product).multiplyBy(rfq.amount() * this.profitMargin).plus(transportCosts);
         // then look at the delivery date
         Time proposedShippingDate =
-                Time.max(getSimulator().getAbsSimulatorTime(), rfq.getEarliestDeliveryDate().minus(shippingDuration));
+                Time.max(getSimulatorTime(), rfq.demand().earliestDeliveryDate().minus(shippingDuration));
         // construct the quote
-        Quote quote = new Quote(getActor(), rfq.getSender(), rfq, product, rfq.getAmount(), price, proposedShippingDate,
-                rfq.getPreferredTransportOption(), getSimulator().getAbsSimulatorTime().plus(this.validityDuration));
+        Quote quote = new Quote(getRole().getActor(), rfq.sender(), rfq, product, rfq.amount(), price, proposedShippingDate,
+                rfq.preferredTransportOption(), getSimulatorTime().plus(this.validityDuration));
         sendContent(quote, this.handlingTime.draw());
         return true;
     }

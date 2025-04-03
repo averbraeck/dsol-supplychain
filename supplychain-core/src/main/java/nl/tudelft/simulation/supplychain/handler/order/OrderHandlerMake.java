@@ -8,6 +8,7 @@ import org.djunits.value.vdouble.scalar.Time;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
+import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.content.OrderBasedOnQuote;
 import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
 import nl.tudelft.simulation.supplychain.content.ProductionOrder;
@@ -40,27 +41,27 @@ public class OrderHandlerMake extends OrderHandler<Order>
     {
         // send out the confirmation
         OrderConfirmation orderConfirmation =
-                new OrderConfirmation(getActor(), order.getSender(), order.groupingId(), order, OrderConfirmation.CONFIRMED);
+                new OrderConfirmation(getRole().getActor(), order.sender(), order.groupingId(), order, true);
         sendContent(orderConfirmation, Duration.ZERO);
 
         Logger.trace("t={} - MTO ORDER CONFIRMATION of actor '{}': sent '{}'", getSimulator().getSimulatorTime(),
                 getActor().getName(), orderConfirmation);
 
         // this is MTO, so we don't keep stock of this product. Therefore, produce it.
-        ProductionOrder productionOrder = new ProductionOrder(getActor(), order.groupingId(), order.getDeliveryDate(),
-                order.getProduct(), order.getAmount());
+        ProductionOrder productionOrder = new ProductionOrder(getActor(), order.groupingId(), order.deliveryDate(),
+                order.product(), order.amount());
         sendContent(productionOrder);
 
         // production should get an mto stock
         // tell the stock that we claimed some amount
-        this.stock.changeClaimedAmount(order.getProduct(), order.getAmount());
+        this.stock.changeClaimedAmount(order.product(), order.amount());
 
         // wait till the right time to start shipping
         try
         {
             Duration transportationDuration =
-                    order.getTransportOption().estimatedTotalTransportDuration(order.getProduct().getSku());
-            Time proposedShippingDate = ((OrderBasedOnQuote) order).getQuote().getProposedShippingDate();
+                    order.transportOption().estimatedTotalTransportDuration(order.product().getSku());
+            Time proposedShippingDate = ((OrderBasedOnQuote) order).quote().proposedShippingDate();
             Time scheduledShippingTime = proposedShippingDate.minus(transportationDuration);
 
             // start shipping 8 hours from now at the earliest

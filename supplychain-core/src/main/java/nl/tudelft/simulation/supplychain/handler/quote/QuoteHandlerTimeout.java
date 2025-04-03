@@ -10,11 +10,12 @@ import org.djunits.value.vdouble.scalar.Time;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
-import nl.tudelft.simulation.supplychain.actor.Role;
+import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.content.OrderBasedOnQuote;
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 
 /**
  * The QuoteHandlerTimeout handles quotes until a certain timeout is reached. When all Quotes are in, it reacts. It schedules
@@ -42,8 +43,8 @@ public class QuoteHandlerTimeout extends QuoteHandler
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the margin within which the offered amount may differ from the requested amount.
      */
-    public QuoteHandlerTimeout(final Role owner, final Comparator<Quote> comparator, final DistContinuousDuration handlingTime,
-            final double maximumPriceMargin, final double minimumAmountMargin)
+    public QuoteHandlerTimeout(final PurchasingRole owner, final Comparator<Quote> comparator,
+            final DistContinuousDuration handlingTime, final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super("QuoteHandlerTimeout", owner, comparator, handlingTime, maximumPriceMargin, minimumAmountMargin);
     }
@@ -56,7 +57,7 @@ public class QuoteHandlerTimeout extends QuoteHandler
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the minimal amount margin
      */
-    public QuoteHandlerTimeout(final Role owner, final QuoteComparatorEnum comparatorType,
+    public QuoteHandlerTimeout(final PurchasingRole owner, final QuoteComparatorEnum comparatorType,
             final DistContinuousDuration handlingTime, final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super("QuoteHandlerTimeout", owner, comparatorType, handlingTime, maximumPriceMargin, minimumAmountMargin);
@@ -82,7 +83,7 @@ public class QuoteHandlerTimeout extends QuoteHandler
                 Serializable[] args = new Serializable[] {demandId};
 
                 // calculate the actual time out
-                Time time = Time.max(getSimulator().getAbsSimulatorTime(), quote.getRequestForQuote().getCutoffDate());
+                Time time = Time.max(getSimulatorTime(), quote.requestForQuote().cutoffDate());
                 getSimulator().scheduleEventAbs(time, this, "createOrder", args);
             }
             catch (Exception exception)
@@ -119,8 +120,8 @@ public class QuoteHandlerTimeout extends QuoteHandler
             Quote bestQuote = this.selectBestQuote(quotes);
             if (bestQuote != null)
             {
-                Order order = new OrderBasedOnQuote(getActor(), bestQuote.getSender(), bestQuote.getProposedDeliveryDate(),
-                        bestQuote, bestQuote.getTransportOption());
+                Order order = new OrderBasedOnQuote(getRole().getActor(), bestQuote.sender(), bestQuote.proposedDeliveryDate(),
+                        bestQuote, bestQuote.transportOption());
                 sendContent(order, this.getHandlingTime().draw());
             }
         }
