@@ -16,6 +16,7 @@ import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
+import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 import nl.tudelft.simulation.supplychain.transport.TransportChoiceProvider;
 import nl.tudelft.simulation.supplychain.transport.TransportOption;
 import nl.tudelft.simulation.supplychain.transport.TransportOptionProvider;
@@ -107,10 +108,10 @@ public class DemandHandlerRFQ extends DemandHandler
             return false;
         }
         // resolve the suplier
-        Set<Actor> supplierSet = this.suppliers.get(demand.getProduct());
+        Set<Actor> supplierSet = this.suppliers.get(demand.product());
         if (supplierSet == null)
         {
-            Logger.warn("handleContent", "Demand for actor " + getRole() + " contains product " + demand.getProduct().toString()
+            Logger.warn("handleContent", "Demand for actor " + getRole() + " contains product " + demand.product().toString()
                     + " without any suppliers.");
             return false;
         }
@@ -120,8 +121,9 @@ public class DemandHandlerRFQ extends DemandHandler
         {
             Set<TransportOption> transportOptions = this.transportOptionProvider.provideTransportOptions(supplier, getActor());
             TransportOption transportOption =
-                    this.transportChoiceProvider.chooseTransportOptions(transportOptions, demand.getProduct().getSku());
-            RequestForQuote rfq = new RequestForQuote(getActor(), supplier, demand, transportOption, this.cutoffDuration);
+                    this.transportChoiceProvider.chooseTransportOptions(transportOptions, demand.product().getSku());
+            RequestForQuote rfq = new RequestForQuote(getRole().getActor(), (SellingActor) supplier, demand, transportOption,
+                    this.cutoffDuration);
             sendContent(rfq, delay);
         }
         return true;

@@ -78,20 +78,20 @@ public class DemandHandlerOrder extends DemandHandler
             return false;
         }
         // resolve the suplier
-        SupplierRecord supplierRecord = this.suppliers.get(demand.getProduct());
+        SupplierRecord supplierRecord = this.suppliers.get(demand.product());
         if (supplierRecord == null)
         {
-            Logger.warn("checkContent", "Demand for actor " + getRole() + " contains product " + demand.getProduct().toString()
+            Logger.warn("checkContent", "Demand for actor " + getRole() + " contains product " + demand.product().toString()
                     + " without a supplier");
             return false;
         }
-        SellingActor supplier = supplierRecord.getSupplier();
-        Money price = supplierRecord.getUnitPrice().multiplyBy(demand.getAmount());
+        SellingActor supplier = (SellingActor) supplierRecord.getSupplier();
+        Money price = supplierRecord.getUnitPrice().multiplyBy(demand.amount());
         Set<TransportOption> transportOptions = this.transportOptionProvider.provideTransportOptions(supplier, getActor());
         TransportOption transportOption =
-                this.transportChoiceProvider.chooseTransportOptions(transportOptions, demand.getProduct().getSku());
-        var order = new OrderStandalone(getRole().getActor(), supplier, demand, demand.getLatestDeliveryDate(),
-                demand.getProduct(), demand.getAmount(), price, transportOption);
+                this.transportChoiceProvider.chooseTransportOptions(transportOptions, demand.product().getSku());
+        var order = new OrderStandalone(getRole().getActor(), supplier, demand.latestDeliveryDate(), demand.product(),
+                demand.amount(), price, transportOption);
         // and send it out after the handling time
         sendContent(order, this.handlingTime.draw());
         return true;
