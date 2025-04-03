@@ -23,13 +23,13 @@ import nl.tudelft.simulation.supplychain.actor.unit.dist.DistConstantDuration;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.handler.demand.InternalDemandHandlerYP;
+import nl.tudelft.simulation.supplychain.handler.invoice.InvoiceHandler;
 import nl.tudelft.simulation.supplychain.handler.payment.PaymentPolicyEnum;
 import nl.tudelft.simulation.supplychain.handler.search.SearchAnswerHandler;
 import nl.tudelft.simulation.supplychain.message.store.trade.LeanTradeMessageStore;
 import nl.tudelft.simulation.supplychain.messagehandlers.HandleAllMessages;
 import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.Money;
-import nl.tudelft.simulation.supplychain.handler.bill.BillHandler;
 import nl.tudelft.simulation.supplychain.handler.orderconfirmation.OrderConfirmationHandler;
 import nl.tudelft.simulation.supplychain.handler.quote.QuoteComparatorEnum;
 import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandler;
@@ -109,7 +109,7 @@ public class DemoMarket extends Customer
         ShipmentHandler shipmentHandler = new ShipmentHandlerConsume(this);
 
         DistContinuousDuration paymentDelay = new DistContinuousDuration(new DistConstant(stream, 0.0), DurationUnit.HOUR);
-        BillHandler billHandler = new BillHandler(this, this.getBankAccount(), PaymentPolicyEnum.PAYMENT_ON_TIME, paymentDelay);
+        InvoiceHandler billHandler = new InvoiceHandler(this, this.getBankAccount(), PaymentPolicyEnum.PAYMENT_ON_TIME, paymentDelay);
 
         BuyingRoleSearch buyingRole = new BuyingRoleSearch(this, simulator, demandHandler, searchAnswerHandler, quoteHandler,
                 orderConfirmationHandler, shipmentHandler, billHandler);

@@ -1,7 +1,7 @@
-package nl.tudelft.simulation.supplychain.handler.bill;
+package nl.tudelft.simulation.supplychain.handler.invoice;
 
 /**
- * The different payment policies that this BillHandler class can use.
+ * The different payment policies that this InvoiceHandler class can use.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.

@@ -63,10 +63,10 @@ public class ShipmentHandlerFineConsume extends ShipmentHandlerConsume
                         .plus(shipment.getOrder().getPrice().multiplyBy(this.fineMarginPerDay));
 
                 /*-
-                 // send the bill for the fine
-                 Bill bill = new Bill(getOwner(), shipment.getSender(), shipment.getDemandID(), shipment.getOrder(),
+                 // send the invoice for the fine
+                 Invoice invoice = new Invoice(getOwner(), shipment.getSender(), shipment.getDemandID(), shipment.getOrder(),
                          getOwner().getSimulatorTime(), fine, "FINE"); 
-                 sendContent(bill, Duration.ZERO);
+                 sendContent(invoice, Duration.ZERO);
                  */
 
                 shipment.getSender().getBankAccount().withdrawFromBalance(fine);

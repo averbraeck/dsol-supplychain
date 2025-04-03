@@ -16,6 +16,7 @@ import nl.tudelft.simulation.dsol.swing.charts.xy.XYChart;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.handler.demand.InternalDemandHandlerRFQ;
+import nl.tudelft.simulation.supplychain.handler.invoice.InvoiceHandler;
 import nl.tudelft.simulation.supplychain.handler.order.OrderHandler;
 import nl.tudelft.simulation.supplychain.handler.order.OrderHandlerStock;
 import nl.tudelft.simulation.supplychain.handler.payment.PaymentHandler;
@@ -24,7 +25,6 @@ import nl.tudelft.simulation.supplychain.message.store.trade.ContentStoreInterfa
 import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.BankAccount;
 import nl.tudelft.simulation.supplychain.money.Money;
-import nl.tudelft.simulation.supplychain.handler.bill.BillHandler;
 import nl.tudelft.simulation.supplychain.handler.orderconfirmation.OrderConfirmationHandler;
 import nl.tudelft.simulation.supplychain.handler.quote.QuoteComparatorEnum;
 import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandler;
@@ -142,7 +142,7 @@ public class PCShop extends Retailer
         OrderConfirmationHandler confirmationHandler = new OrderConfirmationHandler(this);
         //
         // PCShop will get a bill in the end
-        BillHandler billHandler = new BillHandler(this, getBankAccount(), PaymentPolicyEnum.PAYMENT_IMMEDIATE,
+        InvoiceHandler billHandler = new InvoiceHandler(this, getBankAccount(), PaymentPolicyEnum.PAYMENT_IMMEDIATE,
                 new DistConstantDuration(Duration.ZERO));
         //
         // hopefully, PCShop will get laptop shipments, put them in stock

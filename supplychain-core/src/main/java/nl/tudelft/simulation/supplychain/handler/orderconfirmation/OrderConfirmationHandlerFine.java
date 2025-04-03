@@ -93,13 +93,13 @@ public class OrderConfirmationHandlerFine extends OrderConfirmationHandler
             Money fine = this.fixedFine.plus(orderConfirmation.getOrder().getPrice().multiplyBy(this.fineMargin));
 
             /*-
-            // TODO: send a bill for the fine instead of direct booking through the bank
+            // TODO: send a invoice for the fine instead of direct booking through the bank
             System.err.println("BILL FOR SUPPLIER ORDERCONF FINE, ACTOR " + getOwner());
-            // send the bill for the fine
-            Bill bill = new Bill(getOwner(), orderConfirmation.getSender(), orderConfirmation.getDemandID(),
+            // send the invoice for the fine
+            Invoice invoice = new Invoice(getOwner(), orderConfirmation.getSender(), orderConfirmation.getDemandID(),
                     orderConfirmation.getOrder(), getOwner().getSimulatorTime().plus(new Duration(14.0, DurationUnit.DAY)),
                     fine, "FINE - LATE PAYMENT");
-            sendContent(bill, Duration.ZERO);
+            sendContent(invoice, Duration.ZERO);
             */
 
             orderConfirmation.getSender().getFinancingRole().getBankAccount().withdrawFromBalance(fine);

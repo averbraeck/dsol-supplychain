@@ -7,7 +7,7 @@ import java.util.Set;
 import org.djunits.value.vdouble.scalar.Duration;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.content.Bill;
+import nl.tudelft.simulation.supplychain.content.Invoice;
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.Payment;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
@@ -16,7 +16,7 @@ import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 import nl.tudelft.simulation.supplychain.role.banking.BankingRole;
 
 /**
- * The FinancingRole manages the bank account of an organization and can take care of paying bills and receiving money.
+ * The FinancingRole manages the bank account of an organization and can take care of paying invoices and receiving money.
  * <p>
  * Copyright (c) 2023-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
@@ -35,7 +35,7 @@ public class FinancingRole extends Role<FinancingRole>
     private List<FixedCostProcess> fixedCosts = new ArrayList<FixedCostProcess>();
 
     /** the necessary content handlers. */
-    private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of(Bill.class, Payment.class);
+    private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of(Invoice.class, Payment.class);
 
     /** the necessary autonomous processes. */
     private static Set<Class<? extends AutonomousProcess<FinancingRole>>> necessaryAutonomousProcesses =

@@ -63,10 +63,10 @@ public class ShipmentHandlerFineStock extends ShipmentHandlerStock
                         .multiplyBy((shipment.getOrder().getDeliveryDate().minus(time).getInUnit(DurationUnit.DAY)));
 
                 /*-
-                 * TODO: send the bill for the fine
-                 * Bill bill = new Bill(getOwner(), shipment.getSender(), shipment.getDemandID(), shipment.getOrder(),
+                 * TODO: send the invoice for the fine
+                 * Invoice invoice = new Invoice(getOwner(), shipment.getSender(), shipment.getDemandID(), shipment.getOrder(),
                  * getOwner().getSimulatorTime() + (14.0 * day), fine, "FINE");
-                 * sendContent(bill, Duration.ZERO);
+                 * sendContent(invoice, Duration.ZERO);
                  */
 
                 // we are pragmatic -- just book it through the bank...

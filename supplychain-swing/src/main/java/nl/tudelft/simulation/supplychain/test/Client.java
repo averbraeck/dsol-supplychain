@@ -22,12 +22,12 @@ import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.handler.demand.InternalDemandHandlerRFQ;
+import nl.tudelft.simulation.supplychain.handler.invoice.InvoiceHandler;
 import nl.tudelft.simulation.supplychain.handler.payment.PaymentPolicyEnum;
 import nl.tudelft.simulation.supplychain.message.store.trade.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.BankAccount;
 import nl.tudelft.simulation.supplychain.money.Money;
-import nl.tudelft.simulation.supplychain.handler.bill.BillHandler;
 import nl.tudelft.simulation.supplychain.handler.orderconfirmation.OrderConfirmationHandler;
 import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandler;
 import nl.tudelft.simulation.supplychain.handler.quote.QuoteComparatorEnum;
@@ -123,7 +123,7 @@ public class Client extends Customer
         OrderConfirmationHandler confirmationHandler = new OrderConfirmationHandler(this);
         //
         // Client will get a bill in the end
-        BillHandler billHandler = new BillHandler(this, getBankAccount(), PaymentPolicyEnum.PAYMENT_IMMEDIATE,
+        InvoiceHandler billHandler = new InvoiceHandler(this, getBankAccount(), PaymentPolicyEnum.PAYMENT_IMMEDIATE,
                 new DistConstantDuration(Duration.ZERO));
         //
         // hopefully, Client will get laptop shipments

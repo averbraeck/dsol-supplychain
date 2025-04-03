@@ -1,7 +1,7 @@
 package nl.tudelft.simulation.supplychain.role.buying;
 
-import nl.tudelft.simulation.supplychain.handler.bill.BillHandler;
 import nl.tudelft.simulation.supplychain.handler.demand.DemandHandlerSearch;
+import nl.tudelft.simulation.supplychain.handler.invoice.InvoiceHandler;
 import nl.tudelft.simulation.supplychain.handler.search.SearchAnswerHandler;
 import nl.tudelft.simulation.supplychain.handler.orderconfirmation.OrderConfirmationHandler;
 import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandler;
@@ -21,19 +21,19 @@ public class BuyingRoleSearch extends BuyingRole
     private static final long serialVersionUID = 20221205L;
 
     /**
-     * Construct a new BuyingRole for Demand - SearchAnswer - Quote - Confirmation - Shipment - Bill.
+     * Construct a new BuyingRole for Demand - SearchAnswer - Quote - Confirmation - Shipment - Invoice.
      * @param owner the actor to which this role belongs
      * @param demandHandler the demand handler, results in sending out an RFQ
      * @param searchAnswerHandler the search answer handler
      * @param quoteHandler the quote handler
      * @param orderConfirmationHandler the order confirmation handler
      * @param shipmentHandler the shipment handler
-     * @param billHandler the bill handler
+     * @param invoiceHandler the invoice handler
      */
     public BuyingRoleSearch(final BuyingActor owner, final DemandHandlerSearch demandHandler,
             final SearchAnswerHandler searchAnswerHandler, final QuoteHandler quoteHandler,
             final OrderConfirmationHandler orderConfirmationHandler, final ShipmentHandler shipmentHandler,
-            final BillHandler billHandler)
+            final InvoiceHandler invoiceHandler)
     {
         super(owner);
         setContentHandler(demandHandler);
@@ -41,7 +41,7 @@ public class BuyingRoleSearch extends BuyingRole
         setContentHandler(quoteHandler);
         setContentHandler(orderConfirmationHandler);
         setContentHandler(shipmentHandler);
-        setContentHandler(billHandler);
+        setContentHandler(invoiceHandler);
     }
 
     @Override

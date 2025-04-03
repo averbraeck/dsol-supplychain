@@ -10,7 +10,7 @@ import org.djutils.exceptions.Throw;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.Actor;
-import nl.tudelft.simulation.supplychain.content.Bill;
+import nl.tudelft.simulation.supplychain.content.Invoice;
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.GroupedContent;
 import nl.tudelft.simulation.supplychain.content.Demand;
@@ -149,7 +149,7 @@ public class FullContentStore implements ContentStoreInterface
             removeContentList(contentMap, OrderBasedOnQuote.class);
             removeContentList(contentMap, OrderConfirmation.class);
             removeContentList(contentMap, Shipment.class);
-            removeContentList(contentMap, Bill.class);
+            removeContentList(contentMap, Invoice.class);
             removeContentList(contentMap, Payment.class);
             removeContentList(contentMap, Demand.class);
             removeContentList(contentMap, ProductionOrder.class);
@@ -314,22 +314,22 @@ public class FullContentStore implements ContentStoreInterface
                 }
             }
         }
-        // if (!sent && content instanceof Bill): // don't do anything when the bill arrives, wait for payment
+        // if (!sent && content instanceof Invoice): // don't do anything when the invoice arrives, wait for payment
         else if (sent && content instanceof Payment)
         {
-            // remove the bill
-            List<Bill> billList = getContentList(groupingId, Bill.class, false);
-            if (billList.size() == 0)
+            // remove the invoice
+            List<Invoice> invoiceList = getContentList(groupingId, Invoice.class, false);
+            if (invoiceList.size() == 0)
             {
                 Logger.warn("t=" + this.owner.getSimulatorTime()
-                        + " removeOldStateContent - could not find bill for payment uniqueId=" + content.uniqueId() + ", IDid="
+                        + " removeOldStateContent - could not find invoice for payment uniqueId=" + content.uniqueId() + ", IDid="
                         + content.groupingId() + " " + content.toString());
             }
             else
             {
-                for (Bill bill : billList)
+                for (Invoice invoice : invoiceList)
                 {
-                    removeSentReceivedContent(bill, false);
+                    removeSentReceivedContent(invoice, false);
                 }
             }
         }
@@ -403,22 +403,22 @@ public class FullContentStore implements ContentStoreInterface
                 }
             }
         }
-        // if (sent && content instanceof Bill) // don't do anything with the bill yet, wait for payment
+        // if (sent && content instanceof Invoice) // don't do anything with the invoice yet, wait for payment
         else if (!sent && content instanceof Payment)
         {
-            // remove the bill
-            List<Bill> billList = getContentList(groupingId, Bill.class, true);
-            if (billList.size() == 0)
+            // remove the invoice
+            List<Invoice> invoiceList = getContentList(groupingId, Invoice.class, true);
+            if (invoiceList.size() == 0)
             {
                 Logger.warn("t=" + this.owner.getSimulatorTime()
-                        + " removeOldStateContent - could not find bill for payment uniqueId=" + content.uniqueId() + ", IDid="
+                        + " removeOldStateContent - could not find invoice for payment uniqueId=" + content.uniqueId() + ", IDid="
                         + content.groupingId() + " " + content.toString());
             }
             else
             {
-                for (Bill bill : billList)
+                for (Invoice invoice : invoiceList)
                 {
-                    removeSentReceivedContent(bill, true);
+                    removeSentReceivedContent(invoice, true);
                 }
             }
         }

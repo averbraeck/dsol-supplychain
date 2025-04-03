@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.handler.bill;
+package nl.tudelft.simulation.supplychain.handler.invoice;
 
 import java.io.Serializable;
 
@@ -10,13 +10,13 @@ import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.SimRuntimeException;
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
-import nl.tudelft.simulation.supplychain.content.Bill;
+import nl.tudelft.simulation.supplychain.content.Invoice;
 import nl.tudelft.simulation.supplychain.content.Payment;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
 
 /**
- * BillHandler.java.
+ * InvoiceHandler.java.
  * <p>
  * Copyright (c) 2025-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
@@ -24,7 +24,7 @@ import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
 /**
- * The BillHandler is a simple implementation of the business logic to pay a bill. Four different policies are available in this
+ * The InvoiceHandler is a simple implementation of the business logic to pay a invoice. Four different policies are available in this
  * version -- which can be extended, of course: paying immediately, paying on time, paying early, and paying late.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
@@ -32,7 +32,7 @@ import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class BillHandler extends ContentHandler<Bill, FinancingRole>
+public class InvoiceHandler extends ContentHandler<Invoice, FinancingRole>
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
@@ -44,15 +44,15 @@ public class BillHandler extends ContentHandler<Bill, FinancingRole>
     private DistContinuousDuration paymentDelay;
 
     /**
-     * Constructs a new BillHandler with possibilities to pay early or late.
+     * Constructs a new InvoiceHandler with possibilities to pay early or late.
      * @param owner the owner of the handler.
      * @param paymentPolicy the payment handler to use (early, late, etc.).
      * @param paymentDelay the delay to use in early or late payment
      */
-    public BillHandler(final FinancingRole owner, final PaymentPolicyEnum paymentPolicy,
+    public InvoiceHandler(final FinancingRole owner, final PaymentPolicyEnum paymentPolicy,
             final DistContinuousDuration paymentDelay)
     {
-        super("BillHandler", owner, Bill.class);
+        super("InvoiceHandler", owner, Invoice.class);
         Throw.whenNull(paymentPolicy, "paymentPolicy cannot be null");
         Throw.whenNull(paymentDelay, "paymentDelay cannot be null");
         this.paymentPolicy = paymentPolicy;
@@ -60,15 +60,15 @@ public class BillHandler extends ContentHandler<Bill, FinancingRole>
     }
 
     @Override
-    public boolean handleContent(final Bill bill)
+    public boolean handleContent(final Invoice invoice)
     {
-        if (!isValidContent(bill))
+        if (!isValidContent(invoice))
         {
             return false;
         }
         // schedule the payment
         Time currentTime = getSimulatorTime();
-        Time paymentTime = bill.finalPaymentDate();
+        Time paymentTime = invoice.finalPaymentDate();
         switch (this.paymentPolicy)
         {
             case PAYMENT_ON_TIME:
@@ -91,7 +91,7 @@ public class BillHandler extends ContentHandler<Bill, FinancingRole>
         paymentTime = Time.max(paymentTime, currentTime);
         try
         {
-            Serializable[] args = new Serializable[] {bill};
+            Serializable[] args = new Serializable[] {invoice};
             getSimulator().scheduleEventAbs(paymentTime, this, "pay", args);
         }
         catch (SimRuntimeException exception)
@@ -104,16 +104,16 @@ public class BillHandler extends ContentHandler<Bill, FinancingRole>
 
     /**
      * Try to pay. If it does not succeed, try later.
-     * @param bill - the bill to pay.
+     * @param invoice - the invoice to pay.
      */
-    protected void pay(final Bill bill)
+    protected void pay(final Invoice invoice)
     {
-        if (getRole().getBank().getBalance(getActor()).lt(bill.price()))
+        if (getRole().getBank().getBalance(getActor()).lt(invoice.price()))
         {
             // the bank account balance is not sufficient. Try one day later.
             try
             {
-                Serializable[] args = new Serializable[] {bill};
+                Serializable[] args = new Serializable[] {invoice};
                 getSimulator().scheduleEventRel(new Duration(1.0, DurationUnit.DAY), this, "pay", args);
             }
             catch (SimRuntimeException exception)
@@ -123,8 +123,8 @@ public class BillHandler extends ContentHandler<Bill, FinancingRole>
             return;
         }
         // make a payment to send out
-        getRole().getBank().withdrawFromBalance(getActor(), bill.price());
-        Payment payment = new Payment(bill);
+        getRole().getBank().withdrawFromBalance(getActor(), invoice.price());
+        Payment payment = new Payment(invoice);
         sendContent(payment);
     }
 

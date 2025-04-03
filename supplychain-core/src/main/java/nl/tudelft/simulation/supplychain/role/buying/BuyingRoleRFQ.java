@@ -1,7 +1,7 @@
 package nl.tudelft.simulation.supplychain.role.buying;
 
-import nl.tudelft.simulation.supplychain.handler.bill.BillHandler;
 import nl.tudelft.simulation.supplychain.handler.demand.DemandHandlerRFQ;
+import nl.tudelft.simulation.supplychain.handler.invoice.InvoiceHandler;
 import nl.tudelft.simulation.supplychain.handler.orderconfirmation.OrderConfirmationHandler;
 import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandler;
 import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandler;
@@ -21,24 +21,24 @@ public class BuyingRoleRFQ extends BuyingRole
     private static final long serialVersionUID = 20221205L;
 
     /**
-     * Constructs a new BuyingRole for Demand - Quote - Confirmation - Shipment - Bill.
+     * Constructs a new BuyingRole for Demand - Quote - Confirmation - Shipment - Invoice.
      * @param owner the actor to which this role belongs
      * @param demandHandler the demand handler, results in sending out an RFQ
      * @param quoteHandler the quote handler
      * @param orderConfirmationHandler the order confirmation handler
      * @param shipmentHandler the shipment handler
-     * @param billHandler the bill handler
+     * @param invoiceHandler the invoice handler
      */
     public BuyingRoleRFQ(final BuyingActor owner, final DemandHandlerRFQ demandHandler, final QuoteHandler quoteHandler,
             final OrderConfirmationHandler orderConfirmationHandler, final ShipmentHandler shipmentHandler,
-            final BillHandler billHandler)
+            final InvoiceHandler invoiceHandler)
     {
         super(owner);
         setContentHandler(demandHandler);
         setContentHandler(quoteHandler);
         setContentHandler(orderConfirmationHandler);
         setContentHandler(shipmentHandler);
-        setContentHandler(billHandler);
+        setContentHandler(invoiceHandler);
     }
 
     @Override

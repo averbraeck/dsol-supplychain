@@ -3,7 +3,7 @@ package nl.tudelft.simulation.supplychain.role.buying;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
 
 /**
- * BuyingActor is an interface to indicate that an Actor has a BuyingRole. Since Buying usually involves bills and payments, the
+ * BuyingActor is an interface to indicate that an Actor has a BuyingRole. Since Buying usually involves invoices and payments, the
  * BuyingActor also implements the FinancingActor.
  * <p>
  * Copyright (c) 2023-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>

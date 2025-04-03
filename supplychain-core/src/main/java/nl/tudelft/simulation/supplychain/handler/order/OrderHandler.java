@@ -7,7 +7,7 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.content.Bill;
+import nl.tudelft.simulation.supplychain.content.Invoice;
 import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.content.Shipment;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
@@ -20,7 +20,7 @@ import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
  * The OrderHandler contains the business logic for handling an incoming Order. It will send out a positive or negative
  * confirmation, based on the conditions at the firm at the moment when the order is received. In its most basic form, the Order
  * will put a claim on finished goods in the store of the owner, and schedule the release of these goods. The sending of the
- * bill has also to be decided here. All in all, the OrderHandler is one of the most complex handlers, because it involves a
+ * invoice has also to be decided here. All in all, the OrderHandler is one of the most complex handlers, because it involves a
  * number of different content types and a lot of possible parameters. <br>
  * In general, when an Order comes in, it puts a claim on the stock of that product (make to stock), or it is specifically
  * fabricated for that order (make to order). Both are implemented as a separate subclass as can differ considerably. When the
@@ -29,7 +29,7 @@ import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
  * After that, the transportation has to be arranged or the transportation time has to be calculated. At the agreed delivery
  * time minus the transportation time, the order is picked immediately (or as soon as it is available), and sent as a Shipment
  * to the other actor. <br>
- * A bill is sent out before, with, or after the shipment, and in some cases, the shipment has to wait for the payment to
+ * A invoice is sent out before, with, or after the shipment, and in some cases, the shipment has to wait for the payment to
  * arrive.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
@@ -95,14 +95,14 @@ public abstract class OrderHandler<O extends Order> extends ContentHandler<O, Se
                 Logger.trace("OrderHandlerStock: transportation delay for order: {} is: {}", order, transportTime);
                 sendContent(shipment, transportTime);
 
-                // send a bill when the shipment leaves...
-                Bill bill = new Bill(getActor(), order.getSender(), order.getDemandId(), order,
+                // send a invoice when the shipment leaves...
+                Invoice invoice = new Invoice(getActor(), order.getSender(), order.getDemandId(), order,
                         getSimulator().getAbsSimulatorTime().plus(new Duration(14.0, DurationUnit.DAY)),
                         shipment.getTotalCargoValue(), "SALE");
 
                 // ... by scheduling it based on the transportation delay
-                Serializable[] args = new Serializable[] {bill};
-                getSimulator().scheduleEventRel(transportTime, this, "sendBill", args);
+                Serializable[] args = new Serializable[] {invoice};
+                getSimulator().scheduleEventRel(transportTime, this, "sendInvoice", args);
             }
         }
         catch (Exception e)
@@ -113,12 +113,12 @@ public abstract class OrderHandler<O extends Order> extends ContentHandler<O, Se
     }
 
     /**
-     * Method sendBill.
-     * @param bill the bill to send
+     * Method sendInvoice.
+     * @param invoice the invoice to send
      */
-    protected void sendBill(final Bill bill)
+    protected void sendInvoice(final Invoice invoice)
     {
         // send after accepting the order.
-        sendContent(bill, new Duration(1.0, DurationUnit.MINUTE));
+        sendContent(invoice, new Duration(1.0, DurationUnit.MINUTE));
     }
 }
