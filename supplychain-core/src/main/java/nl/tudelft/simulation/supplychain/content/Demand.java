@@ -6,8 +6,8 @@ import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.product.Product;
 
 /**
- * The Demand record represents content for an demand of a supply chain actor. The Demand triggers purchasing or manufacturing of
- * products, and is usually the first in a long chain of messages that are exchanged between actors.
+ * The Demand record represents content for an demand of a supply chain actor. The Demand triggers purchasing or manufacturing
+ * of products, and is usually the first in a long chain of messages that are exchanged between actors.
  * <p>
  * Copyright (c) 2025-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.

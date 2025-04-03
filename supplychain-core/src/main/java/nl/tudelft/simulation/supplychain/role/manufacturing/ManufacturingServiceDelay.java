@@ -54,8 +54,9 @@ public class ManufacturingServiceDelay extends ManufacturingService
      * @param greedy if true, immediately start picking raw materials when production has to start.
      * @param profitMargin the fraction that is added to the cost of the materials.
      */
-    public ManufacturingServiceDelay(final WarehousingRole owner, final Product product, final DistContinuousDuration productionTime,
-            final boolean fixedTime, final boolean greedy, final double profitMargin)
+    public ManufacturingServiceDelay(final WarehousingRole owner, final Product product,
+            final DistContinuousDuration productionTime, final boolean fixedTime, final boolean greedy,
+            final double profitMargin)
     {
         super(owner, product);
         this.productionTime = productionTime;

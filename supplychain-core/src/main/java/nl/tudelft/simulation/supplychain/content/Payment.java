@@ -18,12 +18,12 @@ import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
  * @param invoice the invoice to which this payment belongs
  */
-public record Payment(FinancingActor sender, FinancingActor receiver, Time timestamp, long uniqueId, long groupingId, Invoice invoice)
-        implements GroupedContent
+public record Payment(FinancingActor sender, FinancingActor receiver, Time timestamp, long uniqueId, long groupingId,
+        Invoice invoice) implements GroupedContent
 {
     public Payment(final Invoice invoice)
     {
-        this(invoice.receiver(), invoice.sender(), invoice.sender().getSimulatorTime(), invoice.sender().getModel().getUniqueMessageId(),
-                invoice.groupingId(), invoice);
+        this(invoice.receiver(), invoice.sender(), invoice.sender().getSimulatorTime(),
+                invoice.sender().getModel().getUniqueMessageId(), invoice.groupingId(), invoice);
     }
 }

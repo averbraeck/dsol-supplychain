@@ -27,8 +27,8 @@ import nl.tudelft.simulation.supplychain.transport.TransportOption;
 public record OrderBasedOnQuote(PurchasingActor sender, SellingActor receiver, Time timestamp, long uniqueId, long groupingId,
         Quote quote, Time deliveryDate, TransportOption transportOption) implements Order
 {
-    public OrderBasedOnQuote(final PurchasingActor sender, final SellingActor receiver, final Time deliveryDate, final Quote quote,
-            final TransportOption transportOption)
+    public OrderBasedOnQuote(final PurchasingActor sender, final SellingActor receiver, final Time deliveryDate,
+            final Quote quote, final TransportOption transportOption)
     {
         this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), quote.groupingId(), quote,
                 deliveryDate, transportOption);

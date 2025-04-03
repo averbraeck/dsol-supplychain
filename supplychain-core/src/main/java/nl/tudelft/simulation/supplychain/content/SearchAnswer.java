@@ -8,8 +8,8 @@ import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.role.searching.SearchingActor;
 
 /**
- * The SearchAnswer is the answer from a Search actor to a SearchRequest. It contains a list of actors that might sell a
- * product or service that was asked for in the SearchRequest.
+ * The SearchAnswer is the answer from a Search actor to a SearchRequest. It contains a list of actors that might sell a product
+ * or service that was asked for in the SearchRequest.
  * <p>
  * Copyright (c) 2025-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.

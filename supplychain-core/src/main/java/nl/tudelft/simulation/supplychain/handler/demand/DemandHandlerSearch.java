@@ -9,8 +9,8 @@ import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 import nl.tudelft.simulation.supplychain.role.searching.SearchingActor;
 
 /**
- * The DemandHandlerSearch is a simple implementation of the business logic to handle a request for new products through a yellow
- * page request. When receiving the demand, it just creates an Search request, without a given time delay.
+ * The DemandHandlerSearch is a simple implementation of the business logic to handle a request for new products through a
+ * yellow page request. When receiving the demand, it just creates an Search request, without a given time delay.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.

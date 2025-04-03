@@ -8,10 +8,10 @@ import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 
 /**
- * The purchasing role is a role that can handle several types of message content: demand, order confirmation, invoice, and shipment.
- * Depending on the extension of the PurchasingRole, which actually indicates the type if DemandHandler used, several other messages
- * can be handled as well. For the DemandHandlerOrder, no extra types are necessary. For the DemandhandlerRFQ, a Quote has to be
- * handled as well. For an DemandhandlerSearch, a SearchAnswer can be received, and has to be handled.
+ * The purchasing role is a role that can handle several types of message content: demand, order confirmation, invoice, and
+ * shipment. Depending on the extension of the PurchasingRole, which actually indicates the type if DemandHandler used, several
+ * other messages can be handled as well. For the DemandHandlerOrder, no extra types are necessary. For the DemandhandlerRFQ, a
+ * Quote has to be handled as well. For an DemandhandlerSearch, a SearchAnswer can be received, and has to be handled.
  * <p>
  * Copyright (c) 2022-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.

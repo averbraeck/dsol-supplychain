@@ -7,8 +7,8 @@ import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandler;
 import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandler;
 
 /**
- * The purchasing role based on a RFQ is a role that organizes the purchasing based on a RequestForQuote that is sent to a fixed set of
- * possible suppliers, and continues from there.
+ * The purchasing role based on a RFQ is a role that organizes the purchasing based on a RequestForQuote that is sent to a fixed
+ * set of possible suppliers, and continues from there.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.

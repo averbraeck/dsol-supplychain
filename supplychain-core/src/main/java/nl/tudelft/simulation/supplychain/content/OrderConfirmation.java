@@ -25,7 +25,8 @@ import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 public record OrderConfirmation(SellingActor sender, PurchasingActor receiver, Time timestamp, long uniqueId, long groupingId,
         Order order, boolean confirmed) implements GroupedContent, ProductContent
 {
-    public OrderConfirmation(final SellingActor sender, final PurchasingActor receiver, final Order order, final boolean confirmed)
+    public OrderConfirmation(final SellingActor sender, final PurchasingActor receiver, final Order order,
+            final boolean confirmed)
     {
         this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), order.groupingId(), order,
                 confirmed);

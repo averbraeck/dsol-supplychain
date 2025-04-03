@@ -23,8 +23,8 @@ import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
  * @param order the order for which this was the confirmation
  * @param totalCargoValue the total value of the cargo
  */
-public record Shipment(SellingActor sender, PurchasingActor receiver, Time timestamp, long uniqueId, long groupingId, Order order,
-        Money totalCargoValue) implements GroupedContent, ProductContent
+public record Shipment(SellingActor sender, PurchasingActor receiver, Time timestamp, long uniqueId, long groupingId,
+        Order order, Money totalCargoValue) implements GroupedContent, ProductContent
 {
     public Shipment(final SellingActor sender, final PurchasingActor receiver, final Order order, final Money totalCargoValue)
     {

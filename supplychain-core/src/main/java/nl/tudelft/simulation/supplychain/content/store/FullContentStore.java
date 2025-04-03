@@ -322,8 +322,8 @@ public class FullContentStore implements ContentStoreInterface
             if (invoiceList.size() == 0)
             {
                 Logger.warn("t=" + this.owner.getSimulatorTime()
-                        + " removeOldStateContent - could not find invoice for payment uniqueId=" + content.uniqueId() + ", IDid="
-                        + content.groupingId() + " " + content.toString());
+                        + " removeOldStateContent - could not find invoice for payment uniqueId=" + content.uniqueId()
+                        + ", IDid=" + content.groupingId() + " " + content.toString());
             }
             else
             {
@@ -411,8 +411,8 @@ public class FullContentStore implements ContentStoreInterface
             if (invoiceList.size() == 0)
             {
                 Logger.warn("t=" + this.owner.getSimulatorTime()
-                        + " removeOldStateContent - could not find invoice for payment uniqueId=" + content.uniqueId() + ", IDid="
-                        + content.groupingId() + " " + content.toString());
+                        + " removeOldStateContent - could not find invoice for payment uniqueId=" + content.uniqueId()
+                        + ", IDid=" + content.groupingId() + " " + content.toString());
             }
             else
             {

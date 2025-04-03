@@ -42,7 +42,7 @@ public abstract class OrderHandler<O extends Order> extends ContentHandler<O, Se
 {
     /** */
     private static final long serialVersionUID = 1L;
-    
+
     /** access to the owner's stocContentHandlerlability of products. */
     @SuppressWarnings("checkstyle:visibilitymodifier")
     protected Inventory stock;

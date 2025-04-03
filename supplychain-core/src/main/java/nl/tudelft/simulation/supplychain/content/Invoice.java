@@ -6,8 +6,8 @@ import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
 
 /**
- * The invoice represents a document that asks for payment for a product or service. It contains a pointer to an Order to see for
- * which exact order the actor is invoiced.
+ * The invoice represents a document that asks for payment for a product or service. It contains a pointer to an Order to see
+ * for which exact order the actor is invoiced.
  * <p>
  * Copyright (c) 2025-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
@@ -23,8 +23,8 @@ import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
  * @param price the price that has to be paid
  * @param description the description
  */
-public record Invoice(FinancingActor sender, FinancingActor receiver, Time timestamp, long uniqueId, long groupingId, Order order,
-        Time finalPaymentDate, Money price, String description) implements GroupedContent
+public record Invoice(FinancingActor sender, FinancingActor receiver, Time timestamp, long uniqueId, long groupingId,
+        Order order, Time finalPaymentDate, Money price, String description) implements GroupedContent
 {
     public Invoice(final FinancingActor sender, final FinancingActor receiver, final Order order, final Time finalPaymentDate,
             final Money price, final String description)

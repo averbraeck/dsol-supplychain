@@ -46,7 +46,7 @@ public class RequestForQuoteHandler extends ContentHandler<RequestForQuote>
      * @param inventory the stock to check for products when quoting
      * @param profitMargin the profit margin to use; 1.0 is no profit
      * @param handlingTime the distribution of the time to react on the RFQ
-     * @param validityDuration 
+     * @param validityDuration
      */
     public RequestForQuoteHandler(final Role owner, final Inventory inventory, final double profitMargin,
             final DistContinuousDuration handlingTime, final Duration validityDuration)

@@ -24,7 +24,7 @@ public interface ActorMethods
      * @return the actor to which this role belongs
      */
     Actor getActor();
-    
+
     /**
      * Return the ContentStore for the Actor.
      * @return the content store.
@@ -69,7 +69,7 @@ public interface ActorMethods
     {
         return getSimulator().getAbsSimulatorTime();
     }
-    
+
     /**
      * Send content to another actor or this actor with a delay. This method is public, so Roles, Policies, Departments, and
      * other sub-components of the Actor can send content on its behalf. The method has the risk that the conent is sent from
