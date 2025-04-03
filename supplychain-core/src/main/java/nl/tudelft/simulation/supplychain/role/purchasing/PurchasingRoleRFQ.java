@@ -1,10 +1,11 @@
 package nl.tudelft.simulation.supplychain.role.purchasing;
 
-import nl.tudelft.simulation.supplychain.handler.demand.DemandHandlerRFQ;
-import nl.tudelft.simulation.supplychain.handler.invoice.InvoiceHandler;
-import nl.tudelft.simulation.supplychain.handler.orderconfirmation.OrderConfirmationHandler;
-import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandler;
-import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandler;
+import java.util.Set;
+
+import nl.tudelft.simulation.supplychain.content.Content;
+import nl.tudelft.simulation.supplychain.content.Demand;
+import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
+import nl.tudelft.simulation.supplychain.content.Quote;
 
 /**
  * The purchasing role based on a RFQ is a role that organizes the purchasing based on a RequestForQuote that is sent to a fixed
@@ -20,25 +21,17 @@ public class PurchasingRoleRFQ extends PurchasingRole
     /** the serial version uid. */
     private static final long serialVersionUID = 20221205L;
 
+    /** the necessary content handlers. */
+    private static Set<Class<? extends Content>> necessaryContentHandlers =
+            Set.of(Demand.class, Quote.class, OrderConfirmation.class);
+
     /**
      * Constructs a new PurchasingRole for Demand - Quote - Confirmation - Shipment - Invoice.
      * @param owner the actor to which this role belongs
-     * @param demandHandler the demand handler, results in sending out an RFQ
-     * @param quoteHandler the quote handler
-     * @param orderConfirmationHandler the order confirmation handler
-     * @param shipmentHandler the shipment handler
-     * @param invoiceHandler the invoice handler
      */
-    public PurchasingRoleRFQ(final PurchasingActor owner, final DemandHandlerRFQ demandHandler, final QuoteHandler quoteHandler,
-            final OrderConfirmationHandler orderConfirmationHandler, final ShipmentHandler shipmentHandler,
-            final InvoiceHandler invoiceHandler)
+    public PurchasingRoleRFQ(final PurchasingActor owner)
     {
         super(owner);
-        setContentHandler(demandHandler);
-        setContentHandler(quoteHandler);
-        setContentHandler(orderConfirmationHandler);
-        setContentHandler(shipmentHandler);
-        setContentHandler(invoiceHandler);
     }
 
     @Override
@@ -47,4 +40,9 @@ public class PurchasingRoleRFQ extends PurchasingRole
         return getActor().getId() + "-BUYING(RFQ)";
     }
 
+    @Override
+    protected Set<Class<? extends Content>> getNecessaryContentHandlers()
+    {
+        return necessaryContentHandlers;
+    }
 }

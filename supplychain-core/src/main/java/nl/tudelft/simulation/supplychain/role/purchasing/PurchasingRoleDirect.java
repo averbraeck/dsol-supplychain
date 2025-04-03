@@ -1,9 +1,10 @@
 package nl.tudelft.simulation.supplychain.role.purchasing;
 
-import nl.tudelft.simulation.supplychain.handler.demand.DemandHandlerOrder;
-import nl.tudelft.simulation.supplychain.handler.invoice.InvoiceHandler;
-import nl.tudelft.simulation.supplychain.handler.orderconfirmation.OrderConfirmationHandler;
-import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandler;
+import java.util.Set;
+
+import nl.tudelft.simulation.supplychain.content.Content;
+import nl.tudelft.simulation.supplychain.content.Demand;
+import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
 
 /**
  * The direct purchasing role is a role that organizes the purchasing based on a single supplier, and continues from there.
@@ -18,23 +19,16 @@ public class PurchasingRoleDirect extends PurchasingRole
     /** the serial version uid. */
     private static final long serialVersionUID = 20221205L;
 
+    /** the necessary content handlers. */
+    private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of(Demand.class, OrderConfirmation.class);
+
     /**
      * Construct a new PurchasingRole for Generic Demand - Confirmation - Shipment - Invoice.
      * @param owner the actor to which this role belongs
-     * @param demandHandler the demand handler
-     * @param orderConfirmationHandler the order confirmation handler
-     * @param shipmentHandler the shipment handler
-     * @param invoiceHandler the invoice handler
      */
-    public PurchasingRoleDirect(final PurchasingActor owner, final DemandHandlerOrder demandHandler,
-            final OrderConfirmationHandler orderConfirmationHandler, final ShipmentHandler shipmentHandler,
-            final InvoiceHandler invoiceHandler)
+    public PurchasingRoleDirect(final PurchasingActor owner)
     {
         super(owner);
-        setContentHandler(demandHandler);
-        setContentHandler(orderConfirmationHandler);
-        setContentHandler(shipmentHandler);
-        setContentHandler(invoiceHandler);
     }
 
     @Override
@@ -43,4 +37,9 @@ public class PurchasingRoleDirect extends PurchasingRole
         return getActor().getId() + "-BUYING(direct)";
     }
 
+    @Override
+    protected Set<Class<? extends Content>> getNecessaryContentHandlers()
+    {
+        return necessaryContentHandlers;
+    }
 }
