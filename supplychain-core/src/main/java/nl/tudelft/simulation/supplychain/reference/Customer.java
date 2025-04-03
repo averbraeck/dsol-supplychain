@@ -7,10 +7,10 @@ import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.message.store.trade.ContentStoreInterface;
-import nl.tudelft.simulation.supplychain.role.buying.BuyingActor;
-import nl.tudelft.simulation.supplychain.role.buying.BuyingRole;
 import nl.tudelft.simulation.supplychain.role.consuming.ConsumingActor;
 import nl.tudelft.simulation.supplychain.role.consuming.ConsumingRole;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 
 /**
  * A Customer is an actor which usually orders (pulls) products from a Distributor. <br>
@@ -20,13 +20,13 @@ import nl.tudelft.simulation.supplychain.role.consuming.ConsumingRole;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class Customer extends SupplyChainActor implements BuyingActor, ConsumingActor
+public class Customer extends SupplyChainActor implements PurchasingActor, ConsumingActor
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
 
     /** The role to buy products. */
-    private BuyingRole buyingRole;
+    private PurchasingRole purchasingRole;
 
     /** The role to generate demand. */
     private ConsumingRole demandGenerationRole;
@@ -48,18 +48,18 @@ public class Customer extends SupplyChainActor implements BuyingActor, Consuming
     }
 
     @Override
-    public BuyingRole getBuyingRole()
+    public PurchasingRole getPurchasingRole()
     {
-        return this.buyingRole;
+        return this.purchasingRole;
     }
 
     @Override
-    public void setBuyingRole(final BuyingRole buyingRole)
+    public void setPurchasingRole(final PurchasingRole purchasingRole)
     {
-        Throw.whenNull(buyingRole, "buyingRole cannot be null");
-        Throw.when(this.buyingRole != null, IllegalStateException.class, "buyingRole already initialized");
-        addRole(buyingRole);
-        this.buyingRole = buyingRole;
+        Throw.whenNull(purchasingRole, "purchasingRole cannot be null");
+        Throw.when(this.purchasingRole != null, IllegalStateException.class, "purchasingRole already initialized");
+        addRole(purchasingRole);
+        this.purchasingRole = purchasingRole;
     }
 
     /**
@@ -86,7 +86,7 @@ public class Customer extends SupplyChainActor implements BuyingActor, Consuming
     @Override
     public void checkNecessaryRoles()
     {
-        Throw.whenNull(this.buyingRole, "BuyingRole not initialized for Customer: " + this.getName());
+        Throw.whenNull(this.purchasingRole, "PurchasingRole not initialized for Customer: " + this.getName());
         Throw.whenNull(this.demandGenerationRole, "DemandGenerationRole not initialized for Customer: " + this.getName());
     }
 }

@@ -4,7 +4,7 @@ import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.supplychain.role.buying.BuyingActor;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 import nl.tudelft.simulation.supplychain.transport.TransportOption;
 
@@ -29,12 +29,12 @@ import nl.tudelft.simulation.supplychain.transport.TransportOption;
  * @param transportOption the transport option offered
  * @param validityTime the time on the simulator clock until which the quote is valid
  */
-public record Quote(SellingActor sender, BuyingActor receiver, Time timestamp, long uniqueId, long groupingId,
+public record Quote(SellingActor sender, PurchasingActor receiver, Time timestamp, long uniqueId, long groupingId,
         RequestForQuote requestForQuote, Product product, double amount, Money price, Time proposedShippingDate,
         TransportOption transportOption, Time validityTime) implements GroupedContent, ProductContent
 {
     @SuppressWarnings("checkstyle:parameternumber")
-    public Quote(final SellingActor sender, final BuyingActor receiver, final RequestForQuote requestForQuote,
+    public Quote(final SellingActor sender, final PurchasingActor receiver, final RequestForQuote requestForQuote,
             final Product product, final double amount, final Money price, final Time proposedShippingDate,
             final TransportOption transportOption, final Time validityTime)
     {

@@ -12,7 +12,7 @@ import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.message.store.trade.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.Money;
-import nl.tudelft.simulation.supplychain.role.buying.BuyingRole;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
 
@@ -30,7 +30,7 @@ public class Retailer extends SupplyChainActor implements Serializable
     private static final long serialVersionUID = 20221206L;
 
     /** The role to buy. */
-    private BuyingRole buyingRole = null;
+    private PurchasingRole purchasingRole = null;
 
     /** The role to sell. */
     private SellingRole sellingRole = null;
@@ -58,24 +58,24 @@ public class Retailer extends SupplyChainActor implements Serializable
     }
 
     /**
-     * Return the buying role.
-     * @return the buying role
+     * Return the purchasing role.
+     * @return the purchasing role
      */
-    public BuyingRole getBuyingRole()
+    public PurchasingRole getPurchasingRole()
     {
-        return this.buyingRole;
+        return this.purchasingRole;
     }
 
     /**
-     * Set the buying role.
-     * @param buyingRole the new buying role
+     * Set the purchasing role.
+     * @param purchasingRole the new purchasing role
      */
-    public void setBuyingRole(final BuyingRole buyingRole)
+    public void setPurchasingRole(final PurchasingRole purchasingRole)
     {
-        Throw.whenNull(buyingRole, "buyingRole cannot be null");
-        Throw.when(this.buyingRole != null, IllegalStateException.class, "buyingRole already initialized");
-        addRole(buyingRole);
-        this.buyingRole = buyingRole;
+        Throw.whenNull(purchasingRole, "purchasingRole cannot be null");
+        Throw.when(this.purchasingRole != null, IllegalStateException.class, "purchasingRole already initialized");
+        addRole(purchasingRole);
+        this.purchasingRole = purchasingRole;
     }
 
     /**
@@ -123,7 +123,7 @@ public class Retailer extends SupplyChainActor implements Serializable
     @Override
     public void receiveMessage(final Message message)
     {
-        Throw.whenNull(this.buyingRole, "BuyingRole not initialized for actor: " + this.getName());
+        Throw.whenNull(this.purchasingRole, "PurchasingRole not initialized for actor: " + this.getName());
         Throw.whenNull(this.sellingRole, "SellingRole not initialized for actor: " + this.getName());
         Throw.whenNull(this.inventoryRole, "InventoryRole not initialized for actor: " + this.getName());
         super.receiveContent(message);

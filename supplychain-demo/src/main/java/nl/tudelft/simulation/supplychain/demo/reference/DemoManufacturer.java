@@ -25,7 +25,7 @@ import nl.tudelft.simulation.supplychain.actor.unit.dist.DistConstantDuration;
 import nl.tudelft.simulation.supplychain.actor.yellowpage.Topic;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.handler.demand.InternalDemandHandlerYP;
+import nl.tudelft.simulation.supplychain.handler.demand.DemandHandlerYP;
 import nl.tudelft.simulation.supplychain.handler.invoice.InvoiceHandler;
 import nl.tudelft.simulation.supplychain.handler.order.OrderHandler;
 import nl.tudelft.simulation.supplychain.handler.order.OrderHandlerMake;
@@ -47,8 +47,8 @@ import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandlerConsume
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Manufacturer;
 import nl.tudelft.simulation.supplychain.reference.Search;
-import nl.tudelft.simulation.supplychain.role.buying.BuyingRoleSearch;
 import nl.tudelft.simulation.supplychain.role.manufacturing.ManufacturingServiceDelay;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleSearch;
 import nl.tudelft.simulation.supplychain.role.manufacturing.ManufacturingService;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
 import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
@@ -117,9 +117,9 @@ public class DemoManufacturer extends Manufacturer
 
         // BUYING HANDLERS
 
-        DistContinuousDuration administrativeDelayInternalDemand =
+        DistContinuousDuration administrativeDelayDemand =
                 new DistContinuousDuration(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-        InternalDemandHandlerYP demandHandler = new InternalDemandHandlerYP(this, administrativeDelayInternalDemand,
+        DemandHandlerYP demandHandler = new DemandHandlerYP(this, administrativeDelayDemand,
                 ypProduction, new Length(1E6, LengthUnit.METER), 1000, super.inventory);
 
         DistContinuousDuration administrativeDelaySearchAnswer =
@@ -138,9 +138,9 @@ public class DemoManufacturer extends Manufacturer
         DistContinuousDuration paymentDelay = new DistContinuousDuration(new DistConstant(stream, 0.0), DurationUnit.HOUR);
         InvoiceHandler billHandler = new InvoiceHandler(this, this.getBankAccount(), PaymentPolicyEnum.PAYMENT_ON_TIME, paymentDelay);
 
-        BuyingRoleSearch buyingRole = new BuyingRoleSearch(this, simulator, demandHandler, searchAnswerHandler, quoteHandler,
+        PurchasingRoleSearch purchasingRole = new PurchasingRoleSearch(this, simulator, demandHandler, searchAnswerHandler, quoteHandler,
                 orderConfirmationHandler, shipmentHandler, billHandler);
-        this.setBuyingRole(buyingRole);
+        this.setPurchasingRole(purchasingRole);
 
         // SELLING HANDLERS
 
@@ -164,7 +164,7 @@ public class DemoManufacturer extends Manufacturer
         while (stockIter.hasNext())
         {
             Product stockProduct = stockIter.next();
-            // the restocking handler will generate InternalDemand, handled by the BuyingRole
+            // the restocking handler will generate Demand, handled by the PurchasingRole
             new RestockingServiceSafety(super.inventory, stockProduct, new Duration(24.0, DurationUnit.HOUR), false, initialStock,
                     true, 2.0 * initialStock, new Duration(14.0, DurationUnit.DAY));
         }

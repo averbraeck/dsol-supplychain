@@ -13,7 +13,7 @@ import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.OrderStandalone;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.supplychain.role.buying.BuyingRole;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
 import nl.tudelft.simulation.supplychain.transport.TransportChoiceProvider;
@@ -51,7 +51,7 @@ public class DemandHandlerOrder extends DemandHandler
      * @param transportChoiceProvider the provider to choose between transport options
      * @param handlingTime the handling time distribution
      */
-    public DemandHandlerOrder(final BuyingRole owner, final TransportOptionProvider transportOptionProvider,
+    public DemandHandlerOrder(final PurchasingRole owner, final TransportOptionProvider transportOptionProvider,
             final TransportChoiceProvider transportChoiceProvider, final DistContinuousDuration handlingTime)
     {
         super("DemandHandlerOrder", owner, handlingTime);
@@ -99,9 +99,9 @@ public class DemandHandlerOrder extends DemandHandler
     }
 
     @Override
-    public BuyingRole getRole()
+    public PurchasingRole getRole()
     {
-        return (BuyingRole) super.getRole();
+        return (PurchasingRole) super.getRole();
     }
 
     /**

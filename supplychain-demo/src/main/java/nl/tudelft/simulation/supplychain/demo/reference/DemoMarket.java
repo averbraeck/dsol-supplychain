@@ -22,7 +22,7 @@ import nl.tudelft.simulation.supplychain.actor.messaging.devices.reference.WebAp
 import nl.tudelft.simulation.supplychain.actor.unit.dist.DistConstantDuration;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.handler.demand.InternalDemandHandlerYP;
+import nl.tudelft.simulation.supplychain.handler.demand.DemandHandlerYP;
 import nl.tudelft.simulation.supplychain.handler.invoice.InvoiceHandler;
 import nl.tudelft.simulation.supplychain.handler.payment.PaymentPolicyEnum;
 import nl.tudelft.simulation.supplychain.handler.search.SearchAnswerHandler;
@@ -39,8 +39,8 @@ import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandlerConsume
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Customer;
 import nl.tudelft.simulation.supplychain.reference.Search;
-import nl.tudelft.simulation.supplychain.role.buying.BuyingRoleSearch;
 import nl.tudelft.simulation.supplychain.role.consuming.DemandGeneratingProcess;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleSearch;
 import nl.tudelft.simulation.supplychain.role.consuming.DemandGeneratingProcess;
 
 /**
@@ -90,9 +90,9 @@ public class DemoMarket extends Customer
 
         // MESSAGE HANDLING
 
-        DistContinuousDuration administrativeDelayInternalDemand =
+        DistContinuousDuration administrativeDelayDemand =
                 new DistContinuousDuration(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-        InternalDemandHandlerYP demandHandler = new InternalDemandHandlerYP(this, administrativeDelayInternalDemand,
+        DemandHandlerYP demandHandler = new DemandHandlerYP(this, administrativeDelayDemand,
                 ypCustomre, new Length(1E6, LengthUnit.METER), 1000, null);
 
         DistContinuousDuration administrativeDelaySearchAnswer =
@@ -111,9 +111,9 @@ public class DemoMarket extends Customer
         DistContinuousDuration paymentDelay = new DistContinuousDuration(new DistConstant(stream, 0.0), DurationUnit.HOUR);
         InvoiceHandler billHandler = new InvoiceHandler(this, this.getBankAccount(), PaymentPolicyEnum.PAYMENT_ON_TIME, paymentDelay);
 
-        BuyingRoleSearch buyingRole = new BuyingRoleSearch(this, simulator, demandHandler, searchAnswerHandler, quoteHandler,
+        PurchasingRoleSearch purchasingRole = new PurchasingRoleSearch(this, simulator, demandHandler, searchAnswerHandler, quoteHandler,
                 orderConfirmationHandler, shipmentHandler, billHandler);
-        this.setBuyingRole(buyingRole);
+        this.setPurchasingRole(purchasingRole);
 
         // ANIMATION
 

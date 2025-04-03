@@ -15,7 +15,7 @@ import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.supplychain.role.buying.BuyingRole;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 import nl.tudelft.simulation.supplychain.transport.TransportChoiceProvider;
 import nl.tudelft.simulation.supplychain.transport.TransportOption;
 import nl.tudelft.simulation.supplychain.transport.TransportOptionProvider;
@@ -55,7 +55,7 @@ public class DemandHandlerRFQ extends DemandHandler
      * @param handlingTime the distribution of the time to react on the Search answer
      * @param cutoffDuration the maximum time after which the RFQ will stop collecting quotes
      */
-    public DemandHandlerRFQ(final BuyingRole owner, final TransportOptionProvider transportOptionProvider,
+    public DemandHandlerRFQ(final PurchasingRole owner, final TransportOptionProvider transportOptionProvider,
             final TransportChoiceProvider transportChoiceProvider, final DistContinuousDuration handlingTime,
             final Duration cutoffDuration)
     {

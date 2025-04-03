@@ -4,7 +4,7 @@ import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.supplychain.role.buying.BuyingActor;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 import nl.tudelft.simulation.supplychain.transport.TransportOption;
 
@@ -28,10 +28,10 @@ import nl.tudelft.simulation.supplychain.transport.TransportOption;
  * @param price the price we want to pay for the product
  * @param transportOption the accepted transport option
  */
-public record OrderStandalone(BuyingActor sender, SellingActor receiver, Time timestamp, long uniqueId, long groupingId,
+public record OrderStandalone(PurchasingActor sender, SellingActor receiver, Time timestamp, long uniqueId, long groupingId,
         Time deliveryDate, Product product, double amount, Money price, TransportOption transportOption) implements Order
 {
-    public OrderStandalone(final BuyingActor sender, final SellingActor receiver, final Time deliveryDate,
+    public OrderStandalone(final PurchasingActor sender, final SellingActor receiver, final Time deliveryDate,
             final Product product, final double amount, final Money price, final TransportOption transportOption)
     {
         this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(),

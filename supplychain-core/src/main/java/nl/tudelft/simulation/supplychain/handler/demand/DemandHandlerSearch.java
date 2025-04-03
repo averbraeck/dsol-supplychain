@@ -5,7 +5,7 @@ import org.djunits.value.vdouble.scalar.Length;
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.SearchRequest;
-import nl.tudelft.simulation.supplychain.role.buying.BuyingRole;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 import nl.tudelft.simulation.supplychain.role.searching.SearchingActor;
 
 /**
@@ -39,7 +39,7 @@ public class DemandHandlerSearch extends DemandHandler
      * @param maximumDistance the search distance to use for all products
      * @param maximumNumber the max number of suppliers to return
      */
-    public DemandHandlerSearch(final BuyingRole owner, final DistContinuousDuration handlingTime,
+    public DemandHandlerSearch(final PurchasingRole owner, final DistContinuousDuration handlingTime,
             final SearchingActor searchingActor, final Length maximumDistance, final int maximumNumber)
     {
         super("DemandHandlerSearch", owner, handlingTime);

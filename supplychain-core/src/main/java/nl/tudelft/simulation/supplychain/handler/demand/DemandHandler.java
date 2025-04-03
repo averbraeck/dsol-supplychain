@@ -3,7 +3,7 @@ package nl.tudelft.simulation.supplychain.handler.demand;
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
-import nl.tudelft.simulation.supplychain.role.buying.BuyingRole;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 
 /**
  * The abstract DemandHandler class provides the general methods that all DemandHandler classes need, such as checking whether
@@ -14,7 +14,7 @@ import nl.tudelft.simulation.supplychain.role.buying.BuyingRole;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public abstract class DemandHandler extends ContentHandler<Demand, BuyingRole>
+public abstract class DemandHandler extends ContentHandler<Demand, PurchasingRole>
 {
     /** */
     private static final long serialVersionUID = 20221201L;
@@ -29,7 +29,7 @@ public abstract class DemandHandler extends ContentHandler<Demand, BuyingRole>
      * @param owner the Role that has this handler.
      * @param handlingTime the distribution of the time to handle an demand
      */
-    public DemandHandler(final String id, final BuyingRole owner, final DistContinuousDuration handlingTime)
+    public DemandHandler(final String id, final PurchasingRole owner, final DistContinuousDuration handlingTime)
     {
         super(id, owner, Demand.class);
         this.handlingTime = handlingTime;

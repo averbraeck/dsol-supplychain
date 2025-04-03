@@ -99,7 +99,7 @@ public class DemoSupplier extends Supplier
         while (stockIter.hasNext())
         {
             Product stockProduct = stockIter.next();
-            // the restocking handler will generate InternalDemand, handled by the BuyingRole
+            // the restocking handler will generate Demand, handled by the PurchasingRole
             new RestockingServiceSafety(super.inventory, stockProduct, new Duration(24.0, DurationUnit.HOUR), false, initialStock,
                     true, 2.0 * initialStock, new Duration(14.0, DurationUnit.DAY));
         }

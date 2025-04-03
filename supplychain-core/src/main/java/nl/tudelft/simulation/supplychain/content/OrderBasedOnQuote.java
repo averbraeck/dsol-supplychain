@@ -3,7 +3,7 @@ package nl.tudelft.simulation.supplychain.content;
 import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.supplychain.role.buying.BuyingActor;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 import nl.tudelft.simulation.supplychain.transport.TransportOption;
 
@@ -24,10 +24,10 @@ import nl.tudelft.simulation.supplychain.transport.TransportOption;
  * @param deliveryDate the intended delivery date of the products
  * @param transportOption the accepted transport option
  */
-public record OrderBasedOnQuote(BuyingActor sender, SellingActor receiver, Time timestamp, long uniqueId, long groupingId,
+public record OrderBasedOnQuote(PurchasingActor sender, SellingActor receiver, Time timestamp, long uniqueId, long groupingId,
         Quote quote, Time deliveryDate, TransportOption transportOption) implements Order
 {
-    public OrderBasedOnQuote(final BuyingActor sender, final SellingActor receiver, final Time deliveryDate, final Quote quote,
+    public OrderBasedOnQuote(final PurchasingActor sender, final SellingActor receiver, final Time deliveryDate, final Quote quote,
             final TransportOption transportOption)
     {
         this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), quote.groupingId(), quote,

@@ -15,7 +15,7 @@ import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.dsol.swing.charts.xy.XYChart;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
-import nl.tudelft.simulation.supplychain.handler.demand.InternalDemandHandlerRFQ;
+import nl.tudelft.simulation.supplychain.handler.demand.DemandHandlerRFQ;
 import nl.tudelft.simulation.supplychain.handler.invoice.InvoiceHandler;
 import nl.tudelft.simulation.supplychain.handler.order.OrderHandler;
 import nl.tudelft.simulation.supplychain.handler.order.OrderHandlerStock;
@@ -35,7 +35,7 @@ import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandlerStock;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Retailer;
 import nl.tudelft.simulation.supplychain.reference.Supplier;
-import nl.tudelft.simulation.supplychain.role.buying.BuyingRoleSearch;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleSearch;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRoleRFQ;
 import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
@@ -108,7 +108,7 @@ public class PCShop extends Retailer
         // hopefully, the PCShop will get payments in the end
         PaymentHandler paymentHandler = new PaymentHandler(this, getBankAccount());
         //
-        // add the Handlers to the buying role for PCShop
+        // add the Handlers to the purchasing role for PCShop
         SellingRole sellingRole = new SellingRoleRFQ(this, getSimulator(), rfqHandler, orderHandler, paymentHandler);
         super.setSellingRole(sellingRole);
         //
@@ -126,9 +126,9 @@ public class PCShop extends Retailer
         // BUY PRODUCTS WHEN THERE IS INTERNAL DEMAND
         //
         
-        // tell PCShop to use the InternalDemandHandler for all products
-        InternalDemandHandlerRFQ demandHandler =
-                new InternalDemandHandlerRFQ(this, new Duration(1.0, DurationUnit.HOUR), getInventory());
+        // tell PCShop to use the DemandHandler for all products
+        DemandHandlerRFQ demandHandler =
+                new DemandHandlerRFQ(this, new Duration(1.0, DurationUnit.HOUR), getInventory());
         for (Product product : getInventory().getProducts())
         {
             demandHandler.addSupplier(product, this.manufacturer);
@@ -148,10 +148,10 @@ public class PCShop extends Retailer
         // hopefully, PCShop will get laptop shipments, put them in stock
         ShipmentHandler shipmentHandler = new ShipmentHandlerStock(this, getInventory());
         //
-        // add the Handlers to the buying role for PCShop
-        BuyingRoleSearch buyingRole = new BuyingRoleSearch(this, getSimulator(), demandHandler, quoteHandler,
+        // add the Handlers to the purchasing role for PCShop
+        PurchasingRoleSearch purchasingRole = new PurchasingRoleSearch(this, getSimulator(), demandHandler, quoteHandler,
                 confirmationHandler, shipmentHandler, billHandler);
-        super.setBuyingRole(buyingRole);
+        super.setPurchasingRole(purchasingRole);
         //
         // CHARTS
         //

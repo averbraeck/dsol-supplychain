@@ -21,7 +21,7 @@ import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.handler.demand.InternalDemandHandlerRFQ;
+import nl.tudelft.simulation.supplychain.handler.demand.DemandHandlerRFQ;
 import nl.tudelft.simulation.supplychain.handler.invoice.InvoiceHandler;
 import nl.tudelft.simulation.supplychain.handler.payment.PaymentPolicyEnum;
 import nl.tudelft.simulation.supplychain.message.store.trade.ContentStoreInterface;
@@ -37,8 +37,8 @@ import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandlerConsume
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Customer;
 import nl.tudelft.simulation.supplychain.reference.Retailer;
-import nl.tudelft.simulation.supplychain.role.buying.BuyingRoleSearch;
 import nl.tudelft.simulation.supplychain.role.consuming.DemandGeneratingProcess;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleSearch;
 import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
 /**
@@ -110,9 +110,9 @@ public class Client extends Customer
         dg.addDemandGenerator(this.product, demand);
         super.setDemandGeneration(dg);
         //
-        // tell Client to use the InternalDemandHandler
-        InternalDemandHandlerRFQ demandHandler =
-                new InternalDemandHandlerRFQ(this, new Duration(24.0, DurationUnit.HOUR), null); // XXX: Why does it need stock?
+        // tell Client to use the DemandHandler
+        DemandHandlerRFQ demandHandler =
+                new DemandHandlerRFQ(this, new Duration(24.0, DurationUnit.HOUR), null); // XXX: Why does it need stock?
         demandHandler.addSupplier(this.product, this.retailer);
         //
         // tell Client to use the QuoteHandler to handle quotes
@@ -129,10 +129,10 @@ public class Client extends Customer
         // hopefully, Client will get laptop shipments
         ShipmentHandler shipmentHandler = new ShipmentHandlerConsume(this);
         //
-        // add the Handlers to the buying role for Client
-        BuyingRoleSearch buyingRole = new BuyingRoleSearch(this, super.simulator, demandHandler, quoteHandler,
+        // add the Handlers to the purchasing role for Client
+        PurchasingRoleSearch purchasingRole = new PurchasingRoleSearch(this, super.simulator, demandHandler, quoteHandler,
                 confirmationHandler, shipmentHandler, billHandler);
-        super.setBuyingRole(buyingRole);
+        super.setPurchasingRole(purchasingRole);
 
         //
         // CHARTS

@@ -4,7 +4,7 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.supplychain.role.buying.BuyingActor;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 import nl.tudelft.simulation.supplychain.transport.TransportOption;
 
@@ -25,11 +25,11 @@ import nl.tudelft.simulation.supplychain.transport.TransportOption;
  * @param preferredTransportOption the preferred transport option for moving the product from sender to receiver
  * @param cutoffDuration after how much time will the RFQ stop collecting quotes?
  */
-public record RequestForQuote(BuyingActor sender, SellingActor receiver, Time timestamp, long uniqueId, long groupingId,
+public record RequestForQuote(PurchasingActor sender, SellingActor receiver, Time timestamp, long uniqueId, long groupingId,
         Demand demand, TransportOption preferredTransportOption, Duration cutoffDuration)
         implements GroupedContent, ProductContent
 {
-    public RequestForQuote(final BuyingActor sender, final SellingActor receiver, final Demand demand,
+    public RequestForQuote(final PurchasingActor sender, final SellingActor receiver, final Demand demand,
             final TransportOption preferredTransportOption, final Duration cutoffDuration)
     {
         this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), demand.groupingId(), demand,

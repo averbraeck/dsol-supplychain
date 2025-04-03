@@ -15,7 +15,7 @@ import nl.tudelft.simulation.supplychain.content.SearchAnswer;
 import nl.tudelft.simulation.supplychain.content.SearchRequest;
 import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
-import nl.tudelft.simulation.supplychain.role.buying.BuyingRole;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 import nl.tudelft.simulation.supplychain.transport.TransportChoiceProvider;
 import nl.tudelft.simulation.supplychain.transport.TransportOption;
@@ -31,7 +31,7 @@ import nl.tudelft.simulation.supplychain.transport.TransportOptionProvider;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class SearchAnswerHandler extends ContentHandler<SearchAnswer, BuyingRole>
+public class SearchAnswerHandler extends ContentHandler<SearchAnswer, PurchasingRole>
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 120221203;
@@ -56,7 +56,7 @@ public class SearchAnswerHandler extends ContentHandler<SearchAnswer, BuyingRole
      * @param handlingTime the distribution of the time to react on the Search answer
      * @param cutoffDuration the maximum time after which the RFQ will stop collecting quotes
      */
-    public SearchAnswerHandler(final BuyingRole owner, final TransportOptionProvider transportOptionProvider,
+    public SearchAnswerHandler(final PurchasingRole owner, final TransportOptionProvider transportOptionProvider,
             final TransportChoiceProvider transportChoiceProvider, final DistContinuousDuration handlingTime,
             final Duration cutoffDuration)
     {

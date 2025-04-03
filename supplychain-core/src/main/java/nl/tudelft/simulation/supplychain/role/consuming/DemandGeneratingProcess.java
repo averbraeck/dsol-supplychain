@@ -106,7 +106,7 @@ public class DemandGeneratingProcess extends AutonomousProcess<ConsumingRole>
     }
 
     /**
-     * Generate demand and send it to the BuyingActor.
+     * Generate demand and send it to the PurchasingActor.
      */
     protected void generateDemand()
     {

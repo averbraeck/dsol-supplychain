@@ -3,7 +3,7 @@ package nl.tudelft.simulation.supplychain.content;
 import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.supplychain.role.buying.BuyingActor;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 
 /**
@@ -22,10 +22,10 @@ import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
  * @param order the order for which this was the confirmation
  * @param confirmed indicating whether the order was accepted or not
  */
-public record OrderConfirmation(SellingActor sender, BuyingActor receiver, Time timestamp, long uniqueId, long groupingId,
+public record OrderConfirmation(SellingActor sender, PurchasingActor receiver, Time timestamp, long uniqueId, long groupingId,
         Order order, boolean confirmed) implements GroupedContent, ProductContent
 {
-    public OrderConfirmation(final SellingActor sender, final BuyingActor receiver, final Order order, final boolean confirmed)
+    public OrderConfirmation(final SellingActor sender, final PurchasingActor receiver, final Order order, final boolean confirmed)
     {
         this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueMessageId(), order.groupingId(), order,
                 confirmed);
