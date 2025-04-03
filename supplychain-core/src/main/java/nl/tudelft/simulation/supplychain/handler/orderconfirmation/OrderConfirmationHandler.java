@@ -3,10 +3,10 @@ package nl.tudelft.simulation.supplychain.handler.orderconfirmation;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.pmw.tinylog.Logger;
 
-import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 
 /**
  * The OrderConfirmationHandler is a simple implementation of the business logic for a OrderConfirmation that comes in. When the
@@ -19,19 +19,16 @@ import nl.tudelft.simulation.supplychain.handler.ContentHandler;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class OrderConfirmationHandler extends ContentHandler<OrderConfirmation>
+public class OrderConfirmationHandler extends ContentHandler<OrderConfirmation, PurchasingRole>
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
-
-    /** for debugging. */
-    private static final boolean DEBUG = false;
 
     /**
      * Constructs a new OrderConfirmationHandler.
      * @param owner the owner of the handler.
      */
-    public OrderConfirmationHandler(final Role owner)
+    public OrderConfirmationHandler(final PurchasingRole owner)
     {
         super("OrderConfirmationHandler", owner, OrderConfirmation.class);
     }
@@ -48,37 +45,22 @@ public class OrderConfirmationHandler extends ContentHandler<OrderConfirmation>
         {
             return false;
         }
-        if (!orderConfirmation.isAccepted())
+        if (!orderConfirmation.confirmed())
         {
-            if (OrderConfirmationHandler.DEBUG)
-            {
-                System.out.println("OrderConfirmationHandler: handleContent: !orderConfirmation.isAccepted()");
-            }
-
-            Demand oldID = null;
-            try
-            {
-                // TODO: place some business logic here to handle the problem
-                oldID = getActor().getContentStore().getContentList(orderConfirmation.groupingId(), Demand.class).get(0);
-
-                if (oldID == null)
-                {
-                    Logger.warn("handleContent", "Could not find Demand for OrderConfirmation " + orderConfirmation.toString());
-                    return false;
-                }
-            }
-            catch (Exception exception)
+            Demand oldDemand = null;
+            var demandList = getActor().getContentStore().getContentList(orderConfirmation.groupingId(), Demand.class);
+            if (demandList.size() == 0)
             {
                 Logger.warn("handleContent", "Could not find Demand for OrderConfirmation " + orderConfirmation.toString());
                 return false;
             }
-
-            Demand newID = new Demand(oldID.sender(), oldID.product(), oldID.amount(), oldID.earliestDeliveryDate(),
-                    oldID.latestDeliveryDate());
+            oldDemand = demandList.get(0);
+            Demand newID = new Demand(oldDemand.sender(), oldDemand.product(), oldDemand.amount(),
+                    oldDemand.earliestDeliveryDate(), oldDemand.latestDeliveryDate());
             sendContent(newID, Duration.ZERO);
 
             // also clean the messageStore for the old demand
-            getActor().getContentStore().removeAllMessages(orderConfirmation.groupingId());
+            getActor().getContentStore().removeAllContent(orderConfirmation.groupingId());
         }
         return true;
     }

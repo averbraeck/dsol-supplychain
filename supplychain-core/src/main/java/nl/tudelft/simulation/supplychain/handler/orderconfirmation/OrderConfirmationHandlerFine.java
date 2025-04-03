@@ -5,11 +5,11 @@ import java.io.Serializable;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.pmw.tinylog.Logger;
 
-import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
 import nl.tudelft.simulation.supplychain.content.Shipment;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.money.MoneyUnit;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 
 /**
  * An OrderConfirmationFineHandler checks whether a promised delivery is on time or even delivered at all. If too late, a fine
@@ -41,7 +41,7 @@ public class OrderConfirmationHandlerFine extends OrderConfirmationHandler
      * @param fineMargin the margin
      * @param fixedFine the fixed fine
      */
-    public OrderConfirmationHandlerFine(final Role owner, final Duration maximumTimeOut, final double fineMargin,
+    public OrderConfirmationHandlerFine(final PurchasingRole owner, final Duration maximumTimeOut, final double fineMargin,
             final Money fixedFine)
     {
         super(owner);
@@ -61,13 +61,13 @@ public class OrderConfirmationHandlerFine extends OrderConfirmationHandler
     {
         if (super.handleContent(orderConfirmation))
         {
-            if (orderConfirmation.isAccepted())
+            if (orderConfirmation.confirmed())
             {
                 try
                 {
                     getSimulator()
                             .scheduleEventRel(
-                                    orderConfirmation.getOrder().getDeliveryDate().minus(getSimulator().getAbsSimulatorTime())
+                                    orderConfirmation.order().deliveryDate().minus(getSimulator().getAbsSimulatorTime())
                                             .plus(this.maximumTimeOut),
                                     this, "checkShipment", new Serializable[] {orderConfirmation});
                 }
@@ -90,7 +90,7 @@ public class OrderConfirmationHandlerFine extends OrderConfirmationHandler
         {
 
             // there is still an order, but no shipment... we fine!
-            Money fine = this.fixedFine.plus(orderConfirmation.getOrder().getPrice().multiplyBy(this.fineMargin));
+            Money fine = this.fixedFine.plus(orderConfirmation.order().price().multiplyBy(this.fineMargin));
 
             /*-
             // TODO: send a invoice for the fine instead of direct booking through the bank
@@ -102,8 +102,8 @@ public class OrderConfirmationHandlerFine extends OrderConfirmationHandler
             sendContent(invoice, Duration.ZERO);
             */
 
-            orderConfirmation.getSender().getFinancingRole().getBankAccount().withdrawFromBalance(fine);
-            orderConfirmation.getReceiver().getFinancingRole().getBankAccount().addToBalance(fine);
+            orderConfirmation.sender().getFinancingRole().getBank().withdrawFromBalance(orderConfirmation.sender(), fine);
+            orderConfirmation.receiver().getFinancingRole().getBank().addToBalance(orderConfirmation.receiver(), fine);
         }
     }
 }
