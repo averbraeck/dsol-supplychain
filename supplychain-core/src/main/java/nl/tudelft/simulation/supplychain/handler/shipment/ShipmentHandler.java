@@ -1,8 +1,8 @@
 package nl.tudelft.simulation.supplychain.handler.shipment;
 
-import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Shipment;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
 
 /**
  * When a Shipment comes in, it has to be handled.
@@ -12,7 +12,7 @@ import nl.tudelft.simulation.supplychain.handler.ContentHandler;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public abstract class ShipmentHandler extends ContentHandler<Shipment>
+public abstract class ShipmentHandler extends ContentHandler<Shipment, WarehousingRole>
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221205L;
@@ -22,7 +22,7 @@ public abstract class ShipmentHandler extends ContentHandler<Shipment>
      * @param id the id of the handler
      * @param owner the owner of the handler
      */
-    public ShipmentHandler(final String id, final Role owner)
+    public ShipmentHandler(final String id, final WarehousingRole owner)
     {
         super(id, owner, Shipment.class);
     }

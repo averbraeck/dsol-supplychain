@@ -4,10 +4,10 @@ import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
 
-import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Shipment;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.money.MoneyUnit;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
 
 /**
  * When a Shipment comes in, consume it. In other words and in terms of the supply chain simulation: do nothing... <br>
@@ -39,7 +39,7 @@ public class ShipmentHandlerFineConsume extends ShipmentHandlerConsume
      * @param fineMarginPerDay the fine margin per day
      * @param fixedFinePerDay the fixed fine per day
      */
-    public ShipmentHandlerFineConsume(final Role owner, final Duration maximumTimeOut, final double fineMarginPerDay,
+    public ShipmentHandlerFineConsume(final WarehousingRole owner, final Duration maximumTimeOut, final double fineMarginPerDay,
             final Money fixedFinePerDay)
     {
         super(owner);
@@ -53,14 +53,13 @@ public class ShipmentHandlerFineConsume extends ShipmentHandlerConsume
     {
         if (super.handleContent(shipment))
         {
-            Time time = shipment.getSender().getSimulatorTime();
-            if (time.gt(shipment.getOrder().getDeliveryDate())
-                    && time.lt(shipment.getOrder().getDeliveryDate().plus(this.maximumTimeOut)))
+            Time time = shipment.sender().getSimulatorTime();
+            if (time.gt(shipment.order().deliveryDate()) && time.lt(shipment.order().deliveryDate().plus(this.maximumTimeOut)))
             {
                 // YES!! we can fine! Finaly we earn some money
-                Money fine = this.fixedFinePerDay
-                        .multiplyBy(shipment.getOrder().getDeliveryDate().minus(time).getInUnit(DurationUnit.DAY))
-                        .plus(shipment.getOrder().getPrice().multiplyBy(this.fineMarginPerDay));
+                Money fine =
+                        this.fixedFinePerDay.multiplyBy(shipment.order().deliveryDate().minus(time).getInUnit(DurationUnit.DAY))
+                                .plus(shipment.order().price().multiplyBy(this.fineMarginPerDay));
 
                 /*-
                  // send the invoice for the fine
@@ -69,8 +68,8 @@ public class ShipmentHandlerFineConsume extends ShipmentHandlerConsume
                  sendContent(invoice, Duration.ZERO);
                  */
 
-                shipment.getSender().getBankAccount().withdrawFromBalance(fine);
-                shipment.getReceiver().getBankAccount().addToBalance(fine);
+                shipment.sender().getFinancingRole().getBank().withdrawFromBalance(shipment.sender(), fine);
+                shipment.receiver().getFinancingRole().getBank().addToBalance(shipment.receiver(), fine);
             }
             return true;
         }

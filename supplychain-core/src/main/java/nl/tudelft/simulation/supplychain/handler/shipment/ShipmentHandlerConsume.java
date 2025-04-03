@@ -1,7 +1,7 @@
 package nl.tudelft.simulation.supplychain.handler.shipment;
 
-import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Shipment;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
 
 /**
  * When a Shipment comes in, consume it. In other words and in terms of the supply chain simulation: do nothing...
@@ -20,7 +20,7 @@ public class ShipmentHandlerConsume extends ShipmentHandler
      * Construct a new ShipmentHandlerConsume handler.
      * @param owner the owner of the handler
      */
-    public ShipmentHandlerConsume(final Role owner)
+    public ShipmentHandlerConsume(final WarehousingRole owner)
     {
         super("ShipmentHandlerConsume", owner);
     }

@@ -12,13 +12,10 @@ import nl.tudelft.simulation.supplychain.role.manufacturing.ManufacturingRole;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class ProductionOrderHandler extends ContentHandler<ProductionOrder>
+public class ProductionOrderHandler extends ContentHandler<ProductionOrder, ManufacturingRole>
 {
     /** Serial version ID. */
     private static final long serialVersionUID = 20221201L;
-
-    /** the producing role. */
-    private final ManufacturingRole producingRole;
 
     /**
      * constructs a new ProductionOrderHandler.
@@ -27,13 +24,12 @@ public class ProductionOrderHandler extends ContentHandler<ProductionOrder>
     public ProductionOrderHandler(final ManufacturingRole owner)
     {
         super("ProductionOrderHandler", owner, ProductionOrder.class);
-        this.producingRole = owner;
     }
 
     @Override
     public boolean handleContent(final ProductionOrder productionOrder)
     {
-        return this.producingRole.acceptProductionOrder(productionOrder);
+        return getRole().acceptProductionOrder(productionOrder);
     }
 
 }

@@ -55,12 +55,12 @@ public class ShipmentHandlerFineStock extends ShipmentHandlerStock
         if (super.handleContent(shipment))
         {
             Time time = shipment.getSender().getSimulatorTime();
-            if ((time.gt(shipment.getOrder().getDeliveryDate()))
-                    && (time.lt(shipment.getOrder().getDeliveryDate().plus(this.maximumTimeOut))))
+            if ((time.gt(shipment.order().deliveryDate()))
+                    && (time.lt(shipment.order().deliveryDate().plus(this.maximumTimeOut))))
             {
                 // YES!! we can fine! Finally we earn some money
-                Money fine = (this.fixedFinePerDay.plus(shipment.getOrder().getPrice().multiplyBy(this.fineMarginPerDay)))
-                        .multiplyBy((shipment.getOrder().getDeliveryDate().minus(time).getInUnit(DurationUnit.DAY)));
+                Money fine = (this.fixedFinePerDay.plus(shipment.order().price().multiplyBy(this.fineMarginPerDay)))
+                        .multiplyBy((shipment.order().deliveryDate().minus(time).getInUnit(DurationUnit.DAY)));
 
                 /*-
                  * TODO: send the invoice for the fine

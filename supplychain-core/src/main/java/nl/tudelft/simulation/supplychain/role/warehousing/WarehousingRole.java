@@ -21,7 +21,7 @@ import nl.tudelft.simulation.supplychain.product.ProductAmount;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public abstract class WarehousingRole extends Role
+public abstract class WarehousingRole extends Role<WarehousingRole>
 {
     /** */
     private static final long serialVersionUID = 20221206L;
