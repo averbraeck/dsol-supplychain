@@ -1,9 +1,11 @@
-package nl.tudelft.simulation.supplychain.content;
+package nl.tudelft.simulation.supplychain.product;
 
 import org.djunits.value.vdouble.scalar.Time;
 
+import nl.tudelft.simulation.supplychain.content.GroupedContent;
+import nl.tudelft.simulation.supplychain.content.Order;
+import nl.tudelft.simulation.supplychain.content.ProductContent;
 import nl.tudelft.simulation.supplychain.money.Money;
-import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 

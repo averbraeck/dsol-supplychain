@@ -24,7 +24,7 @@ import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.content.SearchAnswer;
 import nl.tudelft.simulation.supplychain.content.SearchRequest;
-import nl.tudelft.simulation.supplychain.content.Shipment;
+import nl.tudelft.simulation.supplychain.product.Shipment;
 
 /**
  * FullContentStore.java.

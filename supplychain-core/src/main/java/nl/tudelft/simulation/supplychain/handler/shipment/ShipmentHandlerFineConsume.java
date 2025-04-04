@@ -4,9 +4,9 @@ import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
 
-import nl.tudelft.simulation.supplychain.content.Shipment;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.money.MoneyUnit;
+import nl.tudelft.simulation.supplychain.product.Shipment;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
 
 /**

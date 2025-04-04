@@ -8,10 +8,10 @@ import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.content.Invoice;
 import nl.tudelft.simulation.supplychain.content.Order;
-import nl.tudelft.simulation.supplychain.content.Shipment;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.supplychain.product.Shipment;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
 import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
 

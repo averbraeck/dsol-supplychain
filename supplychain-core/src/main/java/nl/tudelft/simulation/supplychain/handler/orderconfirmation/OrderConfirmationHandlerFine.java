@@ -6,9 +6,9 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
-import nl.tudelft.simulation.supplychain.content.Shipment;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.money.MoneyUnit;
+import nl.tudelft.simulation.supplychain.product.Shipment;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 
 /**

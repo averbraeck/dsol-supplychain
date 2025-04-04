@@ -4,9 +4,9 @@ import java.util.Set;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Content;
-import nl.tudelft.simulation.supplychain.content.Shipment;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
+import nl.tudelft.simulation.supplychain.product.Shipment;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 
 /**

@@ -1,8 +1,8 @@
 package nl.tudelft.simulation.supplychain.handler.shipment;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.content.Shipment;
 import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.supplychain.product.Shipment;
 import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
 
 /**

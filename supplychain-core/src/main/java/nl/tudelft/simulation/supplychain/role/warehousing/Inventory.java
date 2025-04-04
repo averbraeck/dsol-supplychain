@@ -16,10 +16,10 @@ import org.djutils.event.TimedEvent;
 import org.djutils.exceptions.Throw;
 import org.pmw.tinylog.Logger;
 
-import nl.tudelft.simulation.supplychain.content.Shipment;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.product.ProductAmount;
+import nl.tudelft.simulation.supplychain.product.Shipment;
 
 /**
  * Simple implementation of Inventory for a Trader. The information on inventoryed amounts is stored in a HashTable of
