@@ -55,12 +55,12 @@ public class ShipmentHandlerFineStock extends ShipmentHandlerStock
         if (super.handleContent(shipment))
         {
             Time time = getSimulatorTime();
-            if ((time.gt(shipment.order().deliveryDate()))
-                    && (time.lt(shipment.order().deliveryDate().plus(this.maximumTimeOut))))
+            if ((time.gt(shipment.getOrder().deliveryDate()))
+                    && (time.lt(shipment.getOrder().deliveryDate().plus(this.maximumTimeOut))))
             {
                 // YES!! we can fine! Finally we earn some money
-                Money fine = (this.fixedFinePerDay.plus(shipment.order().price().multiplyBy(this.fineMarginPerDay)))
-                        .multiplyBy((shipment.order().deliveryDate().minus(time).getInUnit(DurationUnit.DAY)));
+                Money fine = (this.fixedFinePerDay.plus(shipment.getOrder().price().multiplyBy(this.fineMarginPerDay)))
+                        .multiplyBy((shipment.getOrder().deliveryDate().minus(time).getInUnit(DurationUnit.DAY)));
 
                 /*-
                  * TODO: send the invoice for the fine
@@ -70,8 +70,8 @@ public class ShipmentHandlerFineStock extends ShipmentHandlerStock
                  */
 
                 // we are pragmatic -- just book it through the bank...
-                shipment.sender().getFinancingRole().getBank().withdrawFromBalance(shipment.sender(), fine);
-                shipment.receiver().getFinancingRole().getBank().addToBalance(shipment.receiver(), fine);
+                shipment.getShippingActor().getFinancingRole().getBank().withdrawFromBalance(shipment.getShippingActor(), fine);
+                shipment.getReceivingActor().getFinancingRole().getBank().addToBalance(shipment.getReceivingActor(), fine);
             }
             return true;
         }

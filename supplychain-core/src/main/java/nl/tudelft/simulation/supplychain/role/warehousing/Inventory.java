@@ -136,13 +136,13 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
      */
     public void addToInventory(final Shipment shipment)
     {
-        InventoryRecord inventoryRecord = this.inventoryRecords.get(shipment.product());
+        InventoryRecord inventoryRecord = this.inventoryRecords.get(shipment.getProduct());
         if (inventoryRecord == null)
         {
-            inventoryRecord = new InventoryRecord(this.owner, this.owner.getSimulator(), shipment.product());
-            this.inventoryRecords.put(shipment.product(), inventoryRecord);
+            inventoryRecord = new InventoryRecord(this.owner, this.owner.getSimulator(), shipment.getProduct());
+            this.inventoryRecords.put(shipment.getProduct(), inventoryRecord);
         }
-        inventoryRecord.addActualAmount(shipment.amount(), shipment.totalCargoValue().divideBy(shipment.amount()));
+        inventoryRecord.addActualAmount(shipment.getAmount(), shipment.getTotalCargoValue().divideBy(shipment.getAmount()));
         this.sendInventoryUpdateEvent(inventoryRecord);
     }
 

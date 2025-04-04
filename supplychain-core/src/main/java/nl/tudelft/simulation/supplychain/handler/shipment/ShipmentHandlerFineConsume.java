@@ -53,13 +53,13 @@ public class ShipmentHandlerFineConsume extends ShipmentHandlerConsume
     {
         if (super.handleContent(shipment))
         {
-            Time time = shipment.sender().getSimulatorTime();
-            if (time.gt(shipment.order().deliveryDate()) && time.lt(shipment.order().deliveryDate().plus(this.maximumTimeOut)))
+            Time time = shipment.getShippingActor().getSimulatorTime();
+            if (time.gt(shipment.getOrder().deliveryDate()) && time.lt(shipment.getOrder().deliveryDate().plus(this.maximumTimeOut)))
             {
                 // YES!! we can fine! Finaly we earn some money
                 Money fine =
-                        this.fixedFinePerDay.multiplyBy(shipment.order().deliveryDate().minus(time).getInUnit(DurationUnit.DAY))
-                                .plus(shipment.order().price().multiplyBy(this.fineMarginPerDay));
+                        this.fixedFinePerDay.multiplyBy(shipment.getOrder().deliveryDate().minus(time).getInUnit(DurationUnit.DAY))
+                                .plus(shipment.getOrder().price().multiplyBy(this.fineMarginPerDay));
 
                 /*-
                  // send the invoice for the fine
@@ -68,8 +68,8 @@ public class ShipmentHandlerFineConsume extends ShipmentHandlerConsume
                  sendContent(invoice, Duration.ZERO);
                  */
 
-                shipment.sender().getFinancingRole().getBank().withdrawFromBalance(shipment.sender(), fine);
-                shipment.receiver().getFinancingRole().getBank().addToBalance(shipment.receiver(), fine);
+                shipment.getShippingActor().getFinancingRole().getBank().withdrawFromBalance(shipment.getShippingActor(), fine);
+                shipment.getReceivingActor().getFinancingRole().getBank().addToBalance(shipment.getReceivingActor(), fine);
             }
             return true;
         }

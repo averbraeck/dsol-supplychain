@@ -40,9 +40,9 @@ public class ShipmentHandlerStock extends ShipmentHandler
             return false;
         }
         // get the cargo from the shipment, and add its contents to the stock
-        Product product = shipment.product();
-        double amount = shipment.amount();
-        this.stock.addToInventory(product, amount, shipment.totalCargoValue());
+        Product product = shipment.getProduct();
+        double amount = shipment.getAmount();
+        this.stock.addToInventory(product, amount, shipment.getTotalCargoValue());
         // update the administration
         this.stock.changeOrderedAmount(product, -amount);
         shipment.setInTransit(false);

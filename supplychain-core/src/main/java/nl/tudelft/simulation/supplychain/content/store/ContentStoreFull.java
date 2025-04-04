@@ -148,7 +148,6 @@ public class ContentStoreFull implements ContentStoreInterface
             removeContentList(contentMap, OrderStandalone.class);
             removeContentList(contentMap, OrderBasedOnQuote.class);
             removeContentList(contentMap, OrderConfirmation.class);
-            removeContentList(contentMap, Shipment.class);
             removeContentList(contentMap, Invoice.class);
             removeContentList(contentMap, Payment.class);
             removeContentList(contentMap, Demand.class);

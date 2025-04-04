@@ -97,7 +97,7 @@ public abstract class OrderHandler<O extends Order> extends ContentHandler<O, Se
                 // send a invoice when the shipment leaves...
                 Invoice invoice = new Invoice(getActor(), order.sender(), order.groupingId(), order,
                         getSimulatorTime().plus(new Duration(14.0, DurationUnit.DAY)),
-                        shipment.totalCargoValue(), "SALE");
+                        shipment.getTotalCargoValue(), "SALE");
 
                 // ... by scheduling it based on the transportation delay
                 Serializable[] args = new Serializable[] {invoice};

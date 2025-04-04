@@ -1,40 +1,39 @@
 package nl.tudelft.simulation.supplychain.product;
 
+import java.io.Serializable;
+
 import org.djunits.value.vdouble.scalar.Time;
 
-import nl.tudelft.simulation.supplychain.content.GroupedContent;
 import nl.tudelft.simulation.supplychain.content.Order;
-import nl.tudelft.simulation.supplychain.content.ProductContent;
 import nl.tudelft.simulation.supplychain.money.Money;
-import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
-import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 
 /**
- * The Shipment is the information for an amount of products that can be transferred from one actor to another actor.
+ * The Shipment is the actual goods (a certain amount of products) that are being transferred from one actor to another actor.
  * <p>
  * Copyright (c) 2025-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class Shipment implements GroupedContent, ProductContent
+public class Shipment implements Serializable
 {
     /** */
     private static final long serialVersionUID = 1L;
 
     /** sender the sender of the shipment. */
-    private final SellingActor sender;
+    private final WarehousingActor shippingActor;
 
     /** receiver the receiver of the shipment. */
-    private final PurchasingActor receiver;
+    private final WarehousingActor receivingActor;
 
-    /** timestamp the absolute time when the message was created. */
+    /** timestamp the absolute time when the shipment was created. */
     private final Time timestamp;
 
-    /** uniqueId the unique id of the message. */
+    /** uniqueId the unique id of the shipment. */
     private final long uniqueId;
 
-    /** groupingId the id used to group multiple messages, such as the demandId or the orderId. */
+    /** groupingId the id used to group multiple messages and content. */
     private final long groupingId;
 
     /** order the order for which this was the confirmation. */
@@ -51,65 +50,64 @@ public class Shipment implements GroupedContent, ProductContent
 
     /**
      * Create a shipment.
-     * @param sender the sender of the shipment
-     * @param receiver the receiver of the shipment
-     * @param timestamp the absolute time when the message was created
-     * @param uniqueId the unique id of the message
-     * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
+     * @param shippingActor the sender of the shipment
+     * @param receivingActor the receiver of the shipment
      * @param order the order for which this was the confirmation
      * @param totalCargoValue the total value of the cargo
      */
-    public Shipment(final SellingActor sender, final PurchasingActor receiver, final Time timestamp, final long uniqueId,
-            final long groupingId, final Order order, final Money totalCargoValue)
+    public Shipment(final WarehousingActor shippingActor, final WarehousingActor receivingActor, final Order order,
+            final Money totalCargoValue)
     {
-        this.sender = sender;
-        this.receiver = receiver;
-        this.timestamp = timestamp;
-        this.uniqueId = uniqueId;
-        this.groupingId = groupingId;
+        this.shippingActor = shippingActor;
+        this.receivingActor = receivingActor;
+        this.timestamp = shippingActor.getSimulatorTime();
+        this.uniqueId = shippingActor.getModel().getUniqueContentId();
+        this.groupingId = order.groupingId();
         this.order = order;
         this.totalCargoValue = totalCargoValue;
     }
 
     /**
-     * Create a shipment.
-     * @param sender the sender of the shipment
-     * @param receiver the receiver of the shipment
-     * @param order the order for which this was the confirmation
-     * @param totalCargoValue the total value of the cargo
+     * Return the sender of the shipment (to allow for a reply to be sent).
+     * @return the sender of the shipment
      */
-    public Shipment(final SellingActor sender, final PurchasingActor receiver, final Order order, final Money totalCargoValue)
+    public WarehousingActor getShippingActor()
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), order.groupingId(), order,
-                totalCargoValue);
+        return this.shippingActor;
     }
 
-    @Override
-    public SellingActor sender()
+    /**
+     * Return the receiver of the shipment.
+     * @return the receiver of the shipment
+     */
+    public WarehousingActor getReceivingActor()
     {
-        return this.sender;
+        return this.receivingActor;
     }
 
-    @Override
-    public PurchasingActor receiver()
-    {
-        return this.receiver;
-    }
-
-    @Override
-    public Time timestamp()
+    /**
+     * Return the timestamp of the shipment.
+     * @return the timestamp of the shipment
+     */
+    public Time getTimestamp()
     {
         return this.timestamp;
     }
 
-    @Override
-    public long uniqueId()
+    /**
+     * Return the unique shipment id.
+     * @return the unique shipment id.
+     */
+    public long getUniqueId()
     {
         return this.uniqueId;
     }
 
-    @Override
-    public long groupingId()
+    /**
+     * Return the grouping id of the content.
+     * @return the grouping id of the content
+     */
+    public long getGroupingId()
     {
         return this.groupingId;
     }
@@ -118,7 +116,7 @@ public class Shipment implements GroupedContent, ProductContent
      * Return the order on which this shipment is based.
      * @return the order on which this shipment is based
      */
-    public Order order()
+    public Order getOrder()
     {
         return this.order;
     }
@@ -127,7 +125,7 @@ public class Shipment implements GroupedContent, ProductContent
      * Returnt the total value of the cargo.
      * @return the total value of the cargo
      */
-    public Money totalCargoValue()
+    public Money getTotalCargoValue()
     {
         return this.totalCargoValue;
     }
@@ -168,14 +166,20 @@ public class Shipment implements GroupedContent, ProductContent
         this.delivered = delivered;
     }
 
-    @Override
-    public Product product()
+    /**
+     * Return the product of the content.
+     * @return the product of the content
+     */
+    public Product getProduct()
     {
         return this.order.product();
     }
 
-    @Override
-    public double amount()
+    /**
+     * Return the amount of product.
+     * @return the amount of product
+     */
+    public double getAmount()
     {
         return this.order.amount();
     }
