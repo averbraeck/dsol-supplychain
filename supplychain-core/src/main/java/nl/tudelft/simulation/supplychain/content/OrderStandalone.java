@@ -6,7 +6,7 @@ import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
-import nl.tudelft.simulation.supplychain.transport.TransportOption;
+import nl.tudelft.simulation.supplychain.transporting.TransportOption;
 
 /**
  * This is a stand alone order, that is not based on an RFQ and Quote, but which is directly placed to another actor. It

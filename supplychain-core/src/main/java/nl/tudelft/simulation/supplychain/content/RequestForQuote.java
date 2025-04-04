@@ -5,7 +5,7 @@ import org.djunits.value.vdouble.scalar.Time;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
-import nl.tudelft.simulation.supplychain.transport.TransportOption;
+import nl.tudelft.simulation.supplychain.transporting.TransportOption;
 
 /**
  * The RequestForQuote is a question to provide the receiver with a certain amount of a certain product at a certain date. It

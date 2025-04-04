@@ -17,9 +17,9 @@ import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
-import nl.tudelft.simulation.supplychain.transport.TransportChoiceProvider;
-import nl.tudelft.simulation.supplychain.transport.TransportOption;
-import nl.tudelft.simulation.supplychain.transport.TransportOptionProvider;
+import nl.tudelft.simulation.supplychain.transporting.TransportChoiceProvider;
+import nl.tudelft.simulation.supplychain.transporting.TransportOption;
+import nl.tudelft.simulation.supplychain.transporting.TransportOptionProvider;
 
 /**
  * The SearchAnswerHandler implements the business logic for a buyer who receives a SearchAnswer from a search supply chain
