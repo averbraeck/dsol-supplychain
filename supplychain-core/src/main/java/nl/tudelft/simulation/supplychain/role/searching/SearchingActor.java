@@ -20,8 +20,8 @@ public interface SearchingActor extends Actor
 
     /**
      * Set the SearchingRole for this actor.
-     * @param yellowPageRole the new SearchingRole for this actor
+     * @param transportingRole the new SearchingRole for this actor
      */
-    void setSearchingRole(SearchingRole yellowPageRole);
+    void setSearchingRole(SearchingRole transportingRole);
 
 }

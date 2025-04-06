@@ -29,9 +29,9 @@ import nl.tudelft.simulation.supplychain.reference.Search;
 import nl.tudelft.simulation.supplychain.reference.Supplier;
 import nl.tudelft.simulation.supplychain.role.searching.Topic;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
+import nl.tudelft.simulation.supplychain.role.transporting.TransportMode;
 import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
 import nl.tudelft.simulation.supplychain.role.warehousing.RestockingServiceSafety;
-import nl.tudelft.simulation.supplychain.transporting.TransportMode;
 import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
 /**

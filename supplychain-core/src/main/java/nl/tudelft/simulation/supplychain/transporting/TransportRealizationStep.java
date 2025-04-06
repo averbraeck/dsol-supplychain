@@ -10,6 +10,7 @@ import org.djutils.exceptions.Throw;
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Sku;
+import nl.tudelft.simulation.supplychain.role.transporting.TransportMode;
 
 /**
  * TransportRealizationStep models one step of a TransportRealization. It describes the origin Node and destination Node (as an

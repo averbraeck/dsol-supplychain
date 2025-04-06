@@ -28,9 +28,6 @@ public class RequestForQuoteHandler extends ContentHandler<RequestForQuote, Sell
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
 
-    /** the inventory on which checks can take place. */
-    private Inventory inventory;
-
     /** the reaction time of the handler in simulation time units. */
     private DistContinuousDuration handlingTime;
 
@@ -43,21 +40,18 @@ public class RequestForQuoteHandler extends ContentHandler<RequestForQuote, Sell
     /**
      * Construct a new RFQ handler.
      * @param owner the role belonging to this handler
-     * @param inventory the stock to check for products when quoting
      * @param profitMargin the profit margin to use; 1.0 is no profit
      * @param handlingTime the distribution of the time to react on the RFQ
      * @param validityDuration the validity duration of the quote
      */
     public RequestForQuoteHandler(
-            final SellingRole owner, final Inventory inventory, final double profitMargin,
+            final SellingRole owner, final double profitMargin,
             final DistContinuousDuration handlingTime, final Duration validityDuration)
     {
         super("RequestForQuoteHandler", owner, RequestForQuote.class);
-        Throw.whenNull(inventory, "inventory cannot be null");
         Throw.whenNull(handlingTime, "handlingTime cannot be null");
         Throw.whenNull(profitMargin, "profitMargin cannot be null");
         Throw.whenNull(validityDuration, "validityDuration cannot be null");
-        this.inventory = inventory;
         this.handlingTime = handlingTime;
         this.profitMargin = profitMargin;
         this.validityDuration = validityDuration;

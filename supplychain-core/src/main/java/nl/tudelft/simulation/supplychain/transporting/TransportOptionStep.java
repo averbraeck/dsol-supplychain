@@ -12,6 +12,7 @@ import org.djutils.exceptions.Throw;
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Sku;
+import nl.tudelft.simulation.supplychain.role.transporting.TransportMode;
 
 /**
  * TransportStep models one step of a TransportOption. It describes the origin Node and destination Node (as an Actor -- any
