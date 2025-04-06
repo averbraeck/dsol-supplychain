@@ -2,6 +2,7 @@ package nl.tudelft.simulation.supplychain.content;
 
 import org.djunits.value.vdouble.scalar.Time;
 
+import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
@@ -21,15 +22,17 @@ import nl.tudelft.simulation.supplychain.role.transporting.TransportingActor;
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
  * @param transportQuoteRequest the InventoryQuoteRequest from the selling role
  * @param transportOption a single transport option that matches the transport request best
+ * @param price the price for this transport option
  */
 public record TransportQuote(TransportingActor sender, SellingActor receiver, Time timestamp, long uniqueId, long groupingId,
-        TransportQuoteRequest transportQuoteRequest, TransportOption transportOption) implements GroupedContent, ProductContent
+        TransportQuoteRequest transportQuoteRequest, TransportOption transportOption, Money price)
+        implements GroupedContent, ProductContent
 {
     public TransportQuote(final TransportingActor sender, final SellingActor receiver,
-            final TransportQuoteRequest transportQuoteRequest, final TransportOption transportOption)
+            final TransportQuoteRequest transportQuoteRequest, final TransportOption transportOption, final Money price)
     {
         this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(),
-                transportQuoteRequest.groupingId(), transportQuoteRequest, transportOption);
+                transportQuoteRequest.groupingId(), transportQuoteRequest, transportOption, price);
     }
 
     @Override
