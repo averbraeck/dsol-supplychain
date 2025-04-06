@@ -3,10 +3,8 @@ package nl.tudelft.simulation.supplychain.content;
 import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
-import nl.tudelft.simulation.supplychain.transporting.TransportOption;
 
 /**
  * The InventoryQuoteRequest is a question to the warehouse to check whether there is inventory to fulfill the demand for a
@@ -22,31 +20,29 @@ import nl.tudelft.simulation.supplychain.transporting.TransportOption;
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
- * @param demand demand that triggered the process
- * @param preferredTransportOption the preferred transport option for moving the product from sender to receiver
+ * @param rfq the RequestForQuote from the purchaser
  * @param cutoffDate after what point in time will the RFQ stop collecting quotes?
  */
 public record InventoryQuoteRequest(SellingActor sender, WarehousingActor receiver, Time timestamp, long uniqueId,
-        long groupingId, Demand demand, TransportOption preferredTransportOption, Time cutoffDate)
-        implements GroupedContent, ProductContent
+        long groupingId, RequestForQuote rfq, Time cutoffDate) implements GroupedContent, ProductContent
 {
-    public InventoryQuoteRequest(final SellingActor sender, final WarehousingActor receiver, final Demand demand,
-            final TransportOption preferredTransportOption, final Time cutoffDate)
+    public InventoryQuoteRequest(final SellingActor sender, final WarehousingActor receiver, final RequestForQuote rfq,
+            final Time cutoffDate)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), demand.groupingId(), demand,
-                preferredTransportOption, cutoffDate);
+        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), rfq.groupingId(), rfq,
+                cutoffDate);
     }
 
     @Override
     public Product product()
     {
-        return this.demand.product();
+        return rfq().product();
     }
 
     @Override
     public double amount()
     {
-        return this.demand.amount();
+        return rfq().amount();
     }
 
     /**
@@ -54,7 +50,7 @@ public record InventoryQuoteRequest(SellingActor sender, WarehousingActor receiv
      */
     public Time earliestDeliveryDate()
     {
-        return demand().earliestDeliveryDate();
+        return rfq().earliestDeliveryDate();
     }
 
     /**
@@ -62,7 +58,7 @@ public record InventoryQuoteRequest(SellingActor sender, WarehousingActor receiv
      */
     public Time latestDeliveryDate()
     {
-        return demand().latestDeliveryDate();
+        return rfq().latestDeliveryDate();
     }
 
 }

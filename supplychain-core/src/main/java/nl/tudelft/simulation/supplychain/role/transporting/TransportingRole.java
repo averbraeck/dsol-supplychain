@@ -4,7 +4,6 @@ import java.util.Set;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Content;
-import nl.tudelft.simulation.supplychain.content.SearchRequest;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 
@@ -22,7 +21,8 @@ public class TransportingRole extends Role<TransportingRole>
     private static final long serialVersionUID = 20250406L;
 
     /** the necessary content handlers. */
-    private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of(SearchRequest.class);
+    private static Set<Class<? extends Content>> necessaryContentHandlers =
+            Set.of(TransportQuoteRequest.class, TransportPickup.class);
 
     /** the necessary autonomous processes. */
     private static Set<Class<? extends AutonomousProcess<TransportingRole>>> necessaryAutonomousProcesses = Set.of();

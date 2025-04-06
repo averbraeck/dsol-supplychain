@@ -72,8 +72,8 @@ public class RequestForQuoteHandler extends ContentHandler<RequestForQuote, Sell
         }
         Product product = rfq.product();
         // calculate the expected transportation time
-        Duration shippingDuration = rfq.preferredTransportOption().estimatedTotalTransportDuration(product.getSku());
-        Money transportCosts = rfq.preferredTransportOption().estimatedTotalTransportCost(product.getSku());
+        Duration shippingDuration = rfq.transportPreference().estimatedTotalTransportDuration(product.getSku());
+        Money transportCosts = rfq.transportPreference().estimatedTotalTransportCost(product.getSku());
         // react with a Quote. First calculate the price
         Money price = this.inventory.getUnitPrice(product).multiplyBy(rfq.amount() * this.profitMargin).plus(transportCosts);
         // then look at the delivery date
@@ -81,7 +81,7 @@ public class RequestForQuoteHandler extends ContentHandler<RequestForQuote, Sell
                 Time.max(getSimulatorTime(), rfq.demand().earliestDeliveryDate().minus(shippingDuration));
         // construct the quote
         Quote quote = new Quote(getRole().getActor(), rfq.sender(), rfq, product, rfq.amount(), price, proposedShippingDate,
-                rfq.preferredTransportOption(), getSimulatorTime().plus(this.validityDuration));
+                rfq.transportPreference(), getSimulatorTime().plus(this.validityDuration));
         sendContent(quote, this.handlingTime.draw());
         return true;
     }

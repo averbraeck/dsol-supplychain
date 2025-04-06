@@ -13,7 +13,7 @@ import java.util.List;
  * @param preferredTransportModes A sequence of preferred transport modes
  * @param importance the relative importance of cost or time
  */
-public record TransportPreferences(List<TransportMode> preferredTransportModes, CostTimeImportance importance)
+public record TransportPreference(List<TransportMode> preferredTransportModes, CostTimeImportance importance)
 {
     /** The importance of cost versus speed. */
     enum CostTimeImportance
