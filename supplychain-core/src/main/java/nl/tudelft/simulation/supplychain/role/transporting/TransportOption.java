@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.transporting;
+package nl.tudelft.simulation.supplychain.role.transporting;
 
 import java.io.Serializable;
 import java.util.ArrayList;

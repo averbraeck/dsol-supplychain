@@ -5,6 +5,7 @@ import java.util.Set;
 import org.djutils.draw.point.Point;
 
 import nl.tudelft.simulation.supplychain.actor.Actor;
+import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
 
 /**
  * TransportOptionProvider gives options for transport on the basis of an origin and a destination.

@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.transporting;
+package nl.tudelft.simulation.supplychain.role.transporting;
 
 import java.io.Serializable;
 import java.util.LinkedHashMap;
@@ -12,7 +12,6 @@ import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.money.DistContinuousMoney;
 import nl.tudelft.simulation.supplychain.product.Sku;
-import nl.tudelft.simulation.supplychain.role.transporting.TransportMode;
 
 /**
  * StochasticTransportStep models one step of a StochasticTransportOption. It describes the origin Node and destination Node (as

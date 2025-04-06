@@ -6,7 +6,7 @@ import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
-import nl.tudelft.simulation.supplychain.transporting.TransportOption;
+import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
 
 /**
  * A Quote is an answer to a RequestForQuote (or RFQ) and indicates how many items of a certain product could be sold for a
@@ -22,24 +22,33 @@ import nl.tudelft.simulation.supplychain.transporting.TransportOption;
  * @param uniqueId the unique id of the message
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
  * @param requestForQuote the RFQ for which this is the quote
- * @param product the product of the quote, couldbe a replacement product
- * @param amount the amount of products, could be less than the requested amount in the RFQ
  * @param price the quotation price
  * @param proposedDeliveryDate the intended delivery date of the products
  * @param transportOption the transport option offered
  * @param validityTime the time on the simulator clock until which the quote is valid
  */
 public record Quote(SellingActor sender, PurchasingActor receiver, Time timestamp, long uniqueId, long groupingId,
-        RequestForQuote requestForQuote, Product product, double amount, Money price, Time proposedDeliveryDate,
-        TransportOption transportOption, Time validityTime) implements GroupedContent, ProductContent
+        RequestForQuote requestForQuote, Money price, Time proposedDeliveryDate, TransportOption transportOption,
+        Time validityTime) implements GroupedContent, ProductContent
 {
     @SuppressWarnings("checkstyle:parameternumber")
     public Quote(final SellingActor sender, final PurchasingActor receiver, final RequestForQuote requestForQuote,
-            final Product product, final double amount, final Money price, final Time proposedDeliveryDate,
-            final TransportOption transportOption, final Time validityTime)
+            final Money price, final Time proposedDeliveryDate, final TransportOption transportOption, final Time validityTime)
     {
         this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), requestForQuote.groupingId(),
-                requestForQuote, product, amount, price, proposedDeliveryDate, transportOption, validityTime);
+                requestForQuote, price, proposedDeliveryDate, transportOption, validityTime);
+    }
+
+    @Override
+    public Product product()
+    {
+        return requestForQuote().product();
+    }
+
+    @Override
+    public double amount()
+    {
+        return requestForQuote().amount();
     }
 
 }

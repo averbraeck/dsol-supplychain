@@ -3,6 +3,7 @@ package nl.tudelft.simulation.supplychain.transporting;
 import java.util.Set;
 
 import nl.tudelft.simulation.supplychain.product.Sku;
+import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
 
 /**
  * TransportChoiceProvider chooses between options for transport.

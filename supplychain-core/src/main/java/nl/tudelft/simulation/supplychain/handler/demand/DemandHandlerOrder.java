@@ -15,8 +15,8 @@ import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
+import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
 import nl.tudelft.simulation.supplychain.transporting.TransportChoiceProvider;
-import nl.tudelft.simulation.supplychain.transporting.TransportOption;
 import nl.tudelft.simulation.supplychain.transporting.TransportOptionProvider;
 
 /**

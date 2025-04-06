@@ -4,12 +4,11 @@ import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
-import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
+import nl.tudelft.simulation.supplychain.role.transporting.TransportingActor;
 
 /**
- * The InventoryQuoteRequest is a question to the warehouse to check whether there is inventory to fulfill the demand for a
- * certain amount of product at a certain date. It will be answered with an InventoryQuote. Note that the warehouse can decide
- * to look at buying this produt on the market, producing it on time, or just looking in the inventory.
+ * The TransportQuoteRequest is a question to the one or more transport actors to provide a quote to transport a certain amount
+ * of goods. It will be answered with a TransportQuote.
  * <p>
  * Copyright (c) 2025-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
@@ -22,10 +21,10 @@ import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
  * @param rfq the RequestForQuote from the purchaser
  */
-public record InventoryQuoteRequest(SellingActor sender, WarehousingActor receiver, Time timestamp, long uniqueId,
+public record TransportQuoteRequest(SellingActor sender, TransportingActor receiver, Time timestamp, long uniqueId,
         long groupingId, RequestForQuote rfq) implements GroupedContent, ProductContent
 {
-    public InventoryQuoteRequest(final SellingActor sender, final WarehousingActor receiver, final RequestForQuote rfq)
+    public TransportQuoteRequest(final SellingActor sender, final TransportingActor receiver, final RequestForQuote rfq)
     {
         this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), rfq.groupingId(), rfq);
     }

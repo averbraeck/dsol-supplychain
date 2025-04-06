@@ -3,7 +3,7 @@ package nl.tudelft.simulation.supplychain.content;
 import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.supplychain.money.Money;
-import nl.tudelft.simulation.supplychain.transporting.TransportOption;
+import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
 
 /**
  * An Order indicates: I want a certain amount of products on a certain date for a certain price. The four attributes "product",
