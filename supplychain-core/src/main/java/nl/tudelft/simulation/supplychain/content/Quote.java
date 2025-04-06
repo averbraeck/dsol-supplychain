@@ -22,7 +22,7 @@ import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
  * @param uniqueId the unique id of the message
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
  * @param requestForQuote the RFQ for which this is the quote
- * @param price the quotation price
+ * @param price the quotation price, including transport costs and a profit margin
  * @param proposedDeliveryDate the intended delivery date of the products
  * @param transportOption the transport option offered
  * @param validityTime the time on the simulator clock until which the quote is valid
