@@ -1,6 +1,7 @@
 package nl.tudelft.simulation.supplychain.role.selling;
 
 import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 
 /**
  * SellingActor is an interface to indicate that an Actor has a SellingRole. Since Selling usually involves invoices and
@@ -11,7 +12,7 @@ import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public interface SellingActor extends FinancingActor
+public interface SellingActor extends FinancingActor, WarehousingActor
 {
     /**
      * Return the SellingRole for this actor.

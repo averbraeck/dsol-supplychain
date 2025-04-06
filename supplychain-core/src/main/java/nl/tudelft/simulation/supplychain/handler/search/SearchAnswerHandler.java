@@ -1,7 +1,6 @@
 package nl.tudelft.simulation.supplychain.handler.search;
 
 import java.util.List;
-import java.util.Set;
 
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djutils.exceptions.Throw;
@@ -17,9 +16,7 @@ import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
-import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
-import nl.tudelft.simulation.supplychain.transporting.TransportChoiceProvider;
-import nl.tudelft.simulation.supplychain.transporting.TransportOptionProvider;
+import nl.tudelft.simulation.supplychain.role.transporting.TransportPreference;
 
 /**
  * The SearchAnswerHandler implements the business logic for a buyer who receives a SearchAnswer from a search supply chain
@@ -36,39 +33,32 @@ public class SearchAnswerHandler extends ContentHandler<SearchAnswer, Purchasing
     /** the serial version uid. */
     private static final long serialVersionUID = 120221203;
 
-    /** the provider of transport options betwween two locations. */
-    private final TransportOptionProvider transportOptionProvider;
-
-    /** the provider to choose between transport options. */
-    private final TransportChoiceProvider transportChoiceProvider;
-
     /** the handling time of the handler in simulation time units. */
     private DistContinuousDuration handlingTime;
 
     /** the maximum time after which the RFQ will stop collecting quotes. */
     private final Duration cutoffDuration;
 
+    /** the generic transport preference for this actor. */
+    private final TransportPreference transportPreference;
+
     /**
      * Constructs a new SearchAnswerHandler.
      * @param owner the owner of the handler
-     * @param transportOptionProvider the provider of transport options betwween two locations
-     * @param transportChoiceProvider the provider to choose between transport options
      * @param handlingTime the distribution of the time to react on the Search answer
      * @param cutoffDuration the maximum time after which the RFQ will stop collecting quotes
+     * @param transportPreference the generic transport preference for this actor
      */
-    public SearchAnswerHandler(final PurchasingRole owner, final TransportOptionProvider transportOptionProvider,
-            final TransportChoiceProvider transportChoiceProvider, final DistContinuousDuration handlingTime,
-            final Duration cutoffDuration)
+    public SearchAnswerHandler(final PurchasingRole owner, final DistContinuousDuration handlingTime,
+            final Duration cutoffDuration, final TransportPreference transportPreference)
     {
         super("SearchAnswerHandler", owner, SearchAnswer.class);
         Throw.whenNull(handlingTime, "handlingTime cannot be null");
-        Throw.whenNull(transportOptionProvider, "transportOptionProvider cannot be null");
-        Throw.whenNull(transportChoiceProvider, "transportChoiceProvider cannot be null");
         Throw.whenNull(cutoffDuration, "cutoffDuration cannot be null");
-        this.transportOptionProvider = transportOptionProvider;
-        this.transportChoiceProvider = transportChoiceProvider;
+        Throw.whenNull(transportPreference, "transportPreference cannot be null");
         this.handlingTime = handlingTime;
         this.cutoffDuration = cutoffDuration;
+        this.transportPreference = transportPreference;
     }
 
     @Override
@@ -92,11 +82,8 @@ public class SearchAnswerHandler extends ContentHandler<SearchAnswer, Purchasing
         Duration delay = this.handlingTime.draw();
         for (Actor supplier : potentialSuppliers)
         {
-            Set<TransportOption> transportOptions = this.transportOptionProvider.provideTransportOptions(supplier, getActor());
-            TransportOption transportOption =
-                    this.transportChoiceProvider.chooseTransportOptions(transportOptions, searchRequest.product().getSku());
-            RequestForQuote rfq = new RequestForQuote(getRole().getActor(), (SellingActor) supplier, demand, transportOption,
-                    getSimulatorTime().plus(this.cutoffDuration));
+            RequestForQuote rfq = new RequestForQuote(getRole().getActor(), (SellingActor) supplier, demand,
+                    this.transportPreference, getSimulatorTime().plus(this.cutoffDuration));
             sendContent(rfq, delay);
         }
         return true;
