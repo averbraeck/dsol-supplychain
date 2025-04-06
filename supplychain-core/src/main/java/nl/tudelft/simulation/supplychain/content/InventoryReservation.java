@@ -19,30 +19,31 @@ import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
- * @param inventoryQuoteRequest the InventoryQuoteRequest from the selling role
+ * @param inventoryReservationRequest the InventoryReservationRequest from the selling role
  * @param reserved if false, the product cannot be released (anymore) at the requested date
  */
 public record InventoryReservation(WarehousingActor sender, SellingActor receiver, Time timestamp, long uniqueId,
-        long groupingId, InventoryQuoteRequest inventoryQuoteRequest, boolean reserved)
+        long groupingId, InventoryReservationRequest inventoryReservationRequest, boolean reserved)
         implements GroupedContent, ProductContent
 {
-    public InventoryReservation(final WarehousingActor sender, final SellingActor receiver,
-            final InventoryQuoteRequest inventoryQuoteRequest, final boolean reserved)
+    public InventoryReservation(final InventoryReservationRequest inventoryReservationRequest, final boolean reserved)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(),
-                inventoryQuoteRequest.groupingId(), inventoryQuoteRequest, reserved);
+        this(inventoryReservationRequest.receiver(), inventoryReservationRequest.sender(),
+                inventoryReservationRequest.sender().getSimulatorTime(),
+                inventoryReservationRequest.sender().getModel().getUniqueContentId(), inventoryReservationRequest.groupingId(),
+                inventoryReservationRequest, reserved);
     }
 
     @Override
     public Product product()
     {
-        return inventoryQuoteRequest().product();
+        return inventoryReservationRequest().product();
     }
 
     @Override
     public double amount()
     {
-        return inventoryQuoteRequest().amount();
+        return inventoryReservationRequest().amount();
     }
 
 }

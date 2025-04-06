@@ -3,6 +3,7 @@ package nl.tudelft.simulation.supplychain.content;
 import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.supplychain.money.Money;
+import nl.tudelft.simulation.supplychain.product.Shipment;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
 
 /**
@@ -19,16 +20,17 @@ import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
  * @param uniqueId the unique id of the message
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
  * @param transportQuote the order to which this invoice belongs
+ * @param shipment the shipment to check that it arrived before payment
  * @param finalPaymentDate the simulation time for final payment
  */
 public record TransportInvoice(FinancingActor sender, FinancingActor receiver, Time timestamp, long uniqueId, long groupingId,
-        TransportQuote transportQuote, Time finalPaymentDate) implements GroupedContent
+        TransportQuote transportQuote, Shipment shipment, Time finalPaymentDate) implements GroupedContent
 {
     public TransportInvoice(final FinancingActor sender, final FinancingActor receiver, final TransportQuote transportQuote,
-            final Time finalPaymentDate)
+            final Shipment shipment, final Time finalPaymentDate)
     {
         this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), transportQuote.groupingId(),
-                transportQuote, finalPaymentDate);
+                transportQuote, shipment, finalPaymentDate);
     }
 
     /**

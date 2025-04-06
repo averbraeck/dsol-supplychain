@@ -28,11 +28,13 @@ public record TransportQuote(TransportingActor sender, SellingActor receiver, Ti
         TransportQuoteRequest transportQuoteRequest, TransportOption transportOption, Money price)
         implements GroupedContent, ProductContent
 {
-    public TransportQuote(final TransportingActor sender, final SellingActor receiver,
-            final TransportQuoteRequest transportQuoteRequest, final TransportOption transportOption, final Money price)
+    public TransportQuote(final TransportQuoteRequest transportQuoteRequest, final TransportOption transportOption,
+            final Money price)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(),
-                transportQuoteRequest.groupingId(), transportQuoteRequest, transportOption, price);
+        this(transportQuoteRequest.receiver(), transportQuoteRequest.sender(),
+                transportQuoteRequest.sender().getSimulatorTime(),
+                transportQuoteRequest.sender().getModel().getUniqueContentId(), transportQuoteRequest.groupingId(),
+                transportQuoteRequest, transportOption, price);
     }
 
     @Override

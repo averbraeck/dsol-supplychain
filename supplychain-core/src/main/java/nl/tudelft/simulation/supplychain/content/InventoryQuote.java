@@ -30,12 +30,13 @@ public record InventoryQuote(WarehousingActor sender, SellingActor receiver, Tim
         InventoryQuoteRequest inventoryQuoteRequest, boolean possible, Money priceWithoutProfit, Time earliestReleaseDate)
         implements GroupedContent, ProductContent
 {
-    public InventoryQuote(final WarehousingActor sender, final SellingActor receiver,
-            final InventoryQuoteRequest inventoryQuoteRequest, final boolean possible, final Money priceWithoutProfit,
-            final Time proposedDeliveryDate)
+    public InventoryQuote(final InventoryQuoteRequest inventoryQuoteRequest, final boolean possible,
+            final Money priceWithoutProfit, final Time proposedDeliveryDate)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(),
-                inventoryQuoteRequest.groupingId(), inventoryQuoteRequest, possible, priceWithoutProfit, proposedDeliveryDate);
+        this(inventoryQuoteRequest.receiver(), inventoryQuoteRequest.sender(),
+                inventoryQuoteRequest.sender().getSimulatorTime(),
+                inventoryQuoteRequest.sender().getModel().getUniqueContentId(), inventoryQuoteRequest.groupingId(),
+                inventoryQuoteRequest, possible, priceWithoutProfit, proposedDeliveryDate);
     }
 
     @Override
