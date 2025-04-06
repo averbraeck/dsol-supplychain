@@ -8,9 +8,7 @@ import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportingActor;
 
 /**
- * The InventoryQuote is the answer to a question to the warehouse to check whether there is inventory to fulfill the demand for
- * a certain amount of product at a certain date. Note that the warehouse can decide to look at buying this product on the
- * market, producing it on time, or just looking in the inventory.
+ * The TransportQuote is the answer to a question to provide a quote to transport a certain amount of goods.
  * <p>
  * Copyright (c) 2025-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.

@@ -7,8 +7,8 @@ import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportingActor;
 
 /**
- * The TransportQuoteRequest is a question to the one or more transport actors to provide a quote to transport a certain amount
- * of goods. It will be answered with a TransportQuote.
+ * The TransportQuoteRequest is a question to one or more transport actors to provide a quote to transport a certain amount of
+ * goods. It will be answered with a TransportQuote.
  * <p>
  * Copyright (c) 2025-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
