@@ -52,4 +52,11 @@ public class TransportingRole extends Role<TransportingRole>
         return necessaryAutonomousProcesses;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public TransportingActor getActor()
+    {
+        return (TransportingActor) super.getActor();
+    }
+
 }
