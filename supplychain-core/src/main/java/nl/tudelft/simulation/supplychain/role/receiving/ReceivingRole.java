@@ -4,9 +4,9 @@ import java.util.Set;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Content;
+import nl.tudelft.simulation.supplychain.content.TransportDelivery;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
-import nl.tudelft.simulation.supplychain.product.Shipment;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 
 /**
@@ -26,7 +26,7 @@ public class ReceivingRole extends Role<ReceivingRole>
     private static Set<Class<? extends AutonomousProcess<ReceivingRole>>> necessaryAutonomousProcesses = Set.of();
 
     /** the necessary content handlers. */
-    private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of(Shipment.class);
+    private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of(TransportDelivery.class);
 
     /**
      * Create a SellingRole object for an actor.
