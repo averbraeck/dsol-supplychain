@@ -1,6 +1,5 @@
 package nl.tudelft.supplychain.actor;
 
-import org.djutils.draw.bounds.Bounds3d;
 import org.djutils.draw.point.DirectedPoint2d;
 
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
@@ -24,13 +23,6 @@ public class TestActor extends SupplyChainActor
             final String locationDescription) throws ActorAlreadyDefinedException
     {
         super(id, name, model, location, locationDescription, new ContentStoreFull());
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void setBounds(final Bounds3d bounds)
-    {
-        // nothing to do
     }
 
 }

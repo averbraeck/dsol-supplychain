@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.rmi.RemoteException;
 
 import org.djunits.value.vdouble.scalar.Time;
-import org.djutils.draw.bounds.Bounds3d;
 import org.djutils.draw.point.DirectedPoint2d;
 import org.djutils.exceptions.Try;
 import org.junit.jupiter.api.Test;
@@ -45,11 +44,6 @@ public class ActorTest
         assertEquals(new DirectedPoint2d(10, 10, 0), actor.getLocation());
         assertEquals("Dallas, TX", actor.getLocationDescription());
         assertEquals(0, actor.getEventListenerMap().size());
-        assertEquals(-1.0, actor.getBounds().getMinX(), 0.0001);
-        assertEquals(1.0, actor.getBounds().getMaxX(), 0.0001);
-        actor.setBounds(new Bounds3d(10, 10, 10));
-        assertEquals(-5.0, actor.getBounds().getMinX(), 0.0001);
-        assertEquals(5.0, actor.getBounds().getMaxX(), 0.0001);
         double distance0 = model.calculateDistanceKm(actor.getLocation(), actor.getLocation());
         assertEquals(0.0, distance0, 0.0001);
         assertEquals(actor, model.getActor("TA"));
