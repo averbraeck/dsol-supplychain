@@ -10,6 +10,7 @@ import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.role.consuming.ConsumingActor;
 import nl.tudelft.simulation.supplychain.role.consuming.ConsumingRole;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
+import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 
@@ -30,7 +31,10 @@ public class Customer extends SupplyChainActor implements PurchasingActor, Consu
     private PurchasingRole purchasingRole;
 
     /** The role to generate demand. */
-    private ConsumingRole demandGenerationRole;
+    private ConsumingRole consumingRole;
+
+    /** The role to pay bills. */
+    private FinancingRole financingRole;
 
     /**
      * @param id String, the unique id of the customer
@@ -67,22 +71,38 @@ public class Customer extends SupplyChainActor implements PurchasingActor, Consu
      * Return the demand generation role.
      * @return the demand generation role
      */
-    public ConsumingRole getDemandGenerationRole()
+    @Override
+    public ConsumingRole getConsumingRole()
     {
-        return this.demandGenerationRole;
+        return this.consumingRole;
     }
 
     /**
      * Set the demand generation role.
      * @param consumingRole the new demand generation role
      */
-    public void setDemandGenerationRole(final ConsumingRole consumingRole)
+    @Override
+    public void setConsumingRole(final ConsumingRole consumingRole)
     {
         Throw.whenNull(consumingRole, "consumingRole cannot be null");
-        Throw.when(this.demandGenerationRole != null, IllegalStateException.class, "consumingRole already initialized");
+        Throw.when(this.consumingRole != null, IllegalStateException.class, "consumingRole already initialized");
         addRole(consumingRole);
-        this.demandGenerationRole = consumingRole;
+        this.consumingRole = consumingRole;
     }
-    
-    
+
+    @Override
+    public FinancingRole getFinancingRole()
+    {
+        return this.financingRole;
+    }
+
+    @Override
+    public void setFinancingRole(final FinancingRole financingRole)
+    {
+        Throw.whenNull(financingRole, "financingRole cannot be null");
+        Throw.when(this.financingRole != null, IllegalStateException.class, "financingRole already initialized");
+        addRole(financingRole);
+        this.financingRole = financingRole;
+    }
+
 }

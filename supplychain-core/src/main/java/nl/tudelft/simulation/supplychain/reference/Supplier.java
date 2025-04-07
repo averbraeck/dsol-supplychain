@@ -7,11 +7,10 @@ import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
-import nl.tudelft.simulation.supplychain.content.Message;
 import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
-import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.Money;
+import nl.tudelft.simulation.supplychain.role.banking.BankingActor;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
 
@@ -47,10 +46,10 @@ public class Supplier extends SupplyChainActor implements Serializable
      */
     @SuppressWarnings("checkstyle:parameternumber")
     public Supplier(final String id, final String name, final SupplyChainModelInterface model, final DirectedPoint2d location,
-            final String locationDescription, final Bank bank, final Money initialBalance,
+            final String locationDescription, final BankingActor bank, final Money initialBalance,
             final ContentStoreInterface messageStore) throws ActorAlreadyDefinedException
     {
-        super(id, name, model, location, locationDescription, bank, initialBalance, messageStore);
+        super(id, name, model, location, locationDescription, messageStore);
     }
 
     /**
@@ -93,14 +92,6 @@ public class Supplier extends SupplyChainActor implements Serializable
         Throw.when(this.inventoryRole != null, IllegalStateException.class, "inventoryRole already initialized");
         addRole(inventoryRole);
         this.inventoryRole = inventoryRole;
-    }
-
-    @Override
-    public void receiveMessage(final Message message)
-    {
-        Throw.whenNull(this.sellingRole, "SellingRole not initialized for actor: " + this.getName());
-        Throw.whenNull(this.inventoryRole, "InventoryRole not initialized for actor: " + this.getName());
-        super.receiveContent(message);
     }
 
 }

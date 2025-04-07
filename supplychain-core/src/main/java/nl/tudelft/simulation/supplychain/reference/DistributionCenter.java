@@ -5,8 +5,8 @@ import org.djutils.draw.point.DirectedPoint2d;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
-import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.Money;
+import nl.tudelft.simulation.supplychain.role.banking.BankingActor;
 
 /**
  * Reference implementation for a DC.
@@ -34,8 +34,8 @@ public class DistributionCenter extends Retailer
      */
     @SuppressWarnings("checkstyle:parameternumber")
     public DistributionCenter(final String id, final String name, final SupplyChainModelInterface model,
-            final DirectedPoint2d location, final String locationDescription, final Bank bank, final Money initialBalance,
-            final ContentStoreInterface messageStore) throws ActorAlreadyDefinedException
+            final DirectedPoint2d location, final String locationDescription, final BankingActor bank,
+            final Money initialBalance, final ContentStoreInterface messageStore) throws ActorAlreadyDefinedException
     {
         super(id, name, model, location, locationDescription, bank, initialBalance, messageStore);
     }
