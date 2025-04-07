@@ -16,12 +16,12 @@ public interface ConsumingActor extends Actor
      * Return the ConsumingRole for this actor.
      * @return the ConsumingRole for this actor
      */
-    ConsumingRole getConsuming();
+    ConsumingRole getConsumingRole();
 
     /**
      * Set the ConsumingRole for this actor.
      * @param consumingRole the new ConsumingRole for this actor
      */
-    void setConsuming(ConsumingRole consumingRole);
+    void setConsumingRole(ConsumingRole consumingRole);
 
 }

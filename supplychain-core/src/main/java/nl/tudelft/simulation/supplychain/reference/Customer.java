@@ -9,6 +9,7 @@ import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.role.consuming.ConsumingActor;
 import nl.tudelft.simulation.supplychain.role.consuming.ConsumingRole;
+import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 
@@ -20,7 +21,7 @@ import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class Customer extends SupplyChainActor implements PurchasingActor, ConsumingActor
+public class Customer extends SupplyChainActor implements PurchasingActor, ConsumingActor, FinancingActor
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
@@ -73,20 +74,15 @@ public class Customer extends SupplyChainActor implements PurchasingActor, Consu
 
     /**
      * Set the demand generation role.
-     * @param demandGenerationRole the new demand generation role
+     * @param consumingRole the new demand generation role
      */
-    public void setDemandGenerationRole(final ConsumingRole demandGenerationRole)
+    public void setDemandGenerationRole(final ConsumingRole consumingRole)
     {
-        Throw.whenNull(demandGenerationRole, "demandGenerationRole cannot be null");
-        Throw.when(this.demandGenerationRole != null, IllegalStateException.class, "demandGenerationRole already initialized");
-        addRole(demandGenerationRole);
-        this.demandGenerationRole = demandGenerationRole;
+        Throw.whenNull(consumingRole, "consumingRole cannot be null");
+        Throw.when(this.demandGenerationRole != null, IllegalStateException.class, "consumingRole already initialized");
+        addRole(consumingRole);
+        this.demandGenerationRole = consumingRole;
     }
-
-    @Override
-    public void checkNecessaryRoles()
-    {
-        Throw.whenNull(this.purchasingRole, "PurchasingRole not initialized for Customer: " + this.getName());
-        Throw.whenNull(this.demandGenerationRole, "DemandGenerationRole not initialized for Customer: " + this.getName());
-    }
+    
+    
 }
