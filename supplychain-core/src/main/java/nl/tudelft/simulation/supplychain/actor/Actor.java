@@ -7,7 +7,6 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
 import org.djutils.base.Identifiable;
 import org.djutils.draw.bounds.Bounds2d;
-import org.djutils.draw.bounds.Bounds3d;
 import org.djutils.draw.point.DirectedPoint2d;
 import org.djutils.draw.point.Point2d;
 import org.djutils.event.EventProducer;
@@ -117,12 +116,6 @@ public interface Actor extends EventProducer, Locatable, Identifiable, Serializa
     {
         return getSimulator().getAbsSimulatorTime();
     }
-
-    /**
-     * Set the bounds of the object (size and relative height in the animation).
-     * @param bounds the bounds for the (animation) object
-     */
-    void setBounds(Bounds3d bounds);
 
     @Override
     Point2d getLocation();
