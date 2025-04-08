@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.role.consuming;
+package nl.tudelft.simulation.supplychain.role.consuming.process;
 
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
@@ -15,6 +15,7 @@ import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.supplychain.role.consuming.ConsumingRole;
 
 /**
  * Object that can model the demand for a certain amount of product.

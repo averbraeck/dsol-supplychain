@@ -15,6 +15,7 @@ import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.supplychain.role.consuming.process.DemandGeneratingProcess;
 
 /**
  * The consuming role is a role for customers, markets, and other actors that have an autonomous generation of demand for

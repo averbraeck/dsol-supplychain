@@ -34,7 +34,7 @@ import nl.tudelft.simulation.supplychain.money.MoneyUnit;
 import nl.tudelft.simulation.supplychain.product.BillOfMaterials;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.product.Sku;
-import nl.tudelft.simulation.supplychain.role.consuming.DemandGeneratingProcess;
+import nl.tudelft.simulation.supplychain.role.consuming.process.DemandGeneratingProcess;
 import nl.tudelft.simulation.supplychain.test.TestModel;
 import nl.tudelft.simulation.supplychain.util.DistDiscreteTriangular;
 
