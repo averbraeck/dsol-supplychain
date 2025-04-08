@@ -17,6 +17,7 @@ import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
+import nl.tudelft.simulation.supplychain.role.banking.process.InterestProcess;
 
 /**
  * The BankingRole maintains the interest rates for the Bank accounts. In this case, we have chosen to not make the Bank work
@@ -182,7 +183,7 @@ public class BankingRole extends Role<BankingRole>
      * Return the bank accounts per actor with their balance.
      * @return the bank accounts per actor with their balance
      */
-    protected Map<Actor, Money> getBankAccounts()
+    public Map<Actor, Money> getBankAccounts()
     {
         return this.bankAccounts;
     }

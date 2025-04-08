@@ -1,9 +1,10 @@
-package nl.tudelft.simulation.supplychain.role.banking;
+package nl.tudelft.simulation.supplychain.role.banking.process;
 
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
+import nl.tudelft.simulation.supplychain.role.banking.BankingRole;
 
 /**
  * InterestProcess is an autonomous process to provide interest (positive or negative) on the bank acount balance on a
