@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.handler.demand;
+package nl.tudelft.simulation.supplychain.role.purchasing.handler;
 
 import org.djunits.value.vdouble.scalar.Length;
 

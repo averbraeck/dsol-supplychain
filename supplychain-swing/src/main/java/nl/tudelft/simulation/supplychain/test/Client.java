@@ -19,7 +19,6 @@ import nl.tudelft.simulation.jstats.streams.StreamInterface;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
-import nl.tudelft.simulation.supplychain.handler.demand.DemandHandlerRFQ;
 import nl.tudelft.simulation.supplychain.handler.invoice.InvoiceHandler;
 import nl.tudelft.simulation.supplychain.handler.invoice.PaymentPolicyEnum;
 import nl.tudelft.simulation.supplychain.handler.orderconfirmation.OrderConfirmationHandler;
@@ -36,6 +35,7 @@ import nl.tudelft.simulation.supplychain.reference.Customer;
 import nl.tudelft.simulation.supplychain.reference.Retailer;
 import nl.tudelft.simulation.supplychain.role.consuming.DemandGeneratingProcess;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleSearch;
+import nl.tudelft.simulation.supplychain.role.purchasing.handler.DemandHandlerRFQ;
 import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
 /**
