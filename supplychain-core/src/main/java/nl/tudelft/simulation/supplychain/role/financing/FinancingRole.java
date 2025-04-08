@@ -14,6 +14,7 @@ import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 import nl.tudelft.simulation.supplychain.role.banking.BankingRole;
+import nl.tudelft.simulation.supplychain.role.financing.process.FixedCostProcess;
 
 /**
  * The FinancingRole manages the bank account of an organization and can take care of paying invoices and receiving money.

@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.role.financing;
+package nl.tudelft.simulation.supplychain.role.financing.process;
 
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djutils.exceptions.Throw;
@@ -6,6 +6,7 @@ import org.djutils.exceptions.Throw;
 import nl.tudelft.simulation.dsol.formalisms.eventscheduling.SimEventInterface;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
+import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
 
 /**
  * When a supply chain actor is created, one or more FixedCost objects can be created to book fixed costs for e.g. personnel,
