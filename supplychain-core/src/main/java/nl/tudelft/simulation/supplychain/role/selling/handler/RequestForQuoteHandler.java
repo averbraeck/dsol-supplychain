@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.handler.rfq;
+package nl.tudelft.simulation.supplychain.role.selling.handler;
 
 import org.djutils.exceptions.Throw;
 
