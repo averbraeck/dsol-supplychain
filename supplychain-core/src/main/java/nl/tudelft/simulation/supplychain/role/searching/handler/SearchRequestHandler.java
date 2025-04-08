@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.handler.search;
+package nl.tudelft.simulation.supplychain.role.searching.handler;
 
 import java.util.ArrayList;
 import java.util.Iterator;
