@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.handler.search;
+package nl.tudelft.simulation.supplychain.role.purchasing.handler;
 
 import java.util.List;
 

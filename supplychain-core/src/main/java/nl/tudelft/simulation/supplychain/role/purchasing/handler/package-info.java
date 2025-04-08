@@ -1,5 +1,5 @@
 /**
- * Policies for handling incoming Demand messages.
+ * Policies for handling incoming Demand messages, search answers, quotes, and order confirmations.
  * <p>
  * Copyright (c) 2022-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.

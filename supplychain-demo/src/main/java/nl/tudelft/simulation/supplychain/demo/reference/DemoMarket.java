@@ -28,7 +28,6 @@ import nl.tudelft.simulation.supplychain.handler.orderconfirmation.OrderConfirma
 import nl.tudelft.simulation.supplychain.handler.quote.QuoteComparatorEnum;
 import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandler;
 import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandlerAll;
-import nl.tudelft.simulation.supplychain.handler.search.SearchAnswerHandler;
 import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandler;
 import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandlerConsume;
 import nl.tudelft.simulation.supplychain.message.store.trade.LeanTradeMessageStore;
@@ -40,6 +39,7 @@ import nl.tudelft.simulation.supplychain.reference.Customer;
 import nl.tudelft.simulation.supplychain.reference.Search;
 import nl.tudelft.simulation.supplychain.role.consuming.DemandGeneratingProcess;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleSearch;
+import nl.tudelft.simulation.supplychain.role.purchasing.handler.SearchAnswerHandler;
 import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
 /**
