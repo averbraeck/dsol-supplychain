@@ -14,6 +14,8 @@ import org.djutils.event.EventType;
 import org.djutils.event.LocalEventProducer;
 import org.djutils.event.TimedEvent;
 import org.djutils.exceptions.Throw;
+import org.djutils.metadata.MetaData;
+import org.djutils.metadata.ObjectDescriptor;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.money.Money;
@@ -37,10 +39,8 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
     private static final long serialVersionUID = 20221210L;
 
     /** An event to indicate inventory levels changed. */
-    public static final EventType INVENTORY_CHANGE_EVENT = new EventType("INVENTORY_CHANGE_EVENT");
-
-    /** An event to indicate that there is a new inventory forecast. */
-    public static final EventType STOCK_FORECAST_UPDATE_EVENT = new EventType("STOCK_FORECAST_UPDATE_EVENT");
+    public static final EventType INVENTORY_CHANGE_EVENT = new EventType("INVENTORY_CHANGE_EVENT", new MetaData("stock_update",
+            "stock update", new ObjectDescriptor("stock update", "stock update", InventoryUpdateData.class)));
 
     /** the actow that owns the inventory. */
     private final WarehousingActor owner;
