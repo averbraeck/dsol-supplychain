@@ -32,7 +32,7 @@ public abstract class WarehousingRole extends Role<WarehousingRole>
     protected final Inventory inventory;
 
     /** the restocking services per product. */
-    private final Map<Product, RestockingProcess> restockingServices = new LinkedHashMap<>();
+    private final Map<Product, RestockingProcess> restockingProcesses = new LinkedHashMap<>();
 
     /**
      * Create an InventoryRole object for an actor, with an empty inventory.
@@ -57,15 +57,15 @@ public abstract class WarehousingRole extends Role<WarehousingRole>
     }
 
     /**
-     * Add a restocking service to this role.
-     * @param restockingService the restocking service to add to this role
+     * Add a restocking process to this role.
+     * @param restockingProcess the restocking process to add to this role
      */
-    public void addRestockingService(final RestockingProcess restockingService)
+    public void addRestockingService(final RestockingProcess restockingProcess)
     {
-        Throw.whenNull(restockingService, "restockingService cannot be null");
-        Throw.when(!restockingService.getInventory().equals(this.inventory), IllegalArgumentException.class,
-                "Inventory of the restocking service does not belong to Actor of InventoryRole");
-        this.restockingServices.put(restockingService.getProduct(), restockingService);
+        Throw.whenNull(restockingProcess, "restockingService cannot be null");
+        Throw.when(!restockingProcess.getInventory().equals(this.inventory), IllegalArgumentException.class,
+                "Inventory of the restocking process does not belong to Actor of InventoryRole");
+        this.restockingProcesses.put(restockingProcess.getProduct(), restockingProcess);
     }
 
     /**
