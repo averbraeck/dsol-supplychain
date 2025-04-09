@@ -213,6 +213,21 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
     }
 
     /**
+     * Get the virtual amount of a certain product in inventory, which is available + ordered - claimed.
+     * @param product the product
+     * @return double the virtual amount
+     */
+    public double getVirtualAmount(final Product product)
+    {
+        InventoryRecord inventoryRecord = this.inventoryRecords.get(product);
+        if (inventoryRecord == null)
+        {
+            return 0.0;
+        }
+        return inventoryRecord.getActualAmount() + inventoryRecord.getOrderedAmount() - inventoryRecord.getClaimedAmount();
+    }
+
+    /**
      * Update the claimed amount of a certain product in inventory.
      * @param product the product
      * @param delta the delta (positive or negative)
