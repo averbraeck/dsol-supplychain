@@ -24,6 +24,9 @@ public class SellingRoleRFQ extends SellingRole
     /** the necessary content handlers. */
     private static Set<Class<? extends Content>> necessaryContentHandlers =
             Set.of(RequestForQuote.class, OrderBasedOnQuote.class);
+    
+    /** whether to send negative quotes or not. */
+    private boolean sendNegativeQuotes = false;
 
     /**
      * Constructs a new SellingRole for RFQ - Order - Payment.
@@ -32,6 +35,24 @@ public class SellingRoleRFQ extends SellingRole
     public SellingRoleRFQ(final SellingActor owner)
     {
         super(owner);
+    }
+
+    /**
+     * Return whether to send negative quotes or not.
+     * @return whether to send negative quotes or not
+     */
+    public boolean isSendNegativeQuotes()
+    {
+        return this.sendNegativeQuotes;
+    }
+
+    /**
+     * Set whether to send negative quotes or not.
+     * @param sendNegativeQuotes set whether to send negative quotes or not
+     */
+    public void setSendNegativeQuotes(final boolean sendNegativeQuotes)
+    {
+        this.sendNegativeQuotes = sendNegativeQuotes;
     }
 
     @Override

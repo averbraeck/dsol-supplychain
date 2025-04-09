@@ -83,7 +83,7 @@ public class QuoteHandlerTimeout extends QuoteHandler
                 Serializable[] args = new Serializable[] {demandId};
 
                 // calculate the actual time out
-                Time time = Time.max(getSimulatorTime(), quote.requestForQuote().cutoffDate());
+                Time time = Time.max(getSimulatorTime(), quote.rfq().cutoffDate());
                 getSimulator().scheduleEventAbs(time, this, "createOrder", args);
             }
             catch (Exception exception)

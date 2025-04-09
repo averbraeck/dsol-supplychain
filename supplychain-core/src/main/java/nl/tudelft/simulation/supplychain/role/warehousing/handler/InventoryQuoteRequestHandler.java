@@ -28,9 +28,9 @@ public class InventoryQuoteRequestHandler extends ContentHandler<InventoryQuoteR
     private DistContinuousDuration handlingTime;
 
     /**
-     * Construct a new RFQ handler.
+     * Construct a new InventoryQuoteRequest handler.
      * @param owner the role belonging to this handler
-     * @param handlingTime the distribution of the time to react on the RFQ
+     * @param handlingTime the distribution of the time to react on the InventoryQuoteRequest
      */
     public InventoryQuoteRequestHandler(final WarehousingRole owner, final DistContinuousDuration handlingTime)
     {

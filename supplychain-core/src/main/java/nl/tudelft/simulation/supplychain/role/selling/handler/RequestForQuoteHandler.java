@@ -7,6 +7,7 @@ import nl.tudelft.simulation.supplychain.content.InventoryQuoteRequest;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
+import nl.tudelft.simulation.supplychain.role.selling.SellingRoleRFQ;
 
 /**
  * The RequestForQuotehandler implements the business logic for a supplier who receives a RequestForQuote. The first step is to
@@ -30,7 +31,7 @@ public class RequestForQuoteHandler extends ContentHandler<RequestForQuote, Sell
      * @param owner the role belonging to this handler
      * @param handlingTime the distribution of the time to react on the RFQ
      */
-    public RequestForQuoteHandler(final SellingRole owner, final DistContinuousDuration handlingTime)
+    public RequestForQuoteHandler(final SellingRoleRFQ owner, final DistContinuousDuration handlingTime)
     {
         super("RequestForQuoteHandler", owner, RequestForQuote.class);
         Throw.whenNull(handlingTime, "handlingTime cannot be null");
@@ -57,4 +58,11 @@ public class RequestForQuoteHandler extends ContentHandler<RequestForQuote, Sell
         this.handlingTime = handlingTime;
     }
 
+    @Override
+    public SellingRoleRFQ getRole()
+    {
+        return (SellingRoleRFQ) super.getRole();
+    }
+
+    
 }

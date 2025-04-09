@@ -6,6 +6,7 @@ import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
 import nl.tudelft.simulation.supplychain.content.Quote;
+import nl.tudelft.simulation.supplychain.content.QuoteNo;
 
 /**
  * The purchasing role based on a RFQ is a role that organizes the purchasing based on a RequestForQuote that is sent to a fixed
@@ -23,7 +24,7 @@ public class PurchasingRoleRFQ extends PurchasingRole
 
     /** the necessary content handlers. */
     private static Set<Class<? extends Content>> necessaryContentHandlers =
-            Set.of(Demand.class, Quote.class, OrderConfirmation.class);
+            Set.of(Demand.class, Quote.class, QuoteNo.class, OrderConfirmation.class);
 
     /**
      * Constructs a new PurchasingRole for Demand - Quote - Confirmation - Shipment - Invoice.

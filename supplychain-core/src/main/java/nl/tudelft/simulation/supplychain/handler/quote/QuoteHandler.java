@@ -116,10 +116,10 @@ public abstract class QuoteHandler extends ContentHandler<Quote, PurchasingRole>
                 if (((quote.price().getAmount() / quote.amount()))
                         / quote.product().getUnitMarketPrice().getAmount() <= (1.0 + this.maximumPriceMargin))
                 {
-                    if (quote.amount() <= quote.requestForQuote().amount()
-                            && ((quote.requestForQuote().amount() / quote.amount()) <= (1.0 + this.minimumAmountMargin)))
+                    if (quote.amount() <= quote.rfq().amount()
+                            && ((quote.rfq().amount() / quote.amount()) <= (1.0 + this.minimumAmountMargin)))
                     {
-                        if ((quote.proposedDeliveryDate().le(quote.requestForQuote().latestDeliveryDate())))
+                        if ((quote.proposedDeliveryDate().le(quote.rfq().latestDeliveryDate())))
                         // && (quote.getProposedDeliveryDate() >= quote
                         // .getRequestForQuote()
                         // .getEarliestDeliveryDate()))
@@ -131,8 +131,8 @@ public abstract class QuoteHandler extends ContentHandler<Quote, PurchasingRole>
                             if (QuoteHandler.DEBUG)
                             {
                                 System.err.println("QuoteHandler: quote: + prop delivery date: " + quote.proposedDeliveryDate()
-                                        + " earliest delivery date: " + quote.requestForQuote().earliestDeliveryDate()
-                                        + " latest delivery date: " + quote.requestForQuote().latestDeliveryDate());
+                                        + " earliest delivery date: " + quote.rfq().earliestDeliveryDate()
+                                        + " latest delivery date: " + quote.rfq().latestDeliveryDate());
                                 System.err.println("Quote: " + quote);
                                 System.err.println("Owner of quote handler: " + getActor().getName());
                             }
@@ -144,7 +144,7 @@ public abstract class QuoteHandler extends ContentHandler<Quote, PurchasingRole>
                         if (QuoteHandler.DEBUG)
                         {
                             System.err.println("DEBUG -- QuoteHandler: " + " Quote: " + quote + " has invalid amount : "
-                                    + quote.amount() + ">" + quote.requestForQuote().amount());
+                                    + quote.amount() + ">" + quote.rfq().amount());
                         }
                     }
                 }
