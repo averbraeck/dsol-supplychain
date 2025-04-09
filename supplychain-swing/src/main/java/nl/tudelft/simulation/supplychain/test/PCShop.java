@@ -39,7 +39,7 @@ import nl.tudelft.simulation.supplychain.role.selling.SellingRoleRFQ;
 import nl.tudelft.simulation.supplychain.role.selling.handler.RequestForQuoteHandler;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportMode;
 import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
-import nl.tudelft.simulation.supplychain.role.warehousing.RestockingServiceSafety;
+import nl.tudelft.simulation.supplychain.role.warehousing.process.RestockingProcessSafety;
 import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
 /**
@@ -115,7 +115,7 @@ public class PCShop extends Retailer
         // do this for every product we have initially in stock
         for (Product product : getInventory().getProducts())
         {
-            new RestockingServiceSafety(getInventory(), product, new Duration(24.0, DurationUnit.HOUR), false, 5.0, true, 10.0,
+            new RestockingProcessSafety(getInventory(), product, new Duration(24.0, DurationUnit.HOUR), false, 5.0, true, 10.0,
                     new Duration(14.0, DurationUnit.DAY));
             // order 100 PCs when actual+claimed < 100
             // handler will schedule itself

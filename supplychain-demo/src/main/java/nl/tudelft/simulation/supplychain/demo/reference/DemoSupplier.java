@@ -31,7 +31,7 @@ import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
 import nl.tudelft.simulation.supplychain.role.selling.handler.RequestForQuoteHandler;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportMode;
 import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
-import nl.tudelft.simulation.supplychain.role.warehousing.RestockingServiceSafety;
+import nl.tudelft.simulation.supplychain.role.warehousing.process.RestockingProcessSafety;
 import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
 /**
@@ -100,7 +100,7 @@ public class DemoSupplier extends Supplier
         {
             Product stockProduct = stockIter.next();
             // the restocking handler will generate Demand, handled by the PurchasingRole
-            new RestockingServiceSafety(super.inventory, stockProduct, new Duration(24.0, DurationUnit.HOUR), false, initialStock,
+            new RestockingProcessSafety(super.inventory, stockProduct, new Duration(24.0, DurationUnit.HOUR), false, initialStock,
                     true, 2.0 * initialStock, new Duration(14.0, DurationUnit.DAY));
         }
 

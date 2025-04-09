@@ -1,12 +1,14 @@
-package nl.tudelft.simulation.supplychain.role.warehousing;
+package nl.tudelft.simulation.supplychain.role.warehousing.process;
 
 import org.djunits.value.vdouble.scalar.Duration;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
 
 /**
- * This RestockingService either orders fixed amounts of goods at the times indicated by the 'checkInterval', or supplements the
+ * This RestockingProcess either orders fixed amounts of goods at the times indicated by the 'checkInterval', or supplements the
  * number of products till a fixed amount is reached.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
@@ -14,7 +16,7 @@ import nl.tudelft.simulation.supplychain.product.Product;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class RestockingServiceFixed extends AbstractRestockingService
+public class RestockingProcessFixed extends RestockingProcess
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
@@ -30,6 +32,7 @@ public class RestockingServiceFixed extends AbstractRestockingService
 
     /**
      * Construct a new restocking service, which works with fixed amounts.
+     * @param role the warehousing role to which the restocking process belongs
      * @param inventory the inventory for which the service holds
      * @param product the product that has to be restocked
      * @param frequency the frequency distribution for restocking
@@ -38,10 +41,12 @@ public class RestockingServiceFixed extends AbstractRestockingService
      * @param includeClaims whether to include the claims in the stock or not
      * @param maxDeliveryTime the maximum delivery time to use
      */
-    public RestockingServiceFixed(final Inventory inventory, final Product product, final DistContinuousDuration frequency,
-            final boolean ceiling, final double amount, final boolean includeClaims, final Duration maxDeliveryTime)
+    @SuppressWarnings("checkstyle:parameternumber")
+    public RestockingProcessFixed(final WarehousingRole role, final Inventory inventory, final Product product,
+            final DistContinuousDuration frequency, final boolean ceiling, final double amount, final boolean includeClaims,
+            final Duration maxDeliveryTime)
     {
-        super(inventory, product, frequency, maxDeliveryTime);
+        super(role, inventory, product, frequency, maxDeliveryTime);
         this.ceiling = ceiling;
         this.amount = amount;
         this.includeClaims = includeClaims;

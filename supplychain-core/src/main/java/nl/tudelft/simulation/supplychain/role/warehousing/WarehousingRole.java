@@ -11,6 +11,7 @@ import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.product.ProductAmount;
+import nl.tudelft.simulation.supplychain.role.warehousing.process.RestockingProcess;
 
 /**
  * The inventory role is a role that handles the storage of products, which can be raw materials for production or finished
@@ -31,7 +32,7 @@ public abstract class WarehousingRole extends Role<WarehousingRole>
     protected final Inventory inventory;
 
     /** the restocking services per product. */
-    private final Map<Product, RestockingServiceInterface> restockingServices = new LinkedHashMap<>();
+    private final Map<Product, RestockingProcess> restockingServices = new LinkedHashMap<>();
 
     /**
      * Create an InventoryRole object for an actor, with an empty inventory.
@@ -59,7 +60,7 @@ public abstract class WarehousingRole extends Role<WarehousingRole>
      * Add a restocking service to this role.
      * @param restockingService the restocking service to add to this role
      */
-    public void addRestockingService(final RestockingServiceInterface restockingService)
+    public void addRestockingService(final RestockingProcess restockingService)
     {
         Throw.whenNull(restockingService, "restockingService cannot be null");
         Throw.when(!restockingService.getInventory().equals(this.inventory), IllegalArgumentException.class,
@@ -101,6 +102,5 @@ public abstract class WarehousingRole extends Role<WarehousingRole>
     {
         return (WarehousingActor) super.getActor();
     }
-    
-    
+
 }

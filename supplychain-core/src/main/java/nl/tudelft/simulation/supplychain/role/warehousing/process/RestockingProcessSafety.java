@@ -1,9 +1,11 @@
-package nl.tudelft.simulation.supplychain.role.warehousing;
+package nl.tudelft.simulation.supplychain.role.warehousing.process;
 
 import org.djunits.value.vdouble.scalar.Duration;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
 
 /**
  * This restocking service looks at a safety stock level. As long as the stock level is above the safety stock level, do
@@ -14,7 +16,7 @@ import nl.tudelft.simulation.supplychain.product.Product;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class RestockingServiceSafety extends RestockingServiceFixed
+public class RestockingProcessSafety extends RestockingProcessFixed
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
@@ -24,6 +26,7 @@ public class RestockingServiceSafety extends RestockingServiceFixed
 
     /**
      * Construct a new restocking service based on a safety stock level.
+     * @param role the warehousing role to which the restocking process belongs
      * @param inventory the inventory for which the service holds
      * @param product the product that has to be restocked
      * @param frequency the frequency distribution for restocking
@@ -34,11 +37,11 @@ public class RestockingServiceSafety extends RestockingServiceFixed
      * @param maxDeliveryTime the maximum delivery time to use
      */
     @SuppressWarnings("checkstyle:parameternumber")
-    public RestockingServiceSafety(final Inventory inventory, final Product product, final DistContinuousDuration frequency,
-            final boolean ceiling, final double amount, final boolean includeClaims, final double safetyAmount,
-            final Duration maxDeliveryTime)
+    public RestockingProcessSafety(final WarehousingRole role, final Inventory inventory, final Product product,
+            final DistContinuousDuration frequency, final boolean ceiling, final double amount, final boolean includeClaims,
+            final double safetyAmount, final Duration maxDeliveryTime)
     {
-        super(inventory, product, frequency, ceiling, amount, includeClaims, maxDeliveryTime);
+        super(role, inventory, product, frequency, ceiling, amount, includeClaims, maxDeliveryTime);
         this.safetyAmount = safetyAmount;
     }
 
