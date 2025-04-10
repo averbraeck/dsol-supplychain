@@ -163,7 +163,7 @@ public class SellingRoleRFQ extends SellingRole
                 };
                 if (value < min)
                 {
-                    value = min;
+                    min = value;
                     bestTransportQuote = tq;
                 }
             }
