@@ -12,7 +12,6 @@ import org.djutils.exceptions.Throw;
 import org.djutils.immutablecollections.ImmutableArrayList;
 import org.djutils.immutablecollections.ImmutableList;
 
-import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.money.MoneyUnit;
 import nl.tudelft.simulation.supplychain.product.Sku;
@@ -90,6 +89,20 @@ public class TransportOption implements Identifiable, Serializable
     }
 
     /**
+     * Return the  total transport distance from sender to receiver.
+     * @return the total transport distance including transport and transloading
+     */
+    public Length totalTransportDistance()
+    {
+        Length result = Length.ZERO;
+        for (TransportOptionStep step : this.transportSteps)
+        {
+            result = result.plus(step.getTransportDistance());
+        }
+        return result;
+    }
+    
+    /**
      * Return the estimated total transport duration from sender to receiver.
      * @param sku the sku that needs to be transported
      * @return the total transport duration including transport and transloading
@@ -99,10 +112,7 @@ public class TransportOption implements Identifiable, Serializable
         Duration result = Duration.ZERO;
         for (TransportOptionStep step : this.transportSteps)
         {
-            result = result.plus(step.getEstimatedLoadingTime(sku)).plus(step.getEstimatedUnloadingTime(sku));
-            SupplyChainModelInterface model = step.getOrigin().getSimulator().getModel();
-            Length distance = model.calculateDistance(step.getOrigin().getLocation(), step.getDestination().getLocation());
-            result = result.plus(distance.divide(step.getTransportMode().getAverageSpeed()));
+            result = result.plus(step.getEstimatedTransportDuration(sku));
         }
         return result;
     }
@@ -118,16 +128,12 @@ public class TransportOption implements Identifiable, Serializable
         MoneyUnit costUnit = null;
         for (TransportOptionStep step : this.transportSteps)
         {
-            Money costPerKm = step.getEstimatedTransportCostPerKm(sku);
+            Money stepCost = step.getEstimatedTransportCost(sku);
             if (costUnit == null)
             {
-                costUnit = costPerKm.getMoneyUnit();
+                costUnit = stepCost.getMoneyUnit();
             }
-            double distanceKm = step.getOrigin().getSimulator().getModel().calculateDistance(step.getOrigin().getLocation(),
-                    step.getDestination().getLocation()).si / 1000.0;
-            cost += step.getEstimatedLoadingCost(sku).getAmount();
-            cost += step.getEstimatedUnloadingCost(sku).getAmount();
-            cost += costPerKm.getAmount() * distanceKm;
+            cost += stepCost.getAmount();
         }
         return new Money(cost, costUnit);
     }

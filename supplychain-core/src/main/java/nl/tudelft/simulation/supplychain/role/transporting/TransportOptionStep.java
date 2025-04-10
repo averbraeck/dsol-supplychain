@@ -6,10 +6,12 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.djunits.value.vdouble.scalar.Duration;
+import org.djunits.value.vdouble.scalar.Length;
 import org.djutils.base.Identifiable;
 import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.supplychain.actor.Actor;
+import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Sku;
 
@@ -96,6 +98,38 @@ public class TransportOptionStep implements Identifiable, Serializable
     public Actor getDestination()
     {
         return this.destination;
+    }
+
+    /**
+     * Return the distance of this transport step.
+     * @return the distance of this transport step
+     */
+    public Length getTransportDistance()
+    {
+        SupplyChainModelInterface model = getOrigin().getSimulator().getModel();
+        return model.calculateDistance(getOrigin().getLocation(), getDestination().getLocation());
+    }
+
+    /**
+     * Return the estimated transport time of this transport step.
+     * @param sku the sku to use -- (un)loading time may differ per SKU
+     * @return the estimated transport time of this transport step
+     */
+    public Duration getEstimatedTransportDuration(final Sku sku)
+    {
+        return getTransportDistance().divide(getTransportMode().getAverageSpeed()).plus(getEstimatedLoadingTime(sku))
+                .plus(getEstimatedUnloadingTime(sku));
+    }
+
+    /**
+     * Return the estimated cost per SKU of this transport step.
+     * @param sku the SKU to calculate the cost for
+     * @return the estimated transport cost per SKU of this transport step
+     */
+    public Money getEstimatedTransportCost(final Sku sku)
+    {
+        return getEstimatedLoadingCost(sku).plus(getEstimatedUnloadingCost(sku)
+                .plus(getEstimatedTransportCostPerKm(sku).multiplyBy(getTransportDistance().si / 1000.0)));
     }
 
     /**

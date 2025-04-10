@@ -16,13 +16,16 @@ import java.util.List;
 public record TransportPreference(List<TransportMode> preferredTransportModes, CostTimeImportance importance)
 {
     /** The importance of cost versus speed. */
-    enum CostTimeImportance
+    public enum CostTimeImportance
     {
         /** Cost. */
         COST,
 
         /** Time. */
         TIME,
+
+        /** Time. */
+        DISTANCE,
 
         /** None. */
         NONE;

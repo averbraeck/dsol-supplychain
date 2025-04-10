@@ -1,5 +1,8 @@
 package nl.tudelft.simulation.supplychain.role.selling.handler;
 
+import org.djunits.unit.DurationUnit;
+import org.djunits.value.vdouble.scalar.Duration;
+import org.djunits.value.vdouble.scalar.Time;
 import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
@@ -29,6 +32,9 @@ public class InventoryQuoteHandler extends ContentHandler<InventoryQuote, Sellin
     /** the reaction time of the handler in simulation time units. */
     private DistContinuousDuration handlingTime;
 
+    /** the validity duration of the transport quote request. */
+    private Duration transportQuoteRequestValidityDuration = new Duration(24.0, DurationUnit.HOUR);
+
     /**
      * Construct a new InventoryQuote handler.
      * @param owner the role belonging to this handler
@@ -57,11 +63,14 @@ public class InventoryQuoteHandler extends ContentHandler<InventoryQuote, Sellin
             }
             return true;
         }
+        Time cutoffDate = getSimulatorTime().plus(getTransportQuoteRequestValidityDuration());
+        getRole().addTransportQuoteRequestRecord(iq, cutoffDate);
         for (TransportingActor transporter : getRole().getTransporters())
         {
             var transportQuoteRequest =
-                    new TransportQuoteRequest(getRole().getActor(), transporter, iq.inventoryQuoteRequest().rfq());
+                    new TransportQuoteRequest(getRole().getActor(), transporter, iq.inventoryQuoteRequest().rfq(), cutoffDate);
             sendContent(transportQuoteRequest, this.handlingTime.draw());
+            getRole().addSentTransportRequestQuote(transportQuoteRequest);
         }
         return true;
     }
@@ -72,6 +81,24 @@ public class InventoryQuoteHandler extends ContentHandler<InventoryQuote, Sellin
     public void setHandlingTime(final DistContinuousDuration handlingTime)
     {
         this.handlingTime = handlingTime;
+    }
+
+    /**
+     * Return the validity duration of the transport quote request.
+     * @return the validity duration of the transport quote request
+     */
+    protected Duration getTransportQuoteRequestValidityDuration()
+    {
+        return this.transportQuoteRequestValidityDuration;
+    }
+
+    /**
+     * Set a new the validity duration of the transport quote request.
+     * @param transportQuoteRequestValidityDuration the new the validity duration of the transport quote request
+     */
+    protected void setTransportQuoteRequestValidityDuration(final Duration transportQuoteRequestValidityDuration)
+    {
+        this.transportQuoteRequestValidityDuration = transportQuoteRequestValidityDuration;
     }
 
     @Override

@@ -20,13 +20,16 @@ import nl.tudelft.simulation.supplychain.role.transporting.TransportingActor;
  * @param uniqueId the unique id of the message
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
  * @param rfq the RequestForQuote from the purchaser
+ * @param cutoffTime the time before which the transport quote needs to be sent
  */
 public record TransportQuoteRequest(SellingActor sender, TransportingActor receiver, Time timestamp, long uniqueId,
-        long groupingId, RequestForQuote rfq) implements GroupedContent, ProductContent
+        long groupingId, RequestForQuote rfq, Time cutoffTime) implements GroupedContent, ProductContent
 {
-    public TransportQuoteRequest(final SellingActor sender, final TransportingActor receiver, final RequestForQuote rfq)
+    public TransportQuoteRequest(final SellingActor sender, final TransportingActor receiver, final RequestForQuote rfq,
+            final Time cutoffTime)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), rfq.groupingId(), rfq);
+        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), rfq.groupingId(), rfq,
+                cutoffTime);
     }
 
     @Override
