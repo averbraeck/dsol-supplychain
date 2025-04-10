@@ -1,5 +1,6 @@
 package nl.tudelft.simulation.supplychain.role.selling;
 
+import nl.tudelft.simulation.supplychain.role.directing.DirectingActorSelling;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 
@@ -12,7 +13,7 @@ import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public interface SellingActor extends FinancingActor, WarehousingActor
+public interface SellingActor extends FinancingActor, WarehousingActor, DirectingActorSelling
 {
     /**
      * Return the SellingRole for this actor.
