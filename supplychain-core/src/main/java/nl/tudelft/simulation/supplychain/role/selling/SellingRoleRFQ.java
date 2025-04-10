@@ -43,7 +43,7 @@ public class SellingRoleRFQ extends SellingRole
     private boolean sendNegativeQuotes = false;
 
     /** quote validity time. */
-    Duration quoteValidityTime = new Duration(48.0, DurationUnit.HOUR);
+    private Duration quoteValidityTime = new Duration(48.0, DurationUnit.HOUR);
 
     /** the RFQs for which transport quote requests have been sent. */
     private Map<RequestForQuote, QuoteData> quoteDataMap = new LinkedHashMap<>();
@@ -168,7 +168,7 @@ public class SellingRoleRFQ extends SellingRole
                 }
             }
             // we have a best transport quote, and an inventory quote; determine the profit margin.
-            double profitMargin = 0.2; // TODO: should come from DirectingRole.
+            double profitMargin = getActor().getDirectingRoleSelling().getProfitMargin(rfq.product());
             Money totalPrice = quoteData.inventoryQuote.priceWithoutProfit().plus(bestTransportQuote.price())
                     .multiplyBy(1.0 + profitMargin);
             Duration qvt = Duration.max(getQuoteValidityTime(), getSimulatorTime().minus(rfq.cutoffDate()));
