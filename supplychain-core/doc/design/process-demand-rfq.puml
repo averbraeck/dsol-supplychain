@@ -1,0 +1,96 @@
+@startuml
+skinparam BoxPadding 10
+skinparam sequenceMessageAlign center
+
+box "Banking"
+participant Banking0 as BR0
+end box
+
+box "Buyer = Consuming + Purchasing + Warehousing + Financing + Receiving" #LightBlue
+participant Consuming1 as CR1
+participant Purchasing1 as PR1
+participant Warehousing1 as WR1
+participant Financing1 as FR1
+participant Receiving1 AS RR1
+end box
+
+box "Searching"
+participant Searching2 as SR2
+end box
+
+box "Seller = Selling + Warehousing + Financing + Shipping" #LightBlue
+participant Selling3 as SR3
+participant Financing3 as FR3
+participant Warehousing3 as WR3
+participant Shipping3 as ShR3
+end box
+
+box "Transporter = Transporting + Financing"
+participant Transporting4 as TR4
+participant Financing4 as FR4
+end box
+
+activate CR1
+CR1 -> PR1: Demand
+  activate PR1
+  PR1 -> SR2: SearchRequest
+    activate SR2
+    return SearchAnswer
+  PR1 -> SR3: RequestForQuote
+    activate SR3
+    SR3 -> WR3: InventoryQuoteRequest
+      activate WR3
+      return InventoryQuote
+    SR3 -> TR4: TransportQuoteRequest
+      activate TR4
+      return TransportQuote
+    SR3 --> PR1: NoQuote
+    return Quote
+    
+  PR1 -> SR3: OrderBasedOnQuote
+    activate SR3
+    SR3 -> WR3: InventoryReservationRequest
+      activate WR3
+      return InventoryReservation
+    SR3 --> PR1: OrderConfirmation
+  deactivate PR1
+    SR3 -> SR3: wait <&clock>
+    SR3 -> WR3: InventoryRelease
+    activate WR3
+    SR3 -> FR3: IRFinance
+      deactivate SR3
+      activate FR3
+      FR3 -> FR1: Invoice
+      activate FR1
+        FR1 -> FR1: wait <&clock>
+        FR1 --> FR3: Payment
+        deactivate FR1
+      FR3 -> BR0: BankTransfer
+    deactivate FR3
+
+    WR3 -> ShR3: ShippingOrder
+      deactivate WR3
+      activate ShR3
+      ShR3 -> TR4: TransportPickup\n & <back:yellow><b>Shipment</b>
+        deactivate ShR3
+        activate TR4
+        TR4 -> FR4: Transport\nConfirmation
+          activate FR4
+        TR4 -> RR1: TransportDelivery <&clock> & <back:yellow><b>Shipment</b>
+          deactivate TR4
+        activate RR1
+        RR1 -> WR1: InventoryEntry\n & <back:yellow><b>Shipment</b>
+          deactivate RR1
+          activate WR1
+          WR1 -> CR1: Delivery
+          deactivate WR1
+      deactivate CR1
+      FR4 -> FR3: Invoice
+      activate FR3
+        FR3 -> FR3: wait <&clock>
+        FR3 --> FR4: Payment
+        deactivate FR3
+      FR4 -> BR0: BankTransfer
+    deactivate FR4
+
+@enduml
