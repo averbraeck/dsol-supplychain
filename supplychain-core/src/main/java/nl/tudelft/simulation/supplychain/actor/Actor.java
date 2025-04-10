@@ -7,7 +7,6 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
 import org.djutils.base.Identifiable;
 import org.djutils.draw.bounds.Bounds2d;
-import org.djutils.draw.point.DirectedPoint2d;
 import org.djutils.draw.point.Point2d;
 import org.djutils.event.EventProducer;
 
@@ -117,6 +116,12 @@ public interface Actor extends EventProducer, Locatable, Identifiable, Serializa
         return getSimulator().getAbsSimulatorTime();
     }
 
+    /**
+     * Return the geography of the actor with the access to transfer locations of different modes of transport.
+     * @return the geography of the actor with the access to transfer locations of different modes of transport
+     */
+    Geography getGeography();
+    
     @Override
     Point2d getLocation();
 
@@ -139,8 +144,7 @@ public interface Actor extends EventProducer, Locatable, Identifiable, Serializa
     @Override
     default double getDirZ()
     {
-        Point2d p = getLocation();
-        return p == null ? 0.0 : p instanceof DirectedPoint2d ? ((DirectedPoint2d) p).getDirZ() : 0.0;
+        return 0.0;
     }
 
     @Override
