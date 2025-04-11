@@ -3,6 +3,7 @@ package nl.tudelft.simulation.supplychain.role.selling;
 import java.util.Set;
 
 import nl.tudelft.simulation.supplychain.content.Content;
+import nl.tudelft.simulation.supplychain.content.InventoryReservation;
 import nl.tudelft.simulation.supplychain.content.OrderStandalone;
 
 /**
@@ -21,7 +22,8 @@ public class SellingRoleDirect extends SellingRole
     private static final long serialVersionUID = 20221205L;
 
     /** the necessary content handlers. */
-    private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of(OrderStandalone.class);
+    private static Set<Class<? extends Content>> necessaryContentHandlers =
+            Set.of(OrderStandalone.class, InventoryReservation.class);
 
     /**
      * Constructs a new SellingRole for Order - Payment.
