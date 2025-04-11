@@ -39,42 +39,51 @@ public class TransportMode implements Identifiable, Serializable
     /** average handling time on either side. */
     private Duration averageHandlingTime;
 
+    /** is this mode typically used on the same landmass (continental)? */
+    private final boolean continental;
+
+    /** is this mode typically used between landmasses (intercontinental)? */
+    private final boolean intercontinental;
+
     /** SKUs that the TransportMode can handle. */
     private ImmutableSet<Sku> handledSkuSet = new ImmutableLinkedHashSet<>(new LinkedHashSet<>());
 
     /** Airplane. */
     public static final TransportMode AIRPLANE =
-            new TransportMode("airplane").setAverageSpeed(new Speed(600.0, SpeedUnit.KM_PER_HOUR))
+            new TransportMode("airplane", true, true).setAverageSpeed(new Speed(600.0, SpeedUnit.KM_PER_HOUR))
                     .setAverageHandlingTime(new Duration(8.0, DurationUnit.HOUR));
 
     /** Truck. */
     public static final TransportMode TRUCK =
-            new TransportMode("truck").setAverageSpeed(new Speed(80.0, SpeedUnit.KM_PER_HOUR))
+            new TransportMode("truck", true, false).setAverageSpeed(new Speed(80.0, SpeedUnit.KM_PER_HOUR))
                     .setAverageHandlingTime(new Duration(2.0, DurationUnit.HOUR));
 
     /** Ship. */
-    public static final TransportMode SHIP =
-            new TransportMode("ship").setAverageSpeed(new Speed(14.0, SpeedUnit.KNOT))
-                    .setAverageHandlingTime(new Duration(24.0, DurationUnit.HOUR));
+    public static final TransportMode SHIP = new TransportMode("ship", false, true)
+            .setAverageSpeed(new Speed(14.0, SpeedUnit.KNOT)).setAverageHandlingTime(new Duration(24.0, DurationUnit.HOUR));
 
     /** Rail. */
     public static final TransportMode RAIL =
-            new TransportMode("rail").setAverageSpeed(new Speed(40.0, SpeedUnit.KM_PER_HOUR))
+            new TransportMode("rail", true, false).setAverageSpeed(new Speed(40.0, SpeedUnit.KM_PER_HOUR))
                     .setAverageHandlingTime(new Duration(12.0, DurationUnit.HOUR));
 
     /** Barge. */
     public static final TransportMode BARGE =
-            new TransportMode("barge").setAverageSpeed(new Speed(16.0, SpeedUnit.KM_PER_HOUR))
+            new TransportMode("barge", true, false).setAverageSpeed(new Speed(16.0, SpeedUnit.KM_PER_HOUR))
                     .setAverageHandlingTime(new Duration(8.0, DurationUnit.HOUR));
 
     /**
      * Constructor for TransportMode.
      * @param id the name of the transport mode
+     * @param continental is this mode typically used on the same landmass (continental)?
+     * @param intercontinental is this mode typically used between landmasses (intercontinental)?
      */
-    public TransportMode(final String id)
+    public TransportMode(final String id, final boolean continental, final boolean intercontinental)
     {
         Throw.whenNull(id, "id cannot be null");
         this.id = id;
+        this.continental = continental;
+        this.intercontinental = intercontinental;
     }
 
     @Override
@@ -146,6 +155,24 @@ public class TransportMode implements Identifiable, Serializable
     public ImmutableSet<Sku> getHandledSkuSet()
     {
         return this.handledSkuSet;
+    }
+
+    /**
+     * Return whether this mode typically used on the same landmass (continental).
+     * @return whether this mode typically used on the same landmass (continental)
+     */
+    public boolean isContinental()
+    {
+        return this.continental;
+    }
+
+    /**
+     * Return whether this mode typically used between landmasses (intercontinental).
+     * @return whether this mode typically used between landmasses (intercontinental)
+     */
+    public boolean isIntercontinental()
+    {
+        return this.intercontinental;
     }
 
     @Override
