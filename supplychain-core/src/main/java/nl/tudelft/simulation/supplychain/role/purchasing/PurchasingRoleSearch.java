@@ -6,6 +6,7 @@ import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
 import nl.tudelft.simulation.supplychain.content.Quote;
+import nl.tudelft.simulation.supplychain.content.QuoteNo;
 import nl.tudelft.simulation.supplychain.content.SearchAnswer;
 
 /**
@@ -23,7 +24,7 @@ public class PurchasingRoleSearch extends PurchasingRole
 
     /** the necessary content handlers. */
     private static Set<Class<? extends Content>> necessaryContentHandlers =
-            Set.of(Demand.class, SearchAnswer.class, Quote.class, OrderConfirmation.class);
+            Set.of(Demand.class, SearchAnswer.class, Quote.class, QuoteNo.class, OrderConfirmation.class);
 
     /**
      * Construct a new PurchasingRole for Demand - SearchAnswer - Quote - Confirmation - Shipment - Invoice.
