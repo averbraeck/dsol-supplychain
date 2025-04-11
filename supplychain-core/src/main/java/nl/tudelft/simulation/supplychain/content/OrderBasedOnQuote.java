@@ -22,14 +22,15 @@ import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
  * @param uniqueId the unique id of the message
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
  * @param quote the quote on which the order is based
+ * @param deliveryDate the delivery date as ordered
  */
 public record OrderBasedOnQuote(PurchasingActor sender, SellingActor receiver, Time timestamp, long uniqueId, long groupingId,
-        Quote quote) implements Order
+        Quote quote, Time deliveryDate) implements Order
 {
-    public OrderBasedOnQuote(final PurchasingActor sender, final SellingActor receiver, final Time deliveryDate,
-            final Quote quote)
+    public OrderBasedOnQuote(final Quote quote, final Time deliveryDate)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), quote.groupingId(), quote);
+        this(quote.receiver(), quote.sender(), quote.sender().getSimulatorTime(),
+                quote.sender().getModel().getUniqueContentId(), quote.groupingId(), quote, deliveryDate);
     }
 
     @Override
@@ -44,20 +45,11 @@ public record OrderBasedOnQuote(PurchasingActor sender, SellingActor receiver, T
         return this.quote.amount();
     }
 
-
-    @Override
-    public Time deliveryDate()
-    {
-        return this.quote.proposedDeliveryDate();
-    }
-
-
     @Override
     public TransportOption transportOption()
     {
         return this.quote.transportOption();
     }
-
 
     @Override
     public Money price()
