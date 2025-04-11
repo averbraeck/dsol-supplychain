@@ -5,7 +5,6 @@ import java.util.List;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Length;
 import org.djunits.value.vdouble.scalar.Speed;
-import org.djutils.draw.point.Point2d;
 
 import nl.tudelft.simulation.supplychain.role.transporting.TransportMode;
 
