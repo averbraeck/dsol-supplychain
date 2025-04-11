@@ -29,13 +29,12 @@ public record Geography(String landmass, Speed truckSpeed, List<TransferLocation
      * The supply chain Java library uses a BSD-3 style license.
      * </p>
      * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
-     * @param name the name of the transfer location (port, airport, terminal)
+     * @param namedLocation the details of the transfer location (port, airport, terminal)
      * @param mode the mode of transport accessible at the transfer location
      * @param distance the distance to the transfer location
      * @param travelTime the travel time to the transfer location
-     * @param location the coordinate using (lon,lat) or other coordinate system
      */
-    public record TransferLocation(String name, TransportMode mode, Length distance, Duration travelTime, Point2d location)
+    public record TransferLocation(NamedLocation namedLocation, TransportMode mode, Length distance, Duration travelTime)
     {
     }
 }
