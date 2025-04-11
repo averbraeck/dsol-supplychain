@@ -55,14 +55,14 @@ public class RoleTest
             super(id, actor, messageReceiver);
         }
 
-        /** {@inheritDoc} */
+    
         @Override
         protected Set<Class<? extends Content>> getNecessaryContentHandlers()
         {
             return Set.of();
         }
 
-        /** {@inheritDoc} */
+    
         @Override
         protected Set<Class<? extends AutonomousProcess<TestRole>>> getNecessaryAutonomousProcesses()
         {
