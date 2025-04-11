@@ -40,8 +40,8 @@ public class ContentTest
         SingleReplication<Duration> replication =
                 new SingleReplication<Duration>("rep", Duration.ZERO, Duration.ZERO, new Duration(1, DurationUnit.DAY));
         simulator.initialize(model, replication);
-        TestActor actor1 = new TestActor("TA1", "TestActor1", model, new Point2d(10, 10, 0), "Dallas, TX");
-        TestActor actor2 = new TestActor("TA2", "TestActor2", model, new Point2d(20, 20, 0), "Austin, TX");
+        TestActor actor1 = new TestActor("TA1", "TestActor1", model, new Point2d(10, 10), "Dallas, TX");
+        TestActor actor2 = new TestActor("TA2", "TestActor2", model, new Point2d(20, 20), "Austin, TX");
         TestContent content = new TestContent(actor1, actor2);
         assertEquals(actor1, content.sender());
         assertEquals(actor2, content.receiver());

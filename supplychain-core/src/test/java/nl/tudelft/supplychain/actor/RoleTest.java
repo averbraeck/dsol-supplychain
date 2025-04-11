@@ -38,7 +38,7 @@ public class RoleTest
     {
         SupplyChainSimulator simulator = new SupplyChainSimulator("sim", Time.ZERO);
         TestModel model = new TestModel(simulator);
-        TestActor actor = new TestActor("TA", "TestActor", model, new Point2d(10, 10, 0), "Dallas, TX");
+        TestActor actor = new TestActor("TA", "TestActor", model, new Point2d(10, 10), "Dallas, TX");
         assertEquals(0, actor.getRoles().size());
         ContentReceiver messageReceiver = new ContentReceiverDirect();
         TestRole role = new TestRole("ROLE", actor, messageReceiver);

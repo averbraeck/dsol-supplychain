@@ -18,6 +18,7 @@ import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulator;
+import nl.tudelft.simulation.supplychain.json.JsonContentFactory;
 import nl.tudelft.supplychain.actor.TestActor;
 import nl.tudelft.supplychain.actor.TestModel;
 import nl.tudelft.supplychain.content.ContentTest.TestContent;
@@ -49,8 +50,8 @@ public class JsonContentFactoryTest
         Gson gson = JsonContentFactory.instance(model);
         assertNotNull(gson);
         assertEquals(gson, JsonContentFactory.instance(model));
-        Actor actor1 = new TestActor("TA1", "TestActor 1", model, new Point2d(10, 10, 0), "Dallas, TX");
-        Actor actor2 = new TestActor("TA2", "TestActor 2", model, new Point2d(20, 20, 0), "Austin, TX");
+        Actor actor1 = new TestActor("TA1", "TestActor 1", model, new Point2d(10, 10), "Dallas, TX");
+        Actor actor2 = new TestActor("TA2", "TestActor 2", model, new Point2d(20, 20), "Austin, TX");
         TestContent testContent = new TestContent(actor1, actor2);
         String ms = gson.toJson(testContent);
         assertNotNull(ms);
