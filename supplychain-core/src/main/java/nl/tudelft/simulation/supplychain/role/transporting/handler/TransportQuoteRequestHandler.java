@@ -1,16 +1,10 @@
 package nl.tudelft.simulation.supplychain.role.transporting.handler;
 
-import java.util.Objects;
-
 import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
-import nl.tudelft.simulation.supplychain.content.TransportQuote;
 import nl.tudelft.simulation.supplychain.content.TransportQuoteRequest;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
-import nl.tudelft.simulation.supplychain.money.Money;
-import nl.tudelft.simulation.supplychain.product.Sku;
-import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportingRole;
 
 /**
@@ -49,16 +43,10 @@ public class TransportQuoteRequestHandler extends ContentHandler<TransportQuoteR
         {
             return false;
         }
-        Objects.requireNonNull(tqr);
-        // Is the inventory for the product in stock?
-        TransportOption transportOption = new TransportOption(getActor().getId() + "-transport for " + tqr.groupingId());
-        Sku sku = tqr.product().getSku();
-        // TODO: get the geographic options of the pickup and dropoff locations
-        Money price = transportOption.estimatedTotalTransportCost(sku);
-        double profitMargin = 0.2; // TODO: get from DirectingRole
-        price = price.multiplyBy(1.0 + profitMargin);
-        var transportQuote = new TransportQuote(tqr, transportOption, price);
-        sendContent(transportQuote, this.handlingTime.draw());
+        for (var transportQuote : getRole().makeTransportQuotes(tqr))
+        {
+            sendContent(transportQuote, this.handlingTime.draw());
+        }
         return true;
     }
 
