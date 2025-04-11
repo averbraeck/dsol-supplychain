@@ -6,7 +6,6 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.djutils.exceptions.Throw;
 import org.pmw.tinylog.Logger;
 
-import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
@@ -33,9 +32,6 @@ public class SearchAnswerHandler extends ContentHandler<SearchAnswer, Purchasing
     /** the serial version uid. */
     private static final long serialVersionUID = 120221203;
 
-    /** the handling time of the handler in simulation time units. */
-    private DistContinuousDuration handlingTime;
-
     /** the maximum time after which the RFQ will stop collecting quotes. */
     private final Duration cutoffDuration;
 
@@ -45,18 +41,15 @@ public class SearchAnswerHandler extends ContentHandler<SearchAnswer, Purchasing
     /**
      * Constructs a new SearchAnswerHandler.
      * @param owner the owner of the handler
-     * @param handlingTime the distribution of the time to react on the Search answer
      * @param cutoffDuration the maximum time after which the RFQ will stop collecting quotes
      * @param transportPreference the generic transport preference for this actor
      */
-    public SearchAnswerHandler(final PurchasingRole owner, final DistContinuousDuration handlingTime,
-            final Duration cutoffDuration, final TransportPreference transportPreference)
+    public SearchAnswerHandler(final PurchasingRole owner, final Duration cutoffDuration,
+            final TransportPreference transportPreference)
     {
         super("SearchAnswerHandler", owner, SearchAnswer.class);
-        Throw.whenNull(handlingTime, "handlingTime cannot be null");
         Throw.whenNull(cutoffDuration, "cutoffDuration cannot be null");
         Throw.whenNull(transportPreference, "transportPreference cannot be null");
-        this.handlingTime = handlingTime;
         this.cutoffDuration = cutoffDuration;
         this.transportPreference = transportPreference;
     }
@@ -79,7 +72,7 @@ public class SearchAnswerHandler extends ContentHandler<SearchAnswer, Purchasing
         }
         Demand demand = demandList.get(0);
         List<Actor> potentialSuppliers = searchAnswer.actorList();
-        Duration delay = this.handlingTime.draw();
+        Duration delay = getHandlingTime().draw();
         for (Actor supplier : potentialSuppliers)
         {
             RequestForQuote rfq = new RequestForQuote(getRole().getActor(), (SellingActor) supplier, demand,

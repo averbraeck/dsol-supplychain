@@ -1,9 +1,7 @@
 package nl.tudelft.simulation.supplychain.role.warehousing.handler;
 
 import org.djunits.value.vdouble.scalar.Time;
-import org.djutils.exceptions.Throw;
 
-import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.content.InventoryQuote;
 import nl.tudelft.simulation.supplychain.content.InventoryQuoteRequest;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
@@ -24,19 +22,13 @@ public class InventoryQuoteRequestHandler extends ContentHandler<InventoryQuoteR
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
 
-    /** the reaction time of the handler in simulation time units. */
-    private DistContinuousDuration handlingTime;
-
     /**
      * Construct a new InventoryQuoteRequest handler.
      * @param owner the role belonging to this handler
-     * @param handlingTime the distribution of the time to react on the InventoryQuoteRequest
      */
-    public InventoryQuoteRequestHandler(final WarehousingRole owner, final DistContinuousDuration handlingTime)
+    public InventoryQuoteRequestHandler(final WarehousingRole owner)
     {
         super("InventoryQuoteRequestHandler", owner, InventoryQuoteRequest.class);
-        Throw.whenNull(handlingTime, "handlingTime cannot be null");
-        this.handlingTime = handlingTime;
     }
 
     @Override
@@ -52,16 +44,8 @@ public class InventoryQuoteRequestHandler extends ContentHandler<InventoryQuoteR
                 available ? getRole().getInventory().getUnitPrice(iqr.product()).multiplyBy(iqr.amount()) : null;
         Time timeAvailable = available ? getSimulatorTime() : null; // now
         var inventoryQuote = new InventoryQuote(iqr, available, priceWithoutProfit, timeAvailable);
-        sendContent(inventoryQuote, this.handlingTime.draw());
+        sendContent(inventoryQuote, getHandlingTime().draw());
         return true;
-    }
-
-    /**
-     * @param handlingTime The handlingTime to set.
-     */
-    public void setHandlingTime(final DistContinuousDuration handlingTime)
-    {
-        this.handlingTime = handlingTime;
     }
 
 }

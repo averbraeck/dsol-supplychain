@@ -1,8 +1,5 @@
 package nl.tudelft.simulation.supplychain.role.transporting.handler;
 
-import org.djutils.exceptions.Throw;
-
-import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.content.TransportQuoteRequest;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportingRole;
@@ -21,19 +18,13 @@ public class TransportQuoteRequestHandler extends ContentHandler<TransportQuoteR
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
 
-    /** the reaction time of the handler in simulation time units. */
-    private DistContinuousDuration handlingTime;
-
     /**
      * Construct a new TransportQuoteRequest handler.
      * @param owner the role belonging to this handler
-     * @param handlingTime the distribution of the time to react on the TransportQuoteRequest
      */
-    public TransportQuoteRequestHandler(final TransportingRole owner, final DistContinuousDuration handlingTime)
+    public TransportQuoteRequestHandler(final TransportingRole owner)
     {
         super("TransportQuoteRequestHandler", owner, TransportQuoteRequest.class);
-        Throw.whenNull(handlingTime, "handlingTime cannot be null");
-        this.handlingTime = handlingTime;
     }
 
     @Override
@@ -45,17 +36,9 @@ public class TransportQuoteRequestHandler extends ContentHandler<TransportQuoteR
         }
         for (var transportQuote : getRole().makeTransportQuotes(tqr))
         {
-            sendContent(transportQuote, this.handlingTime.draw());
+            sendContent(transportQuote, getHandlingTime().draw());
         }
         return true;
-    }
-
-    /**
-     * @param handlingTime The handlingTime to set.
-     */
-    public void setHandlingTime(final DistContinuousDuration handlingTime)
-    {
-        this.handlingTime = handlingTime;
     }
 
 }

@@ -2,7 +2,6 @@ package nl.tudelft.simulation.supplychain.role.purchasing.handler;
 
 import org.djunits.value.vdouble.scalar.Length;
 
-import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.SearchRequest;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
@@ -34,15 +33,14 @@ public class DemandHandlerSearch extends DemandHandler
     /**
      * Constructs a new DemandHandlerSearch.
      * @param owner the owner of the demand
-     * @param handlingTime the handling time distribution delay to use
      * @param searchingActor the Actor that provides the searching service
      * @param maximumDistance the search distance to use for all products
      * @param maximumNumber the max number of suppliers to return
      */
-    public DemandHandlerSearch(final PurchasingRole owner, final DistContinuousDuration handlingTime,
-            final SearchingActor searchingActor, final Length maximumDistance, final int maximumNumber)
+    public DemandHandlerSearch(final PurchasingRole owner, final SearchingActor searchingActor, final Length maximumDistance,
+            final int maximumNumber)
     {
-        super("DemandHandlerSearch", owner, handlingTime);
+        super("DemandHandlerSearch", owner);
         this.searchingActor = searchingActor;
         this.maximumDistance = maximumDistance;
         this.maximumNumber = maximumNumber;
@@ -59,7 +57,7 @@ public class DemandHandlerSearch extends DemandHandler
         SearchRequest searchRequest = new SearchRequest(getActor(), this.searchingActor, demand.groupingId(),
                 this.maximumDistance, this.maximumNumber, demand.product());
         // and send it out immediately
-        sendContent(searchRequest, this.handlingTime.draw());
+        sendContent(searchRequest, getHandlingTime().draw());
         return true;
     }
 }

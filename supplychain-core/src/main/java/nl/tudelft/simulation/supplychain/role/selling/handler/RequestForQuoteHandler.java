@@ -1,8 +1,5 @@
 package nl.tudelft.simulation.supplychain.role.selling.handler;
 
-import org.djutils.exceptions.Throw;
-
-import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.content.InventoryQuoteRequest;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
@@ -23,19 +20,13 @@ public class RequestForQuoteHandler extends ContentHandler<RequestForQuote, Sell
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
 
-    /** the reaction time of the handler in simulation time units. */
-    private DistContinuousDuration handlingTime;
-
     /**
      * Construct a new RFQ handler.
      * @param owner the role belonging to this handler
-     * @param handlingTime the distribution of the time to react on the RFQ
      */
-    public RequestForQuoteHandler(final SellingRoleRFQ owner, final DistContinuousDuration handlingTime)
+    public RequestForQuoteHandler(final SellingRoleRFQ owner)
     {
         super("RequestForQuoteHandler", owner, RequestForQuote.class);
-        Throw.whenNull(handlingTime, "handlingTime cannot be null");
-        this.handlingTime = handlingTime;
     }
 
     @Override
@@ -46,16 +37,8 @@ public class RequestForQuoteHandler extends ContentHandler<RequestForQuote, Sell
             return false;
         }
         var inventoryQuoteRequest = new InventoryQuoteRequest(getRole().getActor(), getRole().getActor(), rfq);
-        sendContent(inventoryQuoteRequest, this.handlingTime.draw());
+        sendContent(inventoryQuoteRequest, getHandlingTime().draw());
         return true;
-    }
-
-    /**
-     * @param handlingTime The handlingTime to set.
-     */
-    public void setHandlingTime(final DistContinuousDuration handlingTime)
-    {
-        this.handlingTime = handlingTime;
     }
 
     @Override
@@ -64,5 +47,4 @@ public class RequestForQuoteHandler extends ContentHandler<RequestForQuote, Sell
         return (SellingRoleRFQ) super.getRole();
     }
 
-    
 }

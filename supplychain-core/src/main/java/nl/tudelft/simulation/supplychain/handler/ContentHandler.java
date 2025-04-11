@@ -4,16 +4,19 @@ import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.djunits.value.vdouble.scalar.Duration;
 import org.djutils.base.Identifiable;
 import org.djutils.exceptions.Throw;
 import org.pmw.tinylog.Logger;
 
+import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.actor.ActorMethods;
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.ProductContent;
 import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
 /**
  * ContentHandlers work on behalf of a Role and take care of processing incoming content (messages, news, shipments).
@@ -45,6 +48,9 @@ public abstract class ContentHandler<C extends Content, R extends Role<R>> imple
     /** the partner actors for which this handler is valid; if empty, all partners are valid. */
     private Set<Actor> validPartners = new LinkedHashSet<>();
 
+    /** the reaction time of the handler in simulation time units. */
+    private DistContinuousDuration handlingTime;
+
     /**
      * constructs a new content handler.
      * @param id the id of the handler
@@ -56,9 +62,11 @@ public abstract class ContentHandler<C extends Content, R extends Role<R>> imple
         Throw.whenNull(id, "id cannot be null");
         Throw.whenNull(role, "role cannot be null");
         Throw.whenNull(contentClass, "contentClass cannot be null");
+        Throw.whenNull(this.handlingTime, "handlingTime cannot be null");
         this.id = id;
         this.role = role;
         this.contentClass = contentClass;
+        this.handlingTime = new DistConstantDuration(Duration.ZERO);
     }
 
     /**
@@ -219,6 +227,24 @@ public abstract class ContentHandler<C extends Content, R extends Role<R>> imple
     public Class<C> getContentClass()
     {
         return this.contentClass;
+    }
+
+    /**
+     * Return the handling time.
+     * @return the handling time
+     */
+    public DistContinuousDuration getHandlingTime()
+    {
+        return this.handlingTime;
+    }
+
+    /**
+     * Set a new value for the handling time.
+     * @param handlingTime a new value for the handling time
+     */
+    public void setHandlingTime(final DistContinuousDuration handlingTime)
+    {
+        this.handlingTime = handlingTime;
     }
 
 }

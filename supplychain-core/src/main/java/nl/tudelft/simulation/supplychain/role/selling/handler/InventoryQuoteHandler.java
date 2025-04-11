@@ -3,9 +3,7 @@ package nl.tudelft.simulation.supplychain.role.selling.handler;
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
-import org.djutils.exceptions.Throw;
 
-import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.content.InventoryQuote;
 import nl.tudelft.simulation.supplychain.content.QuoteNo;
 import nl.tudelft.simulation.supplychain.content.TransportQuoteRequest;
@@ -29,22 +27,16 @@ public class InventoryQuoteHandler extends ContentHandler<InventoryQuote, Sellin
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
 
-    /** the reaction time of the handler in simulation time units. */
-    private DistContinuousDuration handlingTime;
-
     /** the validity duration of the transport quote request. */
     private Duration transportQuoteRequestValidityDuration = new Duration(24.0, DurationUnit.HOUR);
 
     /**
      * Construct a new InventoryQuote handler.
      * @param owner the role belonging to this handler
-     * @param handlingTime the distribution of the time to react on the InventoryQuote
      */
-    public InventoryQuoteHandler(final SellingRoleRFQ owner, final DistContinuousDuration handlingTime)
+    public InventoryQuoteHandler(final SellingRoleRFQ owner)
     {
         super("InventoryQuoteHandler", owner, InventoryQuote.class);
-        Throw.whenNull(handlingTime, "handlingTime cannot be null");
-        this.handlingTime = handlingTime;
     }
 
     @Override
@@ -59,7 +51,7 @@ public class InventoryQuoteHandler extends ContentHandler<InventoryQuote, Sellin
             if (getRole().isSendNegativeQuotes())
             {
                 var quoteNo = new QuoteNo(iq.inventoryQuoteRequest().rfq());
-                sendContent(quoteNo, this.handlingTime.draw());
+                sendContent(quoteNo, getHandlingTime().draw());
             }
             return true;
         }
@@ -69,18 +61,10 @@ public class InventoryQuoteHandler extends ContentHandler<InventoryQuote, Sellin
         {
             var transportQuoteRequest =
                     new TransportQuoteRequest(getRole().getActor(), transporter, iq.inventoryQuoteRequest().rfq(), cutoffDate);
-            sendContent(transportQuoteRequest, this.handlingTime.draw());
+            sendContent(transportQuoteRequest, getHandlingTime().draw());
             getRole().addSentTransportRequestQuote(transportQuoteRequest);
         }
         return true;
-    }
-
-    /**
-     * @param handlingTime The handlingTime to set.
-     */
-    public void setHandlingTime(final DistContinuousDuration handlingTime)
-    {
-        this.handlingTime = handlingTime;
     }
 
     /**

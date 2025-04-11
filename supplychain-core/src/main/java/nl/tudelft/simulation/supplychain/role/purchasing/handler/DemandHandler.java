@@ -1,6 +1,5 @@
 package nl.tudelft.simulation.supplychain.role.purchasing.handler;
 
-import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
@@ -19,28 +18,14 @@ public abstract class DemandHandler extends ContentHandler<Demand, PurchasingRol
     /** */
     private static final long serialVersionUID = 20221201L;
 
-    /** the handling time distribution to handle demand. */
-    @SuppressWarnings("checkstyle:visibilitymodifier")
-    protected DistContinuousDuration handlingTime;
-
     /**
      * Construct a new DemandHandler.
      * @param id the id of the handler
      * @param owner the Role that has this handler.
-     * @param handlingTime the distribution of the time to handle an demand
      */
-    public DemandHandler(final String id, final PurchasingRole owner, final DistContinuousDuration handlingTime)
+    public DemandHandler(final String id, final PurchasingRole owner)
     {
         super(id, owner, Demand.class);
-        this.handlingTime = handlingTime;
-    }
-
-    /**
-     * @param handlingTime The handlingTime to set.
-     */
-    public void setHandlingTime(final DistContinuousDuration handlingTime)
-    {
-        this.handlingTime = handlingTime;
     }
 
 }

@@ -9,7 +9,6 @@ import org.djunits.value.vdouble.scalar.Duration;
 import org.djutils.exceptions.Throw;
 import org.pmw.tinylog.Logger;
 
-import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.product.Product;
@@ -41,15 +40,12 @@ public class DemandHandlerRFQ extends DemandHandler
     /**
      * Constructs a new DemandHandlerRFQ.
      * @param owner the owner of the demand
-     * @param handlingTime the distribution of the time to react on the Search answer
      * @param cutoffDuration the maximum time after which the RFQ will stop collecting quotes
      */
-    public DemandHandlerRFQ(final PurchasingRole owner, final DistContinuousDuration handlingTime,
-            final Duration cutoffDuration)
+    public DemandHandlerRFQ(final PurchasingRole owner, final Duration cutoffDuration)
     {
-        super("DemandHandlerRFQ", owner, handlingTime);
+        super("DemandHandlerRFQ", owner);
         Throw.whenNull(cutoffDuration, "cutoffDuration cannot be null");
-        Throw.whenNull(handlingTime, "handlingTime cannot be null");
         this.cutoffDuration = cutoffDuration;
     }
 
@@ -108,7 +104,7 @@ public class DemandHandlerRFQ extends DemandHandler
             return false;
         }
         // create an RFQ for each of the suppliers
-        Duration delay = this.handlingTime.draw();
+        Duration delay = getHandlingTime().draw();
         for (var st : supplierSet)
         {
             RequestForQuote rfq = new RequestForQuote(getRole().getActor(), st.supplier, demand, st.transportPreference(),

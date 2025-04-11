@@ -176,14 +176,6 @@ public abstract class QuoteHandler extends ContentHandler<Quote, PurchasingRole>
     }
 
     /**
-     * @return handlingTime
-     */
-    protected DistContinuousDuration getHandlingTime()
-    {
-        return this.handlingTime;
-    }
-
-    /**
      * @return maximumPriceMargin
      */
     protected double getMaximumPriceMargin()
@@ -199,11 +191,4 @@ public abstract class QuoteHandler extends ContentHandler<Quote, PurchasingRole>
         return this.minimumAmountMargin;
     }
 
-    /**
-     * @param handlingTime The handlingTime to set.
-     */
-    public void setHandlingTime(final DistContinuousDuration handlingTime)
-    {
-        this.handlingTime = handlingTime;
-    }
 }

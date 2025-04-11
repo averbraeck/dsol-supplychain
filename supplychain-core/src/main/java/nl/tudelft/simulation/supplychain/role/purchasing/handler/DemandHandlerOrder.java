@@ -7,7 +7,6 @@ import java.util.Set;
 import org.djutils.exceptions.Throw;
 import org.pmw.tinylog.Logger;
 
-import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.OrderStandalone;
@@ -48,12 +47,11 @@ public class DemandHandlerOrder extends DemandHandler
      * @param owner the owner of the demand
      * @param transportOptionProvider the provider of transport options betwween two locations
      * @param transportChoiceProvider the provider to choose between transport options
-     * @param handlingTime the handling time distribution
      */
     public DemandHandlerOrder(final PurchasingRole owner, final TransportOptionProvider transportOptionProvider,
-            final TransportChoiceProvider transportChoiceProvider, final DistContinuousDuration handlingTime)
+            final TransportChoiceProvider transportChoiceProvider)
     {
-        super("DemandHandlerOrder", owner, handlingTime);
+        super("DemandHandlerOrder", owner);
         Throw.whenNull(transportOptionProvider, "transportOptionProvider cannot be null");
         Throw.whenNull(transportChoiceProvider, "transportChoiceProvider cannot be null");
         this.transportOptionProvider = transportOptionProvider;
@@ -93,7 +91,7 @@ public class DemandHandlerOrder extends DemandHandler
         var order = new OrderStandalone(getRole().getActor(), supplier, demand.latestDeliveryDate(), demand.product(),
                 demand.amount(), price, transportOption);
         // and send it out after the handling time
-        sendContent(order, this.handlingTime.draw());
+        sendContent(order, getHandlingTime().draw());
         return true;
     }
 
