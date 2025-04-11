@@ -54,43 +54,43 @@ CR1 -> PR1: Demand
       return InventoryReservation
     SR3 --> PR1: OrderConfirmation
   deactivate PR1
-    SR3 -> SR3: wait <&clock>
-    SR3 -> WR3: InventoryRelease
-    activate WR3
-    SR3 -> FR3: IRFinance
-      deactivate SR3
-      activate FR3
-      FR3 -> FR1: Invoice
-      activate FR1
-        FR1 -> FR1: wait <&clock>
-        FR1 --> FR3: Payment
-        deactivate FR1
-      FR3 -> BR0: BankTransfer
-    deactivate FR3
+  SR3 -> SR3: wait <&clock>
+  SR3 -> WR3: InventoryRelease
+  activate WR3
+  SR3 -> FR3: IRFinance
+    deactivate SR3
+    activate FR3
+    FR3 -> FR1: Invoice
+    activate FR1
+      FR1 -> FR1: wait <&clock>
+      FR1 --> FR3: Payment
+      deactivate FR1
+    FR3 -> BR0: BankTransfer
+  deactivate FR3
 
-    WR3 -> ShR3: ShippingOrder
-      deactivate WR3
-      activate ShR3
-      ShR3 -> TR4: TransportPickup\n & <back:yellow><b>Shipment</b>
-        deactivate ShR3
-        activate TR4
-        TR4 -> FR4: Transport\nConfirmation
-          activate FR4
-        TR4 -> RR1: TransportDelivery <&clock> & <back:yellow><b>Shipment</b>
-          deactivate TR4
-        activate RR1
-        RR1 -> WR1: InventoryEntry\n & <back:yellow><b>Shipment</b>
-          deactivate RR1
-          activate WR1
-          WR1 -> CR1: Delivery
-          deactivate WR1
-      deactivate CR1
-      FR4 -> FR3: Invoice
-      activate FR3
-        FR3 -> FR3: wait <&clock>
-        FR3 --> FR4: Payment
-        deactivate FR3
-      FR4 -> BR0: BankTransfer
-    deactivate FR4
+  WR3 -> ShR3: ShippingOrder
+    deactivate WR3
+    activate ShR3
+    ShR3 -> TR4: TransportPickup\n & <back:yellow><b>Shipment</b>
+      deactivate ShR3
+      activate TR4
+      TR4 -> FR4: Transport\nConfirmation
+        activate FR4
+      TR4 -> RR1: TransportDelivery <&clock> & <back:yellow><b>Shipment</b>
+        deactivate TR4
+      activate RR1
+      RR1 -> WR1: InventoryEntry\n & <back:yellow><b>Shipment</b>
+        deactivate RR1
+      activate WR1
+      WR1 -> CR1: Fulfillment
+      deactivate WR1
+  deactivate CR1
+    FR4 -> FR3: Invoice
+    activate FR3
+      FR3 -> FR3: wait <&clock>
+      FR3 --> FR4: Payment
+      deactivate FR3
+    FR4 -> BR0: BankTransfer
+  deactivate FR4
 
 @enduml
