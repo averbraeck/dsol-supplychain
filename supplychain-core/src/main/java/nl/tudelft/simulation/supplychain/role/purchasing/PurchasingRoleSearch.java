@@ -17,7 +17,7 @@ import nl.tudelft.simulation.supplychain.content.SearchAnswer;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class PurchasingRoleSearch extends PurchasingRole
+public class PurchasingRoleSearch extends PurchasingRoleRFQ
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221205L;
@@ -38,7 +38,7 @@ public class PurchasingRoleSearch extends PurchasingRole
     @Override
     public String getId()
     {
-        return getActor().getId() + "-BUYING(yp)";
+        return getActor().getId() + "-BUYING(search)";
     }
 
     @Override

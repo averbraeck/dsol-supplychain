@@ -3,6 +3,7 @@ package nl.tudelft.simulation.supplychain.role.purchasing.handler;
 import nl.tudelft.simulation.supplychain.content.QuoteNo;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleRFQ;
 
 /**
  * The QuoteNoHandler implements the business logic for a buyer who receives a negative Quote from a selling actor. 
@@ -21,7 +22,7 @@ public class QuoteNoHandler extends ContentHandler<QuoteNo, PurchasingRole>
      * Constructs a new QuoteNoHandler.
      * @param owner the owner of the handler
      */
-    public QuoteNoHandler(final PurchasingRole owner)
+    public QuoteNoHandler(final PurchasingRoleRFQ owner)
     {
         super("QuoteNoHandler", owner, QuoteNo.class);
     }
@@ -33,8 +34,17 @@ public class QuoteNoHandler extends ContentHandler<QuoteNo, PurchasingRole>
         {
             return false;
         }
-        // For now, do nothing. The RFQ will timeout by itself.
+        if (getRole().isDiscardNegativeQuotes())
+        {
+            // TODO implement handling of negative quotes
+        }
         return true;
+    }
+
+    @Override
+    public PurchasingRoleRFQ getRole()
+    {
+        return (PurchasingRoleRFQ) super.getRole();
     }
 
 }

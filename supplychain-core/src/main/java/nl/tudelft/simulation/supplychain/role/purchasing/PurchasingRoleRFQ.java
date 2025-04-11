@@ -21,6 +21,9 @@ public class PurchasingRoleRFQ extends PurchasingRole
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221205L;
+    
+    /** whether to discard negative quots or not. */
+    private boolean discardNegativeQuotes = true;
 
     /** the necessary content handlers. */
     private static Set<Class<? extends Content>> necessaryContentHandlers =
@@ -39,6 +42,24 @@ public class PurchasingRoleRFQ extends PurchasingRole
     public String getId()
     {
         return getActor().getId() + "-BUYING(RFQ)";
+    }
+
+    /**
+     * Return whether to discard negative quots or not.
+     * @return whether to discard negative quots or not
+     */
+    public boolean isDiscardNegativeQuotes()
+    {
+        return this.discardNegativeQuotes;
+    }
+
+    /**
+     * Set a new value for whether to discard negative quots or not.
+     * @param discardNegativeQuotes whether to discard negative quots or not
+     */
+    public void setDiscardNegativeQuotes(final boolean discardNegativeQuotes)
+    {
+        this.discardNegativeQuotes = discardNegativeQuotes;
     }
 
     @Override
