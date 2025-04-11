@@ -2,7 +2,7 @@ package nl.tudelft.supplychain.actor;
 
 import org.djutils.draw.point.Point2d;
 
-import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
+import nl.tudelft.simulation.supplychain.actor.Geography;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
 import nl.tudelft.simulation.supplychain.content.store.ContentStoreFull;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
@@ -20,9 +20,9 @@ public class TestActor extends SupplyChainActor
     private static final long serialVersionUID = 1L;
 
     public TestActor(final String id, final String name, final SupplyChainModelInterface model, final Point2d location,
-            final String locationDescription) throws ActorAlreadyDefinedException
+            final String locationDescription)
     {
-        super(id, name, model, location, locationDescription, new ContentStoreFull());
+        super(id, name, model, new Geography(location, locationDescription, "Europe"), new ContentStoreFull());
     }
 
 }
