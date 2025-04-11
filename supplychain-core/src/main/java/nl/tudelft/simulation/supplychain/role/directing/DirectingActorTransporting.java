@@ -1,5 +1,7 @@
 package nl.tudelft.simulation.supplychain.role.directing;
 
+import org.djutils.exceptions.Throw;
+
 import nl.tudelft.simulation.supplychain.actor.Actor;
 
 /**
@@ -16,12 +18,19 @@ public interface DirectingActorTransporting extends Actor
      * Return the DirectingRole for this actor.
      * @return the DirectingRole for this actor
      */
-    DirectingRoleTransporting getDirectingRoleTransporting();
+    default DirectingRoleTransporting getDirectingRoleTransporting()
+    {
+        return getRole(DirectingRoleTransporting.class);
+    }
 
     /**
      * Set the DirectingRole for this actor.
      * @param directingRoleTransporting the new DirectingRole for this actor
      */
-    void setDirectingRole(DirectingRoleTransporting directingRoleTransporting);
+    default void setDirectingRole(final DirectingRoleTransporting directingRoleTransporting)
+    {
+        Throw.whenNull(directingRoleTransporting, "directingRoleTransporting cannot be null");
+        registerRole(DirectingRoleTransporting.class, directingRoleTransporting);
+    }
 
 }
