@@ -1,5 +1,7 @@
 package nl.tudelft.simulation.supplychain.role.selling;
 
+import org.djutils.exceptions.Throw;
+
 import nl.tudelft.simulation.supplychain.role.directing.DirectingActorSelling;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
@@ -19,12 +21,19 @@ public interface SellingActor extends FinancingActor, WarehousingActor, Directin
      * Return the SellingRole for this actor.
      * @return the SellingRole for this actor
      */
-    SellingRole getSellingRole();
+    default SellingRole getSellingRole()
+    {
+        return getRole(SellingRole.class);
+    }
 
     /**
      * Set the SellingRole for this actor.
      * @param sellingRole the new SellingRole for this actor
      */
-    void setSellingRole(SellingRole sellingRole);
+    default void setSellingRole(final SellingRole sellingRole)
+    {
+        Throw.whenNull(sellingRole, "sellingRole cannot be null");
+        registerRole(SellingRole.class, sellingRole);
+    }
 
 }

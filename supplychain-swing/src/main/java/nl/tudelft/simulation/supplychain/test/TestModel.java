@@ -10,7 +10,7 @@ import org.djunits.value.vdouble.scalar.Length;
 import org.djunits.value.vdouble.scalar.Mass;
 import org.djunits.value.vdouble.scalar.Volume;
 import org.djutils.draw.bounds.Bounds3d;
-import org.djutils.draw.point.DirectedPoint2d;
+import org.djutils.draw.point.Point2d;
 import org.djutils.draw.point.OrientedPoint3d;
 import org.djutils.draw.point.Point;
 
@@ -85,7 +85,7 @@ public class TestModel extends SupplyChainModel
             }
 
             // create the bank
-            Bank ing = new Bank("ING", "ING", this, new DirectedPoint2d(0, 0), "ING");
+            Bank ing = new Bank("ING", "ING", this, new Point2d(0, 0), "ING");
             ing.setAnnualInterestRateNeg(0.080);
             ing.setAnnualInterestRatePos(0.025);
 
@@ -94,16 +94,16 @@ public class TestModel extends SupplyChainModel
                     new Volume(0.05, VolumeUnit.CUBIC_METER), 0.0);
 
             // create a manufacturer
-            this.factory = new Factory("Factory", "Factory", this, new DirectedPoint2d(200, 200), "", ing,
+            this.factory = new Factory("Factory", "Factory", this, new Point2d(200, 200), "", ing,
                     new Money(50000.0, MoneyUnit.USD), new LeanTradeMessageStore(this.devsSimulator), this.laptop, 1000);
 
             // create a retailer
-            this.pcShop = new PCShop("PCshop", "PCshop", this, new DirectedPoint2d(20, 200), "", ing,
+            this.pcShop = new PCShop("PCshop", "PCshop", this, new Point2d(20, 200), "", ing,
                     new Money(50000.0, MoneyUnit.USD), new LeanTradeMessageStore(this.devsSimulator), this.laptop, 10,
                     this.factory);
 
             // create a customer
-            this.client = new Client("Client", "Client", this, new DirectedPoint2d(100, 100), "", ing,
+            this.client = new Client("Client", "Client", this, new Point2d(100, 100), "", ing,
                     new Money(1500000.0, MoneyUnit.USD), new LeanTradeMessageStore(this.devsSimulator), this.laptop,
                     this.pcShop);
 

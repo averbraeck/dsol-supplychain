@@ -1,5 +1,7 @@
 package nl.tudelft.simulation.supplychain.role.directing;
 
+import org.djutils.exceptions.Throw;
+
 import nl.tudelft.simulation.supplychain.actor.Actor;
 
 /**
@@ -16,12 +18,19 @@ public interface DirectingActorSelling extends Actor
      * Return the DirectingRole for this actor.
      * @return the DirectingRole for this actor
      */
-    DirectingRoleSelling getDirectingRoleSelling();
+    default DirectingRoleSelling getDirectingRoleSelling()
+    {
+        return getRole(DirectingRoleSelling.class);
+    }
 
     /**
      * Set the DirectingRole for this actor.
      * @param directingRoleSelling the new DirectingRole for this actor
      */
-    void setDirectingRole(DirectingRoleSelling directingRoleSelling);
+    default void setDirectingRole(final DirectingRoleSelling directingRoleSelling)
+    {
+        Throw.whenNull(directingRoleSelling, "directingRoleSelling cannot be null");
+        registerRole(DirectingRoleSelling.class, directingRoleSelling);
+    }
 
 }

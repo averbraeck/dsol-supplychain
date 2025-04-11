@@ -66,7 +66,6 @@ public abstract class Role<R extends Role<R>> extends LocalEventProducer impleme
         this.actor = actor;
         this.contentReceiver = contentReceiver;
         this.contentReceiver.setRole(this);
-        actor.addRole(this);
     }
 
     /**

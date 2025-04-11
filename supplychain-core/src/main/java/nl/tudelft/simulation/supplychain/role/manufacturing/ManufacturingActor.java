@@ -1,5 +1,7 @@
 package nl.tudelft.simulation.supplychain.role.manufacturing;
 
+import org.djutils.exceptions.Throw;
+
 import nl.tudelft.simulation.supplychain.actor.Actor;
 
 /**
@@ -16,12 +18,19 @@ public interface ManufacturingActor extends Actor
      * Return the ProducingRole for this actor.
      * @return the ProducingRole for this actor
      */
-    ManufacturingRole getProducingRole();
+    default ManufacturingRole getProducingRole()
+    {
+        return getRole(ManufacturingRole.class);
+    }
 
     /**
      * Set the ProducingRole for this actor.
-     * @param producingRole the new ProducingRole for this actor
+     * @param manufacturingRole the new ProducingRole for this actor
      */
-    void setProducingRole(ManufacturingRole producingRole);
+    default void setProducingRole(final ManufacturingRole manufacturingRole)
+    {
+        Throw.whenNull(manufacturingRole, "manufacturingRole cannot be null");
+        registerRole(ManufacturingRole.class, manufacturingRole);
+    }
 
 }

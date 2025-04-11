@@ -1,6 +1,6 @@
 package nl.tudelft.supplychain.actor;
 
-import org.djutils.draw.point.DirectedPoint2d;
+import org.djutils.draw.point.Point2d;
 
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.actor.SupplyChainActor;
@@ -19,7 +19,7 @@ public class TestActor extends SupplyChainActor
 {
     private static final long serialVersionUID = 1L;
 
-    public TestActor(final String id, final String name, final SupplyChainModelInterface model, final DirectedPoint2d location,
+    public TestActor(final String id, final String name, final SupplyChainModelInterface model, final Point2d location,
             final String locationDescription) throws ActorAlreadyDefinedException
     {
         super(id, name, model, location, locationDescription, new ContentStoreFull());

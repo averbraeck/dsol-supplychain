@@ -19,7 +19,7 @@ import nl.tudelft.simulation.supplychain.handler.search.SearchRequestPolicy;
 import nl.tudelft.simulation.supplychain.message.store.EmptyMessageStore;
 import nl.tudelft.simulation.supplychain.messagehandlers.HandleAllMessages;
 import nl.tudelft.simulation.supplychain.money.Bank;
-import nl.tudelft.simulation.supplychain.reference.YellowPage;
+import nl.tudelft.simulation.supplychain.reference.Directory;
 import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
 /**
@@ -30,7 +30,7 @@ import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class DemoYP extends YellowPage
+public class DemoYP extends Directory
 {
     /** */
     private static final long serialVersionUID = 20221201L;

@@ -1,5 +1,7 @@
 package nl.tudelft.simulation.supplychain.role.purchasing;
 
+import org.djutils.exceptions.Throw;
+
 import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
 
 /**
@@ -17,12 +19,19 @@ public interface PurchasingActor extends FinancingActor
      * Return the PurchasingRole for this actor.
      * @return the PurchasingRole for this actor
      */
-    PurchasingRole getPurchasingRole();
+    default PurchasingRole getPurchasingRole()
+    {
+        return getRole(PurchasingRole.class);
+    }
 
     /**
      * Set the PurchasingRole for this actor.
      * @param purchasingRole the new PurchasingRole for this actor
      */
-    void setPurchasingRole(PurchasingRole purchasingRole);
+    default void setPurchasingRole(final PurchasingRole purchasingRole)
+    {
+        Throw.whenNull(purchasingRole, "purchasingRole cannot be null");
+        registerRole(PurchasingRole.class, purchasingRole);
+    }
 
 }

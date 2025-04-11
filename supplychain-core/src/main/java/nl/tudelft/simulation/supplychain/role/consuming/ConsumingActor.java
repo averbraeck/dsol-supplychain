@@ -1,5 +1,7 @@
 package nl.tudelft.simulation.supplychain.role.consuming;
 
+import org.djutils.exceptions.Throw;
+
 import nl.tudelft.simulation.supplychain.actor.Actor;
 
 /**
@@ -16,12 +18,19 @@ public interface ConsumingActor extends Actor
      * Return the ConsumingRole for this actor.
      * @return the ConsumingRole for this actor
      */
-    ConsumingRole getConsumingRole();
+    default ConsumingRole getConsumingRole()
+    {
+        return getRole(ConsumingRole.class);
+    }
 
     /**
      * Set the ConsumingRole for this actor.
      * @param consumingRole the new ConsumingRole for this actor
      */
-    void setConsumingRole(ConsumingRole consumingRole);
+    default void setConsumingRole(final ConsumingRole consumingRole)
+    {
+        Throw.whenNull(consumingRole, "consumingRole cannot be null");
+        registerRole(ConsumingRole.class, consumingRole);
+    }
 
 }

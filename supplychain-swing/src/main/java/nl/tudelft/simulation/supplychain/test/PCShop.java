@@ -7,7 +7,7 @@ import javax.naming.NamingException;
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djutils.draw.bounds.Bounds3d;
-import org.djutils.draw.point.DirectedPoint2d;
+import org.djutils.draw.point.Point2d;
 
 import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
@@ -75,7 +75,7 @@ public class PCShop extends Retailer
      * @throws RemoteException on animation error
      */
     @SuppressWarnings("checkstyle:parameternumber")
-    public PCShop(final String id, final String name, final SupplyChainModelInterface model, final DirectedPoint2d location,
+    public PCShop(final String id, final String name, final SupplyChainModelInterface model, final Point2d location,
             final String locationDescription, final Bank bank, final Money initialBalance,
             final ContentStoreInterface messageStore, final Product product, final double amount,
             final Supplier manufacturer) throws ActorAlreadyDefinedException, RemoteException, NamingException

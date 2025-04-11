@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Set;
 
 import org.djunits.value.vdouble.scalar.Time;
-import org.djutils.draw.point.DirectedPoint2d;
+import org.djutils.draw.point.Point2d;
 import org.junit.jupiter.api.Test;
 
 import nl.tudelft.simulation.supplychain.actor.Actor;
@@ -38,7 +38,7 @@ public class RoleTest
     {
         SupplyChainSimulator simulator = new SupplyChainSimulator("sim", Time.ZERO);
         TestModel model = new TestModel(simulator);
-        TestActor actor = new TestActor("TA", "TestActor", model, new DirectedPoint2d(10, 10, 0), "Dallas, TX");
+        TestActor actor = new TestActor("TA", "TestActor", model, new Point2d(10, 10, 0), "Dallas, TX");
         assertEquals(0, actor.getRoles().size());
         ContentReceiver messageReceiver = new ContentReceiverDirect();
         TestRole role = new TestRole("ROLE", actor, messageReceiver);

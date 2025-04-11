@@ -1,12 +1,13 @@
 package nl.tudelft.simulation.supplychain.actor;
 
-import java.util.LinkedHashSet;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djutils.draw.bounds.Bounds2d;
-import org.djutils.draw.point.DirectedPoint2d;
+import org.djutils.draw.point.Point2d;
 import org.djutils.event.EventType;
 import org.djutils.event.LocalEventProducer;
 import org.djutils.exceptions.Throw;
@@ -39,26 +40,23 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
     /** the longer name of the actor. */
     private final String name;
 
-    /** the location description of the actor (e.g., a city, country). */
-    private final String locationDescription;
-
     /** the model. */
     private final SupplyChainModelInterface model;
 
     /** the roles. */
-    private Set<Role<?>> roles = new LinkedHashSet<>();
+    private Map<Class<? extends Role<?>>, Role<?>> roles = new LinkedHashMap<>();
 
     /** cached check whether all roles have been initialized with handlers and processes. */
     private boolean rolesComplete = false;
-
-    /** the location of the actor. */
-    private final DirectedPoint2d location;
 
     /** the bounds of the object (size and relative height in the animation). */
     private Bounds2d bounds = new Bounds2d(-1.0, 1.0, -1.0, 1.0);
 
     /** the store for the content to use. */
     private final ContentStoreInterface contentStore;
+
+    /** the geographical details of the actor. */
+    private Geography geography;
 
     /** the event to indicate that information has been sent. E.g., for animation. */
     public static final EventType SEND_CONTENT_EVENT = new EventType("SEND_CONTENT_EVENT",
@@ -69,43 +67,47 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
      * @param id String, the unique id of the actor
      * @param name the longer name of the actor
      * @param model the model
-     * @param location the location of the actor
-     * @param locationDescription the location description of the actor (e.g., a city, country)
+     * @param geography the geographical details of the actor
      * @param contentStore the message store for messages
      * @throws ActorAlreadyDefinedException when the actor was already registered in the model
      */
     public SupplyChainActor(final String id, final String name, final SupplyChainModelInterface model,
-            final DirectedPoint2d location, final String locationDescription, final ContentStoreInterface contentStore)
-            throws ActorAlreadyDefinedException
+            final Geography geography, final ContentStoreInterface contentStore) throws ActorAlreadyDefinedException
     {
         Throw.whenNull(model, "model cannot be null");
         Throw.whenNull(id, "name cannot be null");
         Throw.when(id.length() == 0, IllegalArgumentException.class, "id of actor cannot be empty");
         Throw.whenNull(name, "name cannot be null");
-        Throw.whenNull(location, "location cannot be null");
-        Throw.whenNull(locationDescription, "locationDescription cannot be null");
+        Throw.whenNull(geography, "geography cannot be null");
         Throw.whenNull(contentStore, "messageStore cannot be null");
         this.id = id;
         this.name = name;
-        this.locationDescription = locationDescription;
         this.model = model;
-        this.location = location;
+        this.geography = geography;
         this.contentStore = contentStore;
         this.contentStore.setOwner(this);
         model.registerActor(this);
     }
 
     @Override
-    public void addRole(final Role<?> role)
+    public <R extends Role<R>> void registerRole(final Class<R> roleClass, final R role)
     {
+        Throw.whenNull(roleClass, "roleClass cannot be null");
         Throw.whenNull(role, "role cannot be null");
-        this.roles.add(role);
+        this.roles.put(roleClass, role);
     }
 
     @Override
-    public Set<Role<?>> getRoles()
+    public Collection<Role<?>> getRoles()
     {
-        return this.roles;
+        return this.roles.values();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <R extends Role<R>> R getRole(final Class<R> roleClass)
+    {
+        return (R) this.roles.get(roleClass);
     }
 
     @Override
@@ -116,7 +118,7 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
             return true;
         }
         boolean check = true;
-        for (Role<?> role : this.roles)
+        for (Role<?> role : getRoles())
         {
             if (!role.checkHandlersProcessesComplete())
             {
@@ -182,9 +184,15 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
     }
 
     @Override
+    public Geography getGeography()
+    {
+        return this.geography;
+    }
+
+    @Override
     public String getLocationDescription()
     {
-        return this.locationDescription;
+        return this.geography.locationDescription();
     }
 
     @Override
@@ -200,9 +208,9 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
     }
 
     @Override
-    public DirectedPoint2d getLocation()
+    public Point2d getLocation()
     {
-        return this.location;
+        return this.geography.location();
     }
 
     @Override

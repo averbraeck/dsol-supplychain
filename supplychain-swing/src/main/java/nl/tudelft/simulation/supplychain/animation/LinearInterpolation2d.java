@@ -1,6 +1,6 @@
 package nl.tudelft.simulation.supplychain.animation;
 
-import org.djutils.draw.point.DirectedPoint2d;
+import org.djutils.draw.point.Point2d;
 
 /**
  * LinearInterpolation2d interpolates between two points.
@@ -19,10 +19,10 @@ public class LinearInterpolation2d
     private double endTime = Double.NaN;
 
     /** the origin. */
-    private DirectedPoint2d origin = null;
+    private Point2d origin = null;
 
     /** the destination. */
-    private DirectedPoint2d destination = null;
+    private Point2d destination = null;
 
     /**
      * constructs a new LinearInterpolation.
@@ -31,8 +31,8 @@ public class LinearInterpolation2d
      * @param origin the origin
      * @param destination the destination
      */
-    public LinearInterpolation2d(final double startTime, final double endTime, final DirectedPoint2d origin,
-            final DirectedPoint2d destination)
+    public LinearInterpolation2d(final double startTime, final double endTime, final Point2d origin,
+            final Point2d destination)
     {
         super();
         if (endTime < startTime)
@@ -50,7 +50,7 @@ public class LinearInterpolation2d
      * @param time the current time
      * @return OrientedPoint3d the current location
      */
-    public DirectedPoint2d getLocation(final double time)
+    public Point2d getLocation(final double time)
     {
         if (time <= this.startTime)
         {
@@ -64,7 +64,7 @@ public class LinearInterpolation2d
         double x = this.origin.getX() + (this.destination.getX() - this.origin.getX()) * fraction;
         double y = this.origin.getY() + (this.destination.getY() - this.origin.getY()) * fraction;
         double rotZ = this.origin.getDirZ() + (this.destination.getDirZ() - this.origin.getDirZ()) * fraction;
-        return new DirectedPoint2d(x, y, rotZ);
+        return new Point2d(x, y, rotZ);
     }
 
 }

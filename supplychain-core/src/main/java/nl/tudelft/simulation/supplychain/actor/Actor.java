@@ -1,6 +1,6 @@
 package nl.tudelft.simulation.supplychain.actor;
 
-import java.util.Set;
+import java.util.Collection;
 
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
@@ -25,15 +25,25 @@ public interface Actor extends NamedLocation, EventProducer
 {
     /**
      * Add a role to the actor. If the role already exists, the current role replaces the earlier role.
+     * @param roleClass the class to register the role with
      * @param role the role to add to the actor
+     * @param <R> the role type
      */
-    void addRole(Role<?> role);
+    <R extends Role<R>> void registerRole(Class<R> roleClass, R role);
 
     /**
-     * Return the set of roles for this actor.
+     * Return the collection of roles for this actor.
      * @return the roles of this actor
      */
-    Set<Role<?>> getRoles();
+    Collection<Role<?>> getRoles();
+    
+    /**
+     * Get a role of a specific type.
+     * @param roleClass the class of the role to retrieve
+     * @return the role belonging to that class or null when not present
+     * @param <R> the role type
+     */
+    <R extends Role<R>> R getRole(Class<R> roleClass);
 
     /**
      * Check whether the necessary roles are set and filled with the required handlers and processes before executing a

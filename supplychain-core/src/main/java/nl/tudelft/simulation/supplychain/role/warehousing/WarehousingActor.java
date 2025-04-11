@@ -1,5 +1,7 @@
 package nl.tudelft.simulation.supplychain.role.warehousing;
 
+import org.djutils.exceptions.Throw;
+
 import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
 import nl.tudelft.simulation.supplychain.role.receiving.ReceivingRole;
 import nl.tudelft.simulation.supplychain.role.shipping.ShippingRole;
@@ -18,36 +20,57 @@ public interface WarehousingActor extends FinancingActor
      * Return the WarehousingRole for this actor.
      * @return the WarehousingRole for this actor
      */
-    WarehousingRole getWarehousingRole();
+    default WarehousingRole getWarehousingRole()
+    {
+        return getRole(WarehousingRole.class);
+    }
 
     /**
      * Set the WarehousingRole for this actor.
      * @param warehousingRole the new WarehousingRole for this actor
      */
-    void setWarehousingRole(WarehousingRole warehousingRole);
+    default void setWarehousingRole(final WarehousingRole warehousingRole)
+    {
+        Throw.whenNull(warehousingRole, "warehousingRole cannot be null");
+        registerRole(WarehousingRole.class, warehousingRole);
+    }
 
     /**
      * Return the ShippingRole for this actor.
      * @return the ShippingRole for this actor
      */
-    ShippingRole getShippingRole();
+    default ShippingRole getShippingRole()
+    {
+        return getRole(ShippingRole.class);
+    }
 
     /**
      * Set the ShippingRole for this actor.
      * @param shippingRole the new ShippingRole for this actor
      */
-    void setShippingRole(ShippingRole shippingRole);
+    default void setShippingRole(final ShippingRole shippingRole)
+    {
+        Throw.whenNull(shippingRole, "shippingRole cannot be null");
+        registerRole(ShippingRole.class, shippingRole);
+    }
 
     /**
      * Return the ReceivingRole for this actor.
      * @return the ReceivingRole for this actor
      */
-    ReceivingRole getReceivingRole();
+    default ReceivingRole getReceivingRole()
+    {
+        return getRole(ReceivingRole.class);
+    }
 
     /**
      * Set the ReceivingRole for this actor.
      * @param receivingRole the new ReceivingRole for this actor
      */
-    void setReceivingRole(ReceivingRole receivingRole);
+    default void setReceivingRole(final ReceivingRole receivingRole)
+    {
+        Throw.whenNull(receivingRole, "receivingRole cannot be null");
+        registerRole(ReceivingRole.class, receivingRole);
+    }
 
 }

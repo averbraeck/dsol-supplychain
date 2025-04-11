@@ -1,5 +1,7 @@
 package nl.tudelft.simulation.supplychain.role.searching;
 
+import org.djutils.exceptions.Throw;
+
 import nl.tudelft.simulation.supplychain.actor.Actor;
 
 /**
@@ -16,12 +18,19 @@ public interface SearchingActor extends Actor
      * Return the SearchingRole for this actor.
      * @return the SearchingRole for this actor
      */
-    SearchingRole getSearchingRole();
+    default SearchingRole getSearchingRole()
+    {
+        return getRole(SearchingRole.class);
+    }
 
     /**
      * Set the SearchingRole for this actor.
      * @param searchingRole the new SearchingRole for this actor
      */
-    void setSearchingRole(SearchingRole searchingRole);
+    default void setSearchingRole(final SearchingRole searchingRole)
+    {
+        Throw.whenNull(searchingRole, "bankingRole cannot be null");
+        registerRole(SearchingRole.class, searchingRole);
+    }
 
 }

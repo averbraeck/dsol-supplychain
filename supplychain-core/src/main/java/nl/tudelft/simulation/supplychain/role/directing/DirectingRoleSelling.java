@@ -5,6 +5,10 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import nl.tudelft.simulation.supplychain.actor.Role;
+import nl.tudelft.simulation.supplychain.content.Content;
+import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
+import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 import nl.tudelft.simulation.supplychain.product.Product;
 
 /**
@@ -16,7 +20,7 @@ import nl.tudelft.simulation.supplychain.product.Product;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class DirectingRoleSelling extends DirectingRole
+public class DirectingRoleSelling extends Role<DirectingRoleSelling>
 {
     /** */
     private static final long serialVersionUID = 1L;
@@ -33,13 +37,19 @@ public class DirectingRoleSelling extends DirectingRole
     /** the landmasses to which we sell in case salesToAllLandmasses is false. */
     private final Set<String> salesToLandmass = new LinkedHashSet<>();
 
+    /** the necessary content handlers. */
+    private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of();
+
+    /** the necessary autonomous processes. */
+    private static Set<Class<? extends AutonomousProcess<DirectingRoleSelling>>> necessaryAutonomousProcesses = Set.of();
+
     /**
      * Create a new Directing role for sales.
      * @param owner the actor that owns the Directing role
      */
     public DirectingRoleSelling(final DirectingActorSelling owner)
     {
-        super(owner);
+        super("directing-selling", owner, new ContentReceiverDirect());
     }
 
     /**
@@ -139,4 +149,15 @@ public class DirectingRoleSelling extends DirectingRole
         this.salesToAllLandmasses = salesToAllLandmasses;
     }
 
+    @Override
+    protected Set<Class<? extends Content>> getNecessaryContentHandlers()
+    {
+        return necessaryContentHandlers;
+    }
+
+    @Override
+    protected Set<Class<? extends AutonomousProcess<DirectingRoleSelling>>> getNecessaryAutonomousProcesses()
+    {
+        return necessaryAutonomousProcesses;
+    }
 }

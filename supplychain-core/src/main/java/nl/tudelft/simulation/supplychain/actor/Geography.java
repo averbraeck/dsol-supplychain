@@ -1,10 +1,12 @@
 package nl.tudelft.simulation.supplychain.actor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Length;
 import org.djunits.value.vdouble.scalar.Speed;
+import org.djutils.draw.point.Point2d;
 
 import nl.tudelft.simulation.supplychain.role.transporting.TransportMode;
 
@@ -15,12 +17,26 @@ import nl.tudelft.simulation.supplychain.role.transporting.TransportMode;
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
+ * @param location the location of the actor
+ * @param locationDescription the location description of the actor (e.g., a city, country)
  * @param landmass the name of the landmass (continent or island) for contiguously connected trucking
  * @param truckSpeed the average speed of a truck on the given landmass
  * @param transferLocations List with accessible transfer locations by truck
  */
-public record Geography(String landmass, Speed truckSpeed, List<TransferLocation> transferLocations)
+public record Geography(Point2d location, String locationDescription, String landmass, Speed truckSpeed,
+        List<TransferLocation> transferLocations)
 {
+    /**
+     * A Geography without any transport details, e.g., for a Bank.
+     * @param location the location of the actor
+     * @param locationDescription the location description of the actor (e.g., a city, country)
+     * @param landmass the landmass where the actor is located
+     */
+    public Geography(final Point2d location, final String locationDescription, final String landmass)
+    {
+        this(location, locationDescription, landmass, Speed.ZERO, new ArrayList<>());
+    }
+
     /**
      * The access parameters to a transfer location.
      * <p>

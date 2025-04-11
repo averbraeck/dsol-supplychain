@@ -8,7 +8,7 @@ import org.djunits.unit.DurationUnit;
 import org.djunits.unit.TimeUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
-import org.djutils.draw.point.DirectedPoint2d;
+import org.djutils.draw.point.Point2d;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.Gson;
@@ -49,8 +49,8 @@ public class JsonContentFactoryTest
         Gson gson = JsonContentFactory.instance(model);
         assertNotNull(gson);
         assertEquals(gson, JsonContentFactory.instance(model));
-        Actor actor1 = new TestActor("TA1", "TestActor 1", model, new DirectedPoint2d(10, 10, 0), "Dallas, TX");
-        Actor actor2 = new TestActor("TA2", "TestActor 2", model, new DirectedPoint2d(20, 20, 0), "Austin, TX");
+        Actor actor1 = new TestActor("TA1", "TestActor 1", model, new Point2d(10, 10, 0), "Dallas, TX");
+        Actor actor2 = new TestActor("TA2", "TestActor 2", model, new Point2d(20, 20, 0), "Austin, TX");
         TestContent testContent = new TestContent(actor1, actor2);
         String ms = gson.toJson(testContent);
         assertNotNull(ms);

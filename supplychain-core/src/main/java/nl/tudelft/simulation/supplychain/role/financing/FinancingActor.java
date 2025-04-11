@@ -1,5 +1,7 @@
 package nl.tudelft.simulation.supplychain.role.financing;
 
+import org.djutils.exceptions.Throw;
+
 import nl.tudelft.simulation.supplychain.actor.Actor;
 
 /**
@@ -16,12 +18,19 @@ public interface FinancingActor extends Actor
      * Return the FinancingRole for this actor.
      * @return the FinancingRole for this actor
      */
-    FinancingRole getFinancingRole();
+    default FinancingRole getFinancingRole()
+    {
+        return getRole(FinancingRole.class);
+    }
 
     /**
      * Set the FinancingRole for this actor.
      * @param financingRole the new FinancingRole for this actor
      */
-    void setFinancingRole(FinancingRole financingRole);
+    default void setFinancingRole(final FinancingRole financingRole)
+    {
+        Throw.whenNull(financingRole, "financingRole cannot be null");
+        registerRole(FinancingRole.class, financingRole);
+    }
 
 }
