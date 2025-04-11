@@ -1,6 +1,6 @@
 package nl.tudelft.simulation.supplychain.role.transporting;
 
-import nl.tudelft.simulation.supplychain.actor.Actor;
+import nl.tudelft.simulation.supplychain.role.directing.DirectingActorTransporting;
 
 /**
  * TransportingActor is an interface to indicate that an Actor has a TransportingRole.
@@ -10,7 +10,7 @@ import nl.tudelft.simulation.supplychain.actor.Actor;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public interface TransportingActor extends Actor
+public interface TransportingActor extends DirectingActorTransporting
 {
     /**
      * Return the TransportingRole for this actor.

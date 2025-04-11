@@ -10,16 +10,17 @@ import org.djunits.value.vdouble.scalar.Length;
 import org.djutils.base.Identifiable;
 import org.djutils.exceptions.Throw;
 
-import nl.tudelft.simulation.supplychain.actor.Actor;
+import nl.tudelft.simulation.supplychain.actor.NamedLocation;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
+import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Sku;
 
 /**
- * TransportStep models one step of a TransportOption. It describes the origin Node and destination Node (as an Actor -- any
- * location where trandsfer takes place, such as a port or terminal, is seen as an actor in the logistics network), estimated
- * loading time at the origin Node and estimated unloading time at the destination Node, the mode of transport between origin
- * and destination, and the costs associated with loading and with unloading (including storage costs).
+ * TransportStep models one step of a TransportOption. It describes the origin Node and destination Node (as an NamedLocation --
+ * any location where trandsfer takes place, such as a port or terminal, is seen as an actor in the logistics network),
+ * estimated loading time at the origin Node and estimated unloading time at the destination Node, the mode of transport between
+ * origin and destination, and the costs associated with loading and with unloading (including storage costs).
  * <p>
  * Copyright (c) 2022-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
@@ -35,13 +36,16 @@ public class TransportOptionStep implements Identifiable, Serializable
     private final String id;
 
     /** the actor at the origin (company, port, terminal). */
-    private final Actor origin;
+    private final NamedLocation origin;
 
     /** the actor at the destination (company, port, terminal). */
-    private final Actor destination;
+    private final NamedLocation destination;
 
     /** the transport mode between origin and destination. */
     private final TransportMode transportMode;
+
+    /** the simulator to get access to the model. */
+    private final SupplyChainSimulatorInterface simulator;
 
     /** the estimated time to load SKUs at the origin (including typical waiting times). */
     private Map<Sku, Duration> estimatedLoadingTimes = new LinkedHashMap<>();
@@ -63,8 +67,10 @@ public class TransportOptionStep implements Identifiable, Serializable
      * @param origin the actor at the origin (company, port, terminal)
      * @param destination the actor at the destination (company, port, terminal)
      * @param transportMode the transport mode between origin and destination
+     * @param simulator the simulator to get access to the model
      */
-    public TransportOptionStep(final String id, final Actor origin, final Actor destination, final TransportMode transportMode)
+    public TransportOptionStep(final String id, final NamedLocation origin, final NamedLocation destination,
+            final TransportMode transportMode, final SupplyChainSimulatorInterface simulator)
     {
         Throw.whenNull(id, "id cannot be null");
         Throw.whenNull(origin, "origin cannot be null");
@@ -74,6 +80,7 @@ public class TransportOptionStep implements Identifiable, Serializable
         this.origin = origin;
         this.destination = destination;
         this.transportMode = transportMode;
+        this.simulator = simulator;
     }
 
     @Override
@@ -86,7 +93,7 @@ public class TransportOptionStep implements Identifiable, Serializable
      * Return the actor at the origin (company, port, terminal).
      * @return the actor at the origin (company, port, terminal)
      */
-    public Actor getOrigin()
+    public NamedLocation getOrigin()
     {
         return this.origin;
     }
@@ -95,7 +102,7 @@ public class TransportOptionStep implements Identifiable, Serializable
      * Return the actor at the destination (company, port, terminal).
      * @return the actor at the destination (company, port, terminal)
      */
-    public Actor getDestination()
+    public NamedLocation getDestination()
     {
         return this.destination;
     }
@@ -106,7 +113,7 @@ public class TransportOptionStep implements Identifiable, Serializable
      */
     public Length getTransportDistance()
     {
-        SupplyChainModelInterface model = getOrigin().getSimulator().getModel();
+        SupplyChainModelInterface model = this.simulator.getModel();
         return model.calculateDistance(getOrigin().getLocation(), getDestination().getLocation());
     }
 

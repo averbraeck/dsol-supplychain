@@ -1,13 +1,18 @@
 package nl.tudelft.simulation.supplychain.role.transporting;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.TransportPickup;
+import nl.tudelft.simulation.supplychain.content.TransportQuote;
 import nl.tudelft.simulation.supplychain.content.TransportQuoteRequest;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
+import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
+import nl.tudelft.simulation.supplychain.product.Sku;
 
 /**
  * The Transporting role takes care of making transport quotes, doing the actual transporting, and sending a transport invoice.
@@ -38,21 +43,98 @@ public class TransportingRole extends Role<TransportingRole>
         super("transporting", owner, new ContentReceiverDirect());
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Make a list of transport quotes based on the geographic locations of the sender and receiver, and on the capabilities of
+     * this transporting organization.
+     * @param tqr The transport quote request containing the details about the goods and locations
+     * @return a list of possible transport options.
+     */
+    public List<TransportQuote> makeTransportQuotes(final TransportQuoteRequest tqr)
+    {
+        var product = tqr.product();
+        Sku sku = product.getSku();
+        var tql = new ArrayList<TransportQuote>();
+        var from = tqr.rfq().receiver();
+        var to = tqr.rfq().sender();
+
+        // if the transporter does not do business on either landmass, no quotes.
+        if (!getActor().getDirectingRoleTransporting().isTransportOnLandmass(from.getGeography().landmass())
+                || !getActor().getDirectingRoleTransporting().isTransportOnLandmass(to.getGeography().landmass()))
+        {
+            return tql;
+        }
+
+        // if we are on the same landmass, direct trucking is an option (if we do direct trucking)
+        var continental = from.getGeography().landmass().equals(to.getGeography().landmass());
+        if (continental && !Double.isNaN(getActor().getDirectingRoleTransporting().getProfitMargin(TransportMode.TRUCK)))
+        {
+            var transportOption = new TransportOption(getActor().getId() + "-transport for " + tqr.groupingId() + " by truck");
+            var transportOptionStep =
+                    new TransportOptionStep(transportOption.getId(), from, to, TransportMode.TRUCK, getSimulator());
+            transportOption.addTransportStep(transportOptionStep);
+            double profitMargin = getActor().getDirectingRoleTransporting().getProfitMargin(TransportMode.TRUCK);
+            Money price = transportOptionStep.getEstimatedTransportCost(sku).multiplyBy(tqr.amount() * (1.0 + profitMargin));
+            var transportQuote = new TransportQuote(tqr, transportOption, price);
+            tql.add(transportQuote);
+        }
+
+        // add options for matching pairs of transport modes between seller and purchaser
+        // note that there can be multiple transfer locations using the same mode per actor (e.g., two closeby ports)
+        for (var transferLocationFrom : from.getGeography().transferLocations())
+        {
+            TransportMode mode = transferLocationFrom.mode();
+            for (var transferLocationTo : to.getGeography().transferLocations())
+            {
+                if (mode.equals(transferLocationTo.mode())
+                        && ((mode.isContinental() && continental) || (mode.isIntercontinental() && !continental)))
+                {
+                    var transportOption = new TransportOption(
+                            getActor().getId() + "-transport for " + tqr.groupingId() + " by " + mode.getId());
+
+                    // truck from seller to transfer point
+                    var transportOptionStep1 = new TransportOptionStep(transportOption.getId(), from,
+                            transferLocationFrom.namedLocation(), TransportMode.TRUCK, getSimulator());
+                    transportOption.addTransportStep(transportOptionStep1);
+                    double profitMargin = getActor().getDirectingRoleTransporting().getProfitMargin(TransportMode.TRUCK);
+                    Money price =
+                            transportOptionStep1.getEstimatedTransportCost(sku).multiplyBy(tqr.amount() * (1.0 + profitMargin));
+
+                    // long distance transport between transfer points
+                    var transportOptionStep2 = new TransportOptionStep(transportOption.getId(),
+                            transferLocationFrom.namedLocation(), transferLocationTo.namedLocation(), mode, getSimulator());
+                    transportOption.addTransportStep(transportOptionStep2);
+                    profitMargin = getActor().getDirectingRoleTransporting().getProfitMargin(mode);
+                    price = price.plus(transportOptionStep2.getEstimatedTransportCost(sku)
+                            .multiplyBy(tqr.amount() * (1.0 + profitMargin)));
+
+                    // truck from transfer point to buyer
+                    var transportOptionStep3 = new TransportOptionStep(transportOption.getId(),
+                            transferLocationTo.namedLocation(), to, TransportMode.TRUCK, getSimulator());
+                    transportOption.addTransportStep(transportOptionStep3);
+                    profitMargin = getActor().getDirectingRoleTransporting().getProfitMargin(TransportMode.TRUCK);
+                    price = price.plus(transportOptionStep3.getEstimatedTransportCost(sku)
+                            .multiplyBy(tqr.amount() * (1.0 + profitMargin)));
+
+                    var transportQuote = new TransportQuote(tqr, transportOption, price);
+                    tql.add(transportQuote);
+                }
+            }
+        }
+        return tql;
+    }
+
     @Override
     protected Set<Class<? extends Content>> getNecessaryContentHandlers()
     {
         return necessaryContentHandlers;
     }
 
-    /** {@inheritDoc} */
     @Override
     protected Set<Class<? extends AutonomousProcess<TransportingRole>>> getNecessaryAutonomousProcesses()
     {
         return necessaryAutonomousProcesses;
     }
 
-    /** {@inheritDoc} */
     @Override
     public TransportingActor getActor()
     {
