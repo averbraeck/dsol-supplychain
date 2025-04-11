@@ -74,7 +74,7 @@ public class JsonActorFactoryTest
         Gson gson = JsonActorFactory.instance(model);
         assertNotNull(gson);
         assertEquals(gson, JsonActorFactory.instance(model));
-        Actor actor = new TestActor("TA", "TestActor", model, new Point2d(10, 10, 0), "Dallas, TX");
+        Actor actor = new TestActor("TA", "TestActor", model, new Point2d(10, 10), "Dallas, TX");
         String as = gson.toJson(actor);
         assertNotNull(as);
         Actor a2 = gson.fromJson(as, Actor.class);
