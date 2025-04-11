@@ -43,7 +43,7 @@ public class DirectingRoleSelling extends DirectingRole
     }
 
     /**
-     * Get the profit margin for a product, or NaN when the product is not in the map.
+     * Get the profit margin for a product, or the default profit margin when the product is not in the map.
      * @param product the product for which to look up the profit margin
      * @return the profit margin for a product, or NaN when not found
      */
