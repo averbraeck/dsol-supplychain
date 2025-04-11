@@ -113,14 +113,14 @@ public class ConsumingRole extends Role<ConsumingRole>
         return getId();
     }
 
-    /** {@inheritDoc} */
+
     @Override
     protected Set<Class<? extends Content>> getNecessaryContentHandlers()
     {
         return necessaryContentHandlers;
     }
 
-    /** {@inheritDoc} */
+
     @Override
     protected Set<Class<? extends AutonomousProcess<ConsumingRole>>> getNecessaryAutonomousProcesses()
     {

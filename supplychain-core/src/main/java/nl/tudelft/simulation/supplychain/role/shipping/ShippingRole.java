@@ -44,14 +44,14 @@ public class ShippingRole extends Role<ShippingRole>
         return necessaryAutonomousProcesses;
     }
 
-    /** {@inheritDoc} */
+
     @Override
     public WarehousingActor getActor()
     {
         return (WarehousingActor) super.getActor();
     }
 
-    /** {@inheritDoc} */
+
     @Override
     protected Set<Class<? extends Content>> getNecessaryContentHandlers()
     {

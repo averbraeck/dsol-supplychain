@@ -194,7 +194,7 @@ public class ContentStoreFull implements ContentStoreInterface
         return contentList;
     }
 
-    /** {@inheritDoc} */
+
     @SuppressWarnings("unchecked")
     @Override
     public <T extends Content> List<T> getContentList(final long groupingId, final Class<T> contentClass, final boolean sent)

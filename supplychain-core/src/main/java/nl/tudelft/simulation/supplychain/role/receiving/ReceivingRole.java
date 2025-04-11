@@ -43,14 +43,14 @@ public class ReceivingRole extends Role<ReceivingRole>
         return necessaryAutonomousProcesses;
     }
 
-    /** {@inheritDoc} */
+
     @Override
     public WarehousingActor getActor()
     {
         return (WarehousingActor) super.getActor();
     }
 
-    /** {@inheritDoc} */
+
     @Override
     protected Set<Class<? extends Content>> getNecessaryContentHandlers()
     {

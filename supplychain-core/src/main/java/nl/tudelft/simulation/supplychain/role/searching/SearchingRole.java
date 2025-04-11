@@ -177,14 +177,14 @@ public class SearchingRole extends Role<SearchingRole>
         return actors.add(actor);
     }
 
-    /** {@inheritDoc} */
+
     @Override
     protected Set<Class<? extends Content>> getNecessaryContentHandlers()
     {
         return necessaryContentHandlers;
     }
 
-    /** {@inheritDoc} */
+
     @Override
     protected Set<Class<? extends AutonomousProcess<SearchingRole>>> getNecessaryAutonomousProcesses()
     {

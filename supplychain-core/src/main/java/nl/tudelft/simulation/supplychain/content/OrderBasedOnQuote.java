@@ -44,21 +44,21 @@ public record OrderBasedOnQuote(PurchasingActor sender, SellingActor receiver, T
         return this.quote.amount();
     }
 
-    /** {@inheritDoc} */
+
     @Override
     public Time deliveryDate()
     {
         return this.quote.proposedDeliveryDate();
     }
 
-    /** {@inheritDoc} */
+
     @Override
     public TransportOption transportOption()
     {
         return this.quote.transportOption();
     }
 
-    /** {@inheritDoc} */
+
     @Override
     public Money price()
     {

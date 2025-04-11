@@ -71,7 +71,7 @@ public abstract class SellingRole extends Role<SellingRole>
         return this.transporters;
     }
 
-    /** {@inheritDoc} */
+
     @Override
     public SellingActor getActor()
     {
