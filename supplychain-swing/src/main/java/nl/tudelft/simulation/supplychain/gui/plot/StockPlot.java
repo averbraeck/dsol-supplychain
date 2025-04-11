@@ -109,7 +109,7 @@ public class StockPlot extends XYChart
             stock.addListener(this, Inventory.INVENTORY_CHANGE_EVENT);
         }
 
-        /** {@inheritDoc} */
+    
         @Override
         public void notify(final Event event) throws RemoteException
         {

@@ -84,7 +84,7 @@ public class BankPlot extends XYChart
             bankAccount.addListener(this, BankAccount.BANK_ACCOUNT_CHANGED_EVENT);
         }
 
-        /** {@inheritDoc} */
+    
         @Override
         public void notify(final Event event) throws RemoteException
         {
