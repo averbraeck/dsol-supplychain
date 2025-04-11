@@ -30,7 +30,7 @@ import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class DemoYP extends Directory
+public class DemoDirectory extends Directory
 {
     /** */
     private static final long serialVersionUID = 20221201L;
@@ -41,7 +41,7 @@ public class DemoYP extends Directory
      * @param position
      * @param bank
      */
-    public DemoYP(String name, SupplyChainSimulatorInterface simulator, OrientedPoint3d position, Bank bank)
+    public DemoDirectory(String name, SupplyChainSimulatorInterface simulator, OrientedPoint3d position, Bank bank)
     {
         super(name, simulator, position, bank, new EmptyMessageStore());
 
@@ -63,7 +63,7 @@ public class DemoYP extends Directory
             try
             {
                 new SingleImageRenderable<>(this, simulator,
-                        DemoYP.class.getResource("/nl/tudelft/simulation/supplychain/images/YellowPage.gif"));
+                        DemoDirectory.class.getResource("/nl/tudelft/simulation/supplychain/images/YellowPage.gif"));
             }
             catch (RemoteException | NamingException exception)
             {

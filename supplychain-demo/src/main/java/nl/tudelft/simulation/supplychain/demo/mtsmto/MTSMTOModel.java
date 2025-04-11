@@ -19,7 +19,7 @@ import nl.tudelft.simulation.supplychain.demo.DemoContentAnimator;
 import nl.tudelft.simulation.supplychain.demo.reference.DemoManufacturer;
 import nl.tudelft.simulation.supplychain.demo.reference.DemoMarket;
 import nl.tudelft.simulation.supplychain.demo.reference.DemoRetailer;
-import nl.tudelft.simulation.supplychain.demo.reference.DemoYP;
+import nl.tudelft.simulation.supplychain.demo.reference.DemoDirectory;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainAnimator;
 import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.Money;
@@ -97,10 +97,10 @@ public class MTSMTOModel extends AbstractDSOLModel<Duration, SupplyChainAnimator
 
             // we create two search 'domains', one between the customers and the retailers,
             // and one between the retailers, manufacturers, and suppliers
-            DemoYP ypCustomerMTS = new DemoYP("YP_customer_MTS", getSimulator(), new OrientedPoint3d(-300, -270, 1), ing);
-            DemoYP ypCustomerMTO = new DemoYP("YP_customer_MTO", getSimulator(), new OrientedPoint3d(-300, 30, 1), ing);
-            DemoYP ypProductionMTS = new DemoYP("YP_production_MTS", getSimulator(), new OrientedPoint3d(100, -270, 1), ing);
-            DemoYP ypProductionMTO = new DemoYP("YP_production_MTO", getSimulator(), new OrientedPoint3d(100, 30, 1), ing);
+            DemoDirectory ypCustomerMTS = new DemoDirectory("YP_customer_MTS", getSimulator(), new OrientedPoint3d(-300, -270, 1), ing);
+            DemoDirectory ypCustomerMTO = new DemoDirectory("YP_customer_MTO", getSimulator(), new OrientedPoint3d(-300, 30, 1), ing);
+            DemoDirectory ypProductionMTS = new DemoDirectory("YP_production_MTS", getSimulator(), new OrientedPoint3d(100, -270, 1), ing);
+            DemoDirectory ypProductionMTO = new DemoDirectory("YP_production_MTO", getSimulator(), new OrientedPoint3d(100, 30, 1), ing);
 
             // Markets
             DemoMarket marketMTS = new DemoMarket("Market_MTS", getSimulator(), new OrientedPoint3d(-360, -150, 1), ing,

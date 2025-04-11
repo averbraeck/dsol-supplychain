@@ -26,7 +26,7 @@ import nl.tudelft.simulation.supplychain.demo.DemoContentAnimator;
 import nl.tudelft.simulation.supplychain.demo.reference.DemoManufacturer;
 import nl.tudelft.simulation.supplychain.demo.reference.DemoMarket;
 import nl.tudelft.simulation.supplychain.demo.reference.DemoRetailer;
-import nl.tudelft.simulation.supplychain.demo.reference.DemoYP;
+import nl.tudelft.simulation.supplychain.demo.reference.DemoDirectory;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.Money;
@@ -105,10 +105,10 @@ public class BullwhipModel extends AbstractDSOLModel<Duration, SupplyChainSimula
 
             // we create two search 'domains', one between the customers and the retailers,
             // and one between the retailers, manufacturers, and suppliers
-            DemoYP ypCustomerMTS = new DemoYP("YP_customer_MTS", getSimulator(), new OrientedPoint3d(400, 40, 0), ing);
-            DemoYP ypCustomerMTO = new DemoYP("YP_customer_MTO", getSimulator(), new OrientedPoint3d(500, 40, 0), ing);
-            DemoYP ypProductionMTS = new DemoYP("YP_production_MTS", getSimulator(), new OrientedPoint3d(600, 40, 0), ing);
-            DemoYP ypProductionMTO = new DemoYP("YP_production_MTO", getSimulator(), new OrientedPoint3d(700, 40, 0), ing);
+            DemoDirectory ypCustomerMTS = new DemoDirectory("YP_customer_MTS", getSimulator(), new OrientedPoint3d(400, 40, 0), ing);
+            DemoDirectory ypCustomerMTO = new DemoDirectory("YP_customer_MTO", getSimulator(), new OrientedPoint3d(500, 40, 0), ing);
+            DemoDirectory ypProductionMTS = new DemoDirectory("YP_production_MTS", getSimulator(), new OrientedPoint3d(600, 40, 0), ing);
+            DemoDirectory ypProductionMTO = new DemoDirectory("YP_production_MTO", getSimulator(), new OrientedPoint3d(700, 40, 0), ing);
 
             // CUSTOMER or MARKET
             DemoMarket customer = new DemoMarket("US East", getSimulator(), new OrientedPoint3d(40, 150, 0), ing,
