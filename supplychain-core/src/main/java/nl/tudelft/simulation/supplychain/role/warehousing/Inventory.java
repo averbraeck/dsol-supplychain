@@ -1,12 +1,10 @@
 package nl.tudelft.simulation.supplychain.role.warehousing;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import org.djunits.value.vdouble.scalar.Time;
 import org.djutils.event.EventProducer;
@@ -16,7 +14,6 @@ import org.djutils.event.TimedEvent;
 import org.djutils.exceptions.Throw;
 import org.djutils.metadata.MetaData;
 import org.djutils.metadata.ObjectDescriptor;
-import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
@@ -42,17 +39,11 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
     public static final EventType INVENTORY_CHANGE_EVENT = new EventType("INVENTORY_CHANGE_EVENT", new MetaData("stock_update",
             "stock update", new ObjectDescriptor("stock update", "stock update", InventoryUpdateData.class)));
 
-    /** the actow that owns the inventory. */
-    private final WarehousingActor owner;
-
     /** the InventoryRole of the owner. */
     private final WarehousingRole warehousingRole;
 
     /** record keeping of the inventory. */
     private Map<Product, InventoryRecord> inventoryRecords = new LinkedHashMap<Product, InventoryRecord>();
-
-    /** Map of Product to Map of time to ArrayList of values for time moment: future changes. */
-    private Map<Product, TreeMap<Time, ArrayList<Double>>> futureChanges = new LinkedHashMap<>();
 
     /**
      * Create a new Inventory for an actor.
@@ -61,7 +52,6 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
     public Inventory(final WarehousingRole warehousingRole)
     {
         Throw.whenNull(warehousingRole, "inventoryRole cannot be null");
-        this.owner = warehousingRole.getActor();
         this.warehousingRole = warehousingRole;
     }
 
@@ -83,23 +73,21 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
     }
 
     /**
-     * Return the actor who owns this inventory.
-     * @return the actor who owns this inventory
+     * Check if a record for the product is there, and make it if not.
+     * @param product the product to check
+     * @return the new or existing inventory record
      */
-    public WarehousingActor getOwner()
+    protected InventoryRecord retrieveInventoryRecord(final Product product)
     {
-        return this.owner;
+        InventoryRecord inventoryRecord = this.inventoryRecords.get(product);
+        if (inventoryRecord == null)
+        {
+            inventoryRecord = new InventoryRecord(getActor(), this.warehousingRole.getSimulator(), product);
+            this.inventoryRecords.put(product, inventoryRecord);
+        }
+        return inventoryRecord;
     }
-
-    /**
-     * Return an overview of the products that we have in inventory.
-     * @return an overview of the products that we have in inventory
-     */
-    public Set<Product> getProducts()
-    {
-        return this.inventoryRecords.keySet();
-    }
-
+    
     /**
      * Add products to the inventory.
      * @param product the product
@@ -108,25 +96,8 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
      */
     public void addToInventory(final Product product, final double amount, final Money totalPrice)
     {
-        InventoryRecord inventoryRecord = this.inventoryRecords.get(product);
-        if (inventoryRecord == null)
-        {
-            inventoryRecord = new InventoryRecord(this.owner, this.owner.getSimulator(), product);
-            this.inventoryRecords.put(product, inventoryRecord);
-        }
-        try
-        {
-            if (amount == 0.0)
-            {
-                throw new Exception("Amount is 0.0; leading to a divide by zero.");
-            }
-            inventoryRecord.addActualAmount(amount, totalPrice.divideBy(amount));
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace();
-            Logger.error(exception, "addInventory");
-        }
+        var inventoryRecord = retrieveInventoryRecord(product);
+        inventoryRecord.addActualAmount(amount, totalPrice.divideBy(amount));
         this.sendInventoryUpdateEvent(inventoryRecord);
     }
 
@@ -136,35 +107,61 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
      */
     public void addToInventory(final Shipment shipment)
     {
-        InventoryRecord inventoryRecord = this.inventoryRecords.get(shipment.getProduct());
-        if (inventoryRecord == null)
-        {
-            inventoryRecord = new InventoryRecord(this.owner, this.owner.getSimulator(), shipment.getProduct());
-            this.inventoryRecords.put(shipment.getProduct(), inventoryRecord);
-        }
+        var inventoryRecord = retrieveInventoryRecord(shipment.getProduct());
         inventoryRecord.addActualAmount(shipment.getAmount(), shipment.getTotalCargoValue().divideBy(shipment.getAmount()));
+        this.sendInventoryUpdateEvent(inventoryRecord);
+    }
+    
+    /**
+     * Reserve a certain amount of product in inventory.
+     * @param product the product
+     * @param reservedDelta the reserved amount that will be added to the total reserved amount
+     */
+    public void reserveAmount(final Product product, final double reservedDelta)
+    {
+        var inventoryRecord = retrieveInventoryRecord(product);
+        inventoryRecord.reserveAmount(reservedDelta);
+        this.warehousingRole.checkInventory(product);
         this.sendInventoryUpdateEvent(inventoryRecord);
     }
 
     /**
-     * Remove products from the inventory.
+     * Release a certain amount of reserved product in inventory.
      * @param product the product
-     * @param amount the amount
-     * @return double the actual amount of the product taken out of inventory
+     * @param releasedDelta the released amount of previously reserved product
      */
-    public double removeFromInventory(final Product product, final double amount)
+    public void releaseReservedAmount(final Product product, final double releasedDelta)
     {
-        InventoryRecord inventoryRecord = this.inventoryRecords.get(product);
-        double actualAmount = 0.0;
-        if (inventoryRecord != null)
-        {
-            actualAmount = Math.min(amount, inventoryRecord.getActualAmount());
-        }
-        // double unitprice = inventoryRecord.getUnitPrice();
-        inventoryRecord.removeActualAmount(actualAmount);
+        var inventoryRecord = retrieveInventoryRecord(product);
+        inventoryRecord.releaseReservedAmount(releasedDelta);
+        this.sendInventoryUpdateEvent(inventoryRecord);
+    }
+
+    /**
+     * Indicate that a certain amount of product has been ordered.
+     * @param product the product
+     * @param orderedDelta the ordered amount that will be added to the total ordered amount
+     */
+    public void orderedAmount(final Product product, final double orderedDelta)
+    {
+        var inventoryRecord = retrieveInventoryRecord(product);
+        inventoryRecord.orderAmount(orderedDelta);
         this.warehousingRole.checkInventory(product);
         this.sendInventoryUpdateEvent(inventoryRecord);
-        return actualAmount;
+    }
+
+    /**
+     * Indicate that a certain amount of ordered product has been delivered.
+     * @param product the product
+     * @param enteredDelta the ordered amount that will be added to the total ordered amount
+     * @param unitPrice The unit price of the products; has to be positive
+     */
+    public void enterOrderedAmount(final Product product, final double enteredDelta, final Money unitPrice)
+    {
+        var inventoryRecord = retrieveInventoryRecord(product);
+        inventoryRecord.enterOrderedAmount(enteredDelta, unitPrice);
+        this.warehousingRole.checkInventory(product);
+        this.sendInventoryUpdateEvent(inventoryRecord);
     }
 
     /**
@@ -183,18 +180,18 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
     }
 
     /**
-     * Get the claimed amount of a certain product in inventory.
+     * Get the reserved amount of a certain product in inventory.
      * @param product the product
-     * @return double the claimed amount
+     * @return double the reserved amount
      */
-    public double getClaimedAmount(final Product product)
+    public double getReservedAmount(final Product product)
     {
         InventoryRecord inventoryRecord = this.inventoryRecords.get(product);
         if (inventoryRecord == null)
         {
             return 0.0;
         }
-        return inventoryRecord.getClaimedAmount();
+        return inventoryRecord.getReservedAmount();
     }
 
     /**
@@ -213,7 +210,7 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
     }
 
     /**
-     * Get the virtual amount of a certain product in inventory, which is available + ordered - claimed.
+     * Get the virtual amount of a certain product in inventory, which is available + ordered - reserved.
      * @param product the product
      * @return double the virtual amount
      */
@@ -224,115 +221,7 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
         {
             return 0.0;
         }
-        return inventoryRecord.getActualAmount() + inventoryRecord.getOrderedAmount() - inventoryRecord.getClaimedAmount();
-    }
-
-    /**
-     * Update the claimed amount of a certain product in inventory.
-     * @param product the product
-     * @param delta the delta (positive or negative)
-     * @return boolean success or not
-     */
-    public boolean changeClaimedAmount(final Product product, final double delta)
-    {
-        InventoryRecord inventoryRecord = this.inventoryRecords.get(product);
-        if (inventoryRecord == null)
-        {
-            return false;
-        }
-        inventoryRecord.changeClaimedAmount(delta);
-        this.warehousingRole.checkInventory(product);
-        this.sendInventoryUpdateEvent(inventoryRecord);
-        return true;
-    }
-
-    /**
-     * Method changeFutureClaimedAmount.
-     * @param product the product
-     * @param delta the delta (positive or negative)
-     * @param time the time the change is scheduled to take place
-     * @return boolean success or not
-     */
-    public boolean changeFutureClaimedAmount(final Product product, final double delta, final Time time)
-    {
-        if (time.lt(this.owner.getSimulatorTime()))
-        {
-            Logger.error("changeFutureClaimedAmount - Time for the change is smaller than current simulator time (" + time + "<"
-                    + this.owner.getSimulatorTime() + ").");
-            return false;
-        }
-
-        if (delta < 0)
-        {
-            Logger.error("changeFutureOrderedAmount - The delta may not be smaller than 0 (" + delta + "<" + 0 + ").");
-            return false;
-        }
-
-        if (!this.futureChanges.containsKey(product))
-        {
-            this.futureChanges.put(product, new TreeMap<Time, ArrayList<Double>>());
-        }
-        if (!this.futureChanges.get(product).containsKey(time))
-        {
-            this.futureChanges.get(product).put(time, new ArrayList<Double>());
-        }
-        // we consider a future claimed amount as a negative change for our inventory value
-        this.futureChanges.get(product).get(time).add(-delta);
-        // this.sendForecastUpdateEvent(product);
-        return true;
-    }
-
-    /**
-     * Update the ordered amount of a certain product in inventory.
-     * @param product the product
-     * @param delta the delta (positive or negative)
-     * @return boolean success or not
-     */
-    public boolean changeOrderedAmount(final Product product, final double delta)
-    {
-        InventoryRecord inventoryRecord = this.inventoryRecords.get(product);
-        if (inventoryRecord == null)
-        {
-            return false;
-        }
-        inventoryRecord.changeOrderedAmount(delta);
-        this.warehousingRole.checkInventory(product);
-        this.sendInventoryUpdateEvent(inventoryRecord);
-        return true;
-    }
-
-    /**
-     * Method changeFutureOrderedAmount.
-     * @param product the product
-     * @param delta the delta (positive or negative)
-     * @param time the time the change is scheduled to take place
-     * @return boolean success or not
-     */
-    public boolean changeFutureOrderedAmount(final Product product, final double delta, final Time time)
-    {
-        if (time.lt(this.owner.getSimulatorTime()))
-        {
-            Logger.error("changeFutureOrderedAmount - Time for the change is smaller than current simulator time (" + time + "<"
-                    + this.owner.getSimulatorTime() + ").");
-            return false;
-        }
-        if (delta < 0)
-        {
-            Logger.error("changeFutureOrderedAmount - The delta may not be smaller than 0 (" + delta + "<" + 0 + ").");
-            return false;
-        }
-
-        if (!this.futureChanges.containsKey(product))
-        {
-            this.futureChanges.put(product, new TreeMap<Time, ArrayList<Double>>());
-        }
-        if (!this.futureChanges.get(product).containsKey(time))
-        {
-            this.futureChanges.get(product).put(time, new ArrayList<Double>());
-        }
-        this.futureChanges.get(product).get(time).add(delta);
-        // this.sendForecastUpdateEvent(product);
-        return true;
+        return inventoryRecord.getActualAmount() + inventoryRecord.getOrderedAmount() - inventoryRecord.getReservedAmount();
     }
 
     /**
@@ -347,16 +236,7 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
         {
             return product.getUnitMarketPrice();
         }
-        return inventoryRecord.getUnitPrice();
-    }
-
-    /**
-     * Return the number of product types in inventory.
-     * @return int number of products
-     */
-    public int numberOfProducts()
-    {
-        return this.inventoryRecords.keySet().size();
+        return inventoryRecord.getUnitMonetaryValue();
     }
 
     /**
@@ -366,9 +246,9 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
     public void sendInventoryUpdateEvent(final InventoryRecord inventoryRecord)
     {
         InventoryUpdateData data = new InventoryUpdateData(inventoryRecord.getProduct().getName(),
-                inventoryRecord.getActualAmount(), inventoryRecord.getClaimedAmount(), inventoryRecord.getOrderedAmount());
+                inventoryRecord.getActualAmount(), inventoryRecord.getReservedAmount(), inventoryRecord.getOrderedAmount());
 
-        this.fireEvent(new TimedEvent<Time>(INVENTORY_CHANGE_EVENT, data, this.owner.getSimulatorTime()));
+        this.fireEvent(new TimedEvent<Time>(INVENTORY_CHANGE_EVENT, data, this.warehousingRole.getSimulatorTime()));
     }
 
     /**
@@ -384,10 +264,37 @@ public class Inventory extends LocalEventProducer implements Serializable, Event
         }
     }
 
+    /**
+     * Return the number of product types in inventory.
+     * @return int number of products
+     */
+    public int numberOfProducts()
+    {
+        return this.inventoryRecords.keySet().size();
+    }
+
+    /**
+     * Return the actor who owns this inventory.
+     * @return the actor who owns this inventory
+     */
+    public WarehousingActor getActor()
+    {
+        return this.warehousingRole.getActor();
+    }
+
+    /**
+     * Return an overview of the products that we have in inventory.
+     * @return an overview of the products that we have in inventory
+     */
+    public Set<Product> getProducts()
+    {
+        return this.inventoryRecords.keySet();
+    }
+
     @Override
     public String toString()
     {
-        return this.owner.toString() + "_inventory";
+        return getActor().toString() + "_inventory";
     }
 
 }

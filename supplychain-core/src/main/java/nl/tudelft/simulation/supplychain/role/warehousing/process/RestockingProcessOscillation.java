@@ -63,7 +63,7 @@ public class RestockingProcessOscillation extends RestockingProcessFixed
             // let's overreact!
             double old = orderAmount;
             orderAmount = Math.ceil(orderAmount + (Math.abs(stockLevel) * (this.oscillationMargin)));
-            System.out.println(getInventory().getOwner().getName() + " overreacted: was: " + old + " new: " + orderAmount);
+            System.out.println(getInventory().getActor().getName() + " overreacted: was: " + old + " new: " + orderAmount);
         }
 
         if (orderAmount > 0.0)

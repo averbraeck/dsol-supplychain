@@ -12,7 +12,7 @@ import nl.tudelft.simulation.supplychain.money.MoneyUnit;
 import nl.tudelft.simulation.supplychain.product.Product;
 
 /**
- * A InventoryRecord keeps the information about products, such as actual, ordered and claimed amounts of products. It assists
+ * A InventoryRecord keeps the information about products, such as actual, ordered and reserved amounts of products. It assists
  * the Inventory object and the restocking policies to assess the needed order amounts.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
@@ -37,14 +37,14 @@ public class InventoryRecord implements Serializable
     /** the amount currently on inventory. */
     private double actualAmount;
 
-    /** the amount that is claimed by orders, but not yet taken. */
-    private double claimedAmount;
+    /** the amount that is reserved by orders, but not yet taken. */
+    private double reservedAmount;
 
     /** the amount that has been ordered, but not yet delivered. */
     private double orderedAmount;
 
-    /** the costprice of the total amount of these products in inventory. */
-    private Money costprice = new Money(0.0, MoneyUnit.USD);
+    /** the total monetary value of the amount of these products in inventory. */
+    private Money totalMonetaryValue = new Money(0.0, MoneyUnit.USD);
 
     /** the depreciation factor per day. */
     private double dailyDepreciation = 0.0;
@@ -81,12 +81,12 @@ public class InventoryRecord implements Serializable
     }
 
     /**
-     * Return the claimedAmount.
+     * Return the reservedAmount.
      * @return double
      */
-    public double getClaimedAmount()
+    public double getReservedAmount()
     {
-        return this.claimedAmount;
+        return this.reservedAmount;
     }
 
     /**
@@ -108,91 +108,74 @@ public class InventoryRecord implements Serializable
     }
 
     /**
-     * Method setActualAmount.
-     * @param newActualAmount the actual amount
-     * @param unitprice the unit price
+     * Change the actual amount of product with a delta (positive or negative).
+     * @param actualDelta the amount that will be added to the total actual amount
+     * @param unitprice The unit price of the products; has to be positive
      */
-    public void setActualAmount(final double newActualAmount, final Money unitprice)
+    public void addActualAmount(final double actualDelta, final Money unitprice)
     {
-        this.actualAmount = newActualAmount;
-        this.costprice = unitprice.multiplyBy(newActualAmount);
+        this.actualAmount += actualDelta;
+        this.totalMonetaryValue = this.totalMonetaryValue.plus(unitprice.multiplyBy(actualDelta));
     }
 
     /**
-     * Sets the claimedAmount.
-     * @param claimedAmount The claimedAmount to set
+     * Reserve a certain amount of product.
+     * @param reservedDelta the reserved amount that will be added to the total reserved amount
      */
-    public void setClaimedAmount(final double claimedAmount)
+    public void reserveAmount(final double reservedDelta)
     {
-        this.claimedAmount = claimedAmount;
+        this.reservedAmount += reservedDelta;
     }
 
     /**
-     * Sets the orderedAmount.
-     * @param orderedAmount The orderedAmount to set
+     * Release a certain amount of reserved product.
+     * @param releasedDelta the reserved amount that will be added to the total reserved amount
      */
-    public void setOrderedAmount(final double orderedAmount)
+    public void releaseReservedAmount(final double releasedDelta)
     {
-        this.orderedAmount = orderedAmount;
+        this.reservedAmount -= releasedDelta;
+        this.actualAmount -= releasedDelta;
+        this.totalMonetaryValue = this.totalMonetaryValue.minus(getUnitMonetaryValue().multiplyBy(releasedDelta));
     }
 
     /**
-     * Method addActualAmount.
-     * @param delta must be positive
-     * @param unitprice The costprice of the products. Has to be positive
+     * Indicate that a certain amount of product has been ordered.
+     * @param orderedDelta the ordered amount that will be added to the total ordered amount
      */
-    public void addActualAmount(final double delta, final Money unitprice)
+    public void orderAmount(final double orderedDelta)
     {
-        this.actualAmount += delta;
-        this.costprice = this.costprice.plus(unitprice.multiplyBy(delta));
+        this.orderedAmount += orderedDelta;
     }
 
     /**
-     * Method remove an actualAmount.
-     * @param delta must be positive
+     * Indicate that a certain amount of ordered product has been delivered.
+     * @param enteredDelta the amount that will be added the actual amount and subtracted from the ordered amount
+     * @param unitprice The unit price of the products; has to be positive
      */
-    public void removeActualAmount(final double delta)
+    public void enterOrderedAmount(final double enteredDelta, final Money unitprice)
     {
-        this.costprice = this.costprice.minus(getUnitPrice().multiplyBy(delta));
-        this.actualAmount -= delta;
+        this.orderedAmount -= enteredDelta;
+        addActualAmount(enteredDelta, unitprice);
     }
 
     /**
-     * Changes the claimedAmount.
-     * @param delta The claimedAmount to change
+     * Return the total monetary value of the products in the inventory.
+     * @return the total monetary value of the products in the inventory
      */
-    public void changeClaimedAmount(final double delta)
+    public Money getTotalMonetaryValue()
     {
-        this.claimedAmount += delta;
+        return this.totalMonetaryValue;
     }
 
     /**
-     * Changes the orderedAmount.
-     * @param delta The orderedAmount to change
+     * Return the monetary value per product unit.
+     * @return the monetary value per product unit
      */
-    public void changeOrderedAmount(final double delta)
-    {
-        this.orderedAmount += delta;
-    }
-
-    /**
-     * Return the costprice.
-     * @return double
-     */
-    public Money getCostprice()
-    {
-        return this.costprice;
-    }
-
-    /**
-     * Return the costprice per product unit.
-     * @return double Returns the costprice per unit
-     */
-    public Money getUnitPrice()
+    public Money getUnitMonetaryValue()
     {
         if (this.actualAmount > 0.0)
         {
-            return this.costprice.divideBy(this.actualAmount);
+            return this.totalMonetaryValue.divideBy(this.actualAmount);
         }
         return this.product.getUnitMarketPrice();
     }
@@ -212,9 +195,9 @@ public class InventoryRecord implements Serializable
     {
         try
         {
-            this.costprice = this.costprice.multiplyBy(1.0 - this.dailyDepreciation);
+            this.totalMonetaryValue = this.totalMonetaryValue.multiplyBy(1.0 - this.dailyDepreciation);
             this.owner.getFinancingRole().getBank().withdrawFromBalance(this.owner,
-                    this.costprice.multiplyBy(this.dailyDepreciation));
+                    this.totalMonetaryValue.multiplyBy(this.dailyDepreciation));
             this.simulator.scheduleEventRel(new Duration(1.0, DurationUnit.DAY), this, "depreciate", null);
         }
         catch (Exception exception)

@@ -92,7 +92,7 @@ public abstract class RestockingProcess extends AutonomousProcess<WarehousingRol
      */
     protected void createDemand(final double orderAmount)
     {
-        Actor owner = this.inventory.getOwner();
+        Actor owner = this.inventory.getActor();
         Demand demand = new Demand(owner, this.product, orderAmount, getSimulatorTime(),
                 getSimulatorTime().plus(this.maxDeliveryDuration));
         owner.sendContent(demand, Duration.ZERO);
