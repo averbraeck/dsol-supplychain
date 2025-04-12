@@ -1,5 +1,6 @@
 package nl.tudelft.simulation.supplychain.role.financing.handler;
 
+import nl.tudelft.simulation.supplychain.content.BankTransfer;
 import nl.tudelft.simulation.supplychain.content.Payment;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
@@ -33,7 +34,10 @@ public class PaymentHandler extends ContentHandler<Payment, FinancingRole>
         {
             return false;
         }
-        getRole().getBank().addToBalance(getActor(), payment.invoice().price());
+
+        var bankTransfer = new BankTransfer(getRole().getActor(), getRole().getBank().getActor(), payment.receiver(),
+                payment.invoice().price());
+        sendContent(bankTransfer, getHandlingTime().draw());
         return true;
     }
 

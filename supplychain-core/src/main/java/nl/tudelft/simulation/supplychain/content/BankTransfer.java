@@ -21,7 +21,7 @@ import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
  * @param money the amount of money being transfered
  */
 public record BankTransfer(FinancingActor sender, BankingActor receiver, Time timestamp, long uniqueId, FinancingActor payee,
-        Money money)
+        Money money) implements Content
 {
     public BankTransfer(final FinancingActor sender, final BankingActor receiver, final FinancingActor payee, final Money money)
     {

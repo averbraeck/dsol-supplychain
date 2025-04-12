@@ -1,14 +1,9 @@
 package nl.tudelft.simulation.supplychain.role.financing.handler;
 
-import java.io.Serializable;
-
-import org.djunits.unit.DurationUnit;
-import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
 import org.djutils.exceptions.Throw;
 import org.pmw.tinylog.Logger;
 
-import nl.tudelft.simulation.dsol.SimRuntimeException;
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.content.Invoice;
 import nl.tudelft.simulation.supplychain.content.Payment;
@@ -16,7 +11,7 @@ import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
 
 /**
- * InvoiceHandler.java.
+ * InvoiceHandler takes care of paying an invoice.
  * <p>
  * Copyright (c) 2025-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
@@ -89,16 +84,7 @@ public class InvoiceHandler extends ContentHandler<Invoice, FinancingRole>
         }
         // check if payment is still possible, if it already should have taken place, schedule it immediately.
         paymentTime = Time.max(paymentTime, currentTime);
-        try
-        {
-            Serializable[] args = new Serializable[] {invoice};
-            getSimulator().scheduleEventAbs(paymentTime, this, "pay", args);
-        }
-        catch (SimRuntimeException exception)
-        {
-            Logger.error(exception, "handleContent");
-            return false;
-        }
+        getSimulator().scheduleEventAbs(paymentTime, this, "pay", new Object[] {invoice});
         return true;
     }
 
@@ -108,22 +94,6 @@ public class InvoiceHandler extends ContentHandler<Invoice, FinancingRole>
      */
     protected void pay(final Invoice invoice)
     {
-        if (getRole().getBank().getBalance(getActor()).lt(invoice.price()))
-        {
-            // the bank account balance is not sufficient. Try one day later.
-            try
-            {
-                Serializable[] args = new Serializable[] {invoice};
-                getSimulator().scheduleEventRel(new Duration(1.0, DurationUnit.DAY), this, "pay", args);
-            }
-            catch (SimRuntimeException exception)
-            {
-                Logger.error(exception, "handleContent");
-            }
-            return;
-        }
-        // make a payment to send out
-        getRole().getBank().withdrawFromBalance(getActor(), invoice.price());
         Payment payment = new Payment(invoice);
         sendContent(payment);
     }

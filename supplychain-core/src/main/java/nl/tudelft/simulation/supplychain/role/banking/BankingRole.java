@@ -129,18 +129,6 @@ public class BankingRole extends Role<BankingRole>
         return new Money(0.01 * Math.round(100.0 * money.getAmount()), money.getMoneyUnit());
     }
 
-    @Override
-    protected Set<Class<? extends Content>> getNecessaryContentHandlers()
-    {
-        return necessaryContentHandlers;
-    }
-
-    @Override
-    protected Set<Class<? extends AutonomousProcess<BankingRole>>> getNecessaryAutonomousProcesses()
-    {
-        return necessaryAutonomousProcesses;
-    }
-
     /**
      * Return the negative annual interest rate, provided as a negative number.
      * @return negative annual interest rate, as a negative number
@@ -186,6 +174,24 @@ public class BankingRole extends Role<BankingRole>
     public Map<Actor, Money> getBankAccounts()
     {
         return this.bankAccounts;
+    }
+
+    @Override
+    public BankingActor getActor()
+    {
+        return (BankingActor) super.getActor();
+    }
+
+    @Override
+    protected Set<Class<? extends Content>> getNecessaryContentHandlers()
+    {
+        return necessaryContentHandlers;
+    }
+
+    @Override
+    protected Set<Class<? extends AutonomousProcess<BankingRole>>> getNecessaryAutonomousProcesses()
+    {
+        return necessaryAutonomousProcesses;
     }
 
 }
