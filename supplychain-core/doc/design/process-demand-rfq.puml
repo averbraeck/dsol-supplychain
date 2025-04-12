@@ -57,7 +57,7 @@ CR1 -> PR1: Demand
   SR3 -> SR3: wait <&clock>
   SR3 -> WR3: InventoryRelease
   activate WR3
-  SR3 -> FR3: IRFinance
+  SR3 -> FR3: Prepare\nInvoice
     deactivate SR3
     activate FR3
     FR3 -> FR1: Invoice
@@ -85,10 +85,10 @@ CR1 -> PR1: Demand
       WR1 -> CR1: Fulfillment
       deactivate WR1
   deactivate CR1
-    FR4 -> FR3: Invoice
+    FR4 -> FR3: TransportInvoice
     activate FR3
       FR3 -> FR3: wait <&clock>
-      FR3 --> FR4: Payment
+      FR3 --> FR4: TransportPayment
       deactivate FR3
     FR4 -> BR0: BankTransfer
   deactivate FR4
