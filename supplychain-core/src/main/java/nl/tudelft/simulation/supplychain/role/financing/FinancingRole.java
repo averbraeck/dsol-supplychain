@@ -87,6 +87,12 @@ public class FinancingRole extends Role<FinancingRole>
     }
 
     @Override
+    public FinancingActor getActor()
+    {
+        return (FinancingActor) super.getActor();
+    }
+
+    @Override
     protected Set<Class<? extends Content>> getNecessaryContentHandlers()
     {
         return necessaryContentHandlers;
