@@ -1,4 +1,4 @@
-package nl.tudelft.simulation.supplychain.handler.invoice;
+package nl.tudelft.simulation.supplychain.role.financing.handler;
 
 import java.io.Serializable;
 
