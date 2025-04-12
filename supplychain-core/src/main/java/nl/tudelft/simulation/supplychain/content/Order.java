@@ -3,6 +3,8 @@ package nl.tudelft.simulation.supplychain.content;
 import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.supplychain.money.Money;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
+import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
 
 /**
@@ -18,6 +20,20 @@ import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
 public interface Order extends GroupedContent, ProductContent
 {
     /**
+     * Return the sender.
+     * @return the sender
+     */
+    @Override
+    PurchasingActor sender();
+
+    /**
+     * Return the receiver.
+     * @return the receiver
+     */
+    @Override
+    SellingActor receiver();
+
+    /**
      * Return the delivery date as ordered.
      * @return the delivery date as ordered
      */
@@ -28,7 +44,7 @@ public interface Order extends GroupedContent, ProductContent
      * @return the accepted transport option
      */
     TransportOption transportOption();
-    
+
     /**
      * Return the price we plan to pay for the product.
      * @return the price we plan to pay for the product
