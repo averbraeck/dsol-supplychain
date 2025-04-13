@@ -4,7 +4,6 @@ import nl.tudelft.simulation.supplychain.content.InventoryReleaseRequest;
 import nl.tudelft.simulation.supplychain.content.InventoryReservation;
 import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
-import nl.tudelft.simulation.supplychain.content.PrepareInvoice;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
 
@@ -58,11 +57,7 @@ public class InventoryReservationHandler extends ContentHandler<InventoryReserva
      */
     protected void releaseInventory(final InventoryReservation ir)
     {
-        Order order = ir.inventoryReservationRequest().order();
-        var inventoryRelease = new InventoryReleaseRequest(ir);
-        sendContent(inventoryRelease, getHandlingTime().draw());
-        
-        var prepareInvoice = new PrepareInvoice(order);
-        sendContent(prepareInvoice, getHandlingTime().draw());
+        var irr = new InventoryReleaseRequest(ir);
+        sendContent(irr, getHandlingTime().draw());
     }
 }
