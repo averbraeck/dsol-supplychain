@@ -19,28 +19,28 @@ import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
- * @param inventoryReservation the inventory reservation that was made earlier
+ * @param inventoryReleaseRequest the inventory reservation that was made earlier
  */
-public record InventoryRelease(WarehousingActor sender, FinancingActor receiver, Time timestamp, long uniqueId,
-        long groupingId, InventoryReservation inventoryReservation) implements GroupedContent, ProductContent
+public record InventoryRelease(WarehousingActor sender, FinancingActor receiver, Time timestamp, long uniqueId, long groupingId,
+        InventoryReleaseRequest inventoryReleaseRequest) implements GroupedContent, ProductContent
 {
     public InventoryRelease(final WarehousingActor sender, final FinancingActor receiver,
-            final InventoryReservation inventoryReservation)
+            final InventoryReleaseRequest inventoryReleaseRequest)
     {
         this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(),
-                inventoryReservation.groupingId(), inventoryReservation);
+                inventoryReleaseRequest.groupingId(), inventoryReleaseRequest);
     }
 
     @Override
     public Product product()
     {
-        return inventoryReservation().product();
+        return inventoryReleaseRequest().product();
     }
 
     @Override
     public double amount()
     {
-        return inventoryReservation().amount();
+        return inventoryReleaseRequest().amount();
     }
 
 }
