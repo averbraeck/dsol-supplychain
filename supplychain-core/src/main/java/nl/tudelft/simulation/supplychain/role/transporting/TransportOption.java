@@ -15,6 +15,7 @@ import org.djutils.immutablecollections.ImmutableList;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.money.MoneyUnit;
 import nl.tudelft.simulation.supplychain.product.Sku;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 
 /**
  * TransportOption describes a way to get goods from A to B. The class can incicate a singular transport mode that transports
@@ -34,24 +35,34 @@ public class TransportOption implements Identifiable, Serializable
 
     /** the id of the TransportOption. */
     private final String id;
+    
+    /** the transporting organization. */
+    private final TransportingActor transportingActor;
+
+    /** the pickup location. */
+    private final WarehousingActor pickupActor;
+
+    /** the delivery location. */
+    private final WarehousingActor deliveryActor;
 
     /** the sequence of TransportSteps. */
     private ImmutableList<TransportOptionStep> transportSteps = new ImmutableArrayList<>(new ArrayList<>());
 
-    /**
-     * make a new TransportOption.
-     * @param id the id of the TransportOption
-     */
-    public TransportOption(final String id)
-    {
-        Throw.whenNull(id, "id cannot be null");
-        this.id = id;
-    }
 
-    @Override
-    public String getId()
+    /**
+     * Make a new TransportOption.
+     * @param id the id of the TransportOption
+     * @param transportingActor the transporting organization
+     * @param pickupActor the pickup location
+     * @param deliveryActor the delivery location
+     */
+    public TransportOption(final String id, final TransportingActor transportingActor, final WarehousingActor pickupActor,
+            final WarehousingActor deliveryActor)
     {
-        return this.id;
+        this.id = id;
+        this.transportingActor = transportingActor;
+        this.pickupActor = pickupActor;
+        this.deliveryActor = deliveryActor;
     }
 
     /**
@@ -136,6 +147,39 @@ public class TransportOption implements Identifiable, Serializable
             cost += stepCost.getAmount();
         }
         return new Money(cost, costUnit);
+    }
+
+    @Override
+    public String getId()
+    {
+        return this.id;
+    }
+
+    /**
+     * Return the transportingActor.
+     * @return transportingActor
+     */
+    public TransportingActor getTransportingActor()
+    {
+        return this.transportingActor;
+    }
+
+    /**
+     * Return the pickupActor.
+     * @return pickupActor
+     */
+    public WarehousingActor getPickupActor()
+    {
+        return this.pickupActor;
+    }
+
+    /**
+     * Return the deliveryActor.
+     * @return deliveryActor
+     */
+    public WarehousingActor getDeliveryActor()
+    {
+        return this.deliveryActor;
     }
 
     @Override

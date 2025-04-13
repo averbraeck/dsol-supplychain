@@ -68,7 +68,8 @@ public class TransportingRole extends Role<TransportingRole>
         var continental = from.getGeography().landmass().equals(to.getGeography().landmass());
         if (continental && !Double.isNaN(getActor().getDirectingRoleTransporting().getProfitMargin(TransportMode.TRUCK)))
         {
-            var transportOption = new TransportOption(getActor().getId() + "-transport for " + tqr.groupingId() + " by truck");
+            var transportOption = new TransportOption(getActor().getId() + "-transport for " + tqr.groupingId() + " by truck",
+                    getActor(), from, to);
             var transportOptionStep =
                     new TransportOptionStep(transportOption.getId(), from, to, TransportMode.TRUCK, getSimulator());
             transportOption.addTransportStep(transportOptionStep);
@@ -89,7 +90,8 @@ public class TransportingRole extends Role<TransportingRole>
                         && ((mode.isContinental() && continental) || (mode.isIntercontinental() && !continental)))
                 {
                     var transportOption = new TransportOption(
-                            getActor().getId() + "-transport for " + tqr.groupingId() + " by " + mode.getId());
+                            getActor().getId() + "-transport for " + tqr.groupingId() + " by " + mode.getId(), getActor(), from,
+                            to);
 
                     // truck from seller to transfer point
                     var transportOptionStep1 = new TransportOptionStep(transportOption.getId(), from,
