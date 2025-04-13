@@ -5,12 +5,13 @@ import org.djunits.value.vdouble.scalar.Duration;
 
 import nl.tudelft.simulation.supplychain.content.InventoryRelease;
 import nl.tudelft.simulation.supplychain.content.InventoryReleaseRequest;
+import nl.tudelft.simulation.supplychain.content.ShippingOrder;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
 
 /**
- * The InventoryReleaseRequestHandler implements the business logic for a warehouse that receives an
- * InventoryReleaseRequest. It reserves inventory for later release.
+ * The InventoryReleaseRequestHandler implements the business logic for a warehouse that receives an InventoryReleaseRequest. It
+ * reserves inventory for later release.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
@@ -45,10 +46,15 @@ public class InventoryReleaseRequestHandler extends ContentHandler<InventoryRele
             getSimulator().scheduleEventRel(new Duration(1.0, DurationUnit.DAY), this, "handleContent", new Object[] {irr});
             return true;
         }
-        
-        getRole().getInventory().reserveAmount(irr.product(), irr.amount());
+
+        // release the amount of product
+        getRole().getInventory().releaseReservedAmount(irr.product(), irr.amount());
         var inventoryRelease = new InventoryRelease(irr.receiver(), irr.sender().getFinancingRole().getActor(), irr);
         sendContent(inventoryRelease, getHandlingTime().draw());
+
+        // and order shipping by transporter
+        var shippingOrder = new ShippingOrder(getRole().getActor(), getRole().getActor(), inventoryRelease);
+        sendContent(shippingOrder, getHandlingTime().draw());
         return true;
     }
 

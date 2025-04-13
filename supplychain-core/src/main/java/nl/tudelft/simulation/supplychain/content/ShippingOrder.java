@@ -21,10 +21,10 @@ import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
  * @param inventoryRelease the inventory release on which the shipment will be based
  */
 public record ShippingOrder(WarehousingActor sender, WarehousingActor receiver, Time timestamp, long uniqueId, long groupingId,
-        InventoryReleaseRequest inventoryRelease) implements GroupedContent, ProductContent
+        InventoryRelease inventoryRelease) implements GroupedContent, ProductContent
 {
     public ShippingOrder(final WarehousingActor sender, final WarehousingActor receiver,
-            final InventoryReleaseRequest inventoryRelease)
+            final InventoryRelease inventoryRelease)
     {
         this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), inventoryRelease.groupingId(),
                 inventoryRelease);
