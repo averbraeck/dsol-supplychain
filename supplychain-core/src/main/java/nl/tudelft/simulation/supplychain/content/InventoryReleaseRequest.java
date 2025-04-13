@@ -20,10 +20,10 @@ import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
  * @param inventoryReservation the inventory reservation that was made earlier
  */
-public record InventoryRelease(SellingActor sender, WarehousingActor receiver, Time timestamp, long uniqueId, long groupingId,
+public record InventoryReleaseRequest(SellingActor sender, WarehousingActor receiver, Time timestamp, long uniqueId, long groupingId,
         InventoryReservation inventoryReservation) implements GroupedContent, ProductContent
 {
-    public InventoryRelease(final InventoryReservation inventoryReservation)
+    public InventoryReleaseRequest(final InventoryReservation inventoryReservation)
     {
         this(inventoryReservation.receiver(), inventoryReservation.sender(), inventoryReservation.sender().getSimulatorTime(),
                 inventoryReservation.sender().getModel().getUniqueContentId(), inventoryReservation.groupingId(),
