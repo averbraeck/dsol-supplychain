@@ -4,6 +4,7 @@ import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.product.Shipment;
+import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportingActor;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 
@@ -19,29 +20,29 @@ import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
- * @param transportQuote the transport quote that dictates the mode of transport
+ * @param transportOption the transport quote that dictates the mode of transport
  * @param shipment the shipment that needs to be transported
  */
 public record TransportPickup(WarehousingActor sender, TransportingActor receiver, Time timestamp, long uniqueId,
-        long groupingId, TransportQuote transportQuote, Shipment shipment) implements GroupedContent, ProductContent
+        long groupingId, TransportOption transportOption, Shipment shipment) implements GroupedContent, ProductContent
 {
-    public TransportPickup(final WarehousingActor sender, final TransportingActor receiver, final TransportQuote transportQuote,
-            final Shipment shipment)
+    public TransportPickup(final TransportOption transportOption, final Shipment shipment, final long groupingId)
     {
-        this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), transportQuote.groupingId(),
-                transportQuote, shipment);
+        this(transportOption.getPickupActor(), transportOption.getTransportingActor(),
+                transportOption.getPickupActor().getSimulatorTime(),
+                transportOption.getPickupActor().getModel().getUniqueContentId(), groupingId, transportOption, shipment);
     }
 
     @Override
     public Product product()
     {
-        return transportQuote().product();
+        return shipment().getProduct();
     }
 
     @Override
     public double amount()
     {
-        return transportQuote().amount();
+        return shipment().getAmount();
     }
 
 }

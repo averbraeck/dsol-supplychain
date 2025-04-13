@@ -10,7 +10,7 @@ import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
 
 /**
- * InventoryReleaseHandler.java.
+ * The InventoryReleaseHandler takes care of sending the invoice after the goods have been released from the warehouse.
  * <p>
  * Copyright (c) 2025-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.

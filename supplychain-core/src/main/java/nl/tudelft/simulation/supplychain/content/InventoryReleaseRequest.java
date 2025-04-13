@@ -7,7 +7,7 @@ import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 
 /**
- * The InventoryRelease is the order to the warehouse to release the inventory.
+ * The InventoryReleaseRequest is the order to the warehouse to release the inventory.
  * <p>
  * Copyright (c) 2025-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.

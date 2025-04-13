@@ -3,6 +3,7 @@ package nl.tudelft.simulation.supplychain.role.purchasing;
 import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 
 /**
  * PurchasingActor is an interface to indicate that an Actor has a PurchasingRole. Since Purchasing usually involves invoices
@@ -13,7 +14,7 @@ import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public interface PurchasingActor extends FinancingActor
+public interface PurchasingActor extends FinancingActor, WarehousingActor
 {
     /**
      * Return the PurchasingRole for this actor.
