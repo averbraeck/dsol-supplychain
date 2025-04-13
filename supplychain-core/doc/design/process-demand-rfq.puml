@@ -55,9 +55,10 @@ CR1 -> PR1: Demand
     SR3 --> PR1: OrderConfirmation
   deactivate PR1
   SR3 -> SR3: wait <&clock>
-  SR3 -> WR3: InventoryRelease
+  SR3 -> WR3: InventoryReleaseRequest
+  deactivate SR3
   activate WR3
-  SR3 -> FR3: Prepare\nInvoice
+  WR3 -> FR3: Inventory\nRelease
     deactivate SR3
     activate FR3
     FR3 -> FR1: Invoice
