@@ -4,7 +4,7 @@ import org.djunits.value.vdouble.scalar.Time;
 
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
-import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 
 /**
  * The InventoryRelease is the statement to finance that products are about to be sent to a purchaser, and that an invoice needs
@@ -21,10 +21,10 @@ import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
  * @param inventoryReservation the inventory reservation that was made earlier
  */
-public record InventoryReleaseFinance(SellingActor sender, FinancingActor receiver, Time timestamp, long uniqueId,
+public record InventoryRelease(WarehousingActor sender, FinancingActor receiver, Time timestamp, long uniqueId,
         long groupingId, InventoryReservation inventoryReservation) implements GroupedContent, ProductContent
 {
-    public InventoryReleaseFinance(final SellingActor sender, final FinancingActor receiver,
+    public InventoryRelease(final WarehousingActor sender, final FinancingActor receiver,
             final InventoryReservation inventoryReservation)
     {
         this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(),
