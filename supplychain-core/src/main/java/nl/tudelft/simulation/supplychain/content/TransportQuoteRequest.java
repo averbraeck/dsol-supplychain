@@ -2,8 +2,8 @@ package nl.tudelft.simulation.supplychain.content;
 
 import org.djunits.value.vdouble.scalar.Time;
 
+import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportingActor;
 
 /**
@@ -14,7 +14,7 @@ import nl.tudelft.simulation.supplychain.role.transporting.TransportingActor;
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
- * @param sender the sender of the RFW
+ * @param sender the sender of the RFQ; both sellers and purchasers can ask for transportation options
  * @param receiver the receiver of the RFQ
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
@@ -22,10 +22,10 @@ import nl.tudelft.simulation.supplychain.role.transporting.TransportingActor;
  * @param rfq the RequestForQuote from the purchaser
  * @param cutoffTime the time before which the transport quote needs to be sent
  */
-public record TransportQuoteRequest(SellingActor sender, TransportingActor receiver, Time timestamp, long uniqueId,
+public record TransportQuoteRequest(Actor sender, TransportingActor receiver, Time timestamp, long uniqueId,
         long groupingId, RequestForQuote rfq, Time cutoffTime) implements GroupedContent, ProductContent
 {
-    public TransportQuoteRequest(final SellingActor sender, final TransportingActor receiver, final RequestForQuote rfq,
+    public TransportQuoteRequest(final Actor sender, final TransportingActor receiver, final RequestForQuote rfq,
             final Time cutoffTime)
     {
         this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(), rfq.groupingId(), rfq,

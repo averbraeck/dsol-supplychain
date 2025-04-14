@@ -2,9 +2,9 @@ package nl.tudelft.simulation.supplychain.content;
 
 import org.djunits.value.vdouble.scalar.Time;
 
+import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportingActor;
 
@@ -16,7 +16,7 @@ import nl.tudelft.simulation.supplychain.role.transporting.TransportingActor;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  * @param sender the sender of the RFW
- * @param receiver the receiver of the RFQ
+ * @param receiver the receiver of the RFQ; both a buying actor and a receiving actor can reserve transport
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
@@ -24,7 +24,7 @@ import nl.tudelft.simulation.supplychain.role.transporting.TransportingActor;
  * @param transportOption a single transport option that matches the transport request best
  * @param price the price for this transport option
  */
-public record TransportQuote(TransportingActor sender, SellingActor receiver, Time timestamp, long uniqueId, long groupingId,
+public record TransportQuote(TransportingActor sender, Actor receiver, Time timestamp, long uniqueId, long groupingId,
         TransportQuoteRequest transportQuoteRequest, TransportOption transportOption, Money price)
         implements GroupedContent, ProductContent
 {
