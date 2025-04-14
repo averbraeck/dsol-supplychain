@@ -11,10 +11,10 @@ import java.io.Serializable;
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  * @param productName the product name
  * @param actualAmount the actual amount
- * @param claimedAmount the claimed amount
+ * @param reservedAmount the reserved amount
  * @param orderedAmount the ordered amount
  */
-public record InventoryUpdateData(String productName, double actualAmount, double claimedAmount, double orderedAmount)
+public record InventoryUpdateData(String productName, double actualAmount, double reservedAmount, double orderedAmount)
         implements Serializable
 {
 }
