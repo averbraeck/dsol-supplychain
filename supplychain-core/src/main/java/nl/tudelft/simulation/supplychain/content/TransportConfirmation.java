@@ -25,11 +25,11 @@ import nl.tudelft.simulation.supplychain.role.transporting.TransportingActor;
 public record TransportConfirmation(TransportingActor sender, TransportingActor receiver, Time timestamp, long uniqueId,
         long groupingId, TransportQuote transportQuote, Shipment shipment) implements GroupedContent, ProductContent
 {
-    public TransportConfirmation(final TransportingActor transportingActor, final TransportQuote transportQuote,
-            final Shipment shipment)
+    public TransportConfirmation(final TransportOrder transportOrder)
     {
-        this(transportingActor, transportingActor, transportingActor.getSimulatorTime(),
-                transportingActor.getModel().getUniqueContentId(), transportQuote.groupingId(), transportQuote, shipment);
+        this(transportOrder.receiver(), transportOrder.receiver(), transportOrder.sender().getSimulatorTime(),
+                transportOrder.sender().getModel().getUniqueContentId(), transportOrder.groupingId(),
+                transportOrder.transportQuote(), transportOrder.shipment());
     }
 
     @Override
