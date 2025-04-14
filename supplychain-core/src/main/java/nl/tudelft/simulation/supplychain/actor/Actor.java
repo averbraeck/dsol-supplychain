@@ -56,9 +56,10 @@ public interface Actor extends NamedLocation, EventProducer
     /**
      * Check whether the necessary roles are set and filled with the required handlers and processes before executing a
      * role-dependent method.
-     * @return whether the necessary roles are set and filled with handlers and processes
+     * @return an empty string when all handlers and processes have been properly registered with the role, or a filled string
+     *         with the names of the handlers and/or processes when not.
      */
-    boolean checkRolesComplete();
+    String checkRolesComplete();
 
     /**
      * Receive content, e.g. a message, from another actor, and handle it (storing or handling, depending on the

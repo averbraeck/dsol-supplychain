@@ -14,7 +14,7 @@ import org.djunits.value.vdouble.scalar.Time;
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.InventoryQuote;
 import nl.tudelft.simulation.supplychain.content.InventoryReservation;
-import nl.tudelft.simulation.supplychain.content.OrderBasedOnQuote;
+import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.content.QuoteNo;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
@@ -51,7 +51,7 @@ public class SellingRoleRFQ extends SellingRole
 
     /** the necessary content handlers. */
     private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of(RequestForQuote.class, InventoryQuote.class,
-            TransportQuote.class, OrderBasedOnQuote.class, InventoryReservation.class);
+            TransportQuote.class, Order.class, InventoryReservation.class);
 
     /**
      * Constructs a new SellingRole for RFQ - Order - Payment.

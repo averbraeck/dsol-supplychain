@@ -104,22 +104,25 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
     }
 
     @Override
-    public boolean checkRolesComplete()
+    public String checkRolesComplete()
     {
         if (this.rolesComplete)
         {
-            return true;
+            return "";
         }
         boolean check = true;
+        String missing = "";
         for (Role<?> role : getRoles())
         {
-            if (!role.checkHandlersProcessesComplete())
+            String roleMissing = role.checkHandlersProcessesComplete();
+            if (roleMissing.length() != 0)
             {
                 check = false;
+                missing += role.getClass().getSimpleName() + ": " + roleMissing;
             }
         }
         this.rolesComplete = check;
-        return check;
+        return missing;
     }
 
     @Override
@@ -157,7 +160,7 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
         }
         getSimulator().scheduleEventRel(delay, content.receiver(), "receiveContent", new Object[] {content});
         this.contentStore.addContent(content, true);
-        fireEvent(SEND_CONTENT_EVENT, new Object[] {content});
+        fireEvent(SEND_CONTENT_EVENT, content);
     }
 
     /**

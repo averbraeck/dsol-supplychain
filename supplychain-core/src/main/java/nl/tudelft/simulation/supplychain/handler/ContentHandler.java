@@ -62,11 +62,11 @@ public abstract class ContentHandler<C extends Content, R extends Role<R>> imple
         Throw.whenNull(id, "id cannot be null");
         Throw.whenNull(role, "role cannot be null");
         Throw.whenNull(contentClass, "contentClass cannot be null");
-        Throw.whenNull(this.handlingTime, "handlingTime cannot be null");
         this.id = id;
         this.role = role;
         this.contentClass = contentClass;
         this.handlingTime = new DistConstantDuration(Duration.ZERO);
+        this.role.setContentHandler(this);
     }
 
     /**

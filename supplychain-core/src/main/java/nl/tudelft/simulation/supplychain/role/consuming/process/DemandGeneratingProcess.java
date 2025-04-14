@@ -61,6 +61,7 @@ public class DemandGeneratingProcess extends AutonomousProcess<ConsumingRole>
         this.amountDistribution = amountDistribution;
         this.earliestDeliveryDurationDistribution = earliestDeliveryDurationDistribution;
         this.latestDeliveryDurationDistribution = latestDeliveryDurationDistribution;
+        role.addAutonomousProcess(this);
         role.getSimulator().scheduleEventRel(this.intervalDistribution.draw(), this, "generateDemand", null);
     }
 

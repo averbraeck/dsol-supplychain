@@ -71,20 +71,23 @@ public abstract class Role<R extends Role<R>> extends LocalEventProducer impleme
     /**
      * Check whether all handlers for content that are necessary have been registered with this role, as well as all autonomous
      * processes that should have been registered.
-     * @return whether all handlers and processes have been properly registered with the role
+     * @return an empty string when all handlers and processes have been properly registered with the role, or a filled string
+     *         with the names of the handlers and/or processes when not.
      */
-    public boolean checkHandlersProcessesComplete()
+    public String checkHandlersProcessesComplete()
     {
         if (this.handlersProcessesComplete)
         {
-            return true;
+            return "";
         }
         boolean check = true;
+        String missing = "";
         for (var contentClass : getNecessaryContentHandlers())
         {
             if (!this.contentHandlers.containsKey(contentClass))
             {
                 check = false;
+                missing += contentClass.getSimpleName() + "Handler  ";
             }
         }
         for (var processClass : getNecessaryAutonomousProcesses())
@@ -100,10 +103,11 @@ public abstract class Role<R extends Role<R>> extends LocalEventProducer impleme
             if (!found)
             {
                 check = false;
+                missing += processClass.getSimpleName() + "  ";
             }
         }
         this.handlersProcessesComplete = check;
-        return check;
+        return missing;
     }
 
     /**

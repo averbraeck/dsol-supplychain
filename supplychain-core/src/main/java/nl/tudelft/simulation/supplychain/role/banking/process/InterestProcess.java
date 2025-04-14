@@ -24,6 +24,7 @@ public class InterestProcess extends AutonomousProcess<BankingRole>
     public InterestProcess(final BankingRole role)
     {
         super(role);
+        role.addAutonomousProcess(this);
         role.getSimulator().scheduleEventNow(this, "interest", null);
     }
 

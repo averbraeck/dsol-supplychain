@@ -48,7 +48,7 @@ public class BankingRole extends Role<BankingRole>
     /** for who is interested, the BankAccount can send updates of changes. */
     public static final EventType BANK_ACCOUNT_CHANGED_EVENT = new EventType("BANK_ACCOUNT_CHANGED_EVENT",
             new MetaData("account", "bank account", new ObjectDescriptor("actor", "account holder", FinancingActor.class),
-                    new ObjectDescriptor("balance", "bank balance", double.class)));
+                    new ObjectDescriptor("balance", "bank balance", Money.class)));
 
     /** the necessary content handlers. */
     private static Set<Class<? extends Content>> necessaryContentHandlers = Collections.emptySet();
@@ -123,7 +123,7 @@ public class BankingRole extends Role<BankingRole>
      */
     protected void sendBalanceUpdateEvent(final FinancingActor actor, final Money newBalance)
     {
-        this.fireTimedEvent(BANK_ACCOUNT_CHANGED_EVENT, new Serializable[] {getActor(), newBalance},
+        this.fireTimedEvent(BANK_ACCOUNT_CHANGED_EVENT, new Serializable[] {actor, newBalance},
                 getActor().getSimulatorTime());
     }
 
