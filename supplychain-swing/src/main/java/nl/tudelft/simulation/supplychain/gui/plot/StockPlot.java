@@ -69,8 +69,8 @@ public class StockPlot extends XYChart
 
     /**
      * StockListener - delegate class to handle the stock change subscription, filtering for the right product, and event
-     * production for the SimPersistent variables. <br>
-     * <br>
+     * production for the SimPersistent variables.
+     * <p>
      * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
      * The supply chain Java library uses a BSD-3 style license.
      * </p>
@@ -87,13 +87,13 @@ public class StockPlot extends XYChart
         /** the simulator to get the time for the TimedEvent. */
         private final SupplyChainSimulatorInterface simulator;
 
-        /** An event to indicate stock levels changed */
+        /** An event to indicate stock levels changed. */
         static final EventType STOCK_ACTUAL_CHANGE_EVENT = new EventType("STOCK_ACTUAL_CHANGE_EVENT");
 
-        /** An event to indicate stock levels changed */
+        /** An event to indicate stock levels changed. */
         static final EventType STOCK_CLAIMED_CHANGE_EVENT = new EventType("STOCK_CLAIMED_CHANGE_EVENT");
 
-        /** An event to indicate stock levels changed */
+        /** An event to indicate stock levels changed. */
         static final EventType STOCK_ORDERED_CHANGE_EVENT = new EventType("STOCK_ORDERED_CHANGE_EVENT");
 
         /**

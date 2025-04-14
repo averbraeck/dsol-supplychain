@@ -4,30 +4,36 @@ import java.rmi.RemoteException;
 
 import javax.naming.NamingException;
 
-import org.djunits.unit.DurationUnit;
-import org.djunits.value.vdouble.scalar.Duration;
 import org.djutils.draw.bounds.Bounds2d;
-import org.djutils.draw.point.Point2d;
 
 import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.dsol.swing.charts.xy.XYChart;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
+import nl.tudelft.simulation.supplychain.actor.Geography;
 import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
-import nl.tudelft.simulation.supplychain.handler.order.OrderHandler;
-import nl.tudelft.simulation.supplychain.money.BankAccount;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Bank;
 import nl.tudelft.simulation.supplychain.reference.Supplier;
+import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
+import nl.tudelft.simulation.supplychain.role.financing.handler.InventoryReleaseHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentHandler;
-import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
+import nl.tudelft.simulation.supplychain.role.receiving.ReceivingRole;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRoleRFQ;
+import nl.tudelft.simulation.supplychain.role.selling.handler.InventoryQuoteHandler;
+import nl.tudelft.simulation.supplychain.role.selling.handler.InventoryReservationHandler;
 import nl.tudelft.simulation.supplychain.role.selling.handler.OrderHandlerStock;
 import nl.tudelft.simulation.supplychain.role.selling.handler.RequestForQuoteHandler;
-import nl.tudelft.simulation.supplychain.role.transporting.TransportMode;
-import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
+import nl.tudelft.simulation.supplychain.role.selling.handler.TransportQuoteHandler;
+import nl.tudelft.simulation.supplychain.role.shipping.ShippingRole;
+import nl.tudelft.simulation.supplychain.role.shipping.handler.ShippingOrderHandler;
+import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
+import nl.tudelft.simulation.supplychain.role.warehousing.handler.InventoryQuoteRequestHandler;
+import nl.tudelft.simulation.supplychain.role.warehousing.handler.InventoryReleaseRequestHandler;
+import nl.tudelft.simulation.supplychain.role.warehousing.handler.InventoryReservationRequestHandler;
 
 /**
  * The ComputerShop named Factory.
@@ -46,11 +52,10 @@ public class Factory extends Supplier
      * @param id String, the unique id of the supplier
      * @param name the longer name of the supplier
      * @param model the model
-     * @param location the location of the actor
-     * @param locationDescription the location description of the actor (e.g., a city, country)
+     * @param geography the location of the actor
      * @param bank the bank for the BankAccount
      * @param initialBalance the initial balance for the actor
-     * @param messageStore the message store for messages
+     * @param contentStore the message store for messages
      * @param product initial stock product
      * @param amount amount of initial stock
      * @throws ActorAlreadyDefinedException when the actor was already registered in the model
@@ -58,13 +63,19 @@ public class Factory extends Supplier
      * @throws RemoteException on animation error
      */
     @SuppressWarnings("checkstyle:parameternumber")
-    public Factory(final String id, final String name, final SupplyChainModelInterface model, final Point2d location,
-            final String locationDescription, final Bank bank, final Money initialBalance,
-            final ContentStoreInterface messageStore, final Product product, final double amount)
-            throws ActorAlreadyDefinedException, RemoteException, NamingException
+    public Factory(final String id, final String name, final SupplyChainModelInterface model, final Geography geography,
+            final Bank bank, final Money initialBalance, final ContentStoreInterface contentStore, final Product product,
+            final double amount) throws ActorAlreadyDefinedException, RemoteException, NamingException
     {
-        super(id, name, model, location, locationDescription, bank, initialBalance, messageStore);
-        // give the retailer some stock
+        super(id, name, model, geography, contentStore);
+
+        setFinancingRole(new FinancingRole(this, bank, initialBalance));
+        setWarehousingRole(new WarehousingRole(this));
+        setShippingRole(new ShippingRole(this));
+        setReceivingRole(new ReceivingRole(this));
+        setSellingRole(new SellingRoleRFQ(this));
+
+        // give the factory some stock
         getInventory().addToInventory(product, amount, product.getUnitMarketPrice().multiplyBy(amount));
         // We initialize Factory
         this.init();
@@ -82,26 +93,40 @@ public class Factory extends Supplier
     public void init() throws RemoteException
     {
         // tell Factory to use the RFQHandler to handle RFQs
-        RequestForQuoteHandler rfqHandler = new RequestForQuoteHandler(this, getInventory(), 1.2,
-                new DistConstantDuration(new Duration(1.23, DurationUnit.HOUR)), TransportMode.PLANE);
+        new RequestForQuoteHandler((SellingRoleRFQ) getSellingRole());
+        new InventoryQuoteRequestHandler(getWarehousingRole());
+        new InventoryQuoteHandler((SellingRoleRFQ) getSellingRole());
+        new TransportQuoteHandler((SellingRoleRFQ) getSellingRole());
         //
         // create an order Handler
-        OrderHandler orderHandler = new OrderHandlerStock(this, getInventory());
+        new OrderHandlerStock(getSellingRole());
+        new InventoryReservationRequestHandler(getWarehousingRole());
+        new InventoryReservationHandler(getSellingRole());
         //
-        // hopefully, Factory will get payments in the end
-        PaymentHandler paymentHandler = new PaymentHandler(this, getBankAccount());
+        // Release the inventory and ship it
+        new InventoryReleaseRequestHandler(getWarehousingRole());
+        new InventoryReleaseHandler(getFinancingRole());
+        new ShippingOrderHandler(getShippingRole());
         //
-        // add the Handlers to the SellingRole
-        SellingRole sellingRole = new SellingRoleRFQ(this, getSimulator(), rfqHandler, orderHandler, paymentHandler);
-        super.setSellingRole(sellingRole);
+        // hopefully, the Factory will get payments in the end
+        new PaymentHandler(getFinancingRole());
+
         //
         // CHARTS
         //
         if (getSimulator() instanceof AnimatorInterface)
         {
             XYChart bankChart = new XYChart(getSimulator(), "BankAccount " + getName());
-            bankChart.add("bank account", getBankAccount(), BankAccount.BANK_ACCOUNT_CHANGED_EVENT);
+            // TODO bankChart.add("bank account", getBankAccount(), BankAccount.BANK_ACCOUNT_CHANGED_EVENT);
         }
+    }
+
+    /**
+     * @return inventory
+     */
+    public Inventory getInventory()
+    {
+        return getWarehousingRole().getInventory();
     }
 
     @Override

@@ -19,6 +19,7 @@ import nl.tudelft.simulation.dsol.swing.gui.ConsoleOutput;
 import nl.tudelft.simulation.dsol.swing.gui.DsolPanel;
 import nl.tudelft.simulation.dsol.swing.gui.TablePanel;
 import nl.tudelft.simulation.dsol.swing.gui.animation.DsolAnimationApplication;
+import nl.tudelft.simulation.dsol.swing.gui.control.DevsControlPanel;
 import nl.tudelft.simulation.language.DsolException;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainAnimator;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
@@ -75,10 +76,12 @@ public class TestModelSwing extends DsolAnimationApplication
         BankPlot cb = new BankPlot(this.model, "Client Bank balance", this.model.client);
         charts.setCell(cb.getSwingPanel(), 2, 0);
 
-        StockPlot fs = new StockPlot(this.model, "Factory stock Laptop", this.model.factory, this.model.laptop);
+        StockPlot fs = new StockPlot(this.model, "Factory stock Laptop", this.model.factory.getWarehousingRole().getInventory(),
+                this.model.laptop);
         charts.setCell(fs.getSwingPanel(), 0, 1);
 
-        StockPlot ps = new StockPlot(this.model, "PCShop stock Laptop", this.model.pcShop, this.model.laptop);
+        StockPlot ps = new StockPlot(this.model, "PCShop stock Laptop", this.model.pcShop.getWarehousingRole().getInventory(),
+                this.model.laptop);
         charts.setCell(ps.getSwingPanel(), 1, 1);
     }
 
@@ -100,7 +103,7 @@ public class TestModelSwing extends DsolAnimationApplication
         Replication<Duration> replication =
                 new SingleReplication<Duration>("rep1", Duration.ZERO, Duration.ZERO, new Duration(1800.0, DurationUnit.HOUR));
         animator.initialize(model, replication);
-        DsolPanel panel = new DsolPanel(new DsolControlPanel(model, animator));
+        DsolPanel panel = new DsolPanel(new DevsControlPanel.TimeDoubleUnit(model, animator));
         panel.addTab("logger", new ConsoleLogger(Level.INFO));
         panel.addTab("console", new ConsoleOutput());
         new TestModelSwing("TestModelApp", panel, model);

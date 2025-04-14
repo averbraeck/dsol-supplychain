@@ -20,8 +20,7 @@ import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
  * of the communications channel between the devices of the actors determine this). It is even worse: the content itself is
  * unaware of being sent: the Message envelope around the Content is being sent; the Content itself is just the Serializable
  * payload... Therefore, the ContentAnimation subscribes itself on the sending time and receiving time by the sending device.
- * <br>
- * <br>
+ * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
@@ -160,7 +159,7 @@ public class ContentAnimation implements Locatable, Serializable
     /**
      * @return the image renderable
      */
-    public SingleImageRenderable getImageRenderable()
+    public SingleImageRenderable<ContentAnimation> getImageRenderable()
     {
         return this.imageRenderable;
     }

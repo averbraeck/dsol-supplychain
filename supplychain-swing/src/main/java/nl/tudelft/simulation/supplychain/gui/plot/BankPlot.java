@@ -18,8 +18,8 @@ import nl.tudelft.simulation.supplychain.role.banking.BankingRole;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
 
 /**
- * StockPlot.java. <br>
- * <br>
+ * StockPlot.java.
+ * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
@@ -56,8 +56,8 @@ public class BankPlot extends XYChart
 
     /**
      * BalanceListener - delegate class to handle the bank account balance change subscription and event production for the
-     * Persistent variables. <br>
-     * <br>
+     * Persistent variables.
+     * <p>
      * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
      * The supply chain Java library uses a BSD-3 style license.
      * </p>
@@ -71,14 +71,14 @@ public class BankPlot extends XYChart
         /** the simulator to get the time for the TimedEvent. */
         private final SupplyChainSimulatorInterface simulator;
 
-        /** An event to indicate stock levels changed */
-        static final EventType BALANCE_CHANGE_EVENT = new EventType("BALANCE_CHANGE_EVENT");
+        /** An event to indicate stock levels changed. */
+        public static final EventType BALANCE_CHANGE_EVENT = new EventType("BALANCE_CHANGE_EVENT");
 
         /**
          * @param simulator the simulator
          * @param financingActor the actor whose bank account needs to be plotted
          */
-        public BalanceListener(final SupplyChainSimulatorInterface simulator, final FinancingActor financingActor)
+        BalanceListener(final SupplyChainSimulatorInterface simulator, final FinancingActor financingActor)
         {
             super();
             this.simulator = simulator;

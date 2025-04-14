@@ -97,7 +97,8 @@ public class TestModel extends SupplyChainModel
                     new Mass(6.5, MassUnit.KILOGRAM), new Volume(0.05, VolumeUnit.CUBIC_METER), 0.0);
 
             // create a manufacturer
-            this.factory = new Factory("Factory", "Factory", this, new Point2d(200, 200), "", this.bank,
+            Geography factoryGeography = new Geography(new Point2d(200, 200), "Delft", "Europe");
+            this.factory = new Factory("Factory", "Factory", this, factoryGeography, this.bank,
                     new Money(50000.0, MoneyUnit.USD), new ContentStoreFull(), this.laptop, 1000);
 
             // create a retailer
