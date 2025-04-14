@@ -21,6 +21,7 @@ import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Bank;
 import nl.tudelft.simulation.supplychain.reference.Retailer;
 import nl.tudelft.simulation.supplychain.reference.Supplier;
+import nl.tudelft.simulation.supplychain.role.directing.DirectingRoleSelling;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
 import nl.tudelft.simulation.supplychain.role.financing.handler.InventoryReleaseHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.InvoiceHandler;
@@ -99,6 +100,7 @@ public class PCShop extends Retailer
         setShippingRole(new ShippingRole(this));
         setReceivingRole(new ReceivingRole(this));
         setSellingRole(new SellingRoleRFQ(this));
+        setDirectingRole(new DirectingRoleSelling(this));
 
         // give the retailer some stock
         getInventory().addToInventory(product, amount, product.getUnitMarketPrice().multiplyBy(amount));
@@ -191,6 +193,9 @@ public class PCShop extends Retailer
         return new Bounds2d(25.0, 25.0);
     }
 
+    /**
+     * @return the inventory
+     */
     public Inventory getInventory()
     {
         return getWarehousingRole().getInventory();

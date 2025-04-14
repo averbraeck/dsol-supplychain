@@ -17,6 +17,7 @@ import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Bank;
 import nl.tudelft.simulation.supplychain.reference.Supplier;
+import nl.tudelft.simulation.supplychain.role.directing.DirectingRoleSelling;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
 import nl.tudelft.simulation.supplychain.role.financing.handler.InventoryReleaseHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentHandler;
@@ -74,6 +75,7 @@ public class Factory extends Supplier
         setShippingRole(new ShippingRole(this));
         setReceivingRole(new ReceivingRole(this));
         setSellingRole(new SellingRoleRFQ(this));
+        setDirectingRole(new DirectingRoleSelling(this));
 
         // give the factory some stock
         getInventory().addToInventory(product, amount, product.getUnitMarketPrice().multiplyBy(amount));
