@@ -72,7 +72,7 @@ CR1 -> PR1: Demand
   WR3 -> ShR3: ShippingOrder
     deactivate WR3
     activate ShR3
-    ShR3 -> TR4: TransportPickup\n & <back:yellow><b>Shipment</b>
+    ShR3 -> TR4: TransportOrder\n & <back:yellow><b>Shipment</b>
       deactivate ShR3
       activate TR4
       TR4 -> FR4: Transport\nConfirmation
