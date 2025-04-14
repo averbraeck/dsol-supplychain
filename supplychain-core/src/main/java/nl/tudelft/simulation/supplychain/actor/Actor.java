@@ -5,6 +5,9 @@ import java.util.Collection;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
 import org.djutils.event.EventProducer;
+import org.djutils.event.EventType;
+import org.djutils.metadata.MetaData;
+import org.djutils.metadata.ObjectDescriptor;
 
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
@@ -23,6 +26,11 @@ import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
  */
 public interface Actor extends NamedLocation, EventProducer
 {
+
+    /** the event to indicate that information has been sent. E.g., for animation. */
+    EventType SEND_CONTENT_EVENT = new EventType("SEND_CONTENT_EVENT",
+            new MetaData("sent content", "sent content", new ObjectDescriptor("content", "content", Content.class)));
+
     /**
      * Add a role to the actor. If the role already exists, the current role replaces the earlier role.
      * @param roleClass the class to register the role with
@@ -36,7 +44,7 @@ public interface Actor extends NamedLocation, EventProducer
      * @return the roles of this actor
      */
     Collection<Role<?>> getRoles();
-    
+
     /**
      * Get a role of a specific type.
      * @param roleClass the class of the role to retrieve
