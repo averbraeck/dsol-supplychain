@@ -13,7 +13,6 @@ import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.content.ProductionOrder;
-import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
 
@@ -200,8 +199,9 @@ public class ManufacturingServiceDelay extends ManufacturingService
     {
         Product product = productionOrder.product();
         double amount = productionOrder.amount();
-        Money cost = productionOrder.materialCost();
-        getInventory().addToInventory(product, amount, cost.multiplyBy(this.profitMargin));
+        // TODO
+        // Money cost = productionOrder.materialCost();
+        // getInventory().addToInventory(product, amount, cost.multiplyBy(this.profitMargin));
     }
 
     /**
@@ -226,9 +226,10 @@ public class ManufacturingServiceDelay extends ManufacturingService
             }
             if (pick)
             {
-                double actualAmount = getInventory().removeFromInventory(rawProduct, pickAmount);
-                productionOrder.addMaterialCost(getInventory().getUnitPrice(rawProduct).multiplyBy(actualAmount));
-                System.out.println("DelayProduction: products taken from stock: " + rawProduct + ", amount=" + actualAmount);
+                // TODO
+                // double actualAmount = getInventory().removeFromInventory(rawProduct, pickAmount);
+                // productionOrder.addMaterialCost(getInventory().getUnitPrice(rawProduct).multiplyBy(actualAmount));
+                // System.out.println("DelayProduction: products taken from stock: " + rawProduct + ", amount=" + actualAmount);
             }
         }
         return ready;
