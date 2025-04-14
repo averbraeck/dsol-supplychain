@@ -3,14 +3,12 @@ package nl.tudelft.simulation.supplychain.role.shipping.handler;
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 
-import nl.tudelft.simulation.supplychain.content.Invoice;
 import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.content.ShippingOrder;
 import nl.tudelft.simulation.supplychain.content.TransportOrder;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.product.Shipment;
 import nl.tudelft.simulation.supplychain.role.shipping.ShippingRole;
-import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
 
 /**
  * The ShippingOrderHandler take care of outbound shipments from the warehouse. It handles the ShippingOrder message.
@@ -49,12 +47,13 @@ public class ShippingOrderHandler extends ContentHandler<ShippingOrder, Shipping
         Order order = shippingOrder.inventoryRelease().inventoryReleaseRequest().inventoryReservation()
                 .inventoryReservationRequest().order();
         var transportOption = order.transportOption();
+        var transportQuote = getRole().getActor().getShippingRole().getTransportQuote(transportOption);
 
         // The value of the cargo now includes the tarnsport cost and the profit margin of the seller.
         Shipment shipment =
                 new Shipment(getRole().getActor(), order.sender().getWarehousingRole().getActor(), order, order.price());
-        TransportOrder transportPickup = new TransportOrder(transportOption, shipment, order.groupingId());
-        sendContent(transportPickup, getHandlingTime().draw());
+        TransportOrder transportOrder = new TransportOrder(transportQuote, shipment, order);
+        sendContent(transportOrder, getHandlingTime().draw());
         return true;
     }
 

@@ -2,21 +2,15 @@ package nl.tudelft.simulation.supplychain.role.purchasing.handler;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 
-import org.djutils.exceptions.Throw;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.content.Demand;
-import nl.tudelft.simulation.supplychain.content.OrderStandalone;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
-import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
-import nl.tudelft.simulation.supplychain.transporting.TransportChoiceProvider;
-import nl.tudelft.simulation.supplychain.transporting.TransportOptionProvider;
 
 /**
  * The DemandHandlerOrder is a simple implementation of the business logic to handle a request for new products through direct
@@ -36,26 +30,13 @@ public class DemandHandlerOrder extends DemandHandler
     /** a table to map the products onto a unique supplier. */
     private Map<Product, SupplierRecord> suppliers = new LinkedHashMap<Product, SupplierRecord>();
 
-    /** the provider of transport options betwween two locations. */
-    private final TransportOptionProvider transportOptionProvider;
-
-    /** the provider to choose between transport options. */
-    private final TransportChoiceProvider transportChoiceProvider;
-
     /**
      * Constructs a new DemandHandlerOrder.
      * @param owner the owner of the demand
-     * @param transportOptionProvider the provider of transport options betwween two locations
-     * @param transportChoiceProvider the provider to choose between transport options
      */
-    public DemandHandlerOrder(final PurchasingRole owner, final TransportOptionProvider transportOptionProvider,
-            final TransportChoiceProvider transportChoiceProvider)
+    public DemandHandlerOrder(final PurchasingRole owner)
     {
         super("DemandHandlerOrder", owner);
-        Throw.whenNull(transportOptionProvider, "transportOptionProvider cannot be null");
-        Throw.whenNull(transportChoiceProvider, "transportChoiceProvider cannot be null");
-        this.transportOptionProvider = transportOptionProvider;
-        this.transportChoiceProvider = transportChoiceProvider;
     }
 
     /**
@@ -84,14 +65,8 @@ public class DemandHandlerOrder extends DemandHandler
             return false;
         }
         SellingActor supplier = (SellingActor) supplierRecord.getSupplier();
-        Money price = supplierRecord.getUnitPrice().multiplyBy(demand.amount());
-        Set<TransportOption> transportOptions = this.transportOptionProvider.provideTransportOptions(supplier, getActor());
-        TransportOption transportOption =
-                this.transportChoiceProvider.chooseTransportOptions(transportOptions, demand.product().getSku());
-        var order = new OrderStandalone(getRole().getActor(), supplier, demand.latestDeliveryDate(), demand.product(),
-                demand.amount(), price, transportOption);
-        // and send it out after the handling time
-        sendContent(order, getHandlingTime().draw());
+        // send out a transportation quote request
+        // TODO: CHANGE TQR: TransportQuoteRequest tqr = new TransportQuoteRequest(sender, receiver, rfq, cutoffTime)
         return true;
     }
 

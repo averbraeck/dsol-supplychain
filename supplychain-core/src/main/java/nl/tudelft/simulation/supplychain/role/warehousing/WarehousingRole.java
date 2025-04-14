@@ -28,12 +28,11 @@ public abstract class WarehousingRole extends Role<WarehousingRole>
     private static final long serialVersionUID = 20221206L;
 
     /** the inventory with products. */
-    @SuppressWarnings("checkstyle:visibilitymodifier")
-    protected final Inventory inventory;
+    private final Inventory inventory;
 
-    /** the restocking services per product. */
+    /** the restocking processes per product. */
     private final Map<Product, RestockingProcess> restockingProcesses = new LinkedHashMap<>();
-
+    
     /**
      * Create an InventoryRole object for an actor, with an empty inventory.
      * @param owner the owner of this role

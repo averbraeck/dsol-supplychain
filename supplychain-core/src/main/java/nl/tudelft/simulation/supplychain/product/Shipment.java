@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.djunits.value.vdouble.scalar.Time;
 
+import nl.tudelft.simulation.supplychain.actor.NamedLocation;
 import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
@@ -43,10 +44,16 @@ public class Shipment implements Serializable
     private final Money totalCargoValue;
 
     /** is the cargo in transit? */
-    private boolean inTransit = false;
+    private boolean inTransit;
 
     /** has the cargo been delivered? */
     private boolean delivered = false;
+
+    /** The origin if moving; will be the originating actor before transport and the receiving actor after arrival. */
+    private NamedLocation origin;
+
+    /** The destination if moving; will be the originating actor before transport and the receiving actor after arrival. */
+    private NamedLocation destination;
 
     /**
      * Create a shipment.
@@ -65,6 +72,9 @@ public class Shipment implements Serializable
         this.groupingId = order.groupingId();
         this.order = order;
         this.totalCargoValue = totalCargoValue;
+        this.origin = shippingActor;
+        this.destination = shippingActor;
+        this.inTransit = false;
     }
 
     /**
@@ -141,11 +151,14 @@ public class Shipment implements Serializable
 
     /**
      * Set whether the cargo is in transit.
-     * @param inTransit set whether the cargo is in transit
+     * @param legOrigin the origin of the current transport leg
+     * @param legDestination the destination of the current transport leg
      */
-    public void setInTransit(final boolean inTransit)
+    public void setTransit(final NamedLocation legOrigin, final NamedLocation legDestination)
     {
-        this.inTransit = inTransit;
+        this.inTransit = true;
+        this.origin = legOrigin;
+        this.destination = legDestination;
     }
 
     /**
@@ -159,11 +172,31 @@ public class Shipment implements Serializable
 
     /**
      * Set whether the cargo has been delivered.
-     * @param delivered true whether the cargo has been delivered
      */
-    public void setDelivered(final boolean delivered)
+    public void setDelivered()
     {
-        this.delivered = delivered;
+        this.delivered = true;
+        this.inTransit = false;
+        this.origin = this.receivingActor;
+        this.destination = this.receivingActor;
+    }
+
+    /**
+     * Return the origin.
+     * @return origin
+     */
+    public NamedLocation getOrigin()
+    {
+        return this.origin;
+    }
+
+    /**
+     * Return the destination.
+     * @return destination
+     */
+    public NamedLocation getDestination()
+    {
+        return this.destination;
     }
 
     /**

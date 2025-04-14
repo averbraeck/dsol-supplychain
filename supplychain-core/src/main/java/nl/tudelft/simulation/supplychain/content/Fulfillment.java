@@ -19,26 +19,26 @@ import nl.tudelft.simulation.supplychain.product.Product;
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
- * @param demand the demand for which this is the fulfillment
+ * @param transportDelivery info about the delivered goods
  */
-public record Fulfillment(Actor sender, Actor receiver, Time timestamp, long uniqueId, long groupingId, Demand demand)
-        implements GroupedContent, ProductContent
+public record Fulfillment(Actor sender, Actor receiver, Time timestamp, long uniqueId, long groupingId,
+        TransportDelivery transportDelivery) implements GroupedContent, ProductContent
 {
-    public Fulfillment(final Demand demand)
+    public Fulfillment(final TransportDelivery transportDelivery)
     {
-        this(demand.receiver(), demand.sender(), demand.sender().getSimulatorTime(),
-                demand.sender().getModel().getUniqueContentId(), demand.groupingId(), demand);
+        this(transportDelivery.receiver(), transportDelivery.sender(), transportDelivery.sender().getSimulatorTime(),
+                transportDelivery.sender().getModel().getUniqueContentId(), transportDelivery.groupingId(), transportDelivery);
     }
 
     @Override
     public Product product()
     {
-        return demand().product();
+        return transportDelivery().product();
     }
 
     @Override
     public double amount()
     {
-        return demand().amount();
+        return transportDelivery().amount();
     }
 }

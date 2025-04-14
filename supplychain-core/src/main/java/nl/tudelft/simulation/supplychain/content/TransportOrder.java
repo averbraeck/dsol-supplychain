@@ -21,15 +21,16 @@ import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
  * @param transportQuote the transport quote that dictates the mode of transport
  * @param shipment the shipment that needs to be transported
+ * @param order the order to which the transport belongs
  */
 public record TransportOrder(WarehousingActor sender, TransportingActor receiver, Time timestamp, long uniqueId,
-        long groupingId, TransportQuote transportQuote, Shipment shipment) implements GroupedContent, ProductContent
+        long groupingId, TransportQuote transportQuote, Shipment shipment, Order order) implements GroupedContent, ProductContent
 {
-    public TransportOrder(final TransportQuote transportQuote, final Shipment shipment)
+    public TransportOrder(final TransportQuote transportQuote, final Shipment shipment, final Order order)
     {
         this(transportQuote.transportOption().getPickupActor(), transportQuote.transportOption().getTransportingActor(),
                 transportQuote.sender().getSimulatorTime(), transportQuote.sender().getModel().getUniqueContentId(),
-                transportQuote.groupingId(), transportQuote, shipment);
+                transportQuote.groupingId(), transportQuote, shipment, order);
     }
 
     @Override
