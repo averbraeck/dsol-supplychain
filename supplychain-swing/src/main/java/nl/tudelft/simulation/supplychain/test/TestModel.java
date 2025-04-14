@@ -16,9 +16,9 @@ import org.djutils.draw.point.Point2d;
 
 import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
+import nl.tudelft.simulation.supplychain.actor.Geography;
 import nl.tudelft.simulation.supplychain.animation.ContentAnimator;
 import nl.tudelft.simulation.supplychain.content.store.ContentStoreFull;
-import nl.tudelft.simulation.supplychain.dsol.SupplyChainAnimator;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModel;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.money.Money;
@@ -58,11 +58,14 @@ public class TestModel extends SupplyChainModel
     /** */
     Client client;
 
+    /** */
+    Bank bank;
+
     /**
      * constructs a new TestModel.
      * @param simulator the simulator
      */
-    public TestModel(final SupplyChainAnimator simulator)
+    public TestModel(final SupplyChainSimulatorInterface simulator)
     {
         super(simulator);
         // We don't do anything to prevent state-based replications.
@@ -85,25 +88,27 @@ public class TestModel extends SupplyChainModel
             }
 
             // create the bank
-            Bank ing = new Bank("ING", "ING", this, new Point2d(0, 0), "ING", "Europe");
-            ing.getBankingRole().setAnnualInterestRateNeg(0.080);
-            ing.getBankingRole().setAnnualInterestRatePos(0.025);
+            this.bank = new Bank("ING", "ING", this, new Point2d(0, 0), "ING", "Europe");
+            this.bank.getBankingRole().setAnnualInterestRateNeg(0.080);
+            this.bank.getBankingRole().setAnnualInterestRatePos(0.025);
 
             // create a product
             this.laptop = new Product(this, "Laptop", Sku.PIECE, new Money(1400.0, MoneyUnit.USD),
                     new Mass(6.5, MassUnit.KILOGRAM), new Volume(0.05, VolumeUnit.CUBIC_METER), 0.0);
 
             // create a manufacturer
-            this.factory = new Factory("Factory", "Factory", this, new Point2d(200, 200), "", ing,
+            this.factory = new Factory("Factory", "Factory", this, new Point2d(200, 200), "", this.bank,
                     new Money(50000.0, MoneyUnit.USD), new ContentStoreFull(), this.laptop, 1000);
 
             // create a retailer
-            this.pcShop = new PCShop("PCshop", "PCshop", this, new Point2d(20, 200), "", ing, new Money(50000.0, MoneyUnit.USD),
+            Geography pcShopGeography = new Geography(new Point2d(20, 200), "Rotterdam", "Europe");
+            this.pcShop = new PCShop("PCshop", "PCshop", this, pcShopGeography, this.bank, new Money(50000.0, MoneyUnit.USD),
                     new ContentStoreFull(), this.laptop, 10, this.factory);
 
             // create a customer
-            this.client = new Client("Client", "Client", this, new Point2d(100, 100), "", ing,
-                    new Money(1500000.0, MoneyUnit.USD), new ContentStoreFull(), this.laptop, this.pcShop);
+            Geography clientGeography = new Geography(new Point2d(100, 100), "Amsterdam", "Europe");
+            this.client = new Client("Client", "Client", this, clientGeography, this.bank, new Money(1500000.0, MoneyUnit.USD),
+                    new ContentStoreFull(), this.laptop, this.pcShop);
 
             // schedule a remark that the simulation is ready
             Duration endTime =
@@ -111,10 +116,13 @@ public class TestModel extends SupplyChainModel
             this.devsSimulator.scheduleEventRel(endTime, this, "endSimulation", new Serializable[] {});
 
             // Create the animation.
-            ContentAnimator contentAnimator = new ContentAnimator(this.devsSimulator);
-            contentAnimator.subscribe(this.factory);
-            contentAnimator.subscribe(this.pcShop);
-            contentAnimator.subscribe(this.client);
+            if (this.simulator instanceof AnimatorInterface)
+            {
+                ContentAnimator contentAnimator = new ContentAnimator(this.devsSimulator);
+                contentAnimator.subscribe(this.factory);
+                contentAnimator.subscribe(this.pcShop);
+                contentAnimator.subscribe(this.client);
+            }
         }
         catch (Exception e)
         {

@@ -5,7 +5,7 @@ import java.net.URL;
 import java.rmi.RemoteException;
 
 import org.djunits.value.vdouble.scalar.Duration;
-import org.djutils.draw.bounds.Bounds3d;
+import org.djutils.draw.bounds.Bounds2d;
 import org.djutils.draw.point.Point2d;
 import org.pmw.tinylog.Logger;
 
@@ -130,7 +130,7 @@ public class ContentAnimation implements Locatable, Serializable
     public Bounds2d getBounds() throws RemoteException
     {
         // determines the size on the screen (!)
-        return new Bounds3d(10, 10, 2.0);
+        return new Bounds2d(10, 10);
     }
 
     /**

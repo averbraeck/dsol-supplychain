@@ -1,6 +1,7 @@
 package nl.tudelft.simulation.supplychain.test;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 import javax.naming.NamingException;
 
@@ -13,6 +14,7 @@ import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.dsol.swing.charts.xy.XYChart;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
+import nl.tudelft.simulation.supplychain.actor.Geography;
 import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.handler.order.OrderHandler;
@@ -24,21 +26,32 @@ import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Bank;
 import nl.tudelft.simulation.supplychain.reference.Retailer;
 import nl.tudelft.simulation.supplychain.reference.Supplier;
+import nl.tudelft.simulation.supplychain.role.consuming.ConsumingRole;
+import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
 import nl.tudelft.simulation.supplychain.role.financing.handler.InvoiceHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentPolicyEnum;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleRFQ;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleSearch;
 import nl.tudelft.simulation.supplychain.role.purchasing.handler.DemandHandlerRFQ;
 import nl.tudelft.simulation.supplychain.role.purchasing.handler.OrderConfirmationHandler;
 import nl.tudelft.simulation.supplychain.role.purchasing.handler.QuoteComparatorEnum;
 import nl.tudelft.simulation.supplychain.role.purchasing.handler.QuoteHandler;
 import nl.tudelft.simulation.supplychain.role.purchasing.handler.QuoteHandlerAll;
+import nl.tudelft.simulation.supplychain.role.purchasing.handler.QuoteNoHandler;
+import nl.tudelft.simulation.supplychain.role.receiving.ReceivingRole;
+import nl.tudelft.simulation.supplychain.role.receiving.handler.TransportDeliveryHandlerConsume;
+import nl.tudelft.simulation.supplychain.role.receiving.handler.TransportDeliveryHandlerStock;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRoleRFQ;
 import nl.tudelft.simulation.supplychain.role.selling.handler.OrderHandlerStock;
 import nl.tudelft.simulation.supplychain.role.selling.handler.RequestForQuoteHandler;
+import nl.tudelft.simulation.supplychain.role.shipping.ShippingRole;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportMode;
+import nl.tudelft.simulation.supplychain.role.transporting.TransportPreference;
+import nl.tudelft.simulation.supplychain.role.transporting.TransportPreference.CostTimeImportance;
 import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
 import nl.tudelft.simulation.supplychain.role.warehousing.process.RestockingProcessSafety;
 import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
@@ -56,17 +69,16 @@ public class PCShop extends Retailer
     private static final long serialVersionUID = 20221201L;
 
     /** the manufacturer where the PCShop buys. */
-    private Supplier manufacturer;
+    private Supplier supplier;
 
     /**
      * @param id String, the unique id of the supplier
      * @param name the longer name of the supplier
      * @param model the model
-     * @param location the location of the actor
-     * @param locationDescription the location description of the actor (e.g., a city, country)
+     * @param geography the location of the actor
      * @param bank the bank for the BankAccount
      * @param initialBalance the initial balance for the actor
-     * @param messageStore the message store for messages
+     * @param contentStore the message store for messages
      * @param product initial stock product
      * @param amount amount of initial stock
      * @param manufacturer fixed manufacturer to use
@@ -75,13 +87,20 @@ public class PCShop extends Retailer
      * @throws RemoteException on animation error
      */
     @SuppressWarnings("checkstyle:parameternumber")
-    public PCShop(final String id, final String name, final SupplyChainModelInterface model, final Point2d location,
-            final String locationDescription, final Bank bank, final Money initialBalance,
-            final ContentStoreInterface messageStore, final Product product, final double amount,
+    public PCShop(final String id, final String name, final SupplyChainModelInterface model, final Geography geography, final Bank bank, final Money initialBalance,
+            final ContentStoreInterface contentStore, final Product product, final double amount,
             final Supplier manufacturer) throws ActorAlreadyDefinedException, RemoteException, NamingException
     {
-        super(id, name, model, location, locationDescription, bank, initialBalance, messageStore);
-        this.manufacturer = manufacturer;
+        super(id, name, model, geography, contentStore);
+        this.supplier = manufacturer;
+        
+        setPurchasingRole(new PurchasingRoleRFQ(this));
+        setFinancingRole(new FinancingRole(this, bank, initialBalance));
+        setWarehousingRole(new WarehousingRole(this));
+        setShippingRole(new ShippingRole(this));
+        setReceivingRole(new ReceivingRole(this));
+        setSellingRole(new SellingRoleRFQ(this));
+
         // give the retailer some stock
         getInventory().addToInventory(product, amount, product.getUnitMarketPrice().multiplyBy(amount));
         init();
@@ -97,6 +116,9 @@ public class PCShop extends Retailer
      */
     public void init() throws RemoteException
     {
+        DurationUnit hours = DurationUnit.HOUR;
+        DurationUnit days = DurationUnit.DAY;
+
         // tell PCshop to use the RFQHandler to handle RFQs
         RequestForQuoteHandler rfqHandler = new RequestForQuoteHandler(this, getInventory(), 1.2,
                 new DistConstantDuration(new Duration(1.23, DurationUnit.HOUR)), TransportMode.PLANE);
@@ -115,7 +137,7 @@ public class PCShop extends Retailer
         // do this for every product we have initially in stock
         for (Product product : getInventory().getProducts())
         {
-            new RestockingProcessSafety(getInventory(), product, new Duration(24.0, DurationUnit.HOUR), false, 5.0, true, 10.0,
+            new RestockingProcessSafety(getWarehousingRole(), getInventory(), product, new Duration(24.0, DurationUnit.HOUR), false, 5.0, true, 10.0,
                     new Duration(14.0, DurationUnit.DAY));
             // order 100 PCs when actual+claimed < 100
             // handler will schedule itself
@@ -124,28 +146,29 @@ public class PCShop extends Retailer
         //
         // BUY PRODUCTS WHEN THERE IS INTERNAL DEMAND
         //
-        
         // tell PCShop to use the DemandHandler for all products
-        DemandHandlerRFQ demandHandler =
-                new DemandHandlerRFQ(this, new Duration(1.0, DurationUnit.HOUR), getInventory());
+        DemandHandlerRFQ demandHandler = new DemandHandlerRFQ(getPurchasingRole(), new Duration(1.0, hours));
+        TransportPreference transportPreference = new TransportPreference(new ArrayList<>(), CostTimeImportance.COST);
         for (Product product : getInventory().getProducts())
         {
-            demandHandler.addSupplier(product, this.manufacturer);
+        demandHandler.addSupplier(product, this.supplier, transportPreference);
         }
         //
         // tell PCShop to use the QuoteHandler to handle quotes
-        QuoteHandler quoteHandler = new QuoteHandlerAll(this, QuoteComparatorEnum.SORT_DATE_PRICE_DISTANCE,
-                new Duration(1.0, DurationUnit.HOUR), 0.4, 0.1);
+        new QuoteNoHandler((PurchasingRoleRFQ) getPurchasingRole());
+        new QuoteHandlerAll(getPurchasingRole(), QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE, 0.4, 0.1);
         //
         // PCShop has the standard order confirmation Handler
-        OrderConfirmationHandler confirmationHandler = new OrderConfirmationHandler(this);
+        new OrderConfirmationHandler(getPurchasingRole());
         //
         // PCShop will get a bill in the end
-        InvoiceHandler billHandler = new InvoiceHandler(this, getBankAccount(), PaymentPolicyEnum.PAYMENT_IMMEDIATE,
-                new DistConstantDuration(Duration.ZERO));
+        new InvoiceHandler(getFinancingRole(), PaymentPolicyEnum.PAYMENT_IMMEDIATE, new DistConstantDuration(Duration.ZERO));
         //
-        // hopefully, PCShop will get laptop shipments, put them in stock
-        ShipmentHandler shipmentHandler = new ShipmentHandlerStock(this, getInventory());
+        // hopefully, PCShop will get computer shipments
+        new TransportDeliveryHandlerStock(getReceivingRole());
+        new InventoryEntryHandler(getWarehousingRole())
+        
+        
         //
         // add the Handlers to the purchasing role for PCShop
         PurchasingRoleSearch purchasingRole = new PurchasingRoleSearch(this, getSimulator(), demandHandler, quoteHandler,

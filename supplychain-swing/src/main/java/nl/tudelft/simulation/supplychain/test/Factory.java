@@ -27,7 +27,6 @@ import nl.tudelft.simulation.supplychain.role.selling.SellingRoleRFQ;
 import nl.tudelft.simulation.supplychain.role.selling.handler.OrderHandlerStock;
 import nl.tudelft.simulation.supplychain.role.selling.handler.RequestForQuoteHandler;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportMode;
-import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
 import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
 /**

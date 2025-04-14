@@ -2,108 +2,73 @@ package nl.tudelft.simulation.supplychain.test;
 
 import java.rmi.RemoteException;
 
-import javax.naming.NamingException;
-
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
-import org.djutils.draw.bounds.Bounds2d;
+import org.djutils.event.Event;
+import org.djutils.event.EventListener;
 import org.djutils.logger.CategoryLogger;
 import org.pmw.tinylog.Level;
 
-import nl.tudelft.simulation.dsol.SimRuntimeException;
 import nl.tudelft.simulation.dsol.experiment.Replication;
 import nl.tudelft.simulation.dsol.experiment.SingleReplication;
-import nl.tudelft.simulation.dsol.swing.gui.ConsoleLogger;
-import nl.tudelft.simulation.dsol.swing.gui.ConsoleOutput;
-import nl.tudelft.simulation.dsol.swing.gui.DsolPanel;
-import nl.tudelft.simulation.dsol.swing.gui.TablePanel;
-import nl.tudelft.simulation.dsol.swing.gui.animation.DsolAnimationApplication;
-import nl.tudelft.simulation.language.DsolException;
-import nl.tudelft.simulation.supplychain.dsol.SupplyChainAnimator;
-import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.gui.plot.BankPlot;
-import nl.tudelft.simulation.supplychain.gui.plot.StockPlot;
+import nl.tudelft.simulation.supplychain.actor.Actor;
+import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulator;
 
 /**
- * TestModelApp.java.
+ * Test application of Supply Chain test model.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class TestModelApp extends DsolAnimationApplication
+public class TestModelApp implements EventListener
 {
     /** */
-    private static final long serialVersionUID = 20221201L;
+    private static final long serialVersionUID = 1L;
 
     /** the model. */
-    private final TestModel model;
-
-    /**
-     * @param title
-     * @param panel
-     * @param model
-     * @throws DsolException
-     * @throws IllegalArgumentException
-     * @throws RemoteException
-     */
-    public TestModelApp(final String title, final DsolPanel panel, final TestModel model)
-            throws RemoteException, IllegalArgumentException, DsolException
+    private TestModel model;
+    
+    /** Make and start a simulation. */
+    public TestModelApp()
     {
-        super(panel, title, new Bounds2d(-100, 300, 50, 250));
-        this.model = model;
-        panel.enableSimulationControlButtons();
-        addTabs();
-        panel.getTabbedPane().setSelectedIndex(0);
-    }
-
-    private void addTabs()
-    {
-        TablePanel charts = new TablePanel(3, 2);
-        getDsolPanel().addTab("statistics", charts);
-        getDsolPanel().getTabbedPane().setSelectedIndex(1);
-        SupplyChainSimulatorInterface devsSimulator = this.model.getSimulator();
-
-        BankPlot fb = new BankPlot(this.model, "Factory Bank balance", this.model.factory);
-        charts.setCell(fb.getSwingPanel(), 0, 0);
-
-        BankPlot pb = new BankPlot(this.model, "PCShop Bank balance", this.model.pcShop);
-        charts.setCell(pb.getSwingPanel(), 1, 0);
-
-        BankPlot cb = new BankPlot(this.model, "Client Bank balance", this.model.client);
-        charts.setCell(cb.getSwingPanel(), 2, 0);
-
-        StockPlot fs = new StockPlot(this.model, "Factory stock Laptop", this.model.factory, this.model.laptop);
-        charts.setCell(fs.getSwingPanel(), 0, 1);
-
-        StockPlot ps = new StockPlot(this.model, "PCShop stock Laptop", this.model.pcShop, this.model.laptop);
-        charts.setCell(ps.getSwingPanel(), 1, 1);
+        var simulator = new SupplyChainSimulator("MTSMTO", Time.ZERO);
+        this.model = new TestModel(simulator);
+        subscribeToMessages();
+        Replication<Duration> replication =
+                new SingleReplication<Duration>("rep1", Duration.ZERO, Duration.ZERO, new Duration(1800.0, DurationUnit.HOUR));
+        simulator.initialize(this.model, replication);
+        simulator.start();
     }
 
     /**
-     * @param args args
-     * @throws RemoteException if error
-     * @throws SimRuntimeException if error
-     * @throws NamingException if error
-     * @throws DsolException on dsol error
+     * Subscribe to messages and print them.
      */
-    public static void main(final String[] args) throws SimRuntimeException, NamingException, RemoteException, DsolException
+    private void subscribeToMessages()
+    {
+        this.model.client.addListener(this, Actor.SEND_CONTENT_EVENT);
+        this.model.factory.addListener(this, Actor.SEND_CONTENT_EVENT);
+        this.model.pcShop.addListener(this, Actor.SEND_CONTENT_EVENT);
+        this.model.bank.addListener(this, Actor.SEND_CONTENT_EVENT);
+    }
+    
+    /**
+     * Test application of Supply Chain test model.
+     * @param args not used
+     * @throws Exception on dsol error
+     */
+    public static void main(final String[] args) throws Exception
     {
         CategoryLogger.setAllLogLevel(Level.INFO);
         CategoryLogger.setAllLogMessageFormat("{level} - {class_name}.{method}:{line}  {message}");
+        new TestModelApp();
+    }
 
-        SupplyChainAnimator animator = new SupplyChainAnimator("MTSMTO", Time.ZERO);
-        animator.setSpeedFactor(3600.0);
-        TestModel model = new TestModel(animator);
-        Replication<Duration> replication =
-                new SingleReplication<Duration>("rep1", Duration.ZERO, Duration.ZERO, new Duration(1800.0, DurationUnit.HOUR));
-        animator.initialize(model, replication);
-        DsolPanel panel = new DsolPanel(new DsolControlPanel(model, animator));
-        panel.addTab("logger", new ConsoleLogger(Level.INFO));
-        panel.addTab("console", new ConsoleOutput());
-        new TestModelApp("TestModelApp", panel, model);
+    @Override
+    public void notify(final Event event) throws RemoteException
+    {
     }
 
 }
