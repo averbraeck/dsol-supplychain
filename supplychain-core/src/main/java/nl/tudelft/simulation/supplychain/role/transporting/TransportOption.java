@@ -35,7 +35,7 @@ public class TransportOption implements Identifiable, Serializable
 
     /** the id of the TransportOption. */
     private final String id;
-    
+
     /** the transporting organization. */
     private final TransportingActor transportingActor;
 
@@ -47,7 +47,6 @@ public class TransportOption implements Identifiable, Serializable
 
     /** the sequence of TransportSteps. */
     private ImmutableList<TransportOptionStep> transportSteps = new ImmutableArrayList<>(new ArrayList<>());
-
 
     /**
      * Make a new TransportOption.
@@ -100,7 +99,7 @@ public class TransportOption implements Identifiable, Serializable
     }
 
     /**
-     * Return the  total transport distance from sender to receiver.
+     * Return the total transport distance from sender to receiver.
      * @return the total transport distance including transport and transloading
      */
     public Length totalTransportDistance()
@@ -112,7 +111,7 @@ public class TransportOption implements Identifiable, Serializable
         }
         return result;
     }
-    
+
     /**
      * Return the estimated total transport duration from sender to receiver.
      * @param sku the sku that needs to be transported

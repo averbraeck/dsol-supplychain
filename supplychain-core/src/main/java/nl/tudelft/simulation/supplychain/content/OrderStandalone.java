@@ -26,16 +26,22 @@ import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
  * @param product the ordered product
  * @param amount the amount of the product, in units for that product
  * @param price the price we want to pay for the product
- * @param transportOption the accepted transport option
+ * @param transportQuote the transport quote that the PURCHASER has obtained (the purchaser also pays the transporter)
  */
 public record OrderStandalone(PurchasingActor sender, SellingActor receiver, Time timestamp, long uniqueId, long groupingId,
-        Time deliveryDate, Product product, double amount, Money price, TransportOption transportOption) implements Order
+        Time deliveryDate, Product product, double amount, Money price, TransportQuote transportQuote) implements Order
 {
     public OrderStandalone(final PurchasingActor sender, final SellingActor receiver, final Time deliveryDate,
-            final Product product, final double amount, final Money price, final TransportOption transportOption)
+            final Product product, final double amount, final Money price, final TransportQuote transportQuote)
     {
         this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(),
-                sender.getModel().getUniqueContentId(), deliveryDate, product, amount, price, transportOption);
+                sender.getModel().getUniqueContentId(), deliveryDate, product, amount, price, transportQuote);
+    }
+
+    @Override
+    public TransportOption transportOption()
+    {
+        return transportQuote().transportOption();
     }
 
 }

@@ -15,7 +15,7 @@ import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
  * Copyright (c) 2025-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
- * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
+ * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>q
  * @param sender the sender of the quote
  * @param receiver the receiver of the quote
  * @param timestamp the absolute time when the message was created

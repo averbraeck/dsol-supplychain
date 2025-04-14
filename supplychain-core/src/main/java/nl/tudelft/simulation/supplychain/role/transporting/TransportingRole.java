@@ -33,7 +33,7 @@ public class TransportingRole extends Role<TransportingRole>
 
     /** the necessary autonomous processes. */
     private static Set<Class<? extends AutonomousProcess<TransportingRole>>> necessaryAutonomousProcesses = Set.of();
-
+    
     /**
      * Create a new Search role.
      * @param owner the actor that owns the Search role
