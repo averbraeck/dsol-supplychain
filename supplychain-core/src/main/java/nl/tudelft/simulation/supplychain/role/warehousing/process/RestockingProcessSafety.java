@@ -52,7 +52,7 @@ public class RestockingProcessSafety extends RestockingProcessFixed
         double inventoryLevel = getInventory().getActualAmount(getProduct()) + getInventory().getOrderedAmount(getProduct());
         if (isIncludeClaims())
         {
-            inventoryLevel -= getInventory().getClaimedAmount(getProduct());
+            inventoryLevel -= getInventory().getReservedAmount(getProduct());
         }
         if (inventoryLevel < this.safetyAmount)
         {

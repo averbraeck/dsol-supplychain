@@ -54,7 +54,7 @@ public class RestockingProcessOscillation extends RestockingProcessFixed
         double stockLevel = getInventory().getActualAmount(getProduct()) + getInventory().getOrderedAmount(getProduct());
         if (isIncludeClaims())
         {
-            stockLevel -= getInventory().getClaimedAmount(getProduct());
+            stockLevel -= getInventory().getReservedAmount(getProduct());
         }
         orderAmount = Math.max(0.0, getAmount() - stockLevel);
 

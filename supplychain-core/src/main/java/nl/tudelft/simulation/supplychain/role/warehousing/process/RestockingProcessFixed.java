@@ -63,7 +63,7 @@ public class RestockingProcessFixed extends RestockingProcess
                     getInventory().getActualAmount(getProduct()) + getInventory().getOrderedAmount(getProduct());
             if (this.includeClaims)
             {
-                inventoryLevel -= getInventory().getClaimedAmount(getProduct());
+                inventoryLevel -= getInventory().getReservedAmount(getProduct());
             }
             orderAmount = Math.max(0.0, this.amount - inventoryLevel);
         }
