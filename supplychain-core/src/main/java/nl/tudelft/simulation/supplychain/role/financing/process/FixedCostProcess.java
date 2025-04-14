@@ -93,7 +93,7 @@ public class FixedCostProcess extends AutonomousProcess<FinancingRole>
      */
     protected void bookFixedCost()
     {
-        getRole().getBank().withdrawFromBalance(getActor(), this.amount);
+        getRole().getBank().withdrawFromBalance(getRole().getActor(), this.amount);
         schedule();
     }
 

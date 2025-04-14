@@ -1,5 +1,6 @@
 package nl.tudelft.simulation.supplychain.role.banking;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -10,14 +11,15 @@ import org.djutils.exceptions.Throw;
 import org.djutils.metadata.MetaData;
 import org.djutils.metadata.ObjectDescriptor;
 
-import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 import nl.tudelft.simulation.supplychain.money.Money;
+import nl.tudelft.simulation.supplychain.money.MoneyUnit;
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 import nl.tudelft.simulation.supplychain.role.banking.process.InterestProcess;
+import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
 
 /**
  * The BankingRole maintains the interest rates for the Bank accounts. In this case, we have chosen to not make the Bank work
@@ -41,11 +43,12 @@ public class BankingRole extends Role<BankingRole>
     private double annualInterestRateNeg = -0.08;
 
     /** the balance of the actors. */
-    private final Map<Actor, Money> bankAccounts = new LinkedHashMap<>();
+    private final Map<FinancingActor, Money> bankAccounts = new LinkedHashMap<>();
 
     /** for who is interested, the BankAccount can send updates of changes. */
     public static final EventType BANK_ACCOUNT_CHANGED_EVENT = new EventType("BANK_ACCOUNT_CHANGED_EVENT",
-            new MetaData("account", "bank account", new ObjectDescriptor("balance", "bank balance", double.class)));
+            new MetaData("account", "bank account", new ObjectDescriptor("actor", "account holder", FinancingActor.class),
+                    new ObjectDescriptor("balance", "bank balance", double.class)));
 
     /** the necessary content handlers. */
     private static Set<Class<? extends Content>> necessaryContentHandlers = Collections.emptySet();
@@ -76,12 +79,16 @@ public class BankingRole extends Role<BankingRole>
     }
 
     /**
-     * Return the bank balance.
-     * @param actor the actor for which to request the balance
-     * @return the bank balance
+     * Get the bank balance and set up a bank account if none is available.
+     * @param actor the actor for which we need the bank account
+     * @return the balance or 0 if newly set up
      */
-    public Money getBalance(final Actor actor)
+    public Money getBalance(final FinancingActor actor)
     {
+        if (!this.bankAccounts.containsKey(actor))
+        {
+            this.bankAccounts.put(actor, new Money(0.0, MoneyUnit.USD));
+        }
         return this.bankAccounts.get(actor);
     }
 
@@ -90,9 +97,9 @@ public class BankingRole extends Role<BankingRole>
      * @param actor the actor for which to add money to the bank account
      * @param amount the amount of money to add
      */
-    public synchronized void addToBalance(final Actor actor, final Money amount)
+    public synchronized void addToBalance(final FinancingActor actor, final Money amount)
     {
-        Money newBalance = roundBalance(this.bankAccounts.get(actor).plus(amount));
+        Money newBalance = roundBalance(getBalance(actor).plus(amount));
         this.bankAccounts.put(actor, newBalance);
         sendBalanceUpdateEvent(actor, newBalance);
     }
@@ -102,9 +109,9 @@ public class BankingRole extends Role<BankingRole>
      * @param actor the actor for which to withdraw money from the bank account
      * @param amount the amount of money to withdraw
      */
-    public synchronized void withdrawFromBalance(final Actor actor, final Money amount)
+    public synchronized void withdrawFromBalance(final FinancingActor actor, final Money amount)
     {
-        Money newBalance = roundBalance(this.bankAccounts.get(actor).minus(amount));
+        Money newBalance = roundBalance(getBalance(actor).minus(amount));
         this.bankAccounts.put(actor, newBalance);
         sendBalanceUpdateEvent(actor, newBalance);
     }
@@ -114,9 +121,10 @@ public class BankingRole extends Role<BankingRole>
      * @param actor the actor whose balance has changed
      * @param newBalance the new balance of the bank account
      */
-    protected void sendBalanceUpdateEvent(final Actor actor, final Money newBalance)
+    protected void sendBalanceUpdateEvent(final FinancingActor actor, final Money newBalance)
     {
-        this.fireTimedEvent(BANK_ACCOUNT_CHANGED_EVENT, newBalance, getActor().getSimulatorTime());
+        this.fireTimedEvent(BANK_ACCOUNT_CHANGED_EVENT, new Serializable[] {getActor(), newBalance},
+                getActor().getSimulatorTime());
     }
 
     /**
@@ -171,7 +179,7 @@ public class BankingRole extends Role<BankingRole>
      * Return the bank accounts per actor with their balance.
      * @return the bank accounts per actor with their balance
      */
-    public Map<Actor, Money> getBankAccounts()
+    public Map<FinancingActor, Money> getBankAccounts()
     {
         return this.bankAccounts;
     }

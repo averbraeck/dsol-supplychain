@@ -10,9 +10,10 @@ import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.Invoice;
 import nl.tudelft.simulation.supplychain.content.Payment;
-import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
+import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
+import nl.tudelft.simulation.supplychain.role.banking.BankingActor;
 import nl.tudelft.simulation.supplychain.role.banking.BankingRole;
 import nl.tudelft.simulation.supplychain.role.financing.process.FixedCostProcess;
 
@@ -44,16 +45,15 @@ public class FinancingRole extends Role<FinancingRole>
 
     /**
      * Create a new FinancingRole with an attached BankAccount.
-     * @param id the id of the role
      * @param owner the actor that has this role
-     * @param messageReceiver the message handler to use for processing the messages
      * @param bank the that holds the account of this organization
+     * @param initialBalance the initial bank balance
      */
-    public FinancingRole(final String id, final FinancingActor owner, final ContentReceiver messageReceiver,
-            final BankingRole bank)
+    public FinancingRole(final FinancingActor owner, final BankingActor bank, final Money initialBalance)
     {
-        super("financing", owner, messageReceiver);
-        this.bank = bank;
+        super("financing", owner, new ContentReceiverDirect());
+        this.bank = bank.getBankingRole();
+        this.bank.addToBalance(getActor(), initialBalance);
     }
 
     /**

@@ -4,11 +4,18 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
+import nl.tudelft.simulation.supplychain.content.Content;
+import nl.tudelft.simulation.supplychain.content.InventoryEntry;
+import nl.tudelft.simulation.supplychain.content.InventoryQuoteRequest;
+import nl.tudelft.simulation.supplychain.content.InventoryReleaseRequest;
+import nl.tudelft.simulation.supplychain.content.InventoryReservationRequest;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
+import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.product.ProductAmount;
 import nl.tudelft.simulation.supplychain.role.warehousing.process.RestockingProcess;
@@ -22,7 +29,7 @@ import nl.tudelft.simulation.supplychain.role.warehousing.process.RestockingProc
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public abstract class WarehousingRole extends Role<WarehousingRole>
+public class WarehousingRole extends Role<WarehousingRole>
 {
     /** */
     private static final long serialVersionUID = 20221206L;
@@ -30,9 +37,16 @@ public abstract class WarehousingRole extends Role<WarehousingRole>
     /** the inventory with products. */
     private final Inventory inventory;
 
-    /** the restocking processes per product. */
+    /** TODO: integrate the restocking processes per product as autonomous processes. */
     private final Map<Product, RestockingProcess> restockingProcesses = new LinkedHashMap<>();
-    
+
+    /** the necessary autonomous processes. */
+    private static Set<Class<? extends AutonomousProcess<WarehousingRole>>> necessaryAutonomousProcesses = Set.of();
+
+    /** the necessary content handlers. */
+    private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of(InventoryQuoteRequest.class,
+            InventoryReservationRequest.class, InventoryReleaseRequest.class, InventoryEntry.class);
+
     /**
      * Create an InventoryRole object for an actor, with an empty inventory.
      * @param owner the owner of this role
@@ -71,7 +85,10 @@ public abstract class WarehousingRole extends Role<WarehousingRole>
      * Implement to check whether the inventory is below some level, might trigger ordering of extra amount of the product.
      * @param product the product to check the inventory for.
      */
-    public abstract void checkInventory(Product product);
+    public void checkInventory(final Product product)
+    {
+        // TODO decide what to do here
+    }
 
     /**
      * @return the raw materials
@@ -95,11 +112,22 @@ public abstract class WarehousingRole extends Role<WarehousingRole>
         return this.inventory;
     }
 
-
     @Override
     public WarehousingActor getActor()
     {
         return (WarehousingActor) super.getActor();
+    }
+
+    @Override
+    protected Set<Class<? extends AutonomousProcess<WarehousingRole>>> getNecessaryAutonomousProcesses()
+    {
+        return necessaryAutonomousProcesses;
+    }
+
+    @Override
+    protected Set<Class<? extends Content>> getNecessaryContentHandlers()
+    {
+        return necessaryContentHandlers;
     }
 
 }
