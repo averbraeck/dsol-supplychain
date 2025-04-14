@@ -8,12 +8,9 @@ import java.util.Objects;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djutils.draw.bounds.Bounds2d;
 import org.djutils.draw.point.Point2d;
-import org.djutils.event.EventType;
 import org.djutils.event.LocalEventProducer;
 import org.djutils.exceptions.Throw;
 import org.djutils.logger.CategoryLogger;
-import org.djutils.metadata.MetaData;
-import org.djutils.metadata.ObjectDescriptor;
 
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
@@ -57,10 +54,6 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
 
     /** the geographical details of the actor. */
     private Geography geography;
-
-    /** the event to indicate that information has been sent. E.g., for animation. */
-    public static final EventType SEND_CONTENT_EVENT = new EventType("SEND_CONTENT_EVENT",
-            new MetaData("sent content", "sent content", new ObjectDescriptor("content", "content", Content.class)));
 
     /**
      * Construct a new Actor, give it a message store, and register it in the model.
