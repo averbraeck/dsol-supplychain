@@ -20,7 +20,7 @@ import nl.tudelft.simulation.supplychain.animation.ContentAnimator;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainAnimator;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModel;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.message.store.trade.LeanTradeMessageStore;
+import nl.tudelft.simulation.supplychain.message.store.trade.LeanContentStore;
 import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.money.MoneyUnit;
@@ -95,16 +95,16 @@ public class TestModel extends SupplyChainModel
 
             // create a manufacturer
             this.factory = new Factory("Factory", "Factory", this, new Point2d(200, 200), "", ing,
-                    new Money(50000.0, MoneyUnit.USD), new LeanTradeMessageStore(this.devsSimulator), this.laptop, 1000);
+                    new Money(50000.0, MoneyUnit.USD), new LeanContentStore(this.devsSimulator), this.laptop, 1000);
 
             // create a retailer
             this.pcShop = new PCShop("PCshop", "PCshop", this, new Point2d(20, 200), "", ing,
-                    new Money(50000.0, MoneyUnit.USD), new LeanTradeMessageStore(this.devsSimulator), this.laptop, 10,
+                    new Money(50000.0, MoneyUnit.USD), new LeanContentStore(this.devsSimulator), this.laptop, 10,
                     this.factory);
 
             // create a customer
             this.client = new Client("Client", "Client", this, new Point2d(100, 100), "", ing,
-                    new Money(1500000.0, MoneyUnit.USD), new LeanTradeMessageStore(this.devsSimulator), this.laptop,
+                    new Money(1500000.0, MoneyUnit.USD), new LeanContentStore(this.devsSimulator), this.laptop,
                     this.pcShop);
 
             // schedule a remark that the simulation is ready

@@ -11,8 +11,8 @@ import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.dsol.animation.Locatable;
 import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
+import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.message.trade.TradeMessage;
 
 /**
  * This class implements the animation of the content of a message that is sent from one Actor to another Actor. Actually, the
@@ -39,7 +39,7 @@ public class ContentAnimation implements Locatable, Serializable
     private LinearInterpolation2d linearInterpolation = null;
 
     /** the content of the source. */
-    private TradeMessage content = null;
+    private Content content = null;
 
     /** the name of the url for the image. */
     private String imageURLlName = null;
@@ -56,7 +56,7 @@ public class ContentAnimation implements Locatable, Serializable
      * @param content the Content that should be animated
      * @param delay the time to go from sender to receiver
      */
-    public ContentAnimation(final TradeMessage content, final Duration delay)
+    public ContentAnimation(final Content content, final Duration delay)
     {
         this(content, delay,
                 content.getClass().getName().substring(content.getClass().getPackage().getName().length() + 1) + ".gif");
@@ -69,9 +69,9 @@ public class ContentAnimation implements Locatable, Serializable
      * @param delay the time to go from sender to receiver
      * @param imageName the filename and extension of the picture
      */
-    public ContentAnimation(final TradeMessage content, final Duration delay, final String imageName)
+    public ContentAnimation(final Content content, final Duration delay, final String imageName)
     {
-        this(content, delay, TradeMessage.class.getResource("/nl/tudelft/simulation/supplychain/images/" + imageName));
+        this(content, delay, Content.class.getResource("/nl/tudelft/simulation/supplychain/images/" + imageName));
     }
 
     /**
@@ -80,7 +80,7 @@ public class ContentAnimation implements Locatable, Serializable
      * @param delay the time to go from sender to receiver
      * @param imageURL the URL of the picture to display
      */
-    public ContentAnimation(final TradeMessage content, final Duration delay, final URL imageURL)
+    public ContentAnimation(final Content content, final Duration delay, final URL imageURL)
     {
         try
         {
@@ -94,12 +94,12 @@ public class ContentAnimation implements Locatable, Serializable
             this.delay = delay;
 
             // We set the simulator
-            this.simulator = content.getSender().getSimulator();
+            this.simulator = content.sender().getSimulator();
 
             // We define its location
             this.linearInterpolation = new LinearInterpolation2d(this.simulator.getSimulatorTime().si,
-                    this.simulator.getSimulatorTime().si + delay.si, content.getSender().getLocation(),
-                    content.getReceiver().getLocation());
+                    this.simulator.getSimulatorTime().si + delay.si, content.sender().getLocation(),
+                    content.receiver().getLocation());
 
             // We load the image
             this.imageRenderable = new SingleImageRenderable<ContentAnimation>(this, this.simulator, imageURL);
@@ -144,7 +144,7 @@ public class ContentAnimation implements Locatable, Serializable
     /**
      * @return the content.
      */
-    public TradeMessage getContent()
+    public Content getContent()
     {
         return this.content;
     }

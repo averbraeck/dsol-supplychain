@@ -8,12 +8,12 @@ import org.djutils.event.EventListener;
 
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.supplychain.actor.Actor;
+import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.message.trade.TradeMessage;
 
 /**
- * ContentAnimator.java. <br>
- * <br>
+ * ContentAnimator.
+ * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
@@ -43,18 +43,18 @@ public class ContentAnimator implements EventListener
      */
     public void subscribe(final Actor sca) throws RemoteException
     {
-        sca.addListener(this, Actor.SEND_MESSAGE_EVENT);
+        sca.addListener(this, Actor.SEND_CONTENT_EVENT);
     }
 
     @Override
     public void notify(final Event event) throws RemoteException
     {
-        if (event.getType().equals(Actor.SEND_MESSAGE_EVENT))
+        if (event.getType().equals(Actor.SEND_CONTENT_EVENT))
         {
             if (this.simulator instanceof AnimatorInterface)
             {
                 Object[] content = (Object[]) event.getContent();
-                new ContentAnimation((TradeMessage) content[0], (Duration) content[1]);
+                new ContentAnimation((Content) content[0], (Duration) content[1]);
             }
         }
     }

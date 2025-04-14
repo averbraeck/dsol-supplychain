@@ -63,8 +63,7 @@ public class LinearInterpolation2d
         double fraction = (time - this.startTime) / (this.endTime - this.startTime);
         double x = this.origin.getX() + (this.destination.getX() - this.origin.getX()) * fraction;
         double y = this.origin.getY() + (this.destination.getY() - this.origin.getY()) * fraction;
-        double rotZ = this.origin.getDirZ() + (this.destination.getDirZ() - this.origin.getDirZ()) * fraction;
-        return new Point2d(x, y, rotZ);
+        return new Point2d(x, y);
     }
 
 }
