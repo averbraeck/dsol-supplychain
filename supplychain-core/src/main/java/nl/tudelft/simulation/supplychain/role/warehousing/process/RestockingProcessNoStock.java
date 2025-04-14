@@ -5,7 +5,6 @@ import org.djunits.value.vdouble.scalar.Duration;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
-import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
 /**
  * RestockingProcessNoStock is an autonomous process that indicates that restocking will not take place.
@@ -28,7 +27,7 @@ public class RestockingProcessNoStock extends RestockingProcessFixed
      */
     public RestockingProcessNoStock(final WarehousingRole role, final Inventory inventory, final Product product)
     {
-        super(role, inventory, product, new DistConstantDuration(Duration.POS_MAXVALUE), false, 0.0, false, Duration.ZERO);
+        super(role, inventory, product, Duration.POS_MAXVALUE, false, 0.0, false, Duration.ZERO);
     }
 
 }

@@ -5,7 +5,6 @@ import java.io.Serializable;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.pmw.tinylog.Logger;
 
-import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
@@ -33,8 +32,8 @@ public abstract class RestockingProcess extends AutonomousProcess<WarehousingRol
     /** the product that has to be restocked. */
     private Product product;
 
-    /** the frequency distribution for restocking or checking the inventory levels. */
-    private DistContinuousDuration checkInterval;
+    /** the interval time for restocking or checking the inventory levels. */
+    private Duration checkInterval;
 
     /** the maximum delivery time. */
     private Duration maxDeliveryDuration = Duration.ZERO;
@@ -48,7 +47,7 @@ public abstract class RestockingProcess extends AutonomousProcess<WarehousingRol
      * @param maxDeliveryDuration the maximum delivery time to use
      */
     public RestockingProcess(final WarehousingRole role, final Inventory inventory, final Product product,
-            final DistContinuousDuration checkInterval, final Duration maxDeliveryDuration)
+            final Duration checkInterval, final Duration maxDeliveryDuration)
     {
         super(role);
         this.inventory = inventory;
@@ -57,7 +56,7 @@ public abstract class RestockingProcess extends AutonomousProcess<WarehousingRol
         this.maxDeliveryDuration = maxDeliveryDuration;
         try
         {
-            getSimulator().scheduleEventRel(checkInterval.draw(), this, "checkLoop", new Serializable[] {});
+            getSimulator().scheduleEventRel(checkInterval, this, "checkLoop", new Serializable[] {});
         }
         catch (Exception e)
         {
@@ -73,7 +72,7 @@ public abstract class RestockingProcess extends AutonomousProcess<WarehousingRol
         checkInventoryLevel();
         try
         {
-            getSimulator().scheduleEventRel(this.checkInterval.draw(), this, "checkLoop", new Serializable[] {});
+            getSimulator().scheduleEventRel(this.checkInterval, this, "checkLoop", new Serializable[] {});
         }
         catch (Exception e)
         {
@@ -117,10 +116,10 @@ public abstract class RestockingProcess extends AutonomousProcess<WarehousingRol
     }
 
     /**
-     * Return the frequency distribution for restocking or checking the inventory levels.
-     * @return the frequency distribution for restocking or checking the inventory levels
+     * Return the interval time for restocking or checking the inventory levels.
+     * @return the interval time for restocking or checking the inventory levels
      */
-    protected DistContinuousDuration getCheckInterval()
+    protected Duration getCheckInterval()
     {
         return this.checkInterval;
     }

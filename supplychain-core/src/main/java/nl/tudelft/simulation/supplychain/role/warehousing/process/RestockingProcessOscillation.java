@@ -2,7 +2,6 @@ package nl.tudelft.simulation.supplychain.role.warehousing.process;
 
 import org.djunits.value.vdouble.scalar.Duration;
 
-import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
@@ -30,7 +29,7 @@ public class RestockingProcessOscillation extends RestockingProcessFixed
      * @param role the warehousing role to which the restocking process belongs
      * @param inventory the inventory for which the service holds
      * @param product the product that has to be restocked
-     * @param frequency the frequency distribution for restocking
+     * @param checkInterval the interval time for restocking
      * @param ceiling fixed ceiling (true) or fixed amount (false)
      * @param amount the amount with which or to which stock is supplemented
      * @param includeClaims whether to include the claims in the stock or not
@@ -39,10 +38,10 @@ public class RestockingProcessOscillation extends RestockingProcessFixed
      */
     @SuppressWarnings("checkstyle:parameternumber")
     public RestockingProcessOscillation(final WarehousingRole role, final Inventory inventory, final Product product,
-            final DistContinuousDuration frequency, final boolean ceiling, final double amount, final boolean includeClaims,
+            final Duration checkInterval, final boolean ceiling, final double amount, final boolean includeClaims,
             final double overReactionMargin, final Duration maxDeliveryTime)
     {
-        super(role, inventory, product, frequency, ceiling, amount, includeClaims, maxDeliveryTime);
+        super(role, inventory, product, checkInterval, ceiling, amount, includeClaims, maxDeliveryTime);
         this.oscillationMargin = overReactionMargin;
     }
 
