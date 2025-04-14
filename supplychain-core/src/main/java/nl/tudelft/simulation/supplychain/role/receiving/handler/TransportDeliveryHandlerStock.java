@@ -13,7 +13,7 @@ import nl.tudelft.simulation.supplychain.role.receiving.ReceivingRole;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public abstract class TransportDeliveryHandlerStock extends ContentHandler<TransportDelivery, ReceivingRole>
+public class TransportDeliveryHandlerStock extends ContentHandler<TransportDelivery, ReceivingRole>
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
