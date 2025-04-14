@@ -17,6 +17,7 @@ import nl.tudelft.simulation.supplychain.actor.Geography;
 import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.money.Money;
+import nl.tudelft.simulation.supplychain.money.MoneyUnit;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Bank;
 import nl.tudelft.simulation.supplychain.reference.Retailer;
@@ -27,6 +28,7 @@ import nl.tudelft.simulation.supplychain.role.financing.handler.InventoryRelease
 import nl.tudelft.simulation.supplychain.role.financing.handler.InvoiceHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentPolicyEnum;
+import nl.tudelft.simulation.supplychain.role.financing.process.FixedCostProcess;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleRFQ;
 import nl.tudelft.simulation.supplychain.role.purchasing.handler.DemandHandlerRFQ;
 import nl.tudelft.simulation.supplychain.role.purchasing.handler.OrderConfirmationHandler;
@@ -106,7 +108,7 @@ public class PCShop extends Retailer
         getInventory().addToInventory(product, amount, product.getUnitMarketPrice().multiplyBy(amount));
 
         init();
-        
+
         if (getSimulator() instanceof AnimatorInterface)
         {
             new SingleImageRenderable<>(this, getSimulator(),
@@ -139,27 +141,29 @@ public class PCShop extends Retailer
         new ShippingOrderHandler(getShippingRole());
         //
         // hopefully, the PCShop will get payments in the end
-        PaymentHandler paymentHandler = new PaymentHandler(getFinancingRole());
+        new PaymentHandler(getFinancingRole());
+        new FixedCostProcess(getFinancingRole(), "no fixed costs", new Duration(1, DurationUnit.WEEK),
+                new Money(0.0, MoneyUnit.USD));
         //
         // After a while, the PC Shop needs to restock and order
         // do this for every product we have initially in stock
         for (Product product : getInventory().getProducts())
         {
-            new RestockingProcessSafety(getWarehousingRole(), getInventory(), product, new Duration(24.0, DurationUnit.HOUR), false, 5.0, true, 10.0,
-                    new Duration(14.0, DurationUnit.DAY));
+            new RestockingProcessSafety(getWarehousingRole(), getInventory(), product, new Duration(24.0, DurationUnit.HOUR),
+                    false, 5.0, true, 10.0, new Duration(14.0, days));
             // order 100 PCs when actual+reserved < 100
         }
-        
+
         //
         // BUY PRODUCTS WHEN THERE IS INTERNAL DEMAND
         //
-        
+
         // tell PCShop to use the DemandHandler for all products
         DemandHandlerRFQ demandHandler = new DemandHandlerRFQ(getPurchasingRole(), new Duration(1.0, hours));
         TransportPreference transportPreference = new TransportPreference(new ArrayList<>(), CostTimeImportance.COST);
         for (Product product : getInventory().getProducts())
         {
-        demandHandler.addSupplier(product, this.supplier, transportPreference);
+            demandHandler.addSupplier(product, this.supplier, transportPreference);
         }
         //
         // tell PCShop to use the QuoteHandler to handle quotes
@@ -179,7 +183,7 @@ public class PCShop extends Retailer
         //
         // CHARTS
         //
-        
+
         if (getSimulator() instanceof AnimatorInterface)
         {
             XYChart bankChart = new XYChart(getSimulator(), "BankAccount " + getName());

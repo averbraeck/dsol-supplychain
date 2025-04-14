@@ -1,6 +1,7 @@
 package nl.tudelft.simulation.supplychain.test;
 
 import java.io.Serializable;
+import java.rmi.RemoteException;
 
 import org.djunits.unit.DurationUnit;
 import org.djunits.unit.MassUnit;
@@ -13,9 +14,12 @@ import org.djutils.draw.bounds.Bounds3d;
 import org.djutils.draw.point.OrientedPoint3d;
 import org.djutils.draw.point.Point;
 import org.djutils.draw.point.Point2d;
+import org.djutils.event.Event;
+import org.djutils.event.EventListener;
 
 import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
+import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.actor.Geography;
 import nl.tudelft.simulation.supplychain.animation.ContentAnimator;
 import nl.tudelft.simulation.supplychain.content.store.ContentStoreFull;
@@ -26,6 +30,8 @@ import nl.tudelft.simulation.supplychain.money.MoneyUnit;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.product.Sku;
 import nl.tudelft.simulation.supplychain.reference.Bank;
+import nl.tudelft.simulation.supplychain.role.banking.BankingRole;
+import nl.tudelft.simulation.supplychain.role.banking.process.InterestProcess;
 
 /**
  * The TestModel for the supplychain package.
@@ -35,7 +41,7 @@ import nl.tudelft.simulation.supplychain.reference.Bank;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class TestModel extends SupplyChainModel
+public class TestModel extends SupplyChainModel implements EventListener
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
@@ -50,16 +56,16 @@ public class TestModel extends SupplyChainModel
     Product laptop;
 
     /** */
-    Factory factory;
+    private Factory factory;
 
     /** */
-    PCShop pcShop;
+    private PCShop pcShop;
 
     /** */
-    Client client;
+    private Client client;
 
     /** */
-    Bank bank;
+    private Bank bank;
 
     /**
      * constructs a new TestModel.
@@ -89,8 +95,12 @@ public class TestModel extends SupplyChainModel
 
             // create the bank
             this.bank = new Bank("ING", "ING", this, new Point2d(0, 0), "ING", "Europe");
-            this.bank.getBankingRole().setAnnualInterestRateNeg(0.080);
+            this.bank.setBankingRole(new BankingRole("ing", this.bank));
+            new InterestProcess(this.bank.getBankingRole());
+            this.bank.getBankingRole().setAnnualInterestRateNeg(-0.080);
             this.bank.getBankingRole().setAnnualInterestRatePos(0.025);
+            String s = this.bank.checkRolesComplete();
+            System.err.println("BANK - " + s);
 
             // create a product
             this.laptop = new Product(this, "Laptop", Sku.PIECE, new Money(1400.0, MoneyUnit.USD),
@@ -98,23 +108,31 @@ public class TestModel extends SupplyChainModel
 
             // create a manufacturer
             Geography factoryGeography = new Geography(new Point2d(200, 200), "Delft", "Europe");
-            this.factory = new Factory("Factory", "Factory", this, factoryGeography, this.bank,
+            this.factory = new Factory("factory", "Factory", this, factoryGeography, this.bank,
                     new Money(50000.0, MoneyUnit.USD), new ContentStoreFull(), this.laptop, 1000);
+            s = this.factory.checkRolesComplete();
+            System.err.println("FACTORY - " + s);
 
             // create a retailer
             Geography pcShopGeography = new Geography(new Point2d(20, 200), "Rotterdam", "Europe");
-            this.pcShop = new PCShop("PCshop", "PCshop", this, pcShopGeography, this.bank, new Money(50000.0, MoneyUnit.USD),
+            this.pcShop = new PCShop("pcShop", "PCshop", this, pcShopGeography, this.bank, new Money(50000.0, MoneyUnit.USD),
                     new ContentStoreFull(), this.laptop, 10, this.factory);
+            s = this.pcShop.checkRolesComplete();
+            System.err.println("PCSHOP -  " + s);
 
             // create a customer
             Geography clientGeography = new Geography(new Point2d(100, 100), "Amsterdam", "Europe");
-            this.client = new Client("Client", "Client", this, clientGeography, this.bank, new Money(1500000.0, MoneyUnit.USD),
+            this.client = new Client("client", "Client", this, clientGeography, this.bank, new Money(1500000.0, MoneyUnit.USD),
                     new ContentStoreFull(), this.laptop, this.pcShop);
+            s = this.client.checkRolesComplete();
+            System.err.println("CLIENT - " + s);
 
             // schedule a remark that the simulation is ready
             Duration endTime =
                     new Duration(this.simulator.getReplication().getRunLength().doubleValue() - 0.001, DurationUnit.SI);
             this.devsSimulator.scheduleEventRel(endTime, this, "endSimulation", new Serializable[] {});
+
+            subscribeToMessages();
 
             // Create the animation.
             if (this.simulator instanceof AnimatorInterface)
@@ -132,13 +150,24 @@ public class TestModel extends SupplyChainModel
     }
 
     /**
+     * Subscribe to messages and print them.
+     */
+    private void subscribeToMessages()
+    {
+        this.client.addListener(this, Actor.SEND_CONTENT_EVENT);
+        this.factory.addListener(this, Actor.SEND_CONTENT_EVENT);
+        this.pcShop.addListener(this, Actor.SEND_CONTENT_EVENT);
+        this.bank.addListener(this, Actor.SEND_CONTENT_EVENT);
+    }
+
+    /**
      * end of simulation -- display a message.
      */
     protected void endSimulation()
     {
-        System.err.println("End of TestModel replication");
-        System.err.println("Runtime = " + ((System.currentTimeMillis() - this.startTimeMs) / 1000) + " seconds.");
-        System.err.println("Simulation time = " + this.devsSimulator.getSimulatorTime());
+        System.out.println("End of TestModel replication");
+        System.out.println("Runtime = " + ((System.currentTimeMillis() - this.startTimeMs) / 1000) + " seconds.");
+        System.out.println("Simulation time = " + this.devsSimulator.getSimulatorTime());
     }
 
     @Override
@@ -149,4 +178,12 @@ public class TestModel extends SupplyChainModel
         return Length.instantiateSI(Math.sqrt(dx * dx + dy * dy));
     }
 
+    @Override
+    public void notify(final Event event) throws RemoteException
+    {
+        if (event.getType().equals(Actor.SEND_CONTENT_EVENT))
+        {
+            System.out.println(getSimulator().getSimulatorTime() + " - " + event.getContent().toString());
+        }
+    }
 }

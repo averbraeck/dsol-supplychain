@@ -4,6 +4,8 @@ import java.rmi.RemoteException;
 
 import javax.naming.NamingException;
 
+import org.djunits.unit.DurationUnit;
+import org.djunits.value.vdouble.scalar.Duration;
 import org.djutils.draw.bounds.Bounds2d;
 
 import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
@@ -14,14 +16,19 @@ import nl.tudelft.simulation.supplychain.actor.Geography;
 import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.money.Money;
+import nl.tudelft.simulation.supplychain.money.MoneyUnit;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Bank;
 import nl.tudelft.simulation.supplychain.reference.Supplier;
 import nl.tudelft.simulation.supplychain.role.directing.DirectingRoleSelling;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
 import nl.tudelft.simulation.supplychain.role.financing.handler.InventoryReleaseHandler;
+import nl.tudelft.simulation.supplychain.role.financing.handler.InvoiceHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentHandler;
+import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentPolicyEnum;
+import nl.tudelft.simulation.supplychain.role.financing.process.FixedCostProcess;
 import nl.tudelft.simulation.supplychain.role.receiving.ReceivingRole;
+import nl.tudelft.simulation.supplychain.role.receiving.handler.TransportDeliveryHandlerStock;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRoleRFQ;
 import nl.tudelft.simulation.supplychain.role.selling.handler.InventoryQuoteHandler;
 import nl.tudelft.simulation.supplychain.role.selling.handler.InventoryReservationHandler;
@@ -32,9 +39,11 @@ import nl.tudelft.simulation.supplychain.role.shipping.ShippingRole;
 import nl.tudelft.simulation.supplychain.role.shipping.handler.ShippingOrderHandler;
 import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
+import nl.tudelft.simulation.supplychain.role.warehousing.handler.InventoryEntryHandler;
 import nl.tudelft.simulation.supplychain.role.warehousing.handler.InventoryQuoteRequestHandler;
 import nl.tudelft.simulation.supplychain.role.warehousing.handler.InventoryReleaseRequestHandler;
 import nl.tudelft.simulation.supplychain.role.warehousing.handler.InventoryReservationRequestHandler;
+import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
 /**
  * The ComputerShop named Factory.
@@ -111,8 +120,15 @@ public class Factory extends Supplier
         new ShippingOrderHandler(getShippingRole());
         //
         // hopefully, the Factory will get payments in the end
+        new InvoiceHandler(getFinancingRole(), PaymentPolicyEnum.PAYMENT_ON_TIME, new DistConstantDuration(Duration.ZERO));
         new PaymentHandler(getFinancingRole());
+        new FixedCostProcess(getFinancingRole(), "no fixed costs", new Duration(1, DurationUnit.WEEK),
+                new Money(0.0, MoneyUnit.USD));
 
+        // Unnecessary handlers
+        new InventoryEntryHandler(getWarehousingRole());
+        new TransportDeliveryHandlerStock(getReceivingRole());
+        
         //
         // CHARTS
         //

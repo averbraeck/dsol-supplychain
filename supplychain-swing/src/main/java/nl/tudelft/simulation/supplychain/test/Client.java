@@ -20,6 +20,7 @@ import nl.tudelft.simulation.supplychain.actor.Geography;
 import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.money.Money;
+import nl.tudelft.simulation.supplychain.money.MoneyUnit;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Bank;
 import nl.tudelft.simulation.supplychain.reference.Customer;
@@ -28,7 +29,9 @@ import nl.tudelft.simulation.supplychain.role.consuming.ConsumingRole;
 import nl.tudelft.simulation.supplychain.role.consuming.process.DemandGeneratingProcess;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
 import nl.tudelft.simulation.supplychain.role.financing.handler.InvoiceHandler;
+import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentPolicyEnum;
+import nl.tudelft.simulation.supplychain.role.financing.process.FixedCostProcess;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleRFQ;
 import nl.tudelft.simulation.supplychain.role.purchasing.handler.DemandHandlerRFQ;
 import nl.tudelft.simulation.supplychain.role.purchasing.handler.OrderConfirmationHandler;
@@ -87,8 +90,6 @@ public class Client extends Customer
         setPurchasingRole(new PurchasingRoleRFQ(this));
         setConsumingRole(new ConsumingRole(this, new DistConstantDuration(Duration.ZERO)));
         setFinancingRole(new FinancingRole(this, bank, initialBalance));
-        setWarehousingRole(new WarehousingRole(this));
-        setShippingRole(new ShippingRole(this));
         setReceivingRole(new ReceivingRole(this));
 
         makeHandlers();
@@ -129,12 +130,19 @@ public class Client extends Customer
         //
         // Client will get a bill in the end
         new InvoiceHandler(getFinancingRole(), PaymentPolicyEnum.PAYMENT_IMMEDIATE, new DistConstantDuration(Duration.ZERO));
+        new FixedCostProcess(getFinancingRole(), "no fixed costs", new Duration(1, DurationUnit.WEEK),
+                new Money(0.0, MoneyUnit.USD));
         //
         // hopefully, Client will get computer shipments
         new TransportDeliveryHandlerConsume(getReceivingRole());
         //
+        // useless handlers
+        new PaymentHandler(getFinancingRole());
+        
+        //
         // CHARTS
         //
+        
         if (getSimulator() instanceof AnimatorInterface)
         {
             XYChart bankChart = new XYChart(getSimulator(), "BankAccount " + getName());

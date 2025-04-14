@@ -21,10 +21,13 @@ import nl.tudelft.simulation.dsol.swing.gui.TablePanel;
 import nl.tudelft.simulation.dsol.swing.gui.animation.DsolAnimationApplication;
 import nl.tudelft.simulation.dsol.swing.gui.control.DevsControlPanel;
 import nl.tudelft.simulation.language.DsolException;
+import nl.tudelft.simulation.supplychain.actor.ActorNotFoundException;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainAnimator;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.gui.plot.BankPlot;
 import nl.tudelft.simulation.supplychain.gui.plot.StockPlot;
+import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 
 /**
  * TestModelApp.java.
@@ -49,9 +52,10 @@ public class TestModelSwing extends DsolAnimationApplication
      * @throws DsolException
      * @throws IllegalArgumentException
      * @throws RemoteException
+     * @throws ActorNotFoundException 
      */
     public TestModelSwing(final String title, final DsolPanel panel, final TestModel model)
-            throws RemoteException, IllegalArgumentException, DsolException
+            throws RemoteException, IllegalArgumentException, DsolException, ActorNotFoundException
     {
         super(panel, title, new Bounds2d(-100, 300, 50, 250));
         this.model = model;
@@ -60,39 +64,36 @@ public class TestModelSwing extends DsolAnimationApplication
         panel.getTabbedPane().setSelectedIndex(0);
     }
 
-    private void addTabs()
+    private void addTabs() throws ActorNotFoundException
     {
         TablePanel charts = new TablePanel(3, 2);
         getDsolPanel().addTab("statistics", charts);
         getDsolPanel().getTabbedPane().setSelectedIndex(1);
         SupplyChainSimulatorInterface devsSimulator = this.model.getSimulator();
 
-        BankPlot fb = new BankPlot(this.model, "Factory Bank balance", this.model.factory);
+        BankPlot fb = new BankPlot(this.model, "Factory Bank balance", (FinancingActor) this.model.getActor("factory"));
         charts.setCell(fb.getSwingPanel(), 0, 0);
 
-        BankPlot pb = new BankPlot(this.model, "PCShop Bank balance", this.model.pcShop);
+        BankPlot pb = new BankPlot(this.model, "PCShop Bank balance", (FinancingActor) this.model.getActor("pcShop"));
         charts.setCell(pb.getSwingPanel(), 1, 0);
 
-        BankPlot cb = new BankPlot(this.model, "Client Bank balance", this.model.client);
+        BankPlot cb = new BankPlot(this.model, "Client Bank balance", (FinancingActor) this.model.getActor("client"));
         charts.setCell(cb.getSwingPanel(), 2, 0);
 
-        StockPlot fs = new StockPlot(this.model, "Factory stock Laptop", this.model.factory.getWarehousingRole().getInventory(),
-                this.model.laptop);
+        StockPlot fs = new StockPlot(this.model, "Factory stock Laptop",
+                ((WarehousingActor) this.model.getActor("factory")).getWarehousingRole().getInventory(), this.model.laptop);
         charts.setCell(fs.getSwingPanel(), 0, 1);
 
-        StockPlot ps = new StockPlot(this.model, "PCShop stock Laptop", this.model.pcShop.getWarehousingRole().getInventory(),
-                this.model.laptop);
+        StockPlot ps = new StockPlot(this.model, "PCShop stock Laptop",
+                ((WarehousingActor) this.model.getActor("pcShop")).getWarehousingRole().getInventory(), this.model.laptop);
         charts.setCell(ps.getSwingPanel(), 1, 1);
     }
 
     /**
-     * @param args args
-     * @throws RemoteException if error
-     * @throws SimRuntimeException if error
-     * @throws NamingException if error
-     * @throws DsolException on dsol error
+     * @param args not used
+     * @throws Exception on dsol error
      */
-    public static void main(final String[] args) throws SimRuntimeException, NamingException, RemoteException, DsolException
+    public static void main(final String[] args) throws Exception
     {
         CategoryLogger.setAllLogLevel(Level.INFO);
         CategoryLogger.setAllLogMessageFormat("{level} - {class_name}.{method}:{line}  {message}");
