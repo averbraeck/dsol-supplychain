@@ -32,6 +32,7 @@ end box
 
 activate CR1
 CR1 -> PR1: Demand
+deactivate CR1
   activate PR1
   PR1 -> SR2: SearchRequest
     activate SR2
@@ -83,9 +84,8 @@ CR1 -> PR1: Demand
       RR1 -> WR1: InventoryEntry\n & <back:yellow><b>Shipment</b>
         deactivate RR1
       activate WR1
-      WR1 -> CR1: Fulfillment
+      WR1 -> FR1: Fulfillment
       deactivate WR1
-  deactivate CR1
     FR4 -> FR3: TransportInvoice
     activate FR3
       FR3 -> FR3: wait <&clock>
