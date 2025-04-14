@@ -6,7 +6,7 @@ import org.djunits.value.vdouble.scalar.Duration;
 import nl.tudelft.simulation.supplychain.content.Invoice;
 import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.content.ShippingOrder;
-import nl.tudelft.simulation.supplychain.content.TransportPickup;
+import nl.tudelft.simulation.supplychain.content.TransportOrder;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.product.Shipment;
 import nl.tudelft.simulation.supplychain.role.shipping.ShippingRole;
@@ -53,7 +53,7 @@ public class ShippingOrderHandler extends ContentHandler<ShippingOrder, Shipping
         // The value of the cargo now includes the tarnsport cost and the profit margin of the seller.
         Shipment shipment =
                 new Shipment(getRole().getActor(), order.sender().getWarehousingRole().getActor(), order, order.price());
-        TransportPickup transportPickup = new TransportPickup(transportOption, shipment, order.groupingId());
+        TransportOrder transportPickup = new TransportOrder(transportOption, shipment, order.groupingId());
         sendContent(transportPickup, getHandlingTime().draw());
         return true;
     }

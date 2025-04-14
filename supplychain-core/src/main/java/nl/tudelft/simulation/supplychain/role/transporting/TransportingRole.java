@@ -6,7 +6,7 @@ import java.util.Set;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Content;
-import nl.tudelft.simulation.supplychain.content.TransportPickup;
+import nl.tudelft.simulation.supplychain.content.TransportOrder;
 import nl.tudelft.simulation.supplychain.content.TransportQuote;
 import nl.tudelft.simulation.supplychain.content.TransportQuoteRequest;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
@@ -29,7 +29,7 @@ public class TransportingRole extends Role<TransportingRole>
 
     /** the necessary content handlers. */
     private static Set<Class<? extends Content>> necessaryContentHandlers =
-            Set.of(TransportQuoteRequest.class, TransportPickup.class);
+            Set.of(TransportQuoteRequest.class, TransportOrder.class);
 
     /** the necessary autonomous processes. */
     private static Set<Class<? extends AutonomousProcess<TransportingRole>>> necessaryAutonomousProcesses = Set.of();

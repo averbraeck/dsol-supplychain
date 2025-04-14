@@ -23,10 +23,10 @@ import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
  * @param transportOption the transport quote that dictates the mode of transport
  * @param shipment the shipment that needs to be transported
  */
-public record TransportPickup(WarehousingActor sender, TransportingActor receiver, Time timestamp, long uniqueId,
+public record TransportOrder(WarehousingActor sender, TransportingActor receiver, Time timestamp, long uniqueId,
         long groupingId, TransportOption transportOption, Shipment shipment) implements GroupedContent, ProductContent
 {
-    public TransportPickup(final TransportOption transportOption, final Shipment shipment, final long groupingId)
+    public TransportOrder(final TransportOption transportOption, final Shipment shipment, final long groupingId)
     {
         this(transportOption.getPickupActor(), transportOption.getTransportingActor(),
                 transportOption.getPickupActor().getSimulatorTime(),
