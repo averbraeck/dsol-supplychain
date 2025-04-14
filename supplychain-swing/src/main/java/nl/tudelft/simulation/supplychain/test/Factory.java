@@ -6,7 +6,7 @@ import javax.naming.NamingException;
 
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
-import org.djutils.draw.bounds.Bounds3d;
+import org.djutils.draw.bounds.Bounds2d;
 import org.djutils.draw.point.Point2d;
 
 import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
@@ -16,15 +16,15 @@ import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.handler.order.OrderHandler;
-import nl.tudelft.simulation.supplychain.handler.order.OrderHandlerStock;
-import nl.tudelft.simulation.supplychain.handler.payment.PaymentHandler;
-import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.BankAccount;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.supplychain.reference.Bank;
 import nl.tudelft.simulation.supplychain.reference.Supplier;
+import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentHandler;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRoleRFQ;
+import nl.tudelft.simulation.supplychain.role.selling.handler.OrderHandlerStock;
 import nl.tudelft.simulation.supplychain.role.selling.handler.RequestForQuoteHandler;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportMode;
 import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
@@ -106,13 +106,8 @@ public class Factory extends Supplier
     }
 
     @Override
-    public Bounds3d getBounds()
+    public Bounds2d getBounds()
     {
-        return new Bounds3d(25.0, 25.0, 1.0);
-    }
-    
-    public Inventory getInventory()
-    {
-        return getInventoryRole().getInventory();
+        return new Bounds2d(25.0, 25.0);
     }
 }

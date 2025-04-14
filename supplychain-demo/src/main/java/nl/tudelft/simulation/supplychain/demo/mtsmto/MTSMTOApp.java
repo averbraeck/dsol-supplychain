@@ -16,9 +16,9 @@ import nl.tudelft.simulation.dsol.experiment.ReplicationInterface;
 import nl.tudelft.simulation.dsol.experiment.SingleReplication;
 import nl.tudelft.simulation.dsol.swing.gui.ConsoleLogger;
 import nl.tudelft.simulation.dsol.swing.gui.ConsoleOutput;
-import nl.tudelft.simulation.dsol.swing.gui.DSOLPanel;
+import nl.tudelft.simulation.dsol.swing.gui.DsolPanel;
 import nl.tudelft.simulation.dsol.swing.gui.animation.DSOLAnimationApplication;
-import nl.tudelft.simulation.language.DSOLException;
+import nl.tudelft.simulation.language.DsolException;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainAnimator;
 import nl.tudelft.simulation.supplychain.gui.SCControlPanel;
 
@@ -38,11 +38,11 @@ public class MTSMTOApp extends DSOLAnimationApplication
     /**
      * @param title
      * @param panel
-     * @throws DSOLException
+     * @throws DsolException
      * @throws IllegalArgumentException
      * @throws RemoteException
      */
-    public MTSMTOApp(final String title, final DSOLPanel panel) throws RemoteException, IllegalArgumentException, DSOLException
+    public MTSMTOApp(final String title, final DsolPanel panel) throws RemoteException, IllegalArgumentException, DsolException
     {
         super(panel, title, new Bounds2d(-400, 400, -300, 300));
         panel.enableSimulationControlButtons();
@@ -54,9 +54,9 @@ public class MTSMTOApp extends DSOLAnimationApplication
      * @throws RemoteException if error
      * @throws SimRuntimeException if error
      * @throws NamingException if error
-     * @throws DSOLException on dsol error
+     * @throws DsolException on dsol error
      */
-    public static void main(final String[] args) throws SimRuntimeException, NamingException, RemoteException, DSOLException
+    public static void main(final String[] args) throws SimRuntimeException, NamingException, RemoteException, DsolException
     {
         CategoryLogger.setAllLogLevel(Level.WARNING);
         CategoryLogger.setAllLogMessageFormat("{level} - {class_name}.{method}:{line}  {message}");
@@ -67,7 +67,7 @@ public class MTSMTOApp extends DSOLAnimationApplication
         ReplicationInterface<Duration> replication =
                 new SingleReplication<Duration>("rep1", Duration.ZERO, Duration.ZERO, new Duration(3000.0, DurationUnit.HOUR));
         animator.initialize(model, replication);
-        DSOLPanel panel = new DSOLPanel(new SCControlPanel(model, animator));
+        DsolPanel panel = new DsolPanel(new SCControlPanel(model, animator));
         panel.addTab("logger", new ConsoleLogger(Level.INFO));
         panel.addTab("console", new ConsoleOutput());
         new MTSMTOApp("MTSMTO", panel);

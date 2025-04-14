@@ -127,7 +127,7 @@ public class ContentAnimation implements Locatable, Serializable
     }
 
     @Override
-    public Bounds3d getBounds() throws RemoteException
+    public Bounds2d getBounds() throws RemoteException
     {
         // determines the size on the screen (!)
         return new Bounds3d(10, 10, 2.0);

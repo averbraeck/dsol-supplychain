@@ -109,18 +109,17 @@ public class StockPlot extends XYChart
             stock.addListener(this, Inventory.INVENTORY_CHANGE_EVENT);
         }
 
-    
         @Override
         public void notify(final Event event) throws RemoteException
         {
             InventoryUpdateData data = (InventoryUpdateData) event.getContent();
-            if (!data.getProductName().equals(this.product.getName()))
+            if (!data.productName().equals(this.product.getName()))
                 return;
-            fireEvent(new TimedEvent<Double>(STOCK_ACTUAL_CHANGE_EVENT, data.getActualAmount(),
+            fireEvent(new TimedEvent<Double>(STOCK_ACTUAL_CHANGE_EVENT, data.actualAmount(),
                     this.simulator.getSimulatorTime().si));
-            fireEvent(new TimedEvent<Double>(STOCK_CLAIMED_CHANGE_EVENT, data.getClaimedAmount(),
+            fireEvent(new TimedEvent<Double>(STOCK_CLAIMED_CHANGE_EVENT, data.reservedAmount(),
                     this.simulator.getSimulatorTime().si));
-            fireEvent(new TimedEvent<Double>(STOCK_ORDERED_CHANGE_EVENT, data.getOrderedAmount(),
+            fireEvent(new TimedEvent<Double>(STOCK_ORDERED_CHANGE_EVENT, data.orderedAmount(),
                     this.simulator.getSimulatorTime().si));
         }
 

@@ -16,13 +16,12 @@ import nl.tudelft.simulation.dsol.experiment.Replication;
 import nl.tudelft.simulation.dsol.experiment.SingleReplication;
 import nl.tudelft.simulation.dsol.swing.gui.ConsoleLogger;
 import nl.tudelft.simulation.dsol.swing.gui.ConsoleOutput;
-import nl.tudelft.simulation.dsol.swing.gui.DSOLPanel;
+import nl.tudelft.simulation.dsol.swing.gui.DsolPanel;
 import nl.tudelft.simulation.dsol.swing.gui.TablePanel;
-import nl.tudelft.simulation.dsol.swing.gui.animation.DSOLAnimationApplication;
-import nl.tudelft.simulation.language.DSOLException;
+import nl.tudelft.simulation.dsol.swing.gui.animation.DsolAnimationApplication;
+import nl.tudelft.simulation.language.DsolException;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainAnimator;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.gui.SCControlPanel;
 import nl.tudelft.simulation.supplychain.gui.plot.BankPlot;
 import nl.tudelft.simulation.supplychain.gui.plot.StockPlot;
 
@@ -34,7 +33,7 @@ import nl.tudelft.simulation.supplychain.gui.plot.StockPlot;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class TestModelApp extends DSOLAnimationApplication
+public class TestModelApp extends DsolAnimationApplication
 {
     /** */
     private static final long serialVersionUID = 20221201L;
@@ -46,12 +45,12 @@ public class TestModelApp extends DSOLAnimationApplication
      * @param title
      * @param panel
      * @param model
-     * @throws DSOLException
+     * @throws DsolException
      * @throws IllegalArgumentException
      * @throws RemoteException
      */
-    public TestModelApp(final String title, final DSOLPanel panel, final TestModel model)
-            throws RemoteException, IllegalArgumentException, DSOLException
+    public TestModelApp(final String title, final DsolPanel panel, final TestModel model)
+            throws RemoteException, IllegalArgumentException, DsolException
     {
         super(panel, title, new Bounds2d(-100, 300, 50, 250));
         this.model = model;
@@ -63,23 +62,23 @@ public class TestModelApp extends DSOLAnimationApplication
     private void addTabs()
     {
         TablePanel charts = new TablePanel(3, 2);
-        getDSOLPanel().addTab("statistics", charts);
-        getDSOLPanel().getTabbedPane().setSelectedIndex(1);
+        getDsolPanel().addTab("statistics", charts);
+        getDsolPanel().getTabbedPane().setSelectedIndex(1);
         SupplyChainSimulatorInterface devsSimulator = this.model.getSimulator();
 
-        BankPlot fb = new BankPlot(this.model, "Factory Bank balance", this.model.factory.getBankAccount());
+        BankPlot fb = new BankPlot(this.model, "Factory Bank balance", this.model.factory);
         charts.setCell(fb.getSwingPanel(), 0, 0);
 
-        BankPlot pb = new BankPlot(this.model, "PCShop Bank balance", this.model.pcShop.getBankAccount());
+        BankPlot pb = new BankPlot(this.model, "PCShop Bank balance", this.model.pcShop);
         charts.setCell(pb.getSwingPanel(), 1, 0);
 
-        BankPlot cb = new BankPlot(this.model, "Client Bank balance", this.model.client.getBankAccount());
+        BankPlot cb = new BankPlot(this.model, "Client Bank balance", this.model.client);
         charts.setCell(cb.getSwingPanel(), 2, 0);
 
-        StockPlot fs = new StockPlot(this.model, "Factory stock Laptop", this.model.factory.getInventory(), this.model.laptop);
+        StockPlot fs = new StockPlot(this.model, "Factory stock Laptop", this.model.factory, this.model.laptop);
         charts.setCell(fs.getSwingPanel(), 0, 1);
 
-        StockPlot ps = new StockPlot(this.model, "PCShop stock Laptop", this.model.pcShop.getInventory(), this.model.laptop);
+        StockPlot ps = new StockPlot(this.model, "PCShop stock Laptop", this.model.pcShop, this.model.laptop);
         charts.setCell(ps.getSwingPanel(), 1, 1);
     }
 
@@ -88,9 +87,9 @@ public class TestModelApp extends DSOLAnimationApplication
      * @throws RemoteException if error
      * @throws SimRuntimeException if error
      * @throws NamingException if error
-     * @throws DSOLException on dsol error
+     * @throws DsolException on dsol error
      */
-    public static void main(final String[] args) throws SimRuntimeException, NamingException, RemoteException, DSOLException
+    public static void main(final String[] args) throws SimRuntimeException, NamingException, RemoteException, DsolException
     {
         CategoryLogger.setAllLogLevel(Level.INFO);
         CategoryLogger.setAllLogMessageFormat("{level} - {class_name}.{method}:{line}  {message}");
@@ -101,7 +100,7 @@ public class TestModelApp extends DSOLAnimationApplication
         Replication<Duration> replication =
                 new SingleReplication<Duration>("rep1", Duration.ZERO, Duration.ZERO, new Duration(1800.0, DurationUnit.HOUR));
         animator.initialize(model, replication);
-        DSOLPanel panel = new DSOLPanel(new SCControlPanel(model, animator));
+        DsolPanel panel = new DsolPanel(new DsolControlPanel(model, animator));
         panel.addTab("logger", new ConsoleLogger(Level.INFO));
         panel.addTab("console", new ConsoleOutput());
         new TestModelApp("TestModelApp", panel, model);

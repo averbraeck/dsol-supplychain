@@ -13,8 +13,9 @@ import nl.tudelft.simulation.dsol.statistics.SimPersistent;
 import nl.tudelft.simulation.dsol.swing.charts.xy.XYChart;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.money.BankAccount;
 import nl.tudelft.simulation.supplychain.money.Money;
+import nl.tudelft.simulation.supplychain.role.banking.BankingRole;
+import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
 
 /**
  * StockPlot.java. <br>
@@ -33,14 +34,14 @@ public class BankPlot extends XYChart
     private SimPersistent<Duration> balancePersistent;
 
     /**
-     * @param model
-     * @param title
-     * @param bankAccount
+     * @param model the simulation model
+     * @param title the title of the graph
+     * @param financingActor the actor whose bank account has to be shown
      */
-    public BankPlot(final SupplyChainModelInterface model, final String title, final BankAccount bankAccount)
+    public BankPlot(final SupplyChainModelInterface model, final String title, final FinancingActor financingActor)
     {
         super(model.getSimulator(), title);
-        BalanceListener balanceListener = new BalanceListener(model.getSimulator(), bankAccount);
+        BalanceListener balanceListener = new BalanceListener(model.getSimulator(), financingActor);
         try
         {
             this.balancePersistent = new SimPersistent<Duration>("balance " + title, model, balanceListener,
@@ -74,14 +75,14 @@ public class BankPlot extends XYChart
         static final EventType BALANCE_CHANGE_EVENT = new EventType("BALANCE_CHANGE_EVENT");
 
         /**
-         * @param simulator
-         * @param bankAccount
+         * @param simulator the simulator
+         * @param financingActor the actor whose bank account needs to be plotted
          */
-        public BalanceListener(final SupplyChainSimulatorInterface simulator, final BankAccount bankAccount)
+        public BalanceListener(final SupplyChainSimulatorInterface simulator, final FinancingActor financingActor)
         {
             super();
             this.simulator = simulator;
-            bankAccount.addListener(this, BankAccount.BANK_ACCOUNT_CHANGED_EVENT);
+            financingActor.getFinancingRole().getBank().addListener(this, BankingRole.BANK_ACCOUNT_CHANGED_EVENT);
         }
 
     

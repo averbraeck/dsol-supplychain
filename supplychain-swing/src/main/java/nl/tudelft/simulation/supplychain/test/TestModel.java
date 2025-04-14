@@ -10,22 +10,22 @@ import org.djunits.value.vdouble.scalar.Length;
 import org.djunits.value.vdouble.scalar.Mass;
 import org.djunits.value.vdouble.scalar.Volume;
 import org.djutils.draw.bounds.Bounds3d;
-import org.djutils.draw.point.Point2d;
 import org.djutils.draw.point.OrientedPoint3d;
 import org.djutils.draw.point.Point;
+import org.djutils.draw.point.Point2d;
 
 import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.supplychain.animation.ContentAnimator;
+import nl.tudelft.simulation.supplychain.content.store.ContentStoreFull;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainAnimator;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModel;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.message.store.trade.LeanContentStore;
-import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.money.MoneyUnit;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.product.Sku;
+import nl.tudelft.simulation.supplychain.reference.Bank;
 
 /**
  * The TestModel for the supplychain package.
@@ -85,27 +85,25 @@ public class TestModel extends SupplyChainModel
             }
 
             // create the bank
-            Bank ing = new Bank("ING", "ING", this, new Point2d(0, 0), "ING");
-            ing.setAnnualInterestRateNeg(0.080);
-            ing.setAnnualInterestRatePos(0.025);
+            Bank ing = new Bank("ING", "ING", this, new Point2d(0, 0), "ING", "Europe");
+            ing.getBankingRole().setAnnualInterestRateNeg(0.080);
+            ing.getBankingRole().setAnnualInterestRatePos(0.025);
 
             // create a product
-            this.laptop = new Product(this, "Laptop", Sku.PIECE, new Money(1400.0, MoneyUnit.USD), new Mass(6.5, MassUnit.KILOGRAM),
-                    new Volume(0.05, VolumeUnit.CUBIC_METER), 0.0);
+            this.laptop = new Product(this, "Laptop", Sku.PIECE, new Money(1400.0, MoneyUnit.USD),
+                    new Mass(6.5, MassUnit.KILOGRAM), new Volume(0.05, VolumeUnit.CUBIC_METER), 0.0);
 
             // create a manufacturer
             this.factory = new Factory("Factory", "Factory", this, new Point2d(200, 200), "", ing,
-                    new Money(50000.0, MoneyUnit.USD), new LeanContentStore(this.devsSimulator), this.laptop, 1000);
+                    new Money(50000.0, MoneyUnit.USD), new ContentStoreFull(), this.laptop, 1000);
 
             // create a retailer
-            this.pcShop = new PCShop("PCshop", "PCshop", this, new Point2d(20, 200), "", ing,
-                    new Money(50000.0, MoneyUnit.USD), new LeanContentStore(this.devsSimulator), this.laptop, 10,
-                    this.factory);
+            this.pcShop = new PCShop("PCshop", "PCshop", this, new Point2d(20, 200), "", ing, new Money(50000.0, MoneyUnit.USD),
+                    new ContentStoreFull(), this.laptop, 10, this.factory);
 
             // create a customer
             this.client = new Client("Client", "Client", this, new Point2d(100, 100), "", ing,
-                    new Money(1500000.0, MoneyUnit.USD), new LeanContentStore(this.devsSimulator), this.laptop,
-                    this.pcShop);
+                    new Money(1500000.0, MoneyUnit.USD), new ContentStoreFull(), this.laptop, this.pcShop);
 
             // schedule a remark that the simulation is ready
             Duration endTime =

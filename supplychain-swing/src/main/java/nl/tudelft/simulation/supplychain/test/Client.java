@@ -6,7 +6,7 @@ import javax.naming.NamingException;
 
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
-import org.djutils.draw.bounds.Bounds3d;
+import org.djutils.draw.bounds.Bounds2d;
 import org.djutils.draw.point.Point2d;
 
 import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
@@ -19,23 +19,23 @@ import nl.tudelft.simulation.jstats.streams.StreamInterface;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
-import nl.tudelft.simulation.supplychain.handler.invoice.InvoiceHandler;
-import nl.tudelft.simulation.supplychain.handler.invoice.PaymentPolicyEnum;
-import nl.tudelft.simulation.supplychain.handler.orderconfirmation.OrderConfirmationHandler;
-import nl.tudelft.simulation.supplychain.handler.quote.QuoteComparatorEnum;
-import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandler;
-import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandlerAll;
 import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandler;
 import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandlerConsume;
-import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.BankAccount;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.supplychain.reference.Bank;
 import nl.tudelft.simulation.supplychain.reference.Customer;
 import nl.tudelft.simulation.supplychain.reference.Retailer;
 import nl.tudelft.simulation.supplychain.role.consuming.process.DemandGeneratingProcess;
+import nl.tudelft.simulation.supplychain.role.financing.handler.InvoiceHandler;
+import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentPolicyEnum;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleSearch;
 import nl.tudelft.simulation.supplychain.role.purchasing.handler.DemandHandlerRFQ;
+import nl.tudelft.simulation.supplychain.role.purchasing.handler.OrderConfirmationHandler;
+import nl.tudelft.simulation.supplychain.role.purchasing.handler.QuoteComparatorEnum;
+import nl.tudelft.simulation.supplychain.role.purchasing.handler.QuoteHandler;
+import nl.tudelft.simulation.supplychain.role.purchasing.handler.QuoteHandlerAll;
 import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
 /**
@@ -142,8 +142,8 @@ public class Client extends Customer
     }
 
     @Override
-    public Bounds3d getBounds()
+    public Bounds2d getBounds()
     {
-        return new Bounds3d(25.0, 25.0, 1.0);
+        return new Bounds2d(25.0, 25.0);
     }
 }
