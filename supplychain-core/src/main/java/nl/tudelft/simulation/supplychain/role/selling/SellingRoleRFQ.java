@@ -71,9 +71,7 @@ public class SellingRoleRFQ extends SellingRole
     {
         var quoteData = new QuoteData(iq.inventoryQuoteRequest().rfq(), iq, new ArrayList<>(), new ArrayList<>(), cutoffDate);
         this.quoteDataMap.put(quoteData.rfq, quoteData);
-        // getSimulator().scheduleEventAbs(cutoffDate, this, "checkTransportQuotes", new Object[] {quoteData});
-        getSimulator().scheduleEventRel(new Duration(12.0, DurationUnit.HOUR), this, "checkTransportQuotes",
-                new Object[] {quoteData});
+        getSimulator().scheduleEventAbs(cutoffDate, this, "checkTransportQuotes", new Object[] {quoteData});
     }
 
     /**
