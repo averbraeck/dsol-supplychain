@@ -78,7 +78,7 @@ public class Trucking extends Transporter
         if (getSimulator() instanceof AnimatorInterface)
         {
             new SingleImageRenderable<>(this, getSimulator(),
-                    Factory.class.getResource("/nl/tudelft/simulation/supplychain/images/Truck.gif"));
+                    Factory.class.getResource("/nl/tudelft/simulation/supplychain/images/Supplier.gif"));
         }
     }
 
