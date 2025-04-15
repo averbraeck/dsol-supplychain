@@ -62,7 +62,7 @@ public class InventoryQuoteHandler extends ContentHandler<InventoryQuote, Sellin
             var transportQuoteRequest =
                     new TransportQuoteRequest(getRole().getActor(), transporter, iq.inventoryQuoteRequest().rfq(), cutoffDate);
             sendContent(transportQuoteRequest, getHandlingTime().draw());
-            getRole().addSentTransportRequestQuote(transportQuoteRequest);
+            getRole().addSentTransportQuoteRequest(transportQuoteRequest);
         }
         return true;
     }

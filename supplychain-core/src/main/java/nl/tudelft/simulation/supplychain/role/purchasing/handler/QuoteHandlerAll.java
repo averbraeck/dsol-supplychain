@@ -63,8 +63,8 @@ public class QuoteHandlerAll extends QuoteHandler
         }
         // look if all quotes are there for the RFQs that we sent out
         long id = quote.groupingId();
-        ContentStoreInterface messageStore = getActor().getContentStore();
-        if (messageStore.getContentList(id, Quote.class).size() == messageStore.getContentList(id, RequestForQuote.class)
+        ContentStoreInterface contentStore = getActor().getContentStore();
+        if (contentStore.getContentList(id, Quote.class).size() == contentStore.getContentList(id, RequestForQuote.class)
                 .size())
         {
             // All quotes are in. Select the best and place an order
@@ -72,10 +72,10 @@ public class QuoteHandlerAll extends QuoteHandler
             if (QuoteHandlerAll.DEBUG)
             {
                 System.err.println("t=" + getSimulator().getSimulatorTime() + " DEBUG -- QuoteHandlerAll of actor " + getActor()
-                        + ", size=" + messageStore.getContentList(id, Quote.class).size());
+                        + ", size=" + contentStore.getContentList(id, Quote.class).size());
             }
 
-            List<Quote> quotes = messageStore.getContentList(id, Quote.class);
+            List<Quote> quotes = contentStore.getContentList(id, Quote.class);
             Quote bestQuote = selectBestQuote(quotes);
             if (bestQuote == null)
             {

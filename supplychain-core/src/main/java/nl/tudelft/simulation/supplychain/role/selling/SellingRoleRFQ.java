@@ -50,8 +50,8 @@ public class SellingRoleRFQ extends SellingRole
     private Map<RequestForQuote, QuoteData> quoteDataMap = new LinkedHashMap<>();
 
     /** the necessary content handlers. */
-    private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of(RequestForQuote.class, InventoryQuote.class,
-            TransportQuote.class, Order.class, InventoryReservation.class);
+    private static Set<Class<? extends Content>> necessaryContentHandlers =
+            Set.of(RequestForQuote.class, InventoryQuote.class, TransportQuote.class, Order.class, InventoryReservation.class);
 
     /**
      * Constructs a new SellingRole for RFQ - Order - Payment.
@@ -71,14 +71,16 @@ public class SellingRoleRFQ extends SellingRole
     {
         var quoteData = new QuoteData(iq.inventoryQuoteRequest().rfq(), iq, new ArrayList<>(), new ArrayList<>(), cutoffDate);
         this.quoteDataMap.put(quoteData.rfq, quoteData);
-        getSimulator().scheduleEventAbs(cutoffDate, this, "checkTransportQuotes", new Object[] {quoteData});
+        // getSimulator().scheduleEventAbs(cutoffDate, this, "checkTransportQuotes", new Object[] {quoteData});
+        getSimulator().scheduleEventRel(new Duration(12.0, DurationUnit.HOUR), this, "checkTransportQuotes",
+                new Object[] {quoteData});
     }
 
     /**
      * Add a sent transport quote request.
      * @param transportQuoteRequest the sent transport quote request
      */
-    public void addSentTransportRequestQuote(final TransportQuoteRequest transportQuoteRequest)
+    public void addSentTransportQuoteRequest(final TransportQuoteRequest transportQuoteRequest)
     {
         var rfq = transportQuoteRequest.rfq();
         if (this.quoteDataMap.containsKey(rfq))
@@ -144,34 +146,32 @@ public class SellingRoleRFQ extends SellingRole
             // only on option
             bestTransportQuote = options.get(0);
         }
-        else
+
+        Sku sku = rfq.product().getSku();
+        double min = Double.MAX_VALUE;
+        for (var tq : quoteData.transportQuoteList)
         {
-            Sku sku = rfq.product().getSku();
-            double min = Double.MAX_VALUE;
-            for (var tq : quoteData.transportQuoteList)
+            double value = switch (rfq.transportPreference().importance())
             {
-                double value = switch (rfq.transportPreference().importance())
-                {
-                    case COST -> tq.transportOption().estimatedTotalTransportCost(sku).getAmount();
-                    case TIME -> tq.transportOption().estimatedTotalTransportDuration(sku).si;
-                    case DISTANCE -> tq.transportOption().totalTransportDistance().si;
-                    case NONE -> tq.transportOption().estimatedTotalTransportCost(sku).getAmount();
-                };
-                if (value < min)
-                {
-                    min = value;
-                    bestTransportQuote = tq;
-                }
+                case COST -> tq.transportOption().estimatedTotalTransportCost(sku).getAmount();
+                case TIME -> tq.transportOption().estimatedTotalTransportDuration(sku).si;
+                case DISTANCE -> tq.transportOption().totalTransportDistance().si;
+                case NONE -> tq.transportOption().estimatedTotalTransportCost(sku).getAmount();
+            };
+            if (value < min)
+            {
+                min = value;
+                bestTransportQuote = tq;
             }
-            // we have a best transport quote, and an inventory quote; determine the profit margin.
-            double profitMargin = getActor().getDirectingRoleSelling().getProfitMargin(rfq.product());
-            Money totalPrice = quoteData.inventoryQuote.priceWithoutProfit().plus(bestTransportQuote.price())
-                    .multiplyBy(1.0 + profitMargin);
-            Duration qvt = Duration.max(getQuoteValidityTime(), getSimulatorTime().minus(rfq.cutoffDate()));
-            var quote = new Quote(rfq, totalPrice, rfq.earliestDeliveryDate(), bestTransportQuote.transportOption(),
-                    getSimulatorTime().plus(qvt));
-            sendContent(quote, Duration.ZERO);
         }
+        // we have a best transport quote, and an inventory quote; determine the profit margin.
+        double profitMargin = getActor().getDirectingRoleSelling().getProfitMargin(rfq.product());
+        Money totalPrice =
+                quoteData.inventoryQuote.priceWithoutProfit().plus(bestTransportQuote.price()).multiplyBy(1.0 + profitMargin);
+        Duration qvt = Duration.max(getQuoteValidityTime(), getSimulatorTime().minus(rfq.cutoffDate()));
+        var quote = new Quote(rfq, totalPrice, rfq.earliestDeliveryDate(), bestTransportQuote.transportOption(),
+                getSimulatorTime().plus(qvt));
+        sendContent(quote, Duration.ZERO);
 
         // remove the record -- late transport quotes are void
         this.quoteDataMap.remove(rfq);
