@@ -71,8 +71,7 @@ public class TransportOrderHandler extends ContentHandler<TransportOrder, Transp
         var ts = transportOption.getTransportSteps().get(step);
         var sku = shipment.getProduct().getSku();
         shipment.setTransit(ts.getOrigin(), ts.getDestination());
-        Duration transportTime = ts.getEstimatedTransportDuration(sku).plus(ts.getEstimatedLoadingTime(sku))
-                .plus(ts.getEstimatedUnloadingTime(sku));
+        Duration transportTime = ts.getEstimatedTransportDuration(sku);
         getSimulator().scheduleEventRel(transportTime, this, "executeTransportStep", new Object[] {transportOrder, step + 1});
     }
 

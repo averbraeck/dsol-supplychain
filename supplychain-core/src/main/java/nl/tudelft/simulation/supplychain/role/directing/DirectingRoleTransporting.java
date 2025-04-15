@@ -45,7 +45,7 @@ public class DirectingRoleTransporting extends Role<DirectingRoleTransporting>
      * @param owner the actor that owns the Directing role
      * @param transportModeProfitMarginMap a map of the transport modes we use, each with their profit margin
      */
-    public DirectingRoleTransporting(final DirectingActorSelling owner,
+    public DirectingRoleTransporting(final DirectingActorTransporting owner,
             final Map<TransportMode, Double> transportModeProfitMarginMap)
     {
         super("directing-transporting", owner, new ContentReceiverDirect());
