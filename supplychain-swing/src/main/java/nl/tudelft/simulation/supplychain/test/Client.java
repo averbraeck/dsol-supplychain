@@ -40,10 +40,8 @@ import nl.tudelft.simulation.supplychain.role.purchasing.handler.QuoteHandlerAll
 import nl.tudelft.simulation.supplychain.role.purchasing.handler.QuoteNoHandler;
 import nl.tudelft.simulation.supplychain.role.receiving.ReceivingRole;
 import nl.tudelft.simulation.supplychain.role.receiving.handler.TransportDeliveryHandlerConsume;
-import nl.tudelft.simulation.supplychain.role.shipping.ShippingRole;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportPreference;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportPreference.CostTimeImportance;
-import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
 import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
 /**
