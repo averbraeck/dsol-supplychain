@@ -24,7 +24,7 @@ import nl.tudelft.simulation.supplychain.actor.Geography;
 import nl.tudelft.simulation.supplychain.animation.ContentAnimator;
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.GroupedContent;
-import nl.tudelft.simulation.supplychain.content.store.ContentStoreFull;
+import nl.tudelft.simulation.supplychain.content.store.ContentStoreEmpty;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModel;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.money.Money;
@@ -114,28 +114,28 @@ public class TestModel extends SupplyChainModel implements EventListener
 
             // create a transporter
             this.trucking = new Trucking("transporter", "Transporter", this, new Point2d(200, 20), "Maastricht", "Europe",
-                    this.bank, new Money(50000.0, MoneyUnit.USD), new ContentStoreFull());
+                    this.bank, new Money(50000.0, MoneyUnit.USD), new ContentStoreEmpty());
             s = this.trucking.checkRolesComplete();
             System.err.println("TRUCKING - " + s);
 
             // create a manufacturer
             Geography factoryGeography = new Geography(new Point2d(200, 200), "Delft", "Europe");
             this.factory = new Factory("factory", "Factory", this, factoryGeography, this.bank,
-                    new Money(50000.0, MoneyUnit.USD), new ContentStoreFull(), this.laptop, 1000);
+                    new Money(50000.0, MoneyUnit.USD), new ContentStoreEmpty(), this.laptop, 1000);
             s = this.factory.checkRolesComplete();
             System.err.println("FACTORY - " + s);
 
             // create a retailer
             Geography pcShopGeography = new Geography(new Point2d(20, 200), "Rotterdam", "Europe");
             this.pcShop = new PCShop("pcShop", "PCshop", this, pcShopGeography, this.bank, new Money(50000.0, MoneyUnit.USD),
-                    new ContentStoreFull(), this.laptop, 10, this.factory);
+                    new ContentStoreEmpty(), this.laptop, 10, this.factory);
             s = this.pcShop.checkRolesComplete();
             System.err.println("PCSHOP -  " + s);
 
             // create a customer
             Geography clientGeography = new Geography(new Point2d(100, 100), "Amsterdam", "Europe");
             this.client = new Client("client", "Client", this, clientGeography, this.bank, new Money(1500000.0, MoneyUnit.USD),
-                    new ContentStoreFull(), this.laptop, this.pcShop);
+                    new ContentStoreEmpty(), this.laptop, this.pcShop);
             s = this.client.checkRolesComplete();
             System.err.println("CLIENT - " + s);
 
