@@ -26,8 +26,8 @@ public class DistributionCenter extends Retailer
      * @param contentStore the content store for messages
      * @throws ActorAlreadyDefinedException when the actor was already registered in the model
      */
-    public DistributionCenter(final String id, final String name, final SupplyChainModelInterface model, final Geography geography,
-            final ContentStoreInterface contentStore) throws ActorAlreadyDefinedException
+    public DistributionCenter(final String id, final String name, final SupplyChainModelInterface model,
+            final Geography geography, final ContentStoreInterface contentStore) throws ActorAlreadyDefinedException
     {
         super(id, name, model, geography, contentStore);
     }
