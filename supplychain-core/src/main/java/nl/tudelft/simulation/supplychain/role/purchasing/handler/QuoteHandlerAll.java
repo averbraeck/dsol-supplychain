@@ -7,8 +7,6 @@ import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.content.OrderBasedOnQuote;
 import nl.tudelft.simulation.supplychain.content.Quote;
-import nl.tudelft.simulation.supplychain.content.RequestForQuote;
-import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 
 /**
@@ -24,9 +22,6 @@ public class QuoteHandlerAll extends QuoteHandler
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
-
-    /** for debugging. */
-    private static final boolean DEBUG = false;
 
     /**
      * Constructor of the QuoteHandlerAll with a user defined comparator for quotes.
@@ -61,21 +56,17 @@ public class QuoteHandlerAll extends QuoteHandler
         {
             return false;
         }
+        long groupingId = quote.groupingId();
+        var role = getRole();
+
+        // add the quote to the list
+        role.addQuoteToMap(quote);
+        
         // look if all quotes are there for the RFQs that we sent out
-        long id = quote.groupingId();
-        ContentStoreInterface contentStore = getActor().getContentStore();
-        if (contentStore.getContentList(id, Quote.class).size() == contentStore.getContentList(id, RequestForQuote.class)
-                .size())
+        if (role.getNrReceivedQuotes(groupingId) == role.getNrSentRfqs(groupingId))
         {
             // All quotes are in. Select the best and place an order
-
-            if (QuoteHandlerAll.DEBUG)
-            {
-                System.err.println("t=" + getSimulator().getSimulatorTime() + " DEBUG -- QuoteHandlerAll of actor " + getActor()
-                        + ", size=" + contentStore.getContentList(id, Quote.class).size());
-            }
-
-            List<Quote> quotes = contentStore.getContentList(id, Quote.class);
+            List<Quote> quotes = role.getQuotesFromMap(groupingId);
             Quote bestQuote = selectBestQuote(quotes);
             if (bestQuote == null)
             {
@@ -83,13 +74,6 @@ public class QuoteHandlerAll extends QuoteHandler
                         getActor().getName(), quotes.size());
                 return false;
             }
-
-            if (QuoteHandlerAll.DEBUG)
-            {
-                System.err.println("t=" + getSimulator().getSimulatorTime() + " DEBUG -- QuoteHandlerAll of actor " + getActor()
-                        + ", bestQuote=" + bestQuote);
-            }
-
             var order = new OrderBasedOnQuote(bestQuote, bestQuote.proposedDeliveryDate());
             sendContent(order, getHandlingTime().draw());
         }

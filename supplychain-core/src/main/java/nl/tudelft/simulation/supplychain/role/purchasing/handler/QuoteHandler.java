@@ -9,6 +9,7 @@ import java.util.TreeSet;
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleRFQ;
 
 /**
  * The abstract QuoteHandler can be extended into several ways how to deal with Quotes. One is the QuoteHandlerAll that waits
@@ -70,7 +71,7 @@ public abstract class QuoteHandler extends ContentHandler<Quote, PurchasingRole>
         this.maximumPriceMargin = maximumPriceMargin;
         this.minimumAmountMargin = minimumAmountMargin;
     }
-
+    
     /**
      * Method getQuoteComparator.
      * @return returns the quote comparator
@@ -178,6 +179,12 @@ public abstract class QuoteHandler extends ContentHandler<Quote, PurchasingRole>
     protected double getMinimumAmountMargin()
     {
         return this.minimumAmountMargin;
+    }
+
+    @Override
+    public PurchasingRoleRFQ getRole()
+    {
+        return (PurchasingRoleRFQ) super.getRole();
     }
 
 }

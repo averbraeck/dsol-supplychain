@@ -14,6 +14,7 @@ import nl.tudelft.simulation.supplychain.content.SearchRequest;
 import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleRFQ;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportPreference;
 
@@ -77,9 +78,16 @@ public class SearchAnswerHandler extends ContentHandler<SearchAnswer, Purchasing
         {
             RequestForQuote rfq = new RequestForQuote(getRole().getActor(), (SellingActor) supplier, demand,
                     this.transportPreference, getSimulatorTime().plus(this.cutoffDuration));
+            getRole().addRequestForQuoteToMap(rfq);
             sendContent(rfq, delay);
         }
         return true;
+    }
+
+    @Override
+    public PurchasingRoleRFQ getRole()
+    {
+        return (PurchasingRoleRFQ) super.getRole();
     }
 
 }

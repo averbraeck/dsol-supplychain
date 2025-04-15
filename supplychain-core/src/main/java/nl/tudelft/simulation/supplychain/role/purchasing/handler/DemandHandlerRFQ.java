@@ -13,6 +13,7 @@ import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleRFQ;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportPreference;
 
@@ -109,9 +110,16 @@ public class DemandHandlerRFQ extends DemandHandler
         {
             RequestForQuote rfq = new RequestForQuote(getRole().getActor(), st.supplier, demand, st.transportPreference(),
                     getSimulatorTime().plus(this.cutoffDuration));
+            getRole().addRequestForQuoteToMap(rfq);
             sendContent(rfq, delay);
         }
         return true;
+    }
+
+    @Override
+    public PurchasingRoleRFQ getRole()
+    {
+        return (PurchasingRoleRFQ) super.getRole();
     }
 
     /**

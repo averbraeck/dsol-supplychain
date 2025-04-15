@@ -66,6 +66,15 @@ public class QuoteHandlerTimeout extends QuoteHandler
         {
             return false;
         }
+        long groupingId = quote.groupingId();
+        var role = getRole();
+
+        // add the quote to the list
+        role.addQuoteToMap(quote);
+        
+
+        
+        
         long demandId = quote.groupingId();
         ContentStoreInterface messageStore = getActor().getContentStore();
         int numberQuotes = messageStore.getContentList(demandId, Quote.class).size();
