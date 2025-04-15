@@ -30,6 +30,7 @@ import nl.tudelft.simulation.supplychain.money.MoneyUnit;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.product.Sku;
 import nl.tudelft.simulation.supplychain.reference.Bank;
+import nl.tudelft.simulation.supplychain.reference.Transporter;
 import nl.tudelft.simulation.supplychain.role.banking.BankingRole;
 import nl.tudelft.simulation.supplychain.role.banking.process.InterestProcess;
 
@@ -53,7 +54,7 @@ public class TestModel extends SupplyChainModel implements EventListener
     private SupplyChainSimulatorInterface devsSimulator;
 
     /** */
-    Product laptop;
+    private Product laptop;
 
     /** */
     private Factory factory;
@@ -63,6 +64,9 @@ public class TestModel extends SupplyChainModel implements EventListener
 
     /** */
     private Client client;
+
+    /** */
+    private Transporter trucking;
 
     /** */
     private Bank bank;
@@ -105,6 +109,12 @@ public class TestModel extends SupplyChainModel implements EventListener
             // create a product
             this.laptop = new Product(this, "Laptop", Sku.PIECE, new Money(1400.0, MoneyUnit.USD),
                     new Mass(6.5, MassUnit.KILOGRAM), new Volume(0.05, VolumeUnit.CUBIC_METER), 0.0);
+
+            // create a transporter
+            this.trucking = new Trucking("transporter", "Transporter", this, new Point2d(200, 20), "Maastricht", "Europe",
+                    this.bank, new Money(50000.0, MoneyUnit.USD), new ContentStoreFull());
+            s = this.trucking.checkRolesComplete();
+            System.err.println("TRUCKING - " + s);
 
             // create a manufacturer
             Geography factoryGeography = new Geography(new Point2d(200, 200), "Delft", "Europe");
@@ -186,4 +196,53 @@ public class TestModel extends SupplyChainModel implements EventListener
             System.out.println(getSimulator().getSimulatorTime() + " - " + event.getContent().toString());
         }
     }
+
+    /**
+     * @return laptop
+     */
+    public Product getLaptop()
+    {
+        return this.laptop;
+    }
+
+    /**
+     * @return factory
+     */
+    public Factory getFactory()
+    {
+        return this.factory;
+    }
+
+    /**
+     * @return pcShop
+     */
+    public PCShop getPcShop()
+    {
+        return this.pcShop;
+    }
+
+    /**
+     * @return client
+     */
+    public Client getClient()
+    {
+        return this.client;
+    }
+
+    /**
+     * @return bank
+     */
+    public Bank getBank()
+    {
+        return this.bank;
+    }
+
+    /**
+     * @return trucking
+     */
+    public Transporter getTrucking()
+    {
+        return this.trucking;
+    }
+
 }

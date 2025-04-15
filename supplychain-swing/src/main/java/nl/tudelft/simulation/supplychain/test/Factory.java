@@ -83,7 +83,9 @@ public class Factory extends Supplier
         setWarehousingRole(new WarehousingRole(this));
         setShippingRole(new ShippingRole(this));
         setReceivingRole(new ReceivingRole(this));
-        setSellingRole(new SellingRoleRFQ(this));
+        var sellingRole = new SellingRoleRFQ(this);
+        setSellingRole(sellingRole);
+        sellingRole.addTransporters(((TestModel) model).getTrucking()); // XXX: use argument or later setter.
         setDirectingRole(new DirectingRoleSelling(this));
 
         // give the factory some stock

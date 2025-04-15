@@ -2,8 +2,6 @@ package nl.tudelft.simulation.supplychain.test;
 
 import java.rmi.RemoteException;
 
-import javax.naming.NamingException;
-
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
@@ -11,7 +9,6 @@ import org.djutils.draw.bounds.Bounds2d;
 import org.djutils.logger.CategoryLogger;
 import org.pmw.tinylog.Level;
 
-import nl.tudelft.simulation.dsol.SimRuntimeException;
 import nl.tudelft.simulation.dsol.experiment.Replication;
 import nl.tudelft.simulation.dsol.experiment.SingleReplication;
 import nl.tudelft.simulation.dsol.swing.gui.ConsoleLogger;
@@ -26,8 +23,6 @@ import nl.tudelft.simulation.supplychain.dsol.SupplyChainAnimator;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.gui.plot.BankPlot;
 import nl.tudelft.simulation.supplychain.gui.plot.StockPlot;
-import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
-import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 
 /**
  * TestModelApp.java.
@@ -52,7 +47,7 @@ public class TestModelSwing extends DsolAnimationApplication
      * @throws DsolException
      * @throws IllegalArgumentException
      * @throws RemoteException
-     * @throws ActorNotFoundException 
+     * @throws ActorNotFoundException
      */
     public TestModelSwing(final String title, final DsolPanel panel, final TestModel model)
             throws RemoteException, IllegalArgumentException, DsolException, ActorNotFoundException
@@ -71,21 +66,21 @@ public class TestModelSwing extends DsolAnimationApplication
         getDsolPanel().getTabbedPane().setSelectedIndex(1);
         SupplyChainSimulatorInterface devsSimulator = this.model.getSimulator();
 
-        BankPlot fb = new BankPlot(this.model, "Factory Bank balance", (FinancingActor) this.model.getActor("factory"));
+        BankPlot fb = new BankPlot(this.model, "Factory Bank balance", this.model.getFactory());
         charts.setCell(fb.getSwingPanel(), 0, 0);
 
-        BankPlot pb = new BankPlot(this.model, "PCShop Bank balance", (FinancingActor) this.model.getActor("pcShop"));
+        BankPlot pb = new BankPlot(this.model, "PCShop Bank balance", this.model.getPcShop());
         charts.setCell(pb.getSwingPanel(), 1, 0);
 
-        BankPlot cb = new BankPlot(this.model, "Client Bank balance", (FinancingActor) this.model.getActor("client"));
+        BankPlot cb = new BankPlot(this.model, "Client Bank balance", this.model.getClient());
         charts.setCell(cb.getSwingPanel(), 2, 0);
 
         StockPlot fs = new StockPlot(this.model, "Factory stock Laptop",
-                ((WarehousingActor) this.model.getActor("factory")).getWarehousingRole().getInventory(), this.model.laptop);
+                this.model.getFactory().getWarehousingRole().getInventory(), this.model.getLaptop());
         charts.setCell(fs.getSwingPanel(), 0, 1);
 
         StockPlot ps = new StockPlot(this.model, "PCShop stock Laptop",
-                ((WarehousingActor) this.model.getActor("pcShop")).getWarehousingRole().getInventory(), this.model.laptop);
+                this.model.getPcShop().getWarehousingRole().getInventory(), this.model.getLaptop());
         charts.setCell(ps.getSwingPanel(), 1, 1);
     }
 
