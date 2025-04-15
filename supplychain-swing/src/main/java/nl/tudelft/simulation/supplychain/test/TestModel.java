@@ -22,6 +22,8 @@ import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.actor.Geography;
 import nl.tudelft.simulation.supplychain.animation.ContentAnimator;
+import nl.tudelft.simulation.supplychain.content.Content;
+import nl.tudelft.simulation.supplychain.content.GroupedContent;
 import nl.tudelft.simulation.supplychain.content.store.ContentStoreFull;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModel;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
@@ -193,7 +195,11 @@ public class TestModel extends SupplyChainModel implements EventListener
     {
         if (event.getType().equals(Actor.SEND_CONTENT_EVENT))
         {
-            System.out.println(getSimulator().getSimulatorTime() + " - " + event.getContent().toString());
+            Content content = (Content) event.getContent();
+            long groupingId = (content instanceof GroupedContent gc) ? gc.groupingId() : -1L;
+            System.out.println(getSimulator().getSimulatorTime().toString(DurationUnit.HOUR) + " - "
+                    + content.getClass().getSimpleName() + " from " + content.sender() + " to " + content.receiver() + " id="
+                    + content.uniqueId() + ", groupingId=" + groupingId);
         }
     }
 
