@@ -63,7 +63,6 @@ public class Trucking extends Transporter
             final ContentStoreInterface contentStore) throws ActorAlreadyDefinedException, RemoteException, NamingException
     {
         super(id, name, model, location, locationDescription, landmass);
-        // TODO ContentStore
         setTransportingRole(new TransportingRole(this));
         setFinancingRole(new FinancingRole(this, bank, initialBalance));
         var transportModeProfitMarginMap = new LinkedHashMap<TransportMode, Double>();
@@ -76,7 +75,7 @@ public class Trucking extends Transporter
         if (getSimulator() instanceof AnimatorInterface)
         {
             new SingleImageRenderable<>(this, getSimulator(),
-                    Factory.class.getResource("/nl/tudelft/simulation/supplychain/images/Supplier.gif"));
+                    Factory.class.getResource("/nl/tudelft/simulation/supplychain/images/ActorTransport.gif"));
         }
     }
 

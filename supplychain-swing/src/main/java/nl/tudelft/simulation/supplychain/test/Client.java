@@ -97,7 +97,7 @@ public class Client extends Customer
         if (getSimulator() instanceof AnimatorInterface)
         {
             new SingleImageRenderable<>(this, getSimulator(),
-                    Factory.class.getResource("/nl/tudelft/simulation/supplychain/images/Market.gif"));
+                    Factory.class.getResource("/nl/tudelft/simulation/supplychain/images/ActorMarket.gif"));
         }
     }
 
@@ -114,7 +114,7 @@ public class Client extends Customer
         var dgp = new DemandGeneratingProcess(getConsumingRole(), this.product,
                 new DistContinuousDuration(new DistExponential(stream, 24.0), hours), 1.0, Duration.ZERO,
                 new Duration(14.0, days));
-        dgp.setMaxNumberGenerations(1);
+        dgp.setMaxNumberGenerations(100);
         //
         // tell Client to use the DemandHandler
         DemandHandlerRFQ demandHandler = new DemandHandlerRFQ(getPurchasingRole(), new Duration(24.0, hours));

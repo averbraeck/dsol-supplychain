@@ -116,7 +116,7 @@ public class PCShop extends Retailer
         if (getSimulator() instanceof AnimatorInterface)
         {
             new SingleImageRenderable<>(this, getSimulator(),
-                    Factory.class.getResource("/nl/tudelft/simulation/supplychain/images/Retailer.gif"));
+                    Factory.class.getResource("/nl/tudelft/simulation/supplychain/images/ActorRetailer.gif"));
         }
     }
 

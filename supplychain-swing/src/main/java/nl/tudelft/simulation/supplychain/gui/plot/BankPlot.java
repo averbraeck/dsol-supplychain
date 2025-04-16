@@ -1,5 +1,6 @@
 package nl.tudelft.simulation.supplychain.gui.plot;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 
 import org.djunits.value.vdouble.scalar.Duration;
@@ -11,6 +12,7 @@ import org.djutils.event.TimedEvent;
 
 import nl.tudelft.simulation.dsol.statistics.SimPersistent;
 import nl.tudelft.simulation.dsol.swing.charts.xy.XYChart;
+import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.money.Money;
@@ -89,7 +91,9 @@ public class BankPlot extends XYChart
         @Override
         public void notify(final Event event) throws RemoteException
         {
-            Money balance = (Money) event.getContent();
+            Serializable[] content = (Serializable[]) event.getContent();
+            Actor actor = (Actor) content[0];
+            Money balance = (Money) content[1];
             fireEvent(new TimedEvent<Double>(BALANCE_CHANGE_EVENT, balance.getAmount(), this.simulator.getSimulatorTime().si));
         }
 

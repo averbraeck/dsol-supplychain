@@ -101,12 +101,7 @@ public class TestModel extends SupplyChainModel implements EventListener
             }
 
             // create the bank
-            this.bank = new Bank("ING", "ING", this, new Point2d(0, 0), "ING", "Europe");
-            this.bank.setBankingRole(new BankingRole("ing", this.bank));
-            new InterestProcess(this.bank.getBankingRole());
-            this.bank.getBankingRole().setAnnualInterestRateNeg(-0.080);
-            this.bank.getBankingRole().setAnnualInterestRatePos(0.025);
-            new BankTransferHandler(this.bank.getBankingRole());
+            this.bank = new GlobalBank("bank", "Bank", this, new Point2d(0, 0), "Bank", "Europe");
 
             // create a product
             this.laptop = new Product(this, "Laptop", Sku.PIECE, new Money(1400.0, MoneyUnit.USD),

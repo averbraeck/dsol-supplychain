@@ -53,8 +53,8 @@ public class ContentAnimator implements EventListener
         {
             if (this.simulator instanceof AnimatorInterface)
             {
-                Object[] content = (Object[]) event.getContent();
-                new ContentAnimation((Content) content[0], (Duration) content[1]);
+                Content content = (Content) event.getContent();
+                new ContentAnimation(content, Duration.instantiateSI(3600));
             }
         }
     }

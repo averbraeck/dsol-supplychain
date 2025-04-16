@@ -94,7 +94,7 @@ public class Factory extends Supplier
         if (getSimulator() instanceof AnimatorInterface)
         {
             new SingleImageRenderable<>(this, getSimulator(),
-                    Factory.class.getResource("/nl/tudelft/simulation/supplychain/images/Manufacturer.gif"));
+                    Factory.class.getResource("/nl/tudelft/simulation/supplychain/images/ActorManufacturer.gif"));
         }
     }
 
