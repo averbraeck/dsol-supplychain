@@ -1,7 +1,6 @@
 package nl.tudelft.simulation.supplychain.role.banking;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -12,6 +11,7 @@ import org.djutils.metadata.MetaData;
 import org.djutils.metadata.ObjectDescriptor;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
+import nl.tudelft.simulation.supplychain.content.BankTransfer;
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
@@ -51,7 +51,7 @@ public class BankingRole extends Role<BankingRole>
                     new ObjectDescriptor("balance", "bank balance", Money.class)));
 
     /** the necessary content handlers. */
-    private static Set<Class<? extends Content>> necessaryContentHandlers = Collections.emptySet();
+    private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of(BankTransfer.class);
 
     /** the necessary autonomous processes. */
     private static Set<Class<? extends AutonomousProcess<BankingRole>>> necessaryAutonomousProcesses =
@@ -123,8 +123,7 @@ public class BankingRole extends Role<BankingRole>
      */
     protected void sendBalanceUpdateEvent(final FinancingActor actor, final Money newBalance)
     {
-        this.fireTimedEvent(BANK_ACCOUNT_CHANGED_EVENT, new Serializable[] {actor, newBalance},
-                getActor().getSimulatorTime());
+        this.fireTimedEvent(BANK_ACCOUNT_CHANGED_EVENT, new Serializable[] {actor, newBalance}, getActor().getSimulatorTime());
     }
 
     /**
