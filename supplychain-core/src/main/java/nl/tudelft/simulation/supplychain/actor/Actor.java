@@ -54,14 +54,6 @@ public interface Actor extends NamedLocation, EventProducer
     <R extends Role<R>> R getRole(Class<R> roleClass);
 
     /**
-     * Check whether the necessary roles are set and filled with the required handlers and processes before executing a
-     * role-dependent method.
-     * @return an empty string when all handlers and processes have been properly registered with the role, or a filled string
-     *         with the names of the handlers and/or processes when not.
-     */
-    String checkRolesComplete();
-
-    /**
      * Receive content, e.g. a message, from another actor, and handle it (storing or handling, depending on the
      * MessageReceiver). When the content is not intended for this actor, a log warning is given, and the content is not
      * processed.

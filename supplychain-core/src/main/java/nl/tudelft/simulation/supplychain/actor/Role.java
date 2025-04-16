@@ -46,10 +46,7 @@ public abstract class Role<R extends Role<R>> extends LocalEventProducer impleme
     private final Map<Class<? extends Content>, ContentHandler<? extends Content, R>> contentHandlers = new LinkedHashMap<>();
 
     /** the autonomous processes for this role. */
-    private final Set<AutonomousProcess<R>> registeredAutonomousProcesses = new LinkedHashSet<>();
-
-    /** have all necessary handlers and processes been properly allocated? */
-    private boolean handlersProcessesComplete = false;
+    private final Set<AutonomousProcess<R>> autonomousProcesses = new LinkedHashSet<>();
 
     /**
      * Create a new Role.
@@ -69,62 +66,6 @@ public abstract class Role<R extends Role<R>> extends LocalEventProducer impleme
     }
 
     /**
-     * Check whether all handlers for content that are necessary have been registered with this role, as well as all autonomous
-     * processes that should have been registered.
-     * @return an empty string when all handlers and processes have been properly registered with the role, or a filled string
-     *         with the names of the handlers and/or processes when not.
-     */
-    public String checkHandlersProcessesComplete()
-    {
-        if (this.handlersProcessesComplete)
-        {
-            return "";
-        }
-        boolean check = true;
-        String missing = "";
-        for (var contentClass : getNecessaryContentHandlers())
-        {
-            if (!this.contentHandlers.containsKey(contentClass))
-            {
-                check = false;
-                missing += contentClass.getSimpleName() + "Handler  ";
-            }
-        }
-        for (var processClass : getNecessaryAutonomousProcesses())
-        {
-            boolean found = false;
-            for (var process : this.registeredAutonomousProcesses)
-            {
-                if (process.getClass().equals(processClass))
-                {
-                    found = true;
-                }
-            }
-            if (!found)
-            {
-                check = false;
-                missing += processClass.getSimpleName() + "  ";
-            }
-        }
-        this.handlersProcessesComplete = check;
-        return missing;
-    }
-
-    /**
-     * Provide a set of content classes for which this role should implement a handler. Typically, this method will return a
-     * static set for this role to avoid creating a set every time when the method is called.
-     * @return a list of content classes for which this role should implement a handler
-     */
-    protected abstract Set<Class<? extends Content>> getNecessaryContentHandlers();
-
-    /**
-     * Provide a list of classes for autonomous processes that this role should implement. Typically, this method will return a
-     * static set for this role to avoid creating a set every time when the method is called.
-     * @return a list of classes for autonomous processes that this role should implement
-     */
-    protected abstract Set<Class<? extends AutonomousProcess<R>>> getNecessaryAutonomousProcesses();
-
-    /**
      * Set a handler for a content type, possibly overwriting the previous content handler.
      * @param handler the handler to set for the implicit content type
      */
@@ -141,7 +82,7 @@ public abstract class Role<R extends Role<R>> extends LocalEventProducer impleme
     public void addAutonomousProcess(final AutonomousProcess<R> process)
     {
         Throw.whenNull(process, "process cannot be null");
-        this.registeredAutonomousProcesses.add(process);
+        this.autonomousProcesses.add(process);
     }
 
     /**

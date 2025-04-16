@@ -43,9 +43,6 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
     /** the roles. */
     private Map<Class<? extends Role<?>>, Role<?>> roles = new LinkedHashMap<>();
 
-    /** cached check whether all roles have been initialized with handlers and processes. */
-    private boolean rolesComplete = false;
-
     /** the bounds of the object (size and relative height in the animation). */
     private Bounds2d bounds = new Bounds2d(-1.0, 1.0, -1.0, 1.0);
 
@@ -104,34 +101,8 @@ public abstract class SupplyChainActor extends LocalEventProducer implements Act
     }
 
     @Override
-    public String checkRolesComplete()
-    {
-        if (this.rolesComplete)
-        {
-            return "";
-        }
-        boolean check = true;
-        String missing = "";
-        for (Role<?> role : getRoles())
-        {
-            String roleMissing = role.checkHandlersProcessesComplete();
-            if (roleMissing.length() != 0)
-            {
-                check = false;
-                missing += role.getClass().getSimpleName() + ": " + roleMissing;
-            }
-        }
-        this.rolesComplete = check;
-        return missing;
-    }
-
-    @Override
     public void receiveContent(final Content content)
     {
-        if (!this.rolesComplete)
-        {
-            throw new IllegalStateException("The roles for " + this + " are not complete");
-        }
         if (!content.receiver().equals(this))
         {
             CategoryLogger.always().warn("Message " + content + " not meant for receiver " + toString());
