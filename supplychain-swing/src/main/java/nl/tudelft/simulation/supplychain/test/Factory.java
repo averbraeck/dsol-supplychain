@@ -22,14 +22,12 @@ import nl.tudelft.simulation.supplychain.reference.Bank;
 import nl.tudelft.simulation.supplychain.reference.Supplier;
 import nl.tudelft.simulation.supplychain.role.directing.DirectingRoleSelling;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
-import nl.tudelft.simulation.supplychain.role.financing.handler.FulfillmentHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.InventoryReleaseHandler;
-import nl.tudelft.simulation.supplychain.role.financing.handler.InvoiceHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentPolicyEnum;
+import nl.tudelft.simulation.supplychain.role.financing.handler.TransportInvoiceHandler;
 import nl.tudelft.simulation.supplychain.role.financing.process.FixedCostProcess;
 import nl.tudelft.simulation.supplychain.role.receiving.ReceivingRole;
-import nl.tudelft.simulation.supplychain.role.receiving.handler.TransportDeliveryHandlerStock;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRoleRFQ;
 import nl.tudelft.simulation.supplychain.role.selling.handler.InventoryQuoteHandler;
 import nl.tudelft.simulation.supplychain.role.selling.handler.InventoryReservationHandler;
@@ -40,7 +38,6 @@ import nl.tudelft.simulation.supplychain.role.shipping.ShippingRole;
 import nl.tudelft.simulation.supplychain.role.shipping.handler.ShippingOrderHandler;
 import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
-import nl.tudelft.simulation.supplychain.role.warehousing.handler.InventoryEntryHandler;
 import nl.tudelft.simulation.supplychain.role.warehousing.handler.InventoryQuoteRequestHandler;
 import nl.tudelft.simulation.supplychain.role.warehousing.handler.InventoryReleaseRequestHandler;
 import nl.tudelft.simulation.supplychain.role.warehousing.handler.InventoryReservationRequestHandler;
@@ -123,16 +120,11 @@ public class Factory extends Supplier
         new ShippingOrderHandler(getShippingRole());
         //
         // hopefully, the Factory will get payments in the end
-        new InvoiceHandler(getFinancingRole(), PaymentPolicyEnum.PAYMENT_ON_TIME, new DistConstantDuration(Duration.ZERO));
+        new TransportInvoiceHandler(getFinancingRole(), PaymentPolicyEnum.PAYMENT_IMMEDIATE,
+                new DistConstantDuration(Duration.ZERO));
         new PaymentHandler(getFinancingRole());
         new FixedCostProcess(getFinancingRole(), "no fixed costs", new Duration(1, DurationUnit.WEEK),
                 new Money(0.0, MoneyUnit.USD));
-
-        // Unnecessary handlers
-        new InventoryEntryHandler(getWarehousingRole());
-        new TransportDeliveryHandlerStock(getReceivingRole());
-        new FulfillmentHandler(getFinancingRole());
-        
         //
         // CHARTS
         //

@@ -29,6 +29,7 @@ import nl.tudelft.simulation.supplychain.role.financing.handler.InventoryRelease
 import nl.tudelft.simulation.supplychain.role.financing.handler.InvoiceHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentPolicyEnum;
+import nl.tudelft.simulation.supplychain.role.financing.handler.TransportInvoiceHandler;
 import nl.tudelft.simulation.supplychain.role.financing.process.FixedCostProcess;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleRFQ;
 import nl.tudelft.simulation.supplychain.role.purchasing.handler.DemandHandlerRFQ;
@@ -144,6 +145,8 @@ public class PCShop extends Retailer
         new ShippingOrderHandler(getShippingRole());
         //
         // hopefully, the PCShop will get payments in the end
+        new TransportInvoiceHandler(getFinancingRole(), PaymentPolicyEnum.PAYMENT_IMMEDIATE,
+                new DistConstantDuration(Duration.ZERO));
         new PaymentHandler(getFinancingRole());
         new FixedCostProcess(getFinancingRole(), "no fixed costs", new Duration(1, DurationUnit.WEEK),
                 new Money(0.0, MoneyUnit.USD));

@@ -30,8 +30,8 @@ import nl.tudelft.simulation.supplychain.role.consuming.process.DemandGenerating
 import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
 import nl.tudelft.simulation.supplychain.role.financing.handler.FulfillmentHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.InvoiceHandler;
-import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentPolicyEnum;
+import nl.tudelft.simulation.supplychain.role.financing.handler.TransportInvoiceHandler;
 import nl.tudelft.simulation.supplychain.role.financing.process.FixedCostProcess;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleRFQ;
 import nl.tudelft.simulation.supplychain.role.purchasing.handler.DemandHandlerRFQ;
@@ -130,15 +130,14 @@ public class Client extends Customer
         //
         // Client will get a bill in the end
         new InvoiceHandler(getFinancingRole(), PaymentPolicyEnum.PAYMENT_IMMEDIATE, new DistConstantDuration(Duration.ZERO));
+        new TransportInvoiceHandler(getFinancingRole(), PaymentPolicyEnum.PAYMENT_IMMEDIATE,
+                new DistConstantDuration(Duration.ZERO));
         new FixedCostProcess(getFinancingRole(), "no fixed costs", new Duration(1, DurationUnit.WEEK),
                 new Money(0.0, MoneyUnit.USD));
         //
         // hopefully, Client will get computer shipments
         new TransportDeliveryHandlerConsume(getReceivingRole());
         new FulfillmentHandler(getFinancingRole());
-        //
-        // useless handlers
-        new PaymentHandler(getFinancingRole());
 
         //
         // CHARTS

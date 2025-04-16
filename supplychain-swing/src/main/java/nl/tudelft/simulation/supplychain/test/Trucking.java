@@ -22,15 +22,13 @@ import nl.tudelft.simulation.supplychain.reference.Bank;
 import nl.tudelft.simulation.supplychain.reference.Transporter;
 import nl.tudelft.simulation.supplychain.role.directing.DirectingRoleTransporting;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
-import nl.tudelft.simulation.supplychain.role.financing.handler.InvoiceHandler;
-import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentHandler;
-import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentPolicyEnum;
+import nl.tudelft.simulation.supplychain.role.financing.handler.TransportConfirmationHandler;
+import nl.tudelft.simulation.supplychain.role.financing.handler.TransportPaymentHandler;
 import nl.tudelft.simulation.supplychain.role.financing.process.FixedCostProcess;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportMode;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportingRole;
 import nl.tudelft.simulation.supplychain.role.transporting.handler.TransportOrderHandler;
 import nl.tudelft.simulation.supplychain.role.transporting.handler.TransportQuoteRequestHandler;
-import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
 /**
  * Customer.
@@ -90,16 +88,12 @@ public class Trucking extends Transporter
         // Handle the transport messages
         new TransportQuoteRequestHandler(getTransportingRole());
         new TransportOrderHandler(getTransportingRole());
-        // TODO new TransportConfirmationHandler(getTransportingRole());
-        // TODO new TransportPaymentHandler(getTransportingRole());
+        new TransportConfirmationHandler(getFinancingRole());
         //
         // Transporter will get a payment in the end
-        new PaymentHandler(getFinancingRole());
+        new TransportPaymentHandler(getFinancingRole());
         new FixedCostProcess(getFinancingRole(), "no fixed costs", new Duration(1, DurationUnit.WEEK),
                 new Money(0.0, MoneyUnit.USD));
-        //
-        // useless handlers
-        new InvoiceHandler(getFinancingRole(), PaymentPolicyEnum.PAYMENT_IMMEDIATE, new DistConstantDuration(Duration.ZERO));
 
         //
         // CHARTS
