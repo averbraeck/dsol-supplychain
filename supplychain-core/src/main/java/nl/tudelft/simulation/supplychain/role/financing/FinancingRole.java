@@ -8,6 +8,8 @@ import org.djunits.value.vdouble.scalar.Duration;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Content;
+import nl.tudelft.simulation.supplychain.content.Fulfillment;
+import nl.tudelft.simulation.supplychain.content.InventoryRelease;
 import nl.tudelft.simulation.supplychain.content.Invoice;
 import nl.tudelft.simulation.supplychain.content.Payment;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
@@ -37,7 +39,8 @@ public class FinancingRole extends Role<FinancingRole>
     private List<FixedCostProcess> fixedCosts = new ArrayList<FixedCostProcess>();
 
     /** the necessary content handlers. */
-    private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of(Invoice.class, Payment.class);
+    private static Set<Class<? extends Content>> necessaryContentHandlers =
+            Set.of(Invoice.class, Payment.class, Fulfillment.class, InventoryRelease.class);
 
     /** the necessary autonomous processes. */
     private static Set<Class<? extends AutonomousProcess<FinancingRole>>> necessaryAutonomousProcesses =

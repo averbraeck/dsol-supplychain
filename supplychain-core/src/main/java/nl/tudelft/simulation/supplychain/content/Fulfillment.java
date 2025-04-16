@@ -2,8 +2,9 @@ package nl.tudelft.simulation.supplychain.content;
 
 import org.djunits.value.vdouble.scalar.Time;
 
-import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 
 /**
  * The Fulfillment indicates that product delivery for a Demand has taken place.
@@ -21,12 +22,12 @@ import nl.tudelft.simulation.supplychain.product.Product;
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
  * @param transportDelivery info about the delivered goods
  */
-public record Fulfillment(Actor sender, Actor receiver, Time timestamp, long uniqueId, long groupingId,
+public record Fulfillment(WarehousingActor sender, FinancingActor receiver, Time timestamp, long uniqueId, long groupingId,
         TransportDelivery transportDelivery) implements GroupedContent, ProductContent
 {
     public Fulfillment(final TransportDelivery transportDelivery)
     {
-        this(transportDelivery.receiver(), transportDelivery.sender(), transportDelivery.sender().getSimulatorTime(),
+        this(transportDelivery.receiver(), transportDelivery.receiver(), transportDelivery.sender().getSimulatorTime(),
                 transportDelivery.sender().getModel().getUniqueContentId(), transportDelivery.groupingId(), transportDelivery);
     }
 
