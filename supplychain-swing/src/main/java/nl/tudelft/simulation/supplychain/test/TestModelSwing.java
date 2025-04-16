@@ -16,13 +16,13 @@ import nl.tudelft.simulation.dsol.swing.gui.ConsoleOutput;
 import nl.tudelft.simulation.dsol.swing.gui.DsolPanel;
 import nl.tudelft.simulation.dsol.swing.gui.TablePanel;
 import nl.tudelft.simulation.dsol.swing.gui.animation.DsolAnimationApplication;
-import nl.tudelft.simulation.dsol.swing.gui.control.DevsControlPanel;
 import nl.tudelft.simulation.language.DsolException;
 import nl.tudelft.simulation.supplychain.actor.ActorNotFoundException;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainAnimator;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.gui.plot.BankPlot;
 import nl.tudelft.simulation.supplychain.gui.plot.StockPlot;
+import nl.tudelft.simulation.supplychain.test.dsol.SCControlPanel;
 
 /**
  * TestModelApp.java.
@@ -94,14 +94,15 @@ public class TestModelSwing extends DsolAnimationApplication
         CategoryLogger.setAllLogMessageFormat("{level} - {class_name}.{method}:{line}  {message}");
 
         SupplyChainAnimator animator = new SupplyChainAnimator("MTSMTO", Time.ZERO);
-        animator.setSpeedFactor(3600.0);
         TestModel model = new TestModel(animator);
         Replication<Duration> replication =
                 new SingleReplication<Duration>("rep1", Duration.ZERO, Duration.ZERO, new Duration(1800.0, DurationUnit.HOUR));
         animator.initialize(model, replication);
-        DsolPanel panel = new DsolPanel(new DevsControlPanel.TimeDoubleUnit(model, animator));
+        var controlPanel = new SCControlPanel.TimeDoubleUnit(model, animator);
+        DsolPanel panel = new DsolPanel(controlPanel);
         panel.addTab("logger", new ConsoleLogger(Level.INFO));
         panel.addTab("console", new ConsoleOutput());
+        animator.setSpeedFactor(7200.0);
         new TestModelSwing("TestModelApp", panel, model);
     }
 
