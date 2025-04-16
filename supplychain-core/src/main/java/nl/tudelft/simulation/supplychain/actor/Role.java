@@ -150,15 +150,40 @@ public abstract class Role<R extends Role<R>> extends LocalEventProducer impleme
      * @param <C> The content class to ensure that the content and handler align
      * @return whether the ContentHandler processed the content or not
      */
-    @SuppressWarnings("unchecked")
     public <C extends Content> boolean handleContent(final C content)
     {
-        if (!this.contentHandlers.containsKey(content.getClass()))
+        return handleContentClass(content, content.getClass());
+    }
+
+    @SuppressWarnings("unchecked")
+    private <C extends Content> boolean handleContentClass(final C content, final Class<? extends Content> contentClass)
+    {
+        // Note: Content.class.isAssignableFrom(Order.class) --> true
+        if (this.contentHandlers.containsKey(contentClass))
         {
-            return false;
+            this.contentReceiver.receiveContent(content, (ContentHandler<C, R>) this.contentHandlers.get(contentClass));
+            return true;
         }
-        this.contentReceiver.receiveContent(content, (ContentHandler<C, R>) this.contentHandlers.get(content.getClass()));
-        return true;
+        boolean received = false;
+        for (var intf : contentClass.getInterfaces())
+        {
+            if (Content.class.isAssignableFrom(intf))
+            {
+                received |= handleContentClass(content, (Class<? extends Content>) intf);
+            }
+        }
+        if (!received)
+        {
+            Class<?> superClass = contentClass.getSuperclass();
+            if (superClass != null && !Object.class.equals(superClass))
+            {
+                if (Content.class.isAssignableFrom(superClass))
+                {
+                    received |= handleContentClass(content, (Class<? extends Content>) superClass);
+                }
+            }
+        }
+        return received;
     }
 
     /**
