@@ -9,8 +9,8 @@ import org.djunits.unit.DurationUnit;
 import org.djunits.unit.LengthUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Length;
-import org.djutils.draw.bounds.Bounds3d;
-import org.djutils.draw.point.OrientedPoint3d;
+import org.djutils.draw.bounds.Bounds2d;
+import org.djutils.draw.point.Point2d;
 
 import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
@@ -36,7 +36,7 @@ import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandler;
 import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandlerAll;
 import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandler;
 import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandlerConsume;
-import nl.tudelft.simulation.supplychain.message.store.trade.LeanTradeMessageStore;
+import nl.tudelft.simulation.supplychain.message.store.trade.LeanContentStore;
 import nl.tudelft.simulation.supplychain.messagehandlers.HandleAllMessages;
 import nl.tudelft.simulation.supplychain.money.Bank;
 import nl.tudelft.simulation.supplychain.money.Money;
@@ -81,11 +81,11 @@ public class DemoManufacturer extends Manufacturer
      * @param stream
      * @param mts true if MTS, false if MTO
      */
-    public DemoManufacturer(final String name, final SupplyChainSimulatorInterface simulator, final OrientedPoint3d position,
+    public DemoManufacturer(final String name, final SupplyChainSimulatorInterface simulator, final Point2d position,
             final Bank bank, final Money initialBankAccount, final Product product, final double initialStock,
             final Search ypCustomer, final Search ypProduction, final StreamInterface stream, final boolean mts)
     {
-        super(name, simulator, position, bank, initialBankAccount, new LeanTradeMessageStore(simulator));
+        super(name, simulator, position, bank, initialBankAccount, new LeanContentStore(simulator));
 
         // COMMUNICATION
 
@@ -192,9 +192,9 @@ public class DemoManufacturer extends Manufacturer
     }
 
     @Override
-    public Bounds3d getBounds()
+    public Bounds2d getBounds()
     {
-        return new Bounds3d(25.0, 25.0, 1.0);
+        return new Bounds2d(25.0, 25.0);
     }
 
 }

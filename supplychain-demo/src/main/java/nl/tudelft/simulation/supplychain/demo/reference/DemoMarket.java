@@ -1,6 +1,7 @@
 package nl.tudelft.simulation.supplychain.demo.reference;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 import javax.naming.NamingException;
 
@@ -8,43 +9,48 @@ import org.djunits.unit.DurationUnit;
 import org.djunits.unit.LengthUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Length;
-import org.djutils.draw.bounds.Bounds3d;
-import org.djutils.draw.point.OrientedPoint3d;
+import org.djutils.draw.bounds.Bounds2d;
 
 import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
-import nl.tudelft.simulation.jstats.distributions.DistConstant;
+import nl.tudelft.simulation.dsol.swing.charts.xy.XYChart;
 import nl.tudelft.simulation.jstats.distributions.DistExponential;
-import nl.tudelft.simulation.jstats.distributions.DistTriangular;
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.jstats.streams.StreamInterface;
-import nl.tudelft.simulation.supplychain.actor.messaging.devices.reference.WebApplication;
-import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
-import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.handler.demand.DemandHandlerYP;
-import nl.tudelft.simulation.supplychain.handler.invoice.InvoiceHandler;
-import nl.tudelft.simulation.supplychain.handler.invoice.PaymentPolicyEnum;
-import nl.tudelft.simulation.supplychain.handler.orderconfirmation.OrderConfirmationHandler;
-import nl.tudelft.simulation.supplychain.handler.quote.QuoteComparatorEnum;
-import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandler;
-import nl.tudelft.simulation.supplychain.handler.quote.QuoteHandlerAll;
-import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandler;
-import nl.tudelft.simulation.supplychain.handler.shipment.ShipmentHandlerConsume;
-import nl.tudelft.simulation.supplychain.message.store.trade.LeanTradeMessageStore;
-import nl.tudelft.simulation.supplychain.messagehandlers.HandleAllMessages;
-import nl.tudelft.simulation.supplychain.money.Bank;
+import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
+import nl.tudelft.simulation.supplychain.actor.Geography;
+import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
+import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.money.Money;
+import nl.tudelft.simulation.supplychain.money.MoneyUnit;
 import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.supplychain.reference.Bank;
 import nl.tudelft.simulation.supplychain.reference.Customer;
-import nl.tudelft.simulation.supplychain.reference.Search;
+import nl.tudelft.simulation.supplychain.reference.Directory;
+import nl.tudelft.simulation.supplychain.role.consuming.ConsumingRole;
 import nl.tudelft.simulation.supplychain.role.consuming.process.DemandGeneratingProcess;
-import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleSearch;
+import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
+import nl.tudelft.simulation.supplychain.role.financing.handler.FulfillmentHandler;
+import nl.tudelft.simulation.supplychain.role.financing.handler.InvoiceHandler;
+import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentPolicyEnum;
+import nl.tudelft.simulation.supplychain.role.financing.handler.TransportInvoiceHandler;
+import nl.tudelft.simulation.supplychain.role.financing.process.FixedCostProcess;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleRFQ;
+import nl.tudelft.simulation.supplychain.role.purchasing.handler.DemandHandlerSearch;
+import nl.tudelft.simulation.supplychain.role.purchasing.handler.OrderConfirmationHandler;
+import nl.tudelft.simulation.supplychain.role.purchasing.handler.QuoteComparatorEnum;
+import nl.tudelft.simulation.supplychain.role.purchasing.handler.QuoteHandlerAll;
+import nl.tudelft.simulation.supplychain.role.purchasing.handler.QuoteNoHandler;
 import nl.tudelft.simulation.supplychain.role.purchasing.handler.SearchAnswerHandler;
+import nl.tudelft.simulation.supplychain.role.receiving.ReceivingRole;
+import nl.tudelft.simulation.supplychain.role.receiving.handler.TransportDeliveryHandlerConsume;
+import nl.tudelft.simulation.supplychain.role.transporting.TransportPreference;
+import nl.tudelft.simulation.supplychain.role.transporting.TransportPreference.CostTimeImportance;
 import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
 /**
- * MtsMtomarket.java. <br>
- * <br>
+ * Customer.
+ * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
@@ -52,88 +58,103 @@ import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
  */
 public class DemoMarket extends Customer
 {
-    /** */
+    /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
 
+    /** the product that Client wants to buy. */
+    private Product product;
+
+    /** the fixed Directory actor. */
+    private Directory directory;
+
     /**
-     * @param name
-     * @param simulator
-     * @param position
-     * @param bank
-     * @param initialBankAccount
-     * @param product
-     * @param ypCustomre
-     * @param stream
+     * @param id String, the unique id of the supplier
+     * @param name the longer name of the supplier
+     * @param model the model
+     * @param geography the location of the actor
+     * @param bank the bank for the BankAccount
+     * @param initialBalance the initial balance for the actor
+     * @param contentStore the message store for messages
+     * @param product product to order
+     * @param directory fixed directory to use
+     * @throws ActorAlreadyDefinedException when the actor was already registered in the model
+     * @throws NamingException on animation error
+     * @throws RemoteException on animation error
      */
-    public DemoMarket(String name, SupplyChainSimulatorInterface simulator, OrientedPoint3d position, Bank bank,
-            Money initialBankAccount, Product product, Search ypCustomre, StreamInterface stream)
+    @SuppressWarnings("checkstyle:parameternumber")
+    public DemoMarket(final String id, final String name, final SupplyChainModelInterface model, final Geography geography,
+            final Bank bank, final Money initialBalance, final ContentStoreInterface contentStore, final Product product,
+            final Directory directory) throws ActorAlreadyDefinedException, RemoteException, NamingException
     {
-        super(name, simulator, position, bank, initialBankAccount, new LeanTradeMessageStore(simulator));
+        super(id, name, model, geography, contentStore);
+        this.product = product;
+        this.directory = directory;
+        setPurchasingRole(new PurchasingRoleRFQ(this));
+        setConsumingRole(new ConsumingRole(this, new DistConstantDuration(Duration.ZERO)));
+        setFinancingRole(new FinancingRole(this, bank, initialBalance));
+        setReceivingRole(new ReceivingRole(this));
 
-        // COMMUNICATION
+        makeHandlers();
 
-        WebApplication www = new WebApplication("Web-" + name, this.simulator);
-        super.addSendingDevice(www);
-        ContentReceiver webSystem = new HandleAllMessages(this);
-        super.addReceivingDevice(www, webSystem, new DistConstantDuration(new Duration(10.0, DurationUnit.SECOND)));
-
-        // DEMAND GENERATION
-
-        DemandGeneratingProcess demand = new DemandGeneratingProcess(product, new DistContinuousDuration(new DistExponential(stream, 8.0), DurationUnit.HOUR),
-                new DistConstant(stream, 1.0), new DistConstantDuration(Duration.ZERO),
-                new DistConstantDuration(new Duration(14.0, DurationUnit.DAY)));
-        DemandGenerationRolePeriodic dg = new DemandGenerationRolePeriodic(this,
-                new DistContinuousDuration(new DistExponential(stream, 2.0), DurationUnit.MINUTE));
-        dg.addDemandGenerator(product, demand);
-        this.setDemandGeneration(dg);
-
-        // MESSAGE HANDLING
-
-        DistContinuousDuration administrativeDelayDemand =
-                new DistContinuousDuration(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-        DemandHandlerYP demandHandler = new DemandHandlerYP(this, administrativeDelayDemand,
-                ypCustomre, new Length(1E6, LengthUnit.METER), 1000, null);
-
-        DistContinuousDuration administrativeDelaySearchAnswer =
-                new DistContinuousDuration(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-        SearchAnswerHandler searchAnswerHandler = new SearchAnswerHandler(this, administrativeDelaySearchAnswer);
-
-        DistContinuousDuration administrativeDelayQuote =
-                new DistContinuousDuration(new DistTriangular(stream, 2, 2.5, 3), DurationUnit.HOUR);
-        QuoteHandler quoteHandler =
-                new QuoteHandlerAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE, administrativeDelayQuote, 0.5, 0);
-
-        OrderConfirmationHandler orderConfirmationHandler = new OrderConfirmationHandler(this);
-
-        ShipmentHandler shipmentHandler = new ShipmentHandlerConsume(this);
-
-        DistContinuousDuration paymentDelay = new DistContinuousDuration(new DistConstant(stream, 0.0), DurationUnit.HOUR);
-        InvoiceHandler billHandler = new InvoiceHandler(this, this.getBankAccount(), PaymentPolicyEnum.PAYMENT_ON_TIME, paymentDelay);
-
-        PurchasingRoleSearch purchasingRole = new PurchasingRoleSearch(this, simulator, demandHandler, searchAnswerHandler, quoteHandler,
-                orderConfirmationHandler, shipmentHandler, billHandler);
-        this.setPurchasingRole(purchasingRole);
-
-        // ANIMATION
-
-        if (simulator instanceof AnimatorInterface)
+        // Let's give Client its corresponding image
+        if (getSimulator() instanceof AnimatorInterface)
         {
-            try
-            {
-                new SingleImageRenderable<>(this, simulator,
-                        DemoMarket.class.getResource("/nl/tudelft/simulation/supplychain/images/Market.gif"));
-            }
-            catch (RemoteException | NamingException exception)
-            {
-                exception.printStackTrace();
-            }
+            new SingleImageRenderable<>(this, getSimulator(),
+                    DemoMarket.class.getResource("/nl/tudelft/simulation/supplychain/images/ActorMarket.gif"));
+        }
+    }
+
+    /**
+     * Set the handlers.
+     */
+    public void makeHandlers()
+    {
+        StreamInterface stream = getSimulator().getModel().getStream("default");
+        DurationUnit hours = DurationUnit.HOUR;
+        DurationUnit days = DurationUnit.DAY;
+        //
+        // create the demand for PCs
+        new DemandGeneratingProcess(getConsumingRole(), this.product,
+                new DistContinuousDuration(new DistExponential(stream, 8.0), hours), 1.0, Duration.ZERO,
+                new Duration(14.0, days));
+        //
+        // tell Client to use the DemandHandler
+        new DemandHandlerSearch(getPurchasingRole(), this.directory, new Length(1000.0, LengthUnit.KILOMETER), 100);
+        TransportPreference transportPreference = new TransportPreference(new ArrayList<>(), CostTimeImportance.COST);
+        new SearchAnswerHandler(getPurchasingRole(), new Duration(24.0, DurationUnit.HOUR), transportPreference);
+        //
+        // tell Client to use the QuoteHandler to handle quotes
+        new QuoteNoHandler((PurchasingRoleRFQ) getPurchasingRole());
+        new QuoteHandlerAll(getPurchasingRole(), QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE, 0.5, 0.0);
+        //
+        // Client has the standard order confirmation Handler
+        new OrderConfirmationHandler(getPurchasingRole());
+        //
+        // Client will get a bill in the end
+        new InvoiceHandler(getFinancingRole(), PaymentPolicyEnum.PAYMENT_ON_TIME, new DistConstantDuration(Duration.ZERO));
+        new TransportInvoiceHandler(getFinancingRole(), PaymentPolicyEnum.PAYMENT_ON_TIME,
+                new DistConstantDuration(Duration.ZERO));
+        new FixedCostProcess(getFinancingRole(), "no fixed costs", new Duration(1, DurationUnit.WEEK),
+                new Money(0.0, MoneyUnit.USD));
+        //
+        // hopefully, Client will get computer shipments
+        new TransportDeliveryHandlerConsume(getReceivingRole());
+        new FulfillmentHandler(getFinancingRole());
+
+        //
+        // CHARTS
+        //
+
+        if (getSimulator() instanceof AnimatorInterface)
+        {
+            XYChart bankChart = new XYChart(getSimulator(), "BankAccount " + getName());
+            // TODO: bankChart.add("bank account", getBankAccount(), BankAccount.BANK_ACCOUNT_CHANGED_EVENT);
         }
     }
 
     @Override
-    public Bounds3d getBounds()
+    public Bounds2d getBounds()
     {
-        return new Bounds3d(25.0, 25.0, 1.0);
+        return new Bounds2d(25.0, 25.0);
     }
-
 }

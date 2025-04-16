@@ -12,16 +12,16 @@ import org.djutils.logger.CategoryLogger;
 import org.pmw.tinylog.Level;
 
 import nl.tudelft.simulation.dsol.SimRuntimeException;
-import nl.tudelft.simulation.dsol.experiment.ReplicationInterface;
+import nl.tudelft.simulation.dsol.experiment.Replication;
 import nl.tudelft.simulation.dsol.experiment.SingleReplication;
 import nl.tudelft.simulation.dsol.swing.gui.ConsoleLogger;
 import nl.tudelft.simulation.dsol.swing.gui.ConsoleOutput;
 import nl.tudelft.simulation.dsol.swing.gui.DsolPanel;
-import nl.tudelft.simulation.dsol.swing.gui.animation.DSOLAnimationApplication;
+import nl.tudelft.simulation.dsol.swing.gui.animation.DsolAnimationApplication;
 import nl.tudelft.simulation.language.DsolException;
 import nl.tudelft.simulation.supplychain.demo.mtsmto.MTSMTOModel;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainAnimator;
-import nl.tudelft.simulation.supplychain.gui.SCControlPanel;
+import nl.tudelft.simulation.supplychain.test.dsol.SCControlPanel;
 
 /**
  * BullwhipApp.java. <br>
@@ -31,7 +31,7 @@ import nl.tudelft.simulation.supplychain.gui.SCControlPanel;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class BullwhipApp extends DSOLAnimationApplication
+public class BullwhipApp extends DsolAnimationApplication
 {
     /** */
     private static final long serialVersionUID = 20221201L;
@@ -66,10 +66,10 @@ public class BullwhipApp extends DSOLAnimationApplication
         SupplyChainAnimator animator = new SupplyChainAnimator("Bullwhip", Time.ZERO);
         animator.setSpeedFactor(3600.0);
         MTSMTOModel model = new MTSMTOModel(animator);
-        ReplicationInterface<Duration> replication =
+        Replication<Duration> replication =
                 new SingleReplication<Duration>("rep1", Duration.ZERO, Duration.ZERO, new Duration(3000.0, DurationUnit.HOUR));
         animator.initialize(model, replication);
-        DsolPanel panel = new DsolPanel(new SCControlPanel(model, animator));
+        DsolPanel panel = new DsolPanel(new SCControlPanel.TimeDoubleUnit(model, animator));
         panel.addTab("logger", new ConsoleLogger(Level.INFO));
         panel.addTab("console", new ConsoleOutput());
         new BullwhipApp("Bullwhip", panel);

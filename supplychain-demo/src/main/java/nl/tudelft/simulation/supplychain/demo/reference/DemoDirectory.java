@@ -6,24 +6,19 @@ import javax.naming.NamingException;
 
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
-import org.djutils.draw.bounds.Bounds3d;
-import org.djutils.draw.point.OrientedPoint3d;
+import org.djutils.draw.bounds.Bounds2d;
+import org.djutils.draw.point.Point2d;
 
 import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
-import nl.tudelft.simulation.supplychain.actor.messaging.devices.reference.WebApplication;
-import nl.tudelft.simulation.supplychain.content.SearchRequest;
-import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
-import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
-import nl.tudelft.simulation.supplychain.handler.search.SearchRequestPolicy;
-import nl.tudelft.simulation.supplychain.message.store.EmptyMessageStore;
-import nl.tudelft.simulation.supplychain.messagehandlers.HandleAllMessages;
-import nl.tudelft.simulation.supplychain.money.Bank;
+import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.reference.Directory;
+import nl.tudelft.simulation.supplychain.role.searching.SearchingRole;
+import nl.tudelft.simulation.supplychain.role.searching.handler.SearchRequestHandler;
 import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
 /**
- * MtsMtoYP.java. <br>
+ * DemoDirectory.java. <br>
  * <br>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
@@ -41,29 +36,21 @@ public class DemoDirectory extends Directory
      * @param position
      * @param bank
      */
-    public DemoDirectory(String name, SupplyChainSimulatorInterface simulator, OrientedPoint3d position, Bank bank)
+    public DemoDirectory(final String id, final SupplyChainModelInterface model, final Point2d location)
     {
-        super(name, simulator, position, bank, new EmptyMessageStore());
+        super(id, id, model, location, id, "X");
 
-        // COMMUNICATION
-
-        WebApplication www = new WebApplication("Web-" + name, this.simulator);
-        super.addSendingDevice(www);
-        ContentReceiver webSystem = new HandleAllMessages(this);
-        super.addReceivingDevice(www, webSystem, new DistConstantDuration(new Duration(10.0, DurationUnit.SECOND)));
-
-        // YP MESSAGE HANDLING
-
-        addContentHandler(SearchRequest.class, new SearchRequestPolicy(this, new Duration(10.0, DurationUnit.MINUTE)));
+        setSearchingRole(new SearchingRole(this));
+        new SearchRequestHandler(getSearchingRole(), new DistConstantDuration(new Duration(10.0, DurationUnit.MINUTE)));
 
         // ANIMATION
 
-        if (simulator instanceof AnimatorInterface)
+        if (getSimulator() instanceof AnimatorInterface)
         {
             try
             {
-                new SingleImageRenderable<>(this, simulator,
-                        DemoDirectory.class.getResource("/nl/tudelft/simulation/supplychain/images/YellowPage.gif"));
+                new SingleImageRenderable<>(this, getSimulator(),
+                        DemoDirectory.class.getResource("/nl/tudelft/simulation/supplychain/images/ActorSearch.gif"));
             }
             catch (RemoteException | NamingException exception)
             {
@@ -73,9 +60,9 @@ public class DemoDirectory extends Directory
     }
 
     @Override
-    public Bounds3d getBounds()
+    public Bounds2d getBounds()
     {
-        return new Bounds3d(25.0, 25.0, 1.0);
+        return new Bounds2d(25.0, 25.0);
     }
 
 }
