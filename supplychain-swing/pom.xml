@@ -19,6 +19,11 @@
       <artifactId>dsol-swing</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.djutils</groupId>
+      <artifactId>djutils-swing</artifactId>
+      <version>2.3.1</version>
+    </dependency>
+    <dependency>
       <groupId>nl.tudelft.simulation</groupId>
       <artifactId>supplychain-core</artifactId>
     </dependency>
