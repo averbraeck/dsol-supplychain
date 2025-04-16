@@ -3,9 +3,9 @@ package nl.tudelft.simulation.supplychain.role.financing.handler;
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 
+import nl.tudelft.simulation.supplychain.content.InventoryRelease;
 import nl.tudelft.simulation.supplychain.content.Invoice;
 import nl.tudelft.simulation.supplychain.content.Order;
-import nl.tudelft.simulation.supplychain.content.InventoryRelease;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
 

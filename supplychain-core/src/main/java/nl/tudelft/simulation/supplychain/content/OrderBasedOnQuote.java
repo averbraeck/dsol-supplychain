@@ -6,7 +6,6 @@ import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
-import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
 
 /**
  * This implementation of an Order contains a link to a Quote on which the order is based. The Order contains a link to the
@@ -46,9 +45,9 @@ public record OrderBasedOnQuote(PurchasingActor sender, SellingActor receiver, T
     }
 
     @Override
-    public TransportOption transportOption()
+    public TransportQuote transportQuote()
     {
-        return this.quote.transportOption();
+        return this.quote.transportQuote();
     }
 
     @Override

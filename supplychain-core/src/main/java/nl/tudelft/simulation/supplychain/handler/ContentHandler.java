@@ -4,11 +4,12 @@ import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.djunits.value.vdouble.scalar.Duration;
+import org.djunits.unit.DurationUnit;
 import org.djutils.base.Identifiable;
 import org.djutils.exceptions.Throw;
 import org.pmw.tinylog.Logger;
 
+import nl.tudelft.simulation.jstats.distributions.DistTriangular;
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.actor.ActorMethods;
@@ -16,7 +17,6 @@ import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.ProductContent;
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
 /**
  * ContentHandlers work on behalf of a Role and take care of processing incoming content (messages, news, shipments).
@@ -65,7 +65,8 @@ public abstract class ContentHandler<C extends Content, R extends Role<R>> imple
         this.id = id;
         this.role = role;
         this.contentClass = contentClass;
-        this.handlingTime = new DistConstantDuration(Duration.ZERO);
+        this.handlingTime =
+                new DistContinuousDuration(new DistTriangular(role.getDefaultStream(), 0.1, 0.5, 1.0), DurationUnit.HOUR);
         this.role.setContentHandler(this);
     }
 
@@ -83,7 +84,7 @@ public abstract class ContentHandler<C extends Content, R extends Role<R>> imple
      */
     protected boolean checkContent(final Content content)
     {
-        if (!getContentClass().equals(content.getClass()))
+        if (!getContentClass().isAssignableFrom(content.getClass()))
         {
             Logger.warn("checkContent - Wrong content type for actor " + getRole() + ", handler " + this.getClass() + ": "
                     + content.getClass());

@@ -6,7 +6,6 @@ import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
-import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
 
 /**
  * This is a stand alone order, that is not based on an RFQ and Quote, but which is directly placed to another actor. It
@@ -36,12 +35,6 @@ public record OrderStandalone(PurchasingActor sender, SellingActor receiver, Tim
     {
         this(sender, receiver, sender.getSimulatorTime(), sender.getModel().getUniqueContentId(),
                 sender.getModel().getUniqueContentId(), deliveryDate, product, amount, price, transportQuote);
-    }
-
-    @Override
-    public TransportOption transportOption()
-    {
-        return transportQuote().transportOption();
     }
 
 }

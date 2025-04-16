@@ -42,4 +42,9 @@ public record ShippingOrder(WarehousingActor sender, WarehousingActor receiver, 
         return inventoryRelease().amount();
     }
 
+    public Order order()
+    {
+        return inventoryRelease().inventoryReleaseRequest().inventoryReservation().inventoryReservationRequest().order();
+    }
+
 }

@@ -1,5 +1,7 @@
 package nl.tudelft.simulation.supplychain.role.selling.handler;
 
+import org.djunits.value.vdouble.scalar.Time;
+
 import nl.tudelft.simulation.supplychain.content.InventoryReleaseRequest;
 import nl.tudelft.simulation.supplychain.content.InventoryReservation;
 import nl.tudelft.simulation.supplychain.content.Order;
@@ -45,8 +47,9 @@ public class InventoryReservationHandler extends ContentHandler<InventoryReserva
         sendContent(orderConfirmation, getHandlingTime().draw());
 
         // schedule the release: delivery time minus transport time
-        var releaseTime =
-                order.deliveryDate().minus(order.transportOption().estimatedTotalTransportDuration(ir.product().getSku()));
+        var releaseTime = order.deliveryDate()
+                .minus(order.transportQuote().transportOption().estimatedTotalTransportDuration(ir.product().getSku()));
+        releaseTime = Time.max(getSimulatorTime(), releaseTime);
         getSimulator().scheduleEventAbs(releaseTime, this, "releaseInventory", new Object[] {ir});
         return true;
     }

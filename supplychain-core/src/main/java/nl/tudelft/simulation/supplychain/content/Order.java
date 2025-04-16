@@ -5,7 +5,6 @@ import org.djunits.value.vdouble.scalar.Time;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
-import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
 
 /**
  * An Order indicates: I want a certain amount of products on a certain date for a certain price. The four attributes "product",
@@ -40,10 +39,10 @@ public interface Order extends GroupedContent, ProductContent
     Time deliveryDate();
 
     /**
-     * Return the accepted transport option.
-     * @return the accepted transport option
+     * Return the accepted transport quote.
+     * @return the accepted transport quote
      */
-    TransportOption transportOption();
+    TransportQuote transportQuote();
 
     /**
      * Return the price we plan to pay for the product.

@@ -44,14 +44,12 @@ public class ShippingOrderHandler extends ContentHandler<ShippingOrder, Shipping
         }
 
         // there should be a transport option that was agreed by the transporter
-        Order order = shippingOrder.inventoryRelease().inventoryReleaseRequest().inventoryReservation()
-                .inventoryReservationRequest().order();
-        var transportOption = order.transportOption();
-        var transportQuote = getRole().getActor().getShippingRole().getTransportQuote(transportOption);
-
+        Order order = shippingOrder.order();
+        var transportQuote = order.transportQuote();
+                
         // The value of the cargo now includes the tarnsport cost and the profit margin of the seller.
         Shipment shipment =
-                new Shipment(getRole().getActor(), order.sender().getWarehousingRole().getActor(), order, order.price());
+                new Shipment(getRole().getActor(), order.sender().getReceivingRole().getActor(), order, order.price());
         TransportOrder transportOrder = new TransportOrder(transportQuote, shipment, order);
         sendContent(transportOrder, getHandlingTime().draw());
         return true;

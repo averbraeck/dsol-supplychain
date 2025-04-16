@@ -6,7 +6,6 @@ import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
-import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
 
 /**
  * A Quote is an answer to a RequestForQuote (or RFQ) and indicates how many items of a certain product could be sold for a
@@ -24,18 +23,18 @@ import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
  * @param rfq the RFQ for which this is the quote
  * @param price the quotation price, including transport costs and a profit margin
  * @param proposedDeliveryDate the intended delivery date of the products
- * @param transportOption the transport option offered
+ * @param transportQuote the transport quote offered
  * @param validityTime the time on the simulator clock until which the quote is valid
  */
 public record Quote(SellingActor sender, PurchasingActor receiver, Time timestamp, long uniqueId, long groupingId,
-        RequestForQuote rfq, Money price, Time proposedDeliveryDate, TransportOption transportOption, Time validityTime)
+        RequestForQuote rfq, Money price, Time proposedDeliveryDate, TransportQuote transportQuote, Time validityTime)
         implements GroupedContent, ProductContent
 {
     public Quote(final RequestForQuote rfq, final Money price, final Time proposedDeliveryDate,
-            final TransportOption transportOption, final Time validityTime)
+            final TransportQuote transportQuote, final Time validityTime)
     {
         this(rfq.receiver(), rfq.sender(), rfq.sender().getSimulatorTime(), rfq.sender().getModel().getUniqueContentId(),
-                rfq.groupingId(), rfq, price, proposedDeliveryDate, transportOption, validityTime);
+                rfq.groupingId(), rfq, price, proposedDeliveryDate, transportQuote, validityTime);
     }
 
     @Override

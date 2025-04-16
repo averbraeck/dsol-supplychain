@@ -167,8 +167,7 @@ public class SellingRoleRFQ extends SellingRole
         Money totalPrice =
                 quoteData.inventoryQuote.priceWithoutProfit().plus(bestTransportQuote.price()).multiplyBy(1.0 + profitMargin);
         Duration qvt = Duration.max(getQuoteValidityTime(), getSimulatorTime().minus(rfq.cutoffDate()));
-        var quote = new Quote(rfq, totalPrice, rfq.earliestDeliveryDate(), bestTransportQuote.transportOption(),
-                getSimulatorTime().plus(qvt));
+        var quote = new Quote(rfq, totalPrice, rfq.earliestDeliveryDate(), bestTransportQuote, getSimulatorTime().plus(qvt));
         sendContent(quote, Duration.ZERO);
 
         // remove the record -- late transport quotes are void

@@ -1,16 +1,12 @@
 package nl.tudelft.simulation.supplychain.role.shipping;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Set;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.ShippingOrder;
-import nl.tudelft.simulation.supplychain.content.TransportQuote;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
-import nl.tudelft.simulation.supplychain.role.transporting.TransportOption;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 
 /**
@@ -27,9 +23,6 @@ public class ShippingRole extends Role<ShippingRole>
     /** */
     private static final long serialVersionUID = 20221206L;
 
-    /** the received transport quotes belonging to transport options. */
-    private Map<TransportOption, TransportQuote> transportQuoteMap = new LinkedHashMap<>();
-
     /** the necessary autonomous processes. */
     private static Set<Class<? extends AutonomousProcess<ShippingRole>>> necessaryAutonomousProcesses = Set.of();
 
@@ -43,34 +36,6 @@ public class ShippingRole extends Role<ShippingRole>
     public ShippingRole(final WarehousingActor owner)
     {
         super("shipping", owner, new ContentReceiverDirect());
-    }
-
-    /**
-     * Add a transport quote in the map for later retrieval.
-     * @param tq the transport quote to add
-     */
-    public void addTransportQuote(final TransportQuote tq)
-    {
-        this.transportQuoteMap.put(tq.transportOption(), tq);
-    }
-
-    /**
-     * Remove a transport option and the related transport quote from the map.
-     * @param to the transport option to remove
-     */
-    public void removeTransportOption(final TransportOption to)
-    {
-        this.transportQuoteMap.remove(to);
-    }
-
-    /**
-     * Return a transport quote from the map.
-     * @param to the transport option to retrieve
-     * @return the transport quote belongin to the transport option
-     */
-    public TransportQuote getTransportQuote(final TransportOption to)
-    {
-        return this.transportQuoteMap.get(to);
     }
 
     @Override
