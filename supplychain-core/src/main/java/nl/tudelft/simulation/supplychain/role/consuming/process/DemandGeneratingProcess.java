@@ -41,6 +41,12 @@ public class DemandGeneratingProcess extends AutonomousProcess<ConsumingRole>
 
     /** the latest delivery date relative to the current simulator time. */
     private DistContinuousDuration latestDeliveryDurationDistribution;
+    
+    /** the maximum number of generations, e.g. for testing. */
+    private int maxNumberGenerations = Integer.MAX_VALUE;
+    
+    /** the number of generations, e.g. for testing. */
+    private int numberGenerations = 0;
 
     /**
      * Make a demand generating process.
@@ -120,7 +126,11 @@ public class DemandGeneratingProcess extends AutonomousProcess<ConsumingRole>
                     getSimulatorTime().plus(this.earliestDeliveryDurationDistribution.draw()),
                     getSimulatorTime().plus(this.latestDeliveryDurationDistribution.draw()));
             getActor().sendContent(demand, getRole().getAdministrativeDelay().draw());
-            getSimulator().scheduleEventRel(this.intervalDistribution.draw(), this, "generateDemand", null);
+            this.numberGenerations++;
+            if (this.numberGenerations < this.maxNumberGenerations)
+            {
+                getSimulator().scheduleEventRel(this.intervalDistribution.draw(), this, "generateDemand", null);
+            }
 
             // we might collect some statistics for the demand
             getActor().fireEvent(new TimedEvent<Time>(ConsumingRole.DEMAND_GENERATED_EVENT, demand, getSimulatorTime()));
@@ -174,6 +184,24 @@ public class DemandGeneratingProcess extends AutonomousProcess<ConsumingRole>
     public DistContinuousDuration getLatestDeliveryDurationDistribution()
     {
         return this.latestDeliveryDurationDistribution;
+    }
+
+    /**
+     * Return the maxNumberGenerations.
+     * @return maxNumberGenerations
+     */
+    public int getMaxNumberGenerations()
+    {
+        return this.maxNumberGenerations;
+    }
+
+    /**
+     * Set a new value for maxNumberGenerations.
+     * @param maxNumberGenerations set a new value for maxNumberGenerations
+     */
+    public void setMaxNumberGenerations(final int maxNumberGenerations)
+    {
+        this.maxNumberGenerations = maxNumberGenerations;
     }
 
 }
