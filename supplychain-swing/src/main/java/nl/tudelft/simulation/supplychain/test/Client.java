@@ -28,6 +28,7 @@ import nl.tudelft.simulation.supplychain.reference.Retailer;
 import nl.tudelft.simulation.supplychain.role.consuming.ConsumingRole;
 import nl.tudelft.simulation.supplychain.role.consuming.process.DemandGeneratingProcess;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
+import nl.tudelft.simulation.supplychain.role.financing.handler.FulfillmentHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.InvoiceHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentPolicyEnum;
@@ -134,6 +135,7 @@ public class Client extends Customer
         //
         // hopefully, Client will get computer shipments
         new TransportDeliveryHandlerConsume(getReceivingRole());
+        new FulfillmentHandler(getFinancingRole());
         //
         // useless handlers
         new PaymentHandler(getFinancingRole());

@@ -24,6 +24,7 @@ import nl.tudelft.simulation.supplychain.reference.Retailer;
 import nl.tudelft.simulation.supplychain.reference.Supplier;
 import nl.tudelft.simulation.supplychain.role.directing.DirectingRoleSelling;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
+import nl.tudelft.simulation.supplychain.role.financing.handler.FulfillmentHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.InventoryReleaseHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.InvoiceHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentHandler;
@@ -181,6 +182,7 @@ public class PCShop extends Retailer
         // hopefully, PCShop will get computer shipments
         new TransportDeliveryHandlerStock(getReceivingRole());
         new InventoryEntryHandler(getWarehousingRole());
+        new FulfillmentHandler(getFinancingRole());
 
         //
         // CHARTS

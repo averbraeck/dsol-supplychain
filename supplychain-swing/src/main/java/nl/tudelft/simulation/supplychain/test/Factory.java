@@ -22,6 +22,7 @@ import nl.tudelft.simulation.supplychain.reference.Bank;
 import nl.tudelft.simulation.supplychain.reference.Supplier;
 import nl.tudelft.simulation.supplychain.role.directing.DirectingRoleSelling;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
+import nl.tudelft.simulation.supplychain.role.financing.handler.FulfillmentHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.InventoryReleaseHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.InvoiceHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentHandler;
@@ -130,6 +131,7 @@ public class Factory extends Supplier
         // Unnecessary handlers
         new InventoryEntryHandler(getWarehousingRole());
         new TransportDeliveryHandlerStock(getReceivingRole());
+        new FulfillmentHandler(getFinancingRole());
         
         //
         // CHARTS
