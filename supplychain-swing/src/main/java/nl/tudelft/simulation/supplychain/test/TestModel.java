@@ -2,7 +2,6 @@ package nl.tudelft.simulation.supplychain.test;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
-import java.util.concurrent.TimeUnit;
 
 import org.djunits.unit.DurationUnit;
 import org.djunits.unit.MassUnit;
