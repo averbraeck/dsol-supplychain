@@ -3,12 +3,9 @@ package nl.tudelft.simulation.supplychain.role.directing;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
-import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportMode;
 
 /**
@@ -33,12 +30,6 @@ public class DirectingRoleTransporting extends Role<DirectingRoleTransporting>
 
     /** the landmasses on which we operate. Empty means all. */
     private final List<String> landmassesForTransport = new ArrayList<>();
-
-    /** the necessary content handlers. */
-    private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of();
-
-    /** the necessary autonomous processes. */
-    private static Set<Class<? extends AutonomousProcess<DirectingRoleTransporting>>> necessaryAutonomousProcesses = Set.of();
 
     /**
      * Create a new Directing role for sales.
@@ -129,18 +120,6 @@ public class DirectingRoleTransporting extends Role<DirectingRoleTransporting>
     public void setTransportOnAllLandmasses(final boolean transportOnAllLandmasses)
     {
         this.transportOnAllLandmasses = transportOnAllLandmasses;
-    }
-
-    @Override
-    protected Set<Class<? extends Content>> getNecessaryContentHandlers()
-    {
-        return necessaryContentHandlers;
-    }
-
-    @Override
-    protected Set<Class<? extends AutonomousProcess<DirectingRoleTransporting>>> getNecessaryAutonomousProcesses()
-    {
-        return necessaryAutonomousProcesses;
     }
 
 }

@@ -5,20 +5,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djutils.exceptions.Throw;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.content.Content;
-import nl.tudelft.simulation.supplychain.content.TransportOrder;
 import nl.tudelft.simulation.supplychain.content.TransportQuote;
 import nl.tudelft.simulation.supplychain.content.TransportQuoteRequest;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.money.MoneyUnit;
-import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 import nl.tudelft.simulation.supplychain.product.Sku;
 
 /**
@@ -48,13 +44,6 @@ public class TransportingRole extends Role<TransportingRole>
 
     /** the estimated costs to transport an SKU per km. */
     private Map<Sku, Money> estimatedTransportCostsPerKm = new LinkedHashMap<>();
-
-    /** the necessary content handlers. */
-    private static Set<Class<? extends Content>> necessaryContentHandlers =
-            Set.of(TransportQuoteRequest.class, TransportOrder.class);
-
-    /** the necessary autonomous processes. */
-    private static Set<Class<? extends AutonomousProcess<TransportingRole>>> necessaryAutonomousProcesses = Set.of();
 
     /**
      * Create a new Search role.
@@ -92,8 +81,7 @@ public class TransportingRole extends Role<TransportingRole>
         {
             var transportOption = new TransportOption(getActor().getId() + "-transport for " + tqr.groupingId() + " by truck",
                     getActor(), from, to);
-            var transportOptionStep =
-                    new TransportOptionStep(transportOption.getId(), from, to, TransportMode.TRUCK, this);
+            var transportOptionStep = new TransportOptionStep(transportOption.getId(), from, to, TransportMode.TRUCK, this);
             transportOption.addTransportStep(transportOptionStep);
             double profitMargin = getActor().getDirectingRoleTransporting().getProfitMargin(TransportMode.TRUCK);
             Money price = transportOptionStep.getEstimatedTransportCost(sku).multiplyBy(tqr.amount() * (1.0 + profitMargin));
@@ -261,18 +249,6 @@ public class TransportingRole extends Role<TransportingRole>
         Throw.whenNull(sku, "sku cannot be null");
         Throw.whenNull(estimatedTransportCostPerKm, "estimatedTransportCostPerKm cannot be null");
         this.estimatedTransportCostsPerKm.put(sku, estimatedTransportCostPerKm);
-    }
-
-    @Override
-    protected Set<Class<? extends Content>> getNecessaryContentHandlers()
-    {
-        return necessaryContentHandlers;
-    }
-
-    @Override
-    protected Set<Class<? extends AutonomousProcess<TransportingRole>>> getNecessaryAutonomousProcesses()
-    {
-        return necessaryAutonomousProcesses;
     }
 
     @Override

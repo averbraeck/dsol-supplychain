@@ -1,14 +1,5 @@
 package nl.tudelft.simulation.supplychain.role.purchasing;
 
-import java.util.Set;
-
-import nl.tudelft.simulation.supplychain.content.Content;
-import nl.tudelft.simulation.supplychain.content.Demand;
-import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
-import nl.tudelft.simulation.supplychain.content.Quote;
-import nl.tudelft.simulation.supplychain.content.QuoteNo;
-import nl.tudelft.simulation.supplychain.content.SearchAnswer;
-
 /**
  * The purchasing role with searchs is a role that organizes the purchasing based on a SearchRequest, and continues from there.
  * <p>
@@ -21,10 +12,6 @@ public class PurchasingRoleSearch extends PurchasingRoleRFQ
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221205L;
-
-    /** the necessary content handlers. */
-    private static Set<Class<? extends Content>> necessaryContentHandlers =
-            Set.of(Demand.class, SearchAnswer.class, Quote.class, QuoteNo.class, OrderConfirmation.class);
 
     /**
      * Construct a new PurchasingRole for Demand - SearchAnswer - Quote - Confirmation - Shipment - Invoice.
@@ -39,12 +26,6 @@ public class PurchasingRoleSearch extends PurchasingRoleRFQ
     public String getId()
     {
         return getActor().getId() + "-BUYING(search)";
-    }
-
-    @Override
-    protected Set<Class<? extends Content>> getNecessaryContentHandlers()
-    {
-        return necessaryContentHandlers;
     }
 
 }

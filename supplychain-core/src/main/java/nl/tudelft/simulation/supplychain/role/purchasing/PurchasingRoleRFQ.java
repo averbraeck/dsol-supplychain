@@ -5,13 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
-import nl.tudelft.simulation.supplychain.content.Content;
-import nl.tudelft.simulation.supplychain.content.Demand;
-import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
 import nl.tudelft.simulation.supplychain.content.Quote;
-import nl.tudelft.simulation.supplychain.content.QuoteNo;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 
 /**
@@ -36,10 +31,6 @@ public class PurchasingRoleRFQ extends PurchasingRole
 
     /** the map of quotes that have come in for a groupingId. */
     private Map<Long, List<Quote>> quoteMap = new LinkedHashMap<>();
-
-    /** the necessary content handlers. */
-    private static Set<Class<? extends Content>> necessaryContentHandlers =
-            Set.of(Demand.class, Quote.class, QuoteNo.class, OrderConfirmation.class);
 
     /**
      * Constructs a new PurchasingRole for Demand - Quote - Confirmation - Shipment - Invoice.
@@ -141,9 +132,4 @@ public class PurchasingRoleRFQ extends PurchasingRole
         this.discardNegativeQuotes = discardNegativeQuotes;
     }
 
-    @Override
-    protected Set<Class<? extends Content>> getNecessaryContentHandlers()
-    {
-        return necessaryContentHandlers;
-    }
 }

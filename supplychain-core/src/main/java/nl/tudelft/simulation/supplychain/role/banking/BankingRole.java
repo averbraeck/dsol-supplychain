@@ -3,7 +3,6 @@ package nl.tudelft.simulation.supplychain.role.banking;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.djutils.event.EventType;
 import org.djutils.exceptions.Throw;
@@ -11,14 +10,10 @@ import org.djutils.metadata.MetaData;
 import org.djutils.metadata.ObjectDescriptor;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.content.BankTransfer;
-import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.money.MoneyUnit;
-import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
-import nl.tudelft.simulation.supplychain.role.banking.process.InterestProcess;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
 
 /**
@@ -49,13 +44,6 @@ public class BankingRole extends Role<BankingRole>
     public static final EventType BANK_ACCOUNT_CHANGED_EVENT = new EventType("BANK_ACCOUNT_CHANGED_EVENT",
             new MetaData("account", "bank account", new ObjectDescriptor("actor", "account holder", FinancingActor.class),
                     new ObjectDescriptor("balance", "bank balance", Money.class)));
-
-    /** the necessary content handlers. */
-    private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of(BankTransfer.class);
-
-    /** the necessary autonomous processes. */
-    private static Set<Class<? extends AutonomousProcess<BankingRole>>> necessaryAutonomousProcesses =
-            Set.of(InterestProcess.class);
 
     /**
      * Create a new FinancingRole with an attached BankAccount.
@@ -187,18 +175,6 @@ public class BankingRole extends Role<BankingRole>
     public BankingActor getActor()
     {
         return (BankingActor) super.getActor();
-    }
-
-    @Override
-    protected Set<Class<? extends Content>> getNecessaryContentHandlers()
-    {
-        return necessaryContentHandlers;
-    }
-
-    @Override
-    protected Set<Class<? extends AutonomousProcess<BankingRole>>> getNecessaryAutonomousProcesses()
-    {
-        return necessaryAutonomousProcesses;
     }
 
 }

@@ -5,7 +5,6 @@ import java.util.Set;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
-import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportingActor;
 
 /**
@@ -26,9 +25,6 @@ public abstract class SellingRole extends Role<SellingRole>
     /** the set of transporting actors who can take care of the transport of products. */
     private Set<TransportingActor> transporters = new LinkedHashSet<>();
 
-    /** the necessary autonomous processes. */
-    private static Set<Class<? extends AutonomousProcess<SellingRole>>> necessaryAutonomousProcesses = Set.of();
-
     /**
      * Create a SellingRole object for an actor.
      * @param owner the owner of this role
@@ -36,12 +32,6 @@ public abstract class SellingRole extends Role<SellingRole>
     public SellingRole(final SellingActor owner)
     {
         super("selling", owner, new ContentReceiverDirect());
-    }
-
-    @Override
-    protected Set<Class<? extends AutonomousProcess<SellingRole>>> getNecessaryAutonomousProcesses()
-    {
-        return necessaryAutonomousProcesses;
     }
 
     /**

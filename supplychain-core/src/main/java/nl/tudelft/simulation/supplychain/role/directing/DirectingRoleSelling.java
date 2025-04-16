@@ -6,9 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
-import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 import nl.tudelft.simulation.supplychain.product.Product;
 
 /**
@@ -36,12 +34,6 @@ public class DirectingRoleSelling extends Role<DirectingRoleSelling>
 
     /** the landmasses to which we sell in case salesToAllLandmasses is false. */
     private final Set<String> salesToLandmass = new LinkedHashSet<>();
-
-    /** the necessary content handlers. */
-    private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of();
-
-    /** the necessary autonomous processes. */
-    private static Set<Class<? extends AutonomousProcess<DirectingRoleSelling>>> necessaryAutonomousProcesses = Set.of();
 
     /**
      * Create a new Directing role for sales.
@@ -149,15 +141,4 @@ public class DirectingRoleSelling extends Role<DirectingRoleSelling>
         this.salesToAllLandmasses = salesToAllLandmasses;
     }
 
-    @Override
-    protected Set<Class<? extends Content>> getNecessaryContentHandlers()
-    {
-        return necessaryContentHandlers;
-    }
-
-    @Override
-    protected Set<Class<? extends AutonomousProcess<DirectingRoleSelling>>> getNecessaryAutonomousProcesses()
-    {
-        return necessaryAutonomousProcesses;
-    }
 }

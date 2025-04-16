@@ -3,8 +3,6 @@ package nl.tudelft.supplychain.actor;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Set;
-
 import org.djunits.value.vdouble.scalar.Time;
 import org.djutils.draw.point.Point2d;
 import org.junit.jupiter.api.Test;
@@ -12,11 +10,9 @@ import org.junit.jupiter.api.Test;
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiver;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulator;
-import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 
 /**
  * RoleTest tests the method of the Role.
@@ -54,20 +50,5 @@ public class RoleTest
         {
             super(id, actor, messageReceiver);
         }
-
-    
-        @Override
-        protected Set<Class<? extends Content>> getNecessaryContentHandlers()
-        {
-            return Set.of();
-        }
-
-    
-        @Override
-        protected Set<Class<? extends AutonomousProcess<TestRole>>> getNecessaryAutonomousProcesses()
-        {
-            return Set.of();
-        }
-
     }
 }

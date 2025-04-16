@@ -2,19 +2,12 @@ package nl.tudelft.simulation.supplychain.role.financing;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.djunits.value.vdouble.scalar.Duration;
 
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.content.Content;
-import nl.tudelft.simulation.supplychain.content.Fulfillment;
-import nl.tudelft.simulation.supplychain.content.InventoryRelease;
-import nl.tudelft.simulation.supplychain.content.Invoice;
-import nl.tudelft.simulation.supplychain.content.Payment;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
 import nl.tudelft.simulation.supplychain.money.Money;
-import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 import nl.tudelft.simulation.supplychain.role.banking.BankingActor;
 import nl.tudelft.simulation.supplychain.role.banking.BankingRole;
 import nl.tudelft.simulation.supplychain.role.financing.process.FixedCostProcess;
@@ -37,14 +30,6 @@ public class FinancingRole extends Role<FinancingRole>
 
     /** the fixed costs for this supply chain actor. */
     private List<FixedCostProcess> fixedCosts = new ArrayList<FixedCostProcess>();
-
-    /** the necessary content handlers. */
-    private static Set<Class<? extends Content>> necessaryContentHandlers =
-            Set.of(Invoice.class, Payment.class, Fulfillment.class, InventoryRelease.class);
-
-    /** the necessary autonomous processes. */
-    private static Set<Class<? extends AutonomousProcess<FinancingRole>>> necessaryAutonomousProcesses =
-            Set.of(FixedCostProcess.class);
 
     /**
      * Create a new FinancingRole with an attached BankAccount.
@@ -93,18 +78,6 @@ public class FinancingRole extends Role<FinancingRole>
     public FinancingActor getActor()
     {
         return (FinancingActor) super.getActor();
-    }
-
-    @Override
-    protected Set<Class<? extends Content>> getNecessaryContentHandlers()
-    {
-        return necessaryContentHandlers;
-    }
-
-    @Override
-    protected Set<Class<? extends AutonomousProcess<FinancingRole>>> getNecessaryAutonomousProcesses()
-    {
-        return necessaryAutonomousProcesses;
     }
 
 }

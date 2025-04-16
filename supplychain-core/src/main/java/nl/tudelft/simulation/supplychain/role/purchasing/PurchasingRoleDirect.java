@@ -1,11 +1,5 @@
 package nl.tudelft.simulation.supplychain.role.purchasing;
 
-import java.util.Set;
-
-import nl.tudelft.simulation.supplychain.content.Content;
-import nl.tudelft.simulation.supplychain.content.Demand;
-import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
-
 /**
  * The direct purchasing role is a role that organizes the purchasing based on a single supplier, and continues from there.
  * <p>
@@ -18,9 +12,6 @@ public class PurchasingRoleDirect extends PurchasingRole
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221205L;
-
-    /** the necessary content handlers. */
-    private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of(Demand.class, OrderConfirmation.class);
 
     /**
      * Construct a new PurchasingRole for Generic Demand - Confirmation - Shipment - Invoice.
@@ -37,9 +28,4 @@ public class PurchasingRoleDirect extends PurchasingRole
         return getActor().getId() + "-BUYING(direct)";
     }
 
-    @Override
-    protected Set<Class<? extends Content>> getNecessaryContentHandlers()
-    {
-        return necessaryContentHandlers;
-    }
 }

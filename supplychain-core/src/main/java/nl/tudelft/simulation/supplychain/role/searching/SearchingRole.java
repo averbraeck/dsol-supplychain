@@ -10,10 +10,7 @@ import java.util.Set;
 
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.content.Content;
-import nl.tudelft.simulation.supplychain.content.SearchRequest;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
-import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 import nl.tudelft.simulation.supplychain.product.Product;
 
 /**
@@ -35,12 +32,6 @@ public class SearchingRole extends Role<SearchingRole>
 
     /** the dictionary of product-actor combinations. */
     private Map<Product, HashSet<Actor>> productDictionary = new LinkedHashMap<>();
-
-    /** the necessary content handlers. */
-    private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of(SearchRequest.class);
-
-    /** the necessary autonomous processes. */
-    private static Set<Class<? extends AutonomousProcess<SearchingRole>>> necessaryAutonomousProcesses = Set.of();
 
     /**
      * Create a new Search role.
@@ -175,20 +166,6 @@ public class SearchingRole extends Role<SearchingRole>
             this.topicDictionary.put(topic, actors);
         }
         return actors.add(actor);
-    }
-
-
-    @Override
-    protected Set<Class<? extends Content>> getNecessaryContentHandlers()
-    {
-        return necessaryContentHandlers;
-    }
-
-
-    @Override
-    protected Set<Class<? extends AutonomousProcess<SearchingRole>>> getNecessaryAutonomousProcesses()
-    {
-        return necessaryAutonomousProcesses;
     }
 
 }

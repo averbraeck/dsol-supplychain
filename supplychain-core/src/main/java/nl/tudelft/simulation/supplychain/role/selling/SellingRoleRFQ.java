@@ -5,16 +5,12 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
 
-import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.InventoryQuote;
-import nl.tudelft.simulation.supplychain.content.InventoryReservation;
-import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.content.QuoteNo;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
@@ -48,10 +44,6 @@ public class SellingRoleRFQ extends SellingRole
 
     /** the RFQs for which transport quote requests have been sent. */
     private Map<RequestForQuote, QuoteData> quoteDataMap = new LinkedHashMap<>();
-
-    /** the necessary content handlers. */
-    private static Set<Class<? extends Content>> necessaryContentHandlers =
-            Set.of(RequestForQuote.class, InventoryQuote.class, TransportQuote.class, Order.class, InventoryReservation.class);
 
     /**
      * Constructs a new SellingRole for RFQ - Order - Payment.
@@ -212,12 +204,6 @@ public class SellingRoleRFQ extends SellingRole
     public String getId()
     {
         return getActor().getName() + "-SELLING(RFQ)";
-    }
-
-    @Override
-    protected Set<Class<? extends Content>> getNecessaryContentHandlers()
-    {
-        return necessaryContentHandlers;
     }
 
     /**

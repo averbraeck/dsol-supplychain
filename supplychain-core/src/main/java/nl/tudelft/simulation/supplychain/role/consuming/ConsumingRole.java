@@ -2,7 +2,6 @@ package nl.tudelft.simulation.supplychain.role.consuming;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.djutils.event.EventType;
 import org.djutils.metadata.MetaData;
@@ -10,10 +9,8 @@ import org.djutils.metadata.ObjectDescriptor;
 
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.actor.Role;
-import nl.tudelft.simulation.supplychain.content.Content;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.receiver.ContentReceiverDirect;
-import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.consuming.process.DemandGeneratingProcess;
 
@@ -40,13 +37,6 @@ public class ConsumingRole extends Role<ConsumingRole>
 
     /** the administrative delay when sending messages. */
     private DistContinuousDuration administrativeDelay;
-
-    /** the necessary content handlers. */
-    private static Set<Class<? extends Content>> necessaryContentHandlers = Set.of();
-
-    /** the necessary autonomous processes. */
-    private static Set<Class<? extends AutonomousProcess<ConsumingRole>>> necessaryAutonomousProcesses =
-            Set.of(DemandGeneratingProcess.class);
 
     /**
      * @param owner the actor that has this role
@@ -111,20 +101,6 @@ public class ConsumingRole extends Role<ConsumingRole>
     public String toString()
     {
         return getId();
-    }
-
-
-    @Override
-    protected Set<Class<? extends Content>> getNecessaryContentHandlers()
-    {
-        return necessaryContentHandlers;
-    }
-
-
-    @Override
-    protected Set<Class<? extends AutonomousProcess<ConsumingRole>>> getNecessaryAutonomousProcesses()
-    {
-        return necessaryAutonomousProcesses;
     }
 
 }
