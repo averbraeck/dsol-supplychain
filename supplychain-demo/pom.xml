@@ -17,6 +17,7 @@
     <dependency>
       <groupId>nl.tudelft.simulation</groupId>
       <artifactId>supplychain-swing</artifactId>
+      <version>3.0</version>
     </dependency>
   </dependencies>
   
