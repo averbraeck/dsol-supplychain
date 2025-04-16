@@ -110,9 +110,10 @@ public class Client extends Customer
         DurationUnit days = DurationUnit.DAY;
         //
         // create the demand for PCs
-        new DemandGeneratingProcess(getConsumingRole(), this.product,
+        var dgp = new DemandGeneratingProcess(getConsumingRole(), this.product,
                 new DistContinuousDuration(new DistExponential(stream, 24.0), hours), 1.0, Duration.ZERO,
                 new Duration(14.0, days));
+        dgp.setMaxNumberGenerations(1);
         //
         // tell Client to use the DemandHandler
         DemandHandlerRFQ demandHandler = new DemandHandlerRFQ(getPurchasingRole(), new Duration(24.0, hours));
@@ -136,11 +137,11 @@ public class Client extends Customer
         //
         // useless handlers
         new PaymentHandler(getFinancingRole());
-        
+
         //
         // CHARTS
         //
-        
+
         if (getSimulator() instanceof AnimatorInterface)
         {
             XYChart bankChart = new XYChart(getSimulator(), "BankAccount " + getName());

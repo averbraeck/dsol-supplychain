@@ -2,6 +2,7 @@ package nl.tudelft.simulation.supplychain.test;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.util.concurrent.TimeUnit;
 
 import org.djunits.unit.DurationUnit;
 import org.djunits.unit.MassUnit;
@@ -34,6 +35,7 @@ import nl.tudelft.simulation.supplychain.product.Sku;
 import nl.tudelft.simulation.supplychain.reference.Bank;
 import nl.tudelft.simulation.supplychain.reference.Transporter;
 import nl.tudelft.simulation.supplychain.role.banking.BankingRole;
+import nl.tudelft.simulation.supplychain.role.banking.handler.BankTransferHandler;
 import nl.tudelft.simulation.supplychain.role.banking.process.InterestProcess;
 
 /**
@@ -105,6 +107,7 @@ public class TestModel extends SupplyChainModel implements EventListener
             new InterestProcess(this.bank.getBankingRole());
             this.bank.getBankingRole().setAnnualInterestRateNeg(-0.080);
             this.bank.getBankingRole().setAnnualInterestRatePos(0.025);
+            new BankTransferHandler(this.bank.getBankingRole());
             String s = this.bank.checkRolesComplete();
             System.err.println("BANK - " + s);
 
@@ -170,6 +173,7 @@ public class TestModel extends SupplyChainModel implements EventListener
         this.factory.addListener(this, Actor.SEND_CONTENT_EVENT);
         this.pcShop.addListener(this, Actor.SEND_CONTENT_EVENT);
         this.bank.addListener(this, Actor.SEND_CONTENT_EVENT);
+        this.trucking.addListener(this, Actor.SEND_CONTENT_EVENT);
     }
 
     /**
@@ -179,7 +183,7 @@ public class TestModel extends SupplyChainModel implements EventListener
     {
         System.out.println("End of TestModel replication");
         System.out.println("Runtime = " + ((System.currentTimeMillis() - this.startTimeMs) / 1000) + " seconds.");
-        System.out.println("Simulation time = " + this.devsSimulator.getSimulatorTime());
+        System.out.println("Simulation time = " + this.devsSimulator.getSimulatorTime().toString(DurationUnit.HOUR));
     }
 
     @Override
