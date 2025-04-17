@@ -7,6 +7,7 @@ import nl.tudelft.simulation.supplychain.content.InventoryReservation;
 import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
 
 /**
@@ -26,11 +27,11 @@ public class InventoryReservationHandler extends ContentHandler<InventoryReserva
 
     /**
      * Construct a new InventoryReservation handler.
-     * @param owner the role belonging to this handler
+     * @param owner the actor belonging to this handler
      */
-    public InventoryReservationHandler(final SellingRole owner)
+    public InventoryReservationHandler(final SellingActor owner)
     {
-        super("InventoryReservationHandler", owner, InventoryReservation.class);
+        super("InventoryReservationHandler", owner.getSellingRole(), InventoryReservation.class);
     }
 
     @Override

@@ -13,7 +13,7 @@ import nl.tudelft.simulation.supplychain.content.OrderBasedOnQuote;
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
-import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 
 /**
  * The QuoteHandlerTimeout handles quotes until a certain timeout is reached. When all Quotes are in, it reacts. It schedules
@@ -35,12 +35,12 @@ public class QuoteHandlerTimeout extends QuoteHandler
 
     /**
      * Constructor of the QuoteHandlerTimeout with a user defined comparator for quotes.
-     * @param owner the role for this QuoteHandler.
+     * @param owner the actor for this QuoteHandler.
      * @param comparator the predefined sorting comparator type.
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the margin within which the offered amount may differ from the requested amount.
      */
-    public QuoteHandlerTimeout(final PurchasingRole owner, final Comparator<Quote> comparator, final double maximumPriceMargin,
+    public QuoteHandlerTimeout(final PurchasingActor owner, final Comparator<Quote> comparator, final double maximumPriceMargin,
             final double minimumAmountMargin)
     {
         super("QuoteHandlerTimeout", owner, comparator, maximumPriceMargin, minimumAmountMargin);
@@ -53,7 +53,7 @@ public class QuoteHandlerTimeout extends QuoteHandler
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the minimal amount margin
      */
-    public QuoteHandlerTimeout(final PurchasingRole owner, final QuoteComparatorEnum comparatorType,
+    public QuoteHandlerTimeout(final PurchasingActor owner, final QuoteComparatorEnum comparatorType,
             final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super("QuoteHandlerTimeout", owner, comparatorType, maximumPriceMargin, minimumAmountMargin);
@@ -71,10 +71,7 @@ public class QuoteHandlerTimeout extends QuoteHandler
 
         // add the quote to the list
         role.addQuoteToMap(quote);
-        
 
-        
-        
         long demandId = quote.groupingId();
         ContentStoreInterface messageStore = getActor().getContentStore();
         int numberQuotes = messageStore.getContentList(demandId, Quote.class).size();

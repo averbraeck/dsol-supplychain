@@ -6,6 +6,7 @@ import org.djutils.exceptions.Throw;
 import nl.tudelft.simulation.dsol.formalisms.eventscheduling.SimEventInterface;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
+import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
 
 /**
@@ -34,14 +35,14 @@ public class FixedCostProcess extends AutonomousProcess<FinancingRole>
 
     /**
      * Create the autonomous process for a fixed cost item for an actor.
-     * @param role the FinancingRole to wich these fixed costs belong
+     * @param actor the FinancingActor to which these fixed costs belong
      * @param description the description
      * @param interval the interval for booking fixed cost
      * @param amount the fixed cost per interval
      */
-    public FixedCostProcess(final FinancingRole role, final String description, final Duration interval, final Money amount)
+    public FixedCostProcess(final FinancingActor actor, final String description, final Duration interval, final Money amount)
     {
-        super(role);
+        super(actor.getFinancingRole());
         Throw.whenNull(description, "description cannot be null");
         Throw.whenNull(interval, "interval cannot be null");
         Throw.when(interval.le0(), IllegalArgumentException.class, "interval duration cannot be <= 0");
@@ -49,7 +50,7 @@ public class FixedCostProcess extends AutonomousProcess<FinancingRole>
         this.description = description;
         this.interval = interval;
         this.amount = amount;
-        role.addAutonomousProcess(this);
+        getRole().addAutonomousProcess(this);
         schedule();
     }
 

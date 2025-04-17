@@ -4,6 +4,7 @@ import org.djutils.logger.CategoryLogger;
 
 import nl.tudelft.simulation.supplychain.content.BankTransfer;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.banking.BankingActor;
 import nl.tudelft.simulation.supplychain.role.banking.BankingRole;
 
 /**
@@ -23,9 +24,9 @@ public class BankTransferHandler extends ContentHandler<BankTransfer, BankingRol
      * Constructs a new BankTransferHandler.
      * @param owner the owner of the handler.
      */
-    public BankTransferHandler(final BankingRole owner)
+    public BankTransferHandler(final BankingActor owner)
     {
-        super("BankTransferHandler", owner, BankTransfer.class);
+        super("BankTransferHandler", owner.getBankingRole(), BankTransfer.class);
     }
 
     @Override

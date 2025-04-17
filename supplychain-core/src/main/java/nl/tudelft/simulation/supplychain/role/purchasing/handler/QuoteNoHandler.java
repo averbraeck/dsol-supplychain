@@ -2,11 +2,12 @@ package nl.tudelft.simulation.supplychain.role.purchasing.handler;
 
 import nl.tudelft.simulation.supplychain.content.QuoteNo;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleRFQ;
 
 /**
- * The QuoteNoHandler implements the business logic for a buyer who receives a negative Quote from a selling actor. 
+ * The QuoteNoHandler implements the business logic for a buyer who receives a negative Quote from a selling actor.
  * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
@@ -22,9 +23,9 @@ public class QuoteNoHandler extends ContentHandler<QuoteNo, PurchasingRole>
      * Constructs a new QuoteNoHandler.
      * @param owner the owner of the handler
      */
-    public QuoteNoHandler(final PurchasingRoleRFQ owner)
+    public QuoteNoHandler(final PurchasingActor owner)
     {
-        super("QuoteNoHandler", owner, QuoteNo.class);
+        super("QuoteNoHandler", owner.getPurchasingRole(), QuoteNo.class);
     }
 
     @Override

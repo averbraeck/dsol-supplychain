@@ -6,6 +6,7 @@ import org.djunits.value.vdouble.scalar.Duration;
 import nl.tudelft.simulation.supplychain.content.TransportConfirmation;
 import nl.tudelft.simulation.supplychain.content.TransportInvoice;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
 
 /**
@@ -26,11 +27,11 @@ public class TransportConfirmationHandler extends ContentHandler<TransportConfir
 
     /**
      * Construct a new TransportConfirmation handler.
-     * @param owner the role belonging to this handler
+     * @param owner the owner of this handler
      */
-    public TransportConfirmationHandler(final FinancingRole owner)
+    public TransportConfirmationHandler(final FinancingActor owner)
     {
-        super("TransportConfirmationHandler", owner, TransportConfirmation.class);
+        super("TransportConfirmationHandler", owner.getFinancingRole(), TransportConfirmation.class);
     }
 
     @Override

@@ -2,6 +2,7 @@ package nl.tudelft.simulation.supplychain.role.purchasing.handler;
 
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 
 /**
@@ -21,11 +22,11 @@ public abstract class DemandHandler extends ContentHandler<Demand, PurchasingRol
     /**
      * Construct a new DemandHandler.
      * @param id the id of the handler
-     * @param owner the Role that has this handler.
+     * @param owner the Actor that has this handler.
      */
-    public DemandHandler(final String id, final PurchasingRole owner)
+    public DemandHandler(final String id, final PurchasingActor owner)
     {
-        super(id, owner, Demand.class);
+        super(id, owner.getPurchasingRole(), Demand.class);
     }
 
 }

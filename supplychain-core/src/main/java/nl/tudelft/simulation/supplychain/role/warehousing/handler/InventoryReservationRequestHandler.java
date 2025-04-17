@@ -3,6 +3,7 @@ package nl.tudelft.simulation.supplychain.role.warehousing.handler;
 import nl.tudelft.simulation.supplychain.content.InventoryReservation;
 import nl.tudelft.simulation.supplychain.content.InventoryReservationRequest;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
 
 /**
@@ -21,11 +22,11 @@ public class InventoryReservationRequestHandler extends ContentHandler<Inventory
 
     /**
      * Construct a new InventoryReservationRequest handler.
-     * @param owner the role belonging to this handler
+     * @param owner the actor belonging to this handler
      */
-    public InventoryReservationRequestHandler(final WarehousingRole owner)
+    public InventoryReservationRequestHandler(final WarehousingActor owner)
     {
-        super("InventoryReservationRequestHandler", owner, InventoryReservationRequest.class);
+        super("InventoryReservationRequestHandler", owner.getWarehousingRole(), InventoryReservationRequest.class);
     }
 
     @Override

@@ -6,6 +6,7 @@ import nl.tudelft.simulation.supplychain.content.InventoryQuote;
 import nl.tudelft.simulation.supplychain.content.InventoryQuoteRequest;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.money.Money;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
 
 /**
@@ -24,11 +25,11 @@ public class InventoryQuoteRequestHandler extends ContentHandler<InventoryQuoteR
 
     /**
      * Construct a new InventoryQuoteRequest handler.
-     * @param owner the role belonging to this handler
+     * @param owner the actor belonging to this handler
      */
-    public InventoryQuoteRequestHandler(final WarehousingRole owner)
+    public InventoryQuoteRequestHandler(final WarehousingActor owner)
     {
-        super("InventoryQuoteRequestHandler", owner, InventoryQuoteRequest.class);
+        super("InventoryQuoteRequestHandler", owner.getWarehousingRole(), InventoryQuoteRequest.class);
     }
 
     @Override

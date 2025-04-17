@@ -10,6 +10,7 @@ import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
 
 /**
@@ -40,28 +41,22 @@ public abstract class RestockingProcess extends AutonomousProcess<WarehousingRol
 
     /**
      * Construct a new restocking service, with the basic parameters that every restocking service has.
-     * @param role the warehousing role to which the restocking process belongs
+     * @param actor the warehousing role to which the restocking process belongs
      * @param inventory the inventory for which the service holds
      * @param product the product that has to be restocked
      * @param checkInterval the distribution of the interval for restocking or checking
      * @param maxDeliveryDuration the maximum delivery time to use
      */
-    public RestockingProcess(final WarehousingRole role, final Inventory inventory, final Product product,
+    public RestockingProcess(final WarehousingActor actor, final Inventory inventory, final Product product,
             final Duration checkInterval, final Duration maxDeliveryDuration)
     {
-        super(role);
+        super(actor.getWarehousingRole());
         this.inventory = inventory;
         this.product = product;
         this.checkInterval = checkInterval;
+        getRole().addAutonomousProcess(this);
         this.maxDeliveryDuration = maxDeliveryDuration;
-        try
-        {
-            getSimulator().scheduleEventRel(checkInterval, this, "checkLoop", new Serializable[] {});
-        }
-        catch (Exception e)
-        {
-            Logger.error(e, "RestockingService");
-        }
+        getSimulator().scheduleEventRel(checkInterval, this, "checkLoop", new Serializable[] {});
     }
 
     /**

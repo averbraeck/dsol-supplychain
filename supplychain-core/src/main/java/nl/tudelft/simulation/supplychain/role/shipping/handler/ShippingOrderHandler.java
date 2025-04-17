@@ -9,6 +9,7 @@ import nl.tudelft.simulation.supplychain.content.TransportOrder;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.product.Shipment;
 import nl.tudelft.simulation.supplychain.role.shipping.ShippingRole;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 
 /**
  * The ShippingOrderHandler take care of outbound shipments from the warehouse. It handles the ShippingOrder message.
@@ -28,11 +29,11 @@ public class ShippingOrderHandler extends ContentHandler<ShippingOrder, Shipping
 
     /**
      * Construct a new ShippingOrder handler.
-     * @param owner the role belonging to this handler
+     * @param owner the actor belonging to this handler
      */
-    public ShippingOrderHandler(final ShippingRole owner)
+    public ShippingOrderHandler(final WarehousingActor owner)
     {
-        super("ShippingOrderHandler", owner, ShippingOrder.class);
+        super("ShippingOrderHandler", owner.getShippingRole(), ShippingOrder.class);
     }
 
     @Override
@@ -46,7 +47,7 @@ public class ShippingOrderHandler extends ContentHandler<ShippingOrder, Shipping
         // there should be a transport option that was agreed by the transporter
         Order order = shippingOrder.order();
         var transportQuote = order.transportQuote();
-                
+
         // The value of the cargo now includes the tarnsport cost and the profit margin of the seller.
         Shipment shipment =
                 new Shipment(getRole().getActor(), order.sender().getReceivingRole().getActor(), order, order.price());

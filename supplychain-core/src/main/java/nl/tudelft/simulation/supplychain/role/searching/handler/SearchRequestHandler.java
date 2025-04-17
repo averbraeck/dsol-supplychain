@@ -16,6 +16,7 @@ import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.content.SearchAnswer;
 import nl.tudelft.simulation.supplychain.content.SearchRequest;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.searching.SearchingActor;
 import nl.tudelft.simulation.supplychain.role.searching.SearchingRole;
 
 /**
@@ -40,9 +41,9 @@ public class SearchRequestHandler extends ContentHandler<SearchRequest, Searchin
      * @param owner the owner of the handler
      * @param handlingTime the distribution of the time to react on the Search request
      */
-    public SearchRequestHandler(final SearchingRole owner, final DistContinuousDuration handlingTime)
+    public SearchRequestHandler(final SearchingActor owner, final DistContinuousDuration handlingTime)
     {
-        super("SearchRequestHandler", owner, SearchRequest.class);
+        super("SearchRequestHandler", owner.getSearchingRole(), SearchRequest.class);
         this.handlingTime = handlingTime;
     }
 

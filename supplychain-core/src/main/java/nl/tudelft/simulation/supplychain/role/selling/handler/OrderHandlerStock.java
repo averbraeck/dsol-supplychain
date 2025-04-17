@@ -24,9 +24,9 @@ public class OrderHandlerStock extends ContentHandler<Order, SellingRole>
      * Construct a new OrderHandler that takes the goods from stock when ordered.
      * @param owner the owner of the handler
      */
-    public OrderHandlerStock(final SellingRole owner)
+    public OrderHandlerStock(final SellingActor owner)
     {
-        super("OrderHandlerStock", owner, Order.class);
+        super("OrderHandlerStock", owner.getSellingRole(), Order.class);
     }
 
     @Override

@@ -4,7 +4,7 @@ import org.djunits.value.vdouble.scalar.Length;
 
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.SearchRequest;
-import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.searching.SearchingActor;
 
 /**
@@ -32,12 +32,12 @@ public class DemandHandlerSearch extends DemandHandler
 
     /**
      * Constructs a new DemandHandlerSearch.
-     * @param owner the owner of the demand
+     * @param owner the owner of the handler
      * @param searchingActor the Actor that provides the searching service
      * @param maximumDistance the search distance to use for all products
      * @param maximumNumber the max number of suppliers to return
      */
-    public DemandHandlerSearch(final PurchasingRole owner, final SearchingActor searchingActor, final Length maximumDistance,
+    public DemandHandlerSearch(final PurchasingActor owner, final SearchingActor searchingActor, final Length maximumDistance,
             final int maximumNumber)
     {
         super("DemandHandlerSearch", owner);

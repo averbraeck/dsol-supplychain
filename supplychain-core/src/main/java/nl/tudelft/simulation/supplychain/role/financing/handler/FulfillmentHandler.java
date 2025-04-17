@@ -2,6 +2,7 @@ package nl.tudelft.simulation.supplychain.role.financing.handler;
 
 import nl.tudelft.simulation.supplychain.content.Fulfillment;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
 
 /**
@@ -21,9 +22,9 @@ public class FulfillmentHandler extends ContentHandler<Fulfillment, FinancingRol
      * Constructs a new FulfillmentHandler.
      * @param owner the owner of the handler.
      */
-    public FulfillmentHandler(final FinancingRole owner)
+    public FulfillmentHandler(final FinancingActor owner)
     {
-        super("FulfillmentHandler", owner, Fulfillment.class);
+        super("FulfillmentHandler", owner.getFinancingRole(), Fulfillment.class);
     }
 
     @Override

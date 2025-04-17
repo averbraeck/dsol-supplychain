@@ -6,6 +6,7 @@ import nl.tudelft.simulation.supplychain.content.TransportConfirmation;
 import nl.tudelft.simulation.supplychain.content.TransportDelivery;
 import nl.tudelft.simulation.supplychain.content.TransportOrder;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.transporting.TransportingActor;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportingRole;
 
 /**
@@ -24,11 +25,11 @@ public class TransportOrderHandler extends ContentHandler<TransportOrder, Transp
 
     /**
      * Construct a new TransportOrder handler.
-     * @param owner the role belonging to this handler
+     * @param owner the actor belonging to this handler
      */
-    public TransportOrderHandler(final TransportingRole owner)
+    public TransportOrderHandler(final TransportingActor owner)
     {
-        super("TransportOrderHandler", owner, TransportOrder.class);
+        super("TransportOrderHandler", owner.getTransportingRole(), TransportOrder.class);
     }
 
     @Override

@@ -2,6 +2,7 @@ package nl.tudelft.simulation.supplychain.role.selling.handler;
 
 import nl.tudelft.simulation.supplychain.content.Order;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
 
 /**
@@ -21,9 +22,9 @@ public class OrderHandlerMake extends ContentHandler<Order, SellingRole>
      * Construct a new OrderHandler that makes the goods when ordered.
      * @param owner the owner of the handler
      */
-    public OrderHandlerMake(final SellingRole owner)
+    public OrderHandlerMake(final SellingActor owner)
     {
-        super("OrderHandlerMake", owner, Order.class);
+        super("OrderHandlerMake", owner.getSellingRole(), Order.class);
     }
 
     @Override

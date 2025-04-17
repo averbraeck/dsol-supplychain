@@ -4,7 +4,7 @@ import org.djunits.value.vdouble.scalar.Duration;
 
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
-import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 
 /**
  * RestockingProcessNoStock is an autonomous process that indicates that restocking will not take place.
@@ -21,13 +21,13 @@ public class RestockingProcessNoStock extends RestockingProcessFixed
 
     /**
      * Construct a new restocking service that keeps no stock of the product.
-     * @param role the warehousing role to which the restocking process belongs
+     * @param actor the warehousing actor to which the restocking process belongs
      * @param inventory the inventory for which the service holds
      * @param product the product that will not be restocked
      */
-    public RestockingProcessNoStock(final WarehousingRole role, final Inventory inventory, final Product product)
+    public RestockingProcessNoStock(final WarehousingActor actor, final Inventory inventory, final Product product)
     {
-        super(role, inventory, product, Duration.POS_MAXVALUE, false, 0.0, false, Duration.ZERO);
+        super(actor, inventory, product, Duration.POS_MAXVALUE, false, 0.0, false, Duration.ZERO);
     }
 
 }

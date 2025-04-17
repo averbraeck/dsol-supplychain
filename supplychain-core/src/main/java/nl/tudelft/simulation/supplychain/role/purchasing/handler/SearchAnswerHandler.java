@@ -13,6 +13,7 @@ import nl.tudelft.simulation.supplychain.content.SearchAnswer;
 import nl.tudelft.simulation.supplychain.content.SearchRequest;
 import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleRFQ;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
@@ -45,10 +46,10 @@ public class SearchAnswerHandler extends ContentHandler<SearchAnswer, Purchasing
      * @param cutoffDuration the maximum time after which the RFQ will stop collecting quotes
      * @param transportPreference the generic transport preference for this actor
      */
-    public SearchAnswerHandler(final PurchasingRole owner, final Duration cutoffDuration,
+    public SearchAnswerHandler(final PurchasingActor owner, final Duration cutoffDuration,
             final TransportPreference transportPreference)
     {
-        super("SearchAnswerHandler", owner, SearchAnswer.class);
+        super("SearchAnswerHandler", owner.getPurchasingRole(), SearchAnswer.class);
         Throw.whenNull(cutoffDuration, "cutoffDuration cannot be null");
         Throw.whenNull(transportPreference, "transportPreference cannot be null");
         this.cutoffDuration = cutoffDuration;

@@ -7,6 +7,7 @@ import nl.tudelft.simulation.supplychain.content.InventoryRelease;
 import nl.tudelft.simulation.supplychain.content.InventoryReleaseRequest;
 import nl.tudelft.simulation.supplychain.content.ShippingOrder;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
 
 /**
@@ -25,11 +26,11 @@ public class InventoryReleaseRequestHandler extends ContentHandler<InventoryRele
 
     /**
      * Construct a new InventoryReleaseRequest handler.
-     * @param owner the role belonging to this handler
+     * @param owner the actor belonging to this handler
      */
-    public InventoryReleaseRequestHandler(final WarehousingRole owner)
+    public InventoryReleaseRequestHandler(final WarehousingActor owner)
     {
-        super("InventoryReleaseRequestHandler", owner, InventoryReleaseRequest.class);
+        super("InventoryReleaseRequestHandler", owner.getWarehousingRole(), InventoryReleaseRequest.class);
     }
 
     @Override

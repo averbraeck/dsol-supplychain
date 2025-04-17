@@ -3,6 +3,7 @@ package nl.tudelft.simulation.supplychain.role.financing.handler;
 import nl.tudelft.simulation.supplychain.content.BankTransfer;
 import nl.tudelft.simulation.supplychain.content.TransportPayment;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
 
 /**
@@ -22,9 +23,9 @@ public class TransportPaymentHandler extends ContentHandler<TransportPayment, Fi
      * Constructs a new TransportPaymentHandler.
      * @param owner the owner of the handler.
      */
-    public TransportPaymentHandler(final FinancingRole owner)
+    public TransportPaymentHandler(final FinancingActor owner)
     {
-        super("TransportPaymentHandler", owner, TransportPayment.class);
+        super("TransportPaymentHandler", owner.getFinancingRole(), TransportPayment.class);
     }
 
     @Override

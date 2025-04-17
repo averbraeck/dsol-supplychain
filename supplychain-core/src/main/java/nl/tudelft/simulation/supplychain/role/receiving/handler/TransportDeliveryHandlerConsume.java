@@ -4,6 +4,7 @@ import nl.tudelft.simulation.supplychain.content.Fulfillment;
 import nl.tudelft.simulation.supplychain.content.TransportDelivery;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.role.receiving.ReceivingRole;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 
 /**
  * The TransportDeliveryHandler handles the shipment that comes in. This version consumes the shipment (no warehousing).
@@ -22,9 +23,9 @@ public class TransportDeliveryHandlerConsume extends ContentHandler<TransportDel
      * Constructs a new TransportDeliveryHandler.
      * @param owner the owner of the handler.
      */
-    public TransportDeliveryHandlerConsume(final ReceivingRole owner)
+    public TransportDeliveryHandlerConsume(final WarehousingActor owner)
     {
-        super("TransportDeliveryHandler", owner, TransportDelivery.class);
+        super("TransportDeliveryHandler", owner.getReceivingRole(), TransportDelivery.class);
     }
 
     /**

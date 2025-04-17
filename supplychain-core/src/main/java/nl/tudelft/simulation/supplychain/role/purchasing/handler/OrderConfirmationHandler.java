@@ -6,6 +6,7 @@ import org.pmw.tinylog.Logger;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.OrderConfirmation;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 
 /**
@@ -28,9 +29,9 @@ public class OrderConfirmationHandler extends ContentHandler<OrderConfirmation, 
      * Constructs a new OrderConfirmationHandler.
      * @param owner the owner of the handler.
      */
-    public OrderConfirmationHandler(final PurchasingRole owner)
+    public OrderConfirmationHandler(final PurchasingActor owner)
     {
-        super("OrderConfirmationHandler", owner, OrderConfirmation.class);
+        super("OrderConfirmationHandler", owner.getPurchasingRole(), OrderConfirmation.class);
     }
 
     /**

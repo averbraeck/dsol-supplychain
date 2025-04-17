@@ -12,7 +12,7 @@ import org.pmw.tinylog.Logger;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.product.Product;
-import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleRFQ;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportPreference;
@@ -40,10 +40,10 @@ public class DemandHandlerRFQ extends DemandHandler
 
     /**
      * Constructs a new DemandHandlerRFQ.
-     * @param owner the owner of the demand
+     * @param owner the owner of the handler
      * @param cutoffDuration the maximum time after which the RFQ will stop collecting quotes
      */
-    public DemandHandlerRFQ(final PurchasingRole owner, final Duration cutoffDuration)
+    public DemandHandlerRFQ(final PurchasingActor owner, final Duration cutoffDuration)
     {
         super("DemandHandlerRFQ", owner);
         Throw.whenNull(cutoffDuration, "cutoffDuration cannot be null");

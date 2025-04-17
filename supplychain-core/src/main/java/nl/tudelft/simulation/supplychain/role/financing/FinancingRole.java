@@ -52,7 +52,7 @@ public class FinancingRole extends Role<FinancingRole>
      */
     public void addFixedCost(final String description, final Duration interval, final Money amount)
     {
-        FixedCostProcess fixedCost = new FixedCostProcess(this, description, interval, amount);
+        FixedCostProcess fixedCost = new FixedCostProcess(getActor(), description, interval, amount);
         this.fixedCosts.add(fixedCost);
     }
 

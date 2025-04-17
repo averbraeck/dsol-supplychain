@@ -18,7 +18,7 @@ public interface ManufacturingActor extends Actor
      * Return the ProducingRole for this actor.
      * @return the ProducingRole for this actor
      */
-    default ManufacturingRole getProducingRole()
+    default ManufacturingRole getManufacturingRole()
     {
         return getRole(ManufacturingRole.class);
     }

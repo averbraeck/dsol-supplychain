@@ -2,6 +2,7 @@ package nl.tudelft.simulation.supplychain.role.warehousing.handler;
 
 import nl.tudelft.simulation.supplychain.content.InventoryEntry;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
 
 /**
@@ -20,11 +21,11 @@ public class InventoryEntryHandler extends ContentHandler<InventoryEntry, Wareho
 
     /**
      * Construct a new InventoryEntry handler.
-     * @param owner the role belonging to this handler
+     * @param owner the actor belonging to this handler
      */
-    public InventoryEntryHandler(final WarehousingRole owner)
+    public InventoryEntryHandler(final WarehousingActor owner)
     {
-        super("InventoryEntryHandler", owner, InventoryEntry.class);
+        super("InventoryEntryHandler", owner.getWarehousingRole(), InventoryEntry.class);
     }
 
     @Override
@@ -38,7 +39,7 @@ public class InventoryEntryHandler extends ContentHandler<InventoryEntry, Wareho
         getRole().getInventory().enterOrderedAmount(inventoryEntry.product(), inventoryEntry.amount(),
                 inventoryEntry.shipment().getTotalCargoValue().divideBy(inventoryEntry.shipment().getAmount()));
         // TODO: fulfillment
-        // var fulfillment = new Fulfillment(inventoryEntry);
+        // var fulfillment = new Fulfillment(inventoryEntry.);
         // sendContent(fulfillment, getHandlingTime().draw());
         return true;
     }

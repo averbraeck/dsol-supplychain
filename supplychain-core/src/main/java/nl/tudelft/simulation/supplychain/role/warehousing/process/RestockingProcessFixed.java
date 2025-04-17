@@ -4,7 +4,7 @@ import org.djunits.value.vdouble.scalar.Duration;
 
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.warehousing.Inventory;
-import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingRole;
+import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 
 /**
  * This RestockingProcess either orders fixed amounts of goods at the times indicated by the 'checkInterval', or supplements the
@@ -31,7 +31,7 @@ public class RestockingProcessFixed extends RestockingProcess
 
     /**
      * Construct a new restocking service, which works with fixed amounts.
-     * @param role the warehousing role to which the restocking process belongs
+     * @param actor the warehousing actor to which the restocking process belongs
      * @param inventory the inventory for which the service holds
      * @param product the product that has to be restocked
      * @param checkInterval the interval time for restocking
@@ -41,11 +41,11 @@ public class RestockingProcessFixed extends RestockingProcess
      * @param maxDeliveryTime the maximum delivery time to use
      */
     @SuppressWarnings("checkstyle:parameternumber")
-    public RestockingProcessFixed(final WarehousingRole role, final Inventory inventory, final Product product,
+    public RestockingProcessFixed(final WarehousingActor actor, final Inventory inventory, final Product product,
             final Duration checkInterval, final boolean ceiling, final double amount, final boolean includeClaims,
             final Duration maxDeliveryTime)
     {
-        super(role, inventory, product, checkInterval, maxDeliveryTime);
+        super(actor, inventory, product, checkInterval, maxDeliveryTime);
         this.ceiling = ceiling;
         this.amount = amount;
         this.includeClaims = includeClaims;

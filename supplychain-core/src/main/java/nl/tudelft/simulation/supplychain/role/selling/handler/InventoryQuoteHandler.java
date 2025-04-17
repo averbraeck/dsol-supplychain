@@ -8,6 +8,7 @@ import nl.tudelft.simulation.supplychain.content.InventoryQuote;
 import nl.tudelft.simulation.supplychain.content.QuoteNo;
 import nl.tudelft.simulation.supplychain.content.TransportQuoteRequest;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.selling.SellingActorRFQ;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRoleRFQ;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportingActor;
@@ -34,9 +35,9 @@ public class InventoryQuoteHandler extends ContentHandler<InventoryQuote, Sellin
      * Construct a new InventoryQuote handler.
      * @param owner the role belonging to this handler
      */
-    public InventoryQuoteHandler(final SellingRoleRFQ owner)
+    public InventoryQuoteHandler(final SellingActorRFQ owner)
     {
-        super("InventoryQuoteHandler", owner, InventoryQuote.class);
+        super("InventoryQuoteHandler", owner.getSellingRole(), InventoryQuote.class);
     }
 
     @Override

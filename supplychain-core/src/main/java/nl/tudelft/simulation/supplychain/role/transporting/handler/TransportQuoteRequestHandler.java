@@ -2,6 +2,7 @@ package nl.tudelft.simulation.supplychain.role.transporting.handler;
 
 import nl.tudelft.simulation.supplychain.content.TransportQuoteRequest;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.transporting.TransportingActor;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportingRole;
 
 /**
@@ -20,11 +21,11 @@ public class TransportQuoteRequestHandler extends ContentHandler<TransportQuoteR
 
     /**
      * Construct a new TransportQuoteRequest handler.
-     * @param owner the role belonging to this handler
+     * @param owner the actor belonging to this handler
      */
-    public TransportQuoteRequestHandler(final TransportingRole owner)
+    public TransportQuoteRequestHandler(final TransportingActor owner)
     {
-        super("TransportQuoteRequestHandler", owner, TransportQuoteRequest.class);
+        super("TransportQuoteRequestHandler", owner.getTransportingRole(), TransportQuoteRequest.class);
     }
 
     @Override

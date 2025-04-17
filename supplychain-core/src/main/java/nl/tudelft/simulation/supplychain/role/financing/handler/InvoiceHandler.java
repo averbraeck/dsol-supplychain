@@ -8,6 +8,7 @@ import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.content.Invoice;
 import nl.tudelft.simulation.supplychain.content.Payment;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
 
 /**
@@ -44,10 +45,10 @@ public class InvoiceHandler extends ContentHandler<Invoice, FinancingRole>
      * @param paymentPolicy the payment handler to use (early, late, etc.).
      * @param paymentDelay the delay to use in early or late payment
      */
-    public InvoiceHandler(final FinancingRole owner, final PaymentPolicyEnum paymentPolicy,
+    public InvoiceHandler(final FinancingActor owner, final PaymentPolicyEnum paymentPolicy,
             final DistContinuousDuration paymentDelay)
     {
-        super("InvoiceHandler", owner, Invoice.class);
+        super("InvoiceHandler", owner.getFinancingRole(), Invoice.class);
         Throw.whenNull(paymentPolicy, "paymentPolicy cannot be null");
         Throw.whenNull(paymentDelay, "paymentDelay cannot be null");
         this.paymentPolicy = paymentPolicy;

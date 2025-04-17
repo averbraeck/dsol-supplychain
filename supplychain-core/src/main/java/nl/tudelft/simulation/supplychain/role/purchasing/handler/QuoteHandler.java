@@ -8,6 +8,7 @@ import java.util.TreeSet;
 
 import nl.tudelft.simulation.supplychain.content.Quote;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleRFQ;
 
@@ -41,16 +42,16 @@ public abstract class QuoteHandler extends ContentHandler<Quote, PurchasingRole>
     /**
      * Constructor of the QuoteHandler with a one of the predefined comparators for quotes.
      * @param id the id of the handler
-     * @param owner the role for this QuoteHandler.
+     * @param owner the actor for this QuoteHandler.
      * @param comparatorType the predefined sorting comparator type.
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the margin within which the offered amount may differ from the requested amount.
      */
-    public QuoteHandler(final String id, final PurchasingRole owner, final QuoteComparatorEnum comparatorType,
+    public QuoteHandler(final String id, final PurchasingActor owner, final QuoteComparatorEnum comparatorType,
             final double maximumPriceMargin, final double minimumAmountMargin)
     {
-        super(id, owner, Quote.class);
-        this.quoteComparator = new QuoteComparator(owner, comparatorType);
+        super(id, owner.getPurchasingRole(), Quote.class);
+        this.quoteComparator = new QuoteComparator(owner.getPurchasingRole(), comparatorType);
         this.maximumPriceMargin = maximumPriceMargin;
         this.minimumAmountMargin = minimumAmountMargin;
     }
@@ -58,20 +59,20 @@ public abstract class QuoteHandler extends ContentHandler<Quote, PurchasingRole>
     /**
      * Constructor of the QuoteHandler with a user defined comparator for quotes.
      * @param id the id of the handler
-     * @param owner the role for this QuoteHandler.
+     * @param owner the actor for this QuoteHandler.
      * @param comparator the predefined sorting comparator type.
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the margin within which the offered amount may differ from the requested amount.
      */
-    public QuoteHandler(final String id, final PurchasingRole owner, final Comparator<Quote> comparator,
+    public QuoteHandler(final String id, final PurchasingActor owner, final Comparator<Quote> comparator,
             final double maximumPriceMargin, final double minimumAmountMargin)
     {
-        super(id, owner, Quote.class);
+        super(id, owner.getPurchasingRole(), Quote.class);
         this.quoteComparator = comparator;
         this.maximumPriceMargin = maximumPriceMargin;
         this.minimumAmountMargin = minimumAmountMargin;
     }
-    
+
     /**
      * Method getQuoteComparator.
      * @return returns the quote comparator

@@ -76,8 +76,8 @@ public abstract class Role<R extends Role<R>> extends LocalEventProducer impleme
     }
 
     /**
-     * Set a handler for a content type, possibly overwriting the previous content handler.
-     * @param process the handler to set for the implicit content type
+     * Add an autonomous process for this role.
+     * @param process autonomous process to add for this role
      */
     public void addAutonomousProcess(final AutonomousProcess<R> process)
     {

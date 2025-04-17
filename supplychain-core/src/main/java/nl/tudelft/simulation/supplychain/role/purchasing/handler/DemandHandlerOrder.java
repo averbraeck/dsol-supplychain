@@ -9,6 +9,7 @@ import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 
@@ -32,9 +33,9 @@ public class DemandHandlerOrder extends DemandHandler
 
     /**
      * Constructs a new DemandHandlerOrder.
-     * @param owner the owner of the demand
+     * @param owner the owner of the handler
      */
-    public DemandHandlerOrder(final PurchasingRole owner)
+    public DemandHandlerOrder(final PurchasingActor owner)
     {
         super("DemandHandlerOrder", owner);
     }

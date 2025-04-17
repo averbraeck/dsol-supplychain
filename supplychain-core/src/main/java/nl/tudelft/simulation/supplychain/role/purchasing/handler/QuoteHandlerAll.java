@@ -7,7 +7,7 @@ import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.content.OrderBasedOnQuote;
 import nl.tudelft.simulation.supplychain.content.Quote;
-import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 
 /**
  * The QuoteHandlerAll just waits patiently till all the Quotes are in for each RequestForQuote that has been sent out. When
@@ -30,7 +30,7 @@ public class QuoteHandlerAll extends QuoteHandler
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the margin within which the offered amount may differ from the requested amount.
      */
-    public QuoteHandlerAll(final PurchasingRole owner, final Comparator<Quote> comparator, final double maximumPriceMargin,
+    public QuoteHandlerAll(final PurchasingActor owner, final Comparator<Quote> comparator, final double maximumPriceMargin,
             final double minimumAmountMargin)
     {
         super("QuoteHandlerAll", owner, comparator, maximumPriceMargin, minimumAmountMargin);
@@ -43,7 +43,7 @@ public class QuoteHandlerAll extends QuoteHandler
      * @param maximumPriceMargin the maximum margin (e.g. 0.4 for 40 % above unitprice) above the unitprice of a product
      * @param minimumAmountMargin the minimal amount margin
      */
-    public QuoteHandlerAll(final PurchasingRole owner, final QuoteComparatorEnum comparatorType,
+    public QuoteHandlerAll(final PurchasingActor owner, final QuoteComparatorEnum comparatorType,
             final double maximumPriceMargin, final double minimumAmountMargin)
     {
         super("QuoteHandlerAll", owner, comparatorType, maximumPriceMargin, minimumAmountMargin);

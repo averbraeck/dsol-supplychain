@@ -3,6 +3,7 @@ package nl.tudelft.simulation.supplychain.role.selling.handler;
 import nl.tudelft.simulation.supplychain.content.InventoryQuoteRequest;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
+import nl.tudelft.simulation.supplychain.role.selling.SellingActorRFQ;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRole;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRoleRFQ;
 
@@ -22,11 +23,11 @@ public class RequestForQuoteHandler extends ContentHandler<RequestForQuote, Sell
 
     /**
      * Construct a new RFQ handler.
-     * @param owner the role belonging to this handler
+     * @param owner the actor belonging to this handler
      */
-    public RequestForQuoteHandler(final SellingRoleRFQ owner)
+    public RequestForQuoteHandler(final SellingActorRFQ owner)
     {
-        super("RequestForQuoteHandler", owner, RequestForQuote.class);
+        super("RequestForQuoteHandler", owner.getSellingRole(), RequestForQuote.class);
     }
 
     @Override

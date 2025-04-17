@@ -4,6 +4,7 @@ import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
+import nl.tudelft.simulation.supplychain.role.banking.BankingActor;
 import nl.tudelft.simulation.supplychain.role.banking.BankingRole;
 
 /**
@@ -19,13 +20,13 @@ public class InterestProcess extends AutonomousProcess<BankingRole>
 {
     /**
      * Create the autonomous interest process.
-     * @param role the BankingRole to which this process belongs
+     * @param actor the BankingActor to which this process belongs
      */
-    public InterestProcess(final BankingRole role)
+    public InterestProcess(final BankingActor actor)
     {
-        super(role);
-        role.addAutonomousProcess(this);
-        role.getSimulator().scheduleEventNow(this, "interest", null);
+        super(actor.getBankingRole());
+        getRole().addAutonomousProcess(this);
+        actor.getSimulator().scheduleEventNow(this, "interest", null);
     }
 
     /**
