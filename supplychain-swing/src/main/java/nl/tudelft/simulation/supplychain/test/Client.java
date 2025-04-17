@@ -111,10 +111,10 @@ public class Client extends Customer
         DurationUnit days = DurationUnit.DAY;
         //
         // create the demand for PCs
-        var dgp = new DemandGeneratingProcess(getConsumingRole(), this.product,
-                new DistContinuousDuration(new DistExponential(stream, 24.0), hours), 1.0, Duration.ZERO,
-                new Duration(14.0, days));
-        dgp.setMaxNumberGenerations(100);
+        new DemandGeneratingProcess(getConsumingRole(), this.product)
+                .setIntervalDistribution(new DistContinuousDuration(new DistExponential(stream, 24.0), hours)).setAmount(1.0)
+                .setEarliestDeliveryDuration(Duration.ZERO).setLatestDeliveryDuration(new Duration(14.0, days))
+                .setMaxNumberGenerations(100).setStartAfterInterval().start();
         //
         // tell Client to use the DemandHandler
         DemandHandlerRFQ demandHandler = new DemandHandlerRFQ(getPurchasingRole(), new Duration(24.0, hours));
