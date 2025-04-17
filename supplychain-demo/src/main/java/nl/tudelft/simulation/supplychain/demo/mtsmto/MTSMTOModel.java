@@ -111,18 +111,18 @@ public class MTSMTOModel extends SupplyChainModel
             // Markets
             var marketMTS = new DemoMarket("Market_MTS", this, new Geography(new Point2d(-360, -150), "", "MTS"), ing,
                     new Money(10000.0, MoneyUnit.USD), ypCustomerMTS);
-            new DemandGeneratingProcess(marketMTS.getConsumingRole(), pc,
-                    new DistContinuousDuration(new DistExponential(streamMTS, 8.0), DurationUnit.HOUR),
-                    new DistDiscreteTriangular(streamMTS, 1.0, 4.0, 8.0),
-                    new DistConstantDuration(new Duration(2.0, DurationUnit.DAY)),
-                    new DistConstantDuration(new Duration(7.0, DurationUnit.DAY)));
+            new DemandGeneratingProcess(marketMTS, pc)
+                    .setIntervalDistribution(new DistContinuousDuration(new DistExponential(streamMTS, 8.0), DurationUnit.HOUR))
+                    .setAmountDistribution(new DistDiscreteTriangular(streamMTS, 1.0, 4.0, 8.0))
+                    .setEarliestDeliveryDuration(new Duration(2.0, DurationUnit.DAY))
+                    .setLatestDeliveryDuration(new Duration(7.0, DurationUnit.DAY)).setStartAfterInterval().start();
             var marketMTO = new DemoMarket("Market_MTO", this, new Geography(new Point2d(-360, 150), "", "MTO"), ing,
                     new Money(10000.0, MoneyUnit.USD), ypCustomerMTO);
-            new DemandGeneratingProcess(marketMTO.getConsumingRole(), pc,
-                    new DistContinuousDuration(new DistExponential(streamMTO, 8.0), DurationUnit.HOUR),
-                    new DistDiscreteTriangular(streamMTO, 1.0, 4.0, 8.0),
-                    new DistConstantDuration(new Duration(2.0, DurationUnit.DAY)),
-                    new DistConstantDuration(new Duration(7.0, DurationUnit.DAY)));
+            new DemandGeneratingProcess(marketMTO, pc)
+                    .setIntervalDistribution(new DistContinuousDuration(new DistExponential(streamMTO, 8.0), DurationUnit.HOUR))
+                    .setAmountDistribution(new DistDiscreteTriangular(streamMTO, 1.0, 4.0, 8.0))
+                    .setEarliestDeliveryDuration(new Duration(2.0, DurationUnit.DAY))
+                    .setLatestDeliveryDuration(new Duration(7.0, DurationUnit.DAY)).setStartAfterInterval().start();
 
             // Retailers
             DemoRetailer[] mtsRet = new DemoRetailer[5];

@@ -12,10 +12,7 @@ import org.djutils.draw.point.Point2d;
 
 import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
-import nl.tudelft.simulation.jstats.distributions.DistConstant;
-import nl.tudelft.simulation.jstats.distributions.DistDiscrete;
 import nl.tudelft.simulation.jstats.distributions.DistExponential;
-import nl.tudelft.simulation.jstats.distributions.DistNormal;
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.jstats.streams.MersenneTwister;
 import nl.tudelft.simulation.jstats.streams.StreamInterface;
@@ -36,7 +33,6 @@ import nl.tudelft.simulation.supplychain.product.Sku;
 import nl.tudelft.simulation.supplychain.reference.Bank;
 import nl.tudelft.simulation.supplychain.role.consuming.process.DemandGeneratingProcess;
 import nl.tudelft.simulation.supplychain.test.TestModel;
-import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 import nl.tudelft.simulation.supplychain.util.DistDiscreteTriangular;
 
 /**
@@ -112,25 +108,25 @@ public class BullwhipModel extends SupplyChainModel
             var customer = new DemoMarket("US East", this, new Geography(new Point2d(40, 150), "", "US"), ing,
                     new Money(10000.0, MoneyUnit.USD), ypCustomerMTS);
             // Buy AINT(TRIA(2,5,10)) computers every EXPO(3) hour starting at t=0
-            new DemandGeneratingProcess(customer.getConsumingRole(), pc)
+            new DemandGeneratingProcess(customer, pc)
                     .setIntervalDistribution(new DistContinuousDuration(new DistExponential(stream, 3.0), DurationUnit.HOUR))
                     .setAmountDistribution(new DistDiscreteTriangular(stream, 2.0, 5.0, 10.0))
                     .setEarliestDeliveryDuration(new Duration(1.0, DurationUnit.DAY))
                     .setLatestDeliveryDuration(new Duration(7.0, DurationUnit.DAY)).setStartAfterInterval().start();
             // Buy AINT(TRIA(2,4,5)) computers every EXPO(4) hour starting at t=0
-            new DemandGeneratingProcess(customer.getConsumingRole(), pc)
+            new DemandGeneratingProcess(customer, pc)
                     .setIntervalDistribution(new DistContinuousDuration(new DistExponential(stream, 4.0), DurationUnit.HOUR))
                     .setAmountDistribution(new DistDiscreteTriangular(stream, 2.0, 4.0, 5.0))
                     .setEarliestDeliveryDuration(new Duration(1.0, DurationUnit.DAY))
                     .setLatestDeliveryDuration(new Duration(7.0, DurationUnit.DAY)).setStartAfterInterval().start();
             // Buy AINT(TRIA(5,8,12)) computers every EXPO(5) hour starting at t=0
-            new DemandGeneratingProcess(customer.getConsumingRole(), pc)
+            new DemandGeneratingProcess(customer, pc)
                     .setIntervalDistribution(new DistContinuousDuration(new DistExponential(stream, 5.0), DurationUnit.HOUR))
                     .setAmountDistribution(new DistDiscreteTriangular(stream, 5.0, 8.0, 12.0))
                     .setEarliestDeliveryDuration(new Duration(1.0, DurationUnit.DAY))
                     .setLatestDeliveryDuration(new Duration(7.0, DurationUnit.DAY)).setStartAfterInterval().start();
             // Buy AINT(TRIA(3,8,10)) computers every EXPO(1) hour starting at t=504.0
-            new DemandGeneratingProcess(customer.getConsumingRole(), pc)
+            new DemandGeneratingProcess(customer, pc)
                     .setIntervalDistribution(new DistContinuousDuration(new DistExponential(stream, 1.0), DurationUnit.HOUR))
                     .setAmountDistribution(new DistDiscreteTriangular(stream, 3.0, 8.0, 10.0))
                     .setEarliestDeliveryDuration(new Duration(1.0, DurationUnit.DAY))
