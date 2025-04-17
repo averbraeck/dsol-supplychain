@@ -3,6 +3,7 @@ package nl.tudelft.simulation.supplychain.demo.bullwhip;
 import org.djunits.unit.DurationUnit;
 import org.djunits.unit.MassUnit;
 import org.djunits.unit.VolumeUnit;
+import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Mass;
 import org.djunits.value.vdouble.scalar.Volume;
 import org.djutils.draw.bounds.Bounds3d;
@@ -18,6 +19,7 @@ import nl.tudelft.simulation.jstats.distributions.DistNormal;
 import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.jstats.streams.MersenneTwister;
 import nl.tudelft.simulation.jstats.streams.StreamInterface;
+import nl.tudelft.simulation.supplychain.actor.Geography;
 import nl.tudelft.simulation.supplychain.demo.DemoContentAnimator;
 import nl.tudelft.simulation.supplychain.demo.reference.DemoBank;
 import nl.tudelft.simulation.supplychain.demo.reference.DemoDirectory;
@@ -34,6 +36,7 @@ import nl.tudelft.simulation.supplychain.product.Sku;
 import nl.tudelft.simulation.supplychain.reference.Bank;
 import nl.tudelft.simulation.supplychain.role.consuming.process.DemandGeneratingProcess;
 import nl.tudelft.simulation.supplychain.test.TestModel;
+import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 import nl.tudelft.simulation.supplychain.util.DistDiscreteTriangular;
 
 /**
@@ -106,44 +109,33 @@ public class BullwhipModel extends SupplyChainModel
             var ypProductionMTO = new DemoDirectory("YP_production_MTO", this, new Point2d(700, 40));
 
             // CUSTOMER or MARKET
-            var customer = new DemoMarket("US East", getSimulator(), new Point2d(40, 150, 0), ing,
-                    new Money(10000.0, MoneyUnit.USD), pc, ypCustomerMTS, stream);
-            // Buy AINT(TRIA(2,5,10)) computers every NORM(3,1) hour starting at t=0.1
-            DistContinuousDuration generatorStartTime1 =
-                    new DistContinuousDuration(new DistConstant(stream, 0.1), DurationUnit.HOUR);
-            DistContinuousDuration generatorEndTime =
-                    new DistContinuousDuration(new DistConstant(stream, 1.0E6), DurationUnit.HOUR);
-            DistContinuousDuration interPurchasingTime1 =
-                    new DistContinuousDuration(new DistNormal(stream, 3.0, 1.0), DurationUnit.HOUR);
-            DistDiscrete batchSize1 = new DistDiscreteTriangular(stream, 2.0, 5.0, 10.0);
-            customer.getDemandGeneration().addDemandGenerator(pc,
-                    new DemandGeneratingProcess(pc, interPurchasingTime1, batchSize1, generatorStartTime1, generatorEndTime));
-            // Buy AINT(TRIA(2,4,5)) computers every NORM(4,2) hour starting at t=0.1
-            DistContinuousDuration generatorStartTime2 =
-                    new DistContinuousDuration(new DistConstant(stream, 0.1), DurationUnit.HOUR);
-            DistContinuousDuration interPurchasingTime2 =
-                    new DistContinuousDuration(new DistNormal(stream, 4.0, 2.0), DurationUnit.HOUR);
-            DistDiscrete batchSize2 = new DistDiscreteTriangular(stream, 2.0, 4.0, 5.0);
-            customer.getDemandGeneration().addDemandGenerator(pc,
-                    new DemandGeneratingProcess(pc, interPurchasingTime2, batchSize2, generatorStartTime2, generatorEndTime));
-            // Buy AINT(TRIA(5,8,12)) computers every NORM(5,3) hour starting at t=0.1
-            DistContinuousDuration generatorStartTime3 =
-                    new DistContinuousDuration(new DistConstant(stream, 0.1), DurationUnit.HOUR);
-            DistContinuousDuration interPurchasingTime3 =
-                    new DistContinuousDuration(new DistNormal(stream, 5.0, 3.0), DurationUnit.HOUR);
-            DistDiscrete batchSize3 = new DistDiscreteTriangular(stream, 5.0, 8.0, 12.0);
-            customer.getDemandGeneration().addDemandGenerator(pc,
-                    new DemandGeneratingProcess(pc, interPurchasingTime3, batchSize3, generatorStartTime3, generatorEndTime));
+            var customer = new DemoMarket("US East", this, new Geography(new Point2d(40, 150), "", "US"), ing,
+                    new Money(10000.0, MoneyUnit.USD), ypCustomerMTS);
+            // Buy AINT(TRIA(2,5,10)) computers every EXPO(3) hour starting at t=0
+            new DemandGeneratingProcess(customer.getConsumingRole(), pc)
+                    .setIntervalDistribution(new DistContinuousDuration(new DistExponential(stream, 3.0), DurationUnit.HOUR))
+                    .setAmountDistribution(new DistDiscreteTriangular(stream, 2.0, 5.0, 10.0))
+                    .setEarliestDeliveryDuration(new Duration(1.0, DurationUnit.DAY))
+                    .setLatestDeliveryDuration(new Duration(7.0, DurationUnit.DAY)).setStartAfterInterval().start();
+            // Buy AINT(TRIA(2,4,5)) computers every EXPO(4) hour starting at t=0
+            new DemandGeneratingProcess(customer.getConsumingRole(), pc)
+                    .setIntervalDistribution(new DistContinuousDuration(new DistExponential(stream, 4.0), DurationUnit.HOUR))
+                    .setAmountDistribution(new DistDiscreteTriangular(stream, 2.0, 4.0, 5.0))
+                    .setEarliestDeliveryDuration(new Duration(1.0, DurationUnit.DAY))
+                    .setLatestDeliveryDuration(new Duration(7.0, DurationUnit.DAY)).setStartAfterInterval().start();
+            // Buy AINT(TRIA(5,8,12)) computers every EXPO(5) hour starting at t=0
+            new DemandGeneratingProcess(customer.getConsumingRole(), pc)
+                    .setIntervalDistribution(new DistContinuousDuration(new DistExponential(stream, 5.0), DurationUnit.HOUR))
+                    .setAmountDistribution(new DistDiscreteTriangular(stream, 5.0, 8.0, 12.0))
+                    .setEarliestDeliveryDuration(new Duration(1.0, DurationUnit.DAY))
+                    .setLatestDeliveryDuration(new Duration(7.0, DurationUnit.DAY)).setStartAfterInterval().start();
             // Buy AINT(TRIA(3,8,10)) computers every EXPO(1) hour starting at t=504.0
-            DistContinuousDuration generatorStartTime4 =
-                    new DistContinuousDuration(new DistConstant(stream, 504.0), DurationUnit.HOUR);
-            DistContinuousDuration interPurchasingTime4 =
-                    new DistContinuousDuration(new DistExponential(stream, 1.0), DurationUnit.HOUR);
-            DistDiscrete batchSize4 = new DistDiscreteTriangular(stream, 3.0, 8.0, 10.0);
-            customer.getDemandGeneration().addDemandGenerator(pc,
-                    new DemandGeneratingProcess(pc, interPurchasingTime4, batchSize4, generatorStartTime4, generatorEndTime));
-            // set max distance for suppliers to 6000 km
-            // TODO: customer.setMaxDistanceSuppliers(6000.0);
+            new DemandGeneratingProcess(customer.getConsumingRole(), pc)
+                    .setIntervalDistribution(new DistContinuousDuration(new DistExponential(stream, 1.0), DurationUnit.HOUR))
+                    .setAmountDistribution(new DistDiscreteTriangular(stream, 3.0, 8.0, 10.0))
+                    .setEarliestDeliveryDuration(new Duration(1.0, DurationUnit.DAY))
+                    .setLatestDeliveryDuration(new Duration(7.0, DurationUnit.DAY))
+                    .setStartAfter(new Duration(504.0, DurationUnit.HOUR)).start();
 
             // Retailers
             StreamInterface streamMTS = new MersenneTwister(2L);

@@ -14,21 +14,16 @@ import org.djutils.draw.bounds.Bounds2d;
 import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
 import nl.tudelft.simulation.dsol.swing.charts.xy.XYChart;
-import nl.tudelft.simulation.jstats.distributions.DistExponential;
-import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
-import nl.tudelft.simulation.jstats.streams.StreamInterface;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
 import nl.tudelft.simulation.supplychain.actor.Geography;
-import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
+import nl.tudelft.simulation.supplychain.content.store.ContentStoreEmpty;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.money.MoneyUnit;
-import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.reference.Bank;
 import nl.tudelft.simulation.supplychain.reference.Customer;
 import nl.tudelft.simulation.supplychain.reference.Directory;
 import nl.tudelft.simulation.supplychain.role.consuming.ConsumingRole;
-import nl.tudelft.simulation.supplychain.role.consuming.process.DemandGeneratingProcess;
 import nl.tudelft.simulation.supplychain.role.financing.FinancingRole;
 import nl.tudelft.simulation.supplychain.role.financing.handler.FulfillmentHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.InvoiceHandler;
@@ -61,33 +56,26 @@ public class DemoMarket extends Customer
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
 
-    /** the product that Client wants to buy. */
-    private Product product;
-
     /** the fixed Directory actor. */
     private Directory directory;
 
     /**
      * @param id String, the unique id of the supplier
-     * @param name the longer name of the supplier
      * @param model the model
      * @param geography the location of the actor
      * @param bank the bank for the BankAccount
      * @param initialBalance the initial balance for the actor
-     * @param contentStore the message store for messages
-     * @param product product to order
      * @param directory fixed directory to use
      * @throws ActorAlreadyDefinedException when the actor was already registered in the model
      * @throws NamingException on animation error
      * @throws RemoteException on animation error
      */
     @SuppressWarnings("checkstyle:parameternumber")
-    public DemoMarket(final String id, final String name, final SupplyChainModelInterface model, final Geography geography,
-            final Bank bank, final Money initialBalance, final ContentStoreInterface contentStore, final Product product,
-            final Directory directory) throws ActorAlreadyDefinedException, RemoteException, NamingException
+    public DemoMarket(final String id, final SupplyChainModelInterface model, final Geography geography, final Bank bank,
+            final Money initialBalance, final Directory directory)
+            throws ActorAlreadyDefinedException, RemoteException, NamingException
     {
-        super(id, name, model, geography, contentStore);
-        this.product = product;
+        super(id, id, model, geography, new ContentStoreEmpty());
         this.directory = directory;
         setPurchasingRole(new PurchasingRoleRFQ(this));
         setConsumingRole(new ConsumingRole(this, new DistConstantDuration(Duration.ZERO)));
@@ -109,14 +97,6 @@ public class DemoMarket extends Customer
      */
     public void makeHandlers()
     {
-        StreamInterface stream = getSimulator().getModel().getStream("default");
-        DurationUnit hours = DurationUnit.HOUR;
-        DurationUnit days = DurationUnit.DAY;
-        //
-        // create the demand for PCs
-        new DemandGeneratingProcess(getConsumingRole(), this.product,
-                new DistContinuousDuration(new DistExponential(stream, 8.0), hours), 1.0, Duration.ZERO,
-                new Duration(14.0, days));
         //
         // tell Client to use the DemandHandler
         new DemandHandlerSearch(getPurchasingRole(), this.directory, new Length(1000.0, LengthUnit.KILOMETER), 100);

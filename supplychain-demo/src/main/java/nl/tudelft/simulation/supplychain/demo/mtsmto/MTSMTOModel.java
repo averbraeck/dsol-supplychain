@@ -1,19 +1,22 @@
 package nl.tudelft.simulation.supplychain.demo.mtsmto;
 
+import org.djunits.unit.DurationUnit;
 import org.djunits.unit.MassUnit;
 import org.djunits.unit.VolumeUnit;
+import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Mass;
 import org.djunits.value.vdouble.scalar.Volume;
-import org.djutils.draw.bounds.Bounds2d;
 import org.djutils.draw.bounds.Bounds3d;
 import org.djutils.draw.point.OrientedPoint3d;
 import org.djutils.draw.point.Point2d;
 
-import nl.tudelft.simulation.dsol.animation.Locatable;
 import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
+import nl.tudelft.simulation.jstats.distributions.DistExponential;
+import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.jstats.streams.MersenneTwister;
 import nl.tudelft.simulation.jstats.streams.StreamInterface;
+import nl.tudelft.simulation.supplychain.actor.Geography;
 import nl.tudelft.simulation.supplychain.demo.DemoContentAnimator;
 import nl.tudelft.simulation.supplychain.demo.reference.DemoBank;
 import nl.tudelft.simulation.supplychain.demo.reference.DemoDirectory;
@@ -29,7 +32,10 @@ import nl.tudelft.simulation.supplychain.product.BillOfMaterials;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.product.Sku;
 import nl.tudelft.simulation.supplychain.reference.Bank;
+import nl.tudelft.simulation.supplychain.role.consuming.process.DemandGeneratingProcess;
 import nl.tudelft.simulation.supplychain.test.TestModel;
+import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
+import nl.tudelft.simulation.supplychain.util.DistDiscreteTriangular;
 
 /**
  * MTSMTOModel.java. <br>
@@ -64,7 +70,8 @@ public class MTSMTOModel extends SupplyChainModel
             {
                 // First we create some background. We set the zValue to -Double.Min value to ensure that it is actually drawn
                 // "below" our actors and messages.
-                new SingleImageRenderable<>(new OrientedPoint3d(0.0, 0.0, -Double.MIN_VALUE), new Bounds3d(800, 600,0), devsSimulator,
+                new SingleImageRenderable<>(new OrientedPoint3d(0.0, 0.0, -Double.MIN_VALUE), new Bounds3d(800, 600, 0),
+                        devsSimulator,
                         TestModel.class.getResource("/nl/tudelft/simulation/supplychain/demo/mtsmto/images/background.gif"));
             }
 
@@ -102,10 +109,20 @@ public class MTSMTOModel extends SupplyChainModel
             var ypProductionMTO = new DemoDirectory("YP_production_MTO", this, new Point2d(100, 30));
 
             // Markets
-            var marketMTS = new DemoMarket("Market_MTS", getSimulator(), new Point2d(-360, -150),
-                    new Money(10000.0, MoneyUnit.USD), pc, ypCustomerMTS, streamMTS);
-            var marketMTO = new DemoMarket("Market_MTO", getSimulator(), new Point2d(-360, 150),
-                    new Money(10000.0, MoneyUnit.USD), pc, ypCustomerMTO, streamMTO);
+            var marketMTS = new DemoMarket("Market_MTS", this, new Geography(new Point2d(-360, -150), "", "MTS"), ing,
+                    new Money(10000.0, MoneyUnit.USD), ypCustomerMTS);
+            new DemandGeneratingProcess(marketMTS.getConsumingRole(), pc,
+                    new DistContinuousDuration(new DistExponential(streamMTS, 8.0), DurationUnit.HOUR),
+                    new DistDiscreteTriangular(streamMTS, 1.0, 4.0, 8.0),
+                    new DistConstantDuration(new Duration(2.0, DurationUnit.DAY)),
+                    new DistConstantDuration(new Duration(7.0, DurationUnit.DAY)));
+            var marketMTO = new DemoMarket("Market_MTO", this, new Geography(new Point2d(-360, 150), "", "MTO"), ing,
+                    new Money(10000.0, MoneyUnit.USD), ypCustomerMTO);
+            new DemandGeneratingProcess(marketMTO.getConsumingRole(), pc,
+                    new DistContinuousDuration(new DistExponential(streamMTO, 8.0), DurationUnit.HOUR),
+                    new DistDiscreteTriangular(streamMTO, 1.0, 4.0, 8.0),
+                    new DistConstantDuration(new Duration(2.0, DurationUnit.DAY)),
+                    new DistConstantDuration(new Duration(7.0, DurationUnit.DAY)));
 
             // Retailers
             DemoRetailer[] mtsRet = new DemoRetailer[5];
