@@ -111,7 +111,7 @@ public class Client extends Customer
         DurationUnit days = DurationUnit.DAY;
         //
         // create the demand for PCs
-        new DemandGeneratingProcess(getConsumingRole(), this.product)
+        new DemandGeneratingProcess(this, this.product)
                 .setIntervalDistribution(new DistContinuousDuration(new DistExponential(stream, 24.0), hours)).setAmount(1.0)
                 .setEarliestDeliveryDuration(Duration.ZERO).setLatestDeliveryDuration(new Duration(14.0, days))
                 .setMaxNumberGenerations(100).setStartAfterInterval().start();
