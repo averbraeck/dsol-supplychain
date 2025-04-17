@@ -15,6 +15,7 @@ import nl.tudelft.simulation.jstats.distributions.unit.DistContinuousDuration;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 import nl.tudelft.simulation.supplychain.product.Product;
+import nl.tudelft.simulation.supplychain.role.consuming.ConsumingActor;
 import nl.tudelft.simulation.supplychain.role.consuming.ConsumingRole;
 import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
@@ -57,12 +58,12 @@ public class DemandGeneratingProcess extends AutonomousProcess<ConsumingRole>
 
     /**
      * Make a demand generating process.
-     * @param role the role to which this process belongs
+     * @param actor the actor to which this process belongs
      * @param product the product
      */
-    public DemandGeneratingProcess(final ConsumingRole role, final Product product)
+    public DemandGeneratingProcess(final ConsumingActor actor, final Product product)
     {
-        super(role);
+        super(actor.getConsumingRole());
         Throw.whenNull(product, "product should not be null");
         this.product = product;
         this.startTime = getSimulatorTime();
