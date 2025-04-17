@@ -1,9 +1,9 @@
 package nl.tudelft.simulation.supplychain.role.consuming.process;
 
-import org.djunits.unit.DurationUnit;
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djunits.value.vdouble.scalar.Time;
 import org.djutils.event.TimedEvent;
+import org.djutils.exceptions.Throw;
 import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.jstats.distributions.Dist;
@@ -16,6 +16,7 @@ import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.process.AutonomousProcess;
 import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.role.consuming.ConsumingRole;
+import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
 
 /**
  * Object that can model the demand for a certain amount of product.
@@ -30,6 +31,9 @@ public class DemandGeneratingProcess extends AutonomousProcess<ConsumingRole>
     /** the product. */
     private Product product;
 
+    /** the duration till the first generation. */
+    private Time startTime;
+
     /** the interval between demand requests. */
     private DistContinuousDuration intervalDistribution;
 
@@ -41,76 +45,241 @@ public class DemandGeneratingProcess extends AutonomousProcess<ConsumingRole>
 
     /** the latest delivery date relative to the current simulator time. */
     private DistContinuousDuration latestDeliveryDurationDistribution;
-    
+
     /** the maximum number of generations, e.g. for testing. */
     private int maxNumberGenerations = Integer.MAX_VALUE;
-    
+
     /** the number of generations, e.g. for testing. */
     private int numberGenerations = 0;
 
+    /** the stop time of the enerating process. */
+    private Time stopTime = Time.instantiateSI(Double.MAX_VALUE);
+
     /**
      * Make a demand generating process.
      * @param role the role to which this process belongs
      * @param product the product
-     * @param interval the distribution for the demand generation interval
-     * @param amountDistribution the amount of product to order (discrete or continuous)
-     * @param earliestDeliveryDurationDistribution the earliest delivery date distribution
-     * @param latestDeliveryDurationDistribution the latest delivery date distribution
      */
-    public DemandGeneratingProcess(final ConsumingRole role, final Product product, final DistContinuousDuration interval,
-            final Dist amountDistribution, final DistContinuousDuration earliestDeliveryDurationDistribution,
-            final DistContinuousDuration latestDeliveryDurationDistribution)
+    public DemandGeneratingProcess(final ConsumingRole role, final Product product)
     {
         super(role);
+        Throw.whenNull(product, "product should not be null");
         this.product = product;
-        this.intervalDistribution = interval;
-        this.amountDistribution = amountDistribution;
-        this.earliestDeliveryDurationDistribution = earliestDeliveryDurationDistribution;
-        this.latestDeliveryDurationDistribution = latestDeliveryDurationDistribution;
-        role.addAutonomousProcess(this);
-        role.getSimulator().scheduleEventRel(this.intervalDistribution.draw(), this, "generateDemand", null);
+        this.startTime = getSimulatorTime();
+        this.amountDistribution = new DistDiscreteConstant(getDefaultStream(), 1);
     }
 
     /**
-     * Make a demand generating process.
-     * @param role the role to which this process belongs
-     * @param product the product
-     * @param interval the distribution for the demand generation interval
-     * @param amount the amount of product to order
-     * @param earliestDeliveryDuration the earliest delivery date
-     * @param latestDeliveryDuration the latest delivery date
+     * Start the generation process. Should always be the last method call in the method chain.
      */
-    public DemandGeneratingProcess(final ConsumingRole role, final Product product, final DistContinuousDuration interval,
-            final double amount, final Duration earliestDeliveryDuration, final Duration latestDeliveryDuration)
+    public void start()
     {
-        this(role, product, interval, new DistConstant(role.getActor().getModel().getDefaultStream(), amount),
-                new DistContinuousDuration(
-                        new DistConstant(role.getActor().getModel().getDefaultStream(), earliestDeliveryDuration.si),
-                        DurationUnit.SI),
-                new DistContinuousDuration(
-                        new DistConstant(role.getActor().getModel().getDefaultStream(), latestDeliveryDuration.si),
-                        DurationUnit.SI));
+        Throw.when(this.intervalDistribution == null, IllegalStateException.class,
+                "intervalDistribution has not been initialized");
+        getRole().addAutonomousProcess(this);
+        getRole().getSimulator().scheduleEventAbs(this.startTime, this, "generateDemand", null);
     }
 
     /**
-     * Make a demand generating process.
-     * @param role the role to which this process belongs
-     * @param product the product
-     * @param interval the distribution for the demand generation interval
-     * @param amount the amount of product to order
-     * @param earliestDeliveryDuration the earliest delivery date
-     * @param latestDeliveryDuration the latest delivery date
+     * Set the duration distribution till the first generation.
+     * @param startDurationDistribution the duration distribution till the first generation
+     * @return the object for method chaining
      */
-    public DemandGeneratingProcess(final ConsumingRole role, final Product product, final DistContinuousDuration interval,
-            final long amount, final Duration earliestDeliveryDuration, final Duration latestDeliveryDuration)
+    public DemandGeneratingProcess setStartAfter(final DistContinuousDuration startDurationDistribution)
     {
-        this(role, product, interval, new DistDiscreteConstant(role.getActor().getModel().getDefaultStream(), amount),
-                new DistContinuousDuration(
-                        new DistConstant(role.getActor().getModel().getDefaultStream(), earliestDeliveryDuration.si),
-                        DurationUnit.SI),
-                new DistContinuousDuration(
-                        new DistConstant(role.getActor().getModel().getDefaultStream(), latestDeliveryDuration.si),
-                        DurationUnit.SI));
+        Throw.whenNull(startDurationDistribution, "startDurationDistribution should not be null");
+        this.startTime = getSimulatorTime().plus(startDurationDistribution.draw());
+        return this;
+    }
+
+    /**
+     * Set the duration till the first generation.
+     * @param startDuration the duration till the first generation
+     * @return the object for method chaining
+     */
+    public DemandGeneratingProcess setStartAfter(final Duration startDuration)
+    {
+        Throw.whenNull(startDuration, "startDuration should not be null");
+        Throw.when(startDuration.si < 0, IllegalArgumentException.class, "startDuration cannot be negative");
+        this.startTime = getSimulatorTime().plus(startDuration);
+        return this;
+    }
+
+    /**
+     * Set the duration till the first generation equal to the interval distribution.
+     * @return the object for method chaining
+     */
+    public DemandGeneratingProcess setStartAfterInterval()
+    {
+        Throw.when(this.intervalDistribution == null, IllegalStateException.class,
+                "setStartDurationToInterval called, but interval == null");
+        this.startTime = getSimulatorTime().plus(this.intervalDistribution.draw());
+        return this;
+    }
+
+    /**
+     * Set the duration till the first generation equal to zero.
+     * @return the object for method chaining
+     */
+    public DemandGeneratingProcess setStartNow()
+    {
+        this.startTime = getSimulatorTime();
+        return this;
+    }
+
+    /**
+     * Set the time of the first generation.
+     * @param startAtTime the time of the first generation
+     * @return the object for method chaining
+     */
+    public DemandGeneratingProcess setStartAt(final Time startAtTime)
+    {
+        Throw.whenNull(startAtTime, "startTime should not be null");
+        Throw.when(startAtTime.si < getSimulatorTime().si, IllegalArgumentException.class,
+                "startTime cannot be before current time");
+        this.startTime = startAtTime;
+        return this;
+    }
+
+    /**
+     * Set a new value for stopTime.
+     * @param stopAtTime set a new value for stopTime
+     * @return the object for method chaining
+     */
+    public DemandGeneratingProcess setStopAt(final Time stopAtTime)
+    {
+        Throw.whenNull(stopAtTime, "stopTime should not be null");
+        Throw.when(stopAtTime.si < getSimulatorTime().si, IllegalArgumentException.class,
+                "stopTime cannot be before current time");
+        Throw.when(stopAtTime.si < this.startTime.si, IllegalArgumentException.class, "stopTime cannot be before startTime");
+        this.stopTime = stopAtTime;
+        return this;
+    }
+
+    /**
+     * Set the duration for the generator to work after the startTime.
+     * @param workingDuration the duration for the generator to work after the startTime
+     * @return the object for method chaining
+     */
+    public DemandGeneratingProcess setStopAfter(final Duration workingDuration)
+    {
+        Throw.whenNull(workingDuration, "workingDuration should not be null");
+        Throw.when(workingDuration.si < 0, IllegalArgumentException.class, "workingDuration cannot be negative");
+        this.stopTime = this.startTime.plus(workingDuration);
+        return this;
+    }
+
+    /**
+     * Set a new value for the interval between demand requests.
+     * @param newIntervalDistribution a new value for the interval between demand requests
+     * @return the object for method chaining
+     */
+    public DemandGeneratingProcess setIntervalDistribution(final DistContinuousDuration newIntervalDistribution)
+    {
+        Throw.whenNull(newIntervalDistribution, "newIntervalDistribution should not be null");
+        this.intervalDistribution = newIntervalDistribution;
+        return this;
+    }
+
+    /**
+     * Set a new value for amountDistribution.
+     * @param newAmountDistribution set a new value for amountDistribution
+     * @return the object for method chaining
+     */
+    public DemandGeneratingProcess setAmountDistribution(final Dist newAmountDistribution)
+    {
+        Throw.whenNull(newAmountDistribution, "newAmountDistribution should not be null");
+        this.amountDistribution = newAmountDistribution;
+        return this;
+    }
+
+    /**
+     * Set a new value for the amount of generated products.
+     * @param amount a new value for the amount of generated products
+     * @return the object for method chaining
+     */
+    public DemandGeneratingProcess setAmount(final int amount)
+    {
+        Throw.when(amount <= 0, IllegalArgumentException.class, "amount should be positive");
+        this.amountDistribution = new DistDiscreteConstant(getDefaultStream(), amount);
+        return this;
+    }
+
+    /**
+     * Set a new value for the amount of generated products.
+     * @param amount a new value for the amount of generated products
+     * @return the object for method chaining
+     */
+    public DemandGeneratingProcess setAmount(final double amount)
+    {
+        Throw.when(amount <= 0, IllegalArgumentException.class, "amount should be positive");
+        this.amountDistribution = new DistConstant(getDefaultStream(), amount);
+        return this;
+    }
+
+    /**
+     * Set a new value for earliestDeliveryDurationDistribution.
+     * @param newEarliestDeliveryDurationDistribution set a new value for earliestDeliveryDurationDistribution
+     * @return the object for method chaining
+     */
+    public DemandGeneratingProcess setEarliestDeliveryDurationDistribution(
+            final DistContinuousDuration newEarliestDeliveryDurationDistribution)
+    {
+        Throw.whenNull(newEarliestDeliveryDurationDistribution, "newEarliestDeliveryDurationDistribution should not be null");
+        this.earliestDeliveryDurationDistribution = newEarliestDeliveryDurationDistribution;
+        return this;
+    }
+
+    /**
+     * Set a new value for earliestDeliveryDuration.
+     * @param earliestDeliveryDuration set a new value for earliestDeliveryDuration
+     * @return the object for method chaining
+     */
+    public DemandGeneratingProcess setEarliestDeliveryDuration(final Duration earliestDeliveryDuration)
+    {
+        Throw.whenNull(earliestDeliveryDuration, "earliestDeliveryDuration should not be null");
+        Throw.when(earliestDeliveryDuration.si < 0, IllegalArgumentException.class,
+                "earliestDeliveryDuration cannot be negative");
+        this.earliestDeliveryDurationDistribution = new DistConstantDuration(earliestDeliveryDuration);
+        return this;
+    }
+
+    /**
+     * Set a new value for latestDeliveryDurationDistribution.
+     * @param newLatestDeliveryDurationDistribution set a new value for latestDeliveryDurationDistribution
+     * @return the object for method chaining
+     */
+    public DemandGeneratingProcess setLatestDeliveryDurationDistribution(
+            final DistContinuousDuration newLatestDeliveryDurationDistribution)
+    {
+        Throw.whenNull(newLatestDeliveryDurationDistribution, "newLatestDeliveryDurationDistribution should not be null");
+        this.latestDeliveryDurationDistribution = newLatestDeliveryDurationDistribution;
+        return this;
+    }
+
+    /**
+     * Set a new value for latestDeliveryDuration.
+     * @param latestDeliveryDuration set a new value for latestDeliveryDuration
+     * @return the object for method chaining
+     */
+    public DemandGeneratingProcess setLatestDeliveryDuration(final Duration latestDeliveryDuration)
+    {
+        Throw.whenNull(latestDeliveryDuration, "latestDeliveryDuration should not be null");
+        Throw.when(latestDeliveryDuration.si < 0, IllegalArgumentException.class, "latestDeliveryDuration cannot be negative");
+        this.latestDeliveryDurationDistribution = new DistConstantDuration(latestDeliveryDuration);
+        return this;
+    }
+
+    /**
+     * Set a new value for the maximum number of time the generation process takes place.
+     * @param newMaxNumberGenerations the new value for maxNumberGenerations
+     * @return the object for method chaining
+     */
+    public DemandGeneratingProcess setMaxNumberGenerations(final int newMaxNumberGenerations)
+    {
+        Throw.when(newMaxNumberGenerations < 0, IllegalArgumentException.class, "newMaxNumberGenerations cannot be negative");
+        this.maxNumberGenerations = newMaxNumberGenerations;
+        return this;
     }
 
     /**
@@ -122,12 +291,14 @@ public class DemandGeneratingProcess extends AutonomousProcess<ConsumingRole>
         {
             double amount = this.amountDistribution instanceof DistContinuous
                     ? ((DistContinuous) this.amountDistribution).draw() : ((DistDiscrete) this.amountDistribution).draw();
-            Demand demand = new Demand(getActor(), this.product, amount,
-                    getSimulatorTime().plus(this.earliestDeliveryDurationDistribution.draw()),
-                    getSimulatorTime().plus(this.latestDeliveryDurationDistribution.draw()));
+            amount = Math.max(0.0, amount);
+            var ed = Duration.max(Duration.ZERO, this.earliestDeliveryDurationDistribution.draw());
+            var ld = Duration.max(ed, this.latestDeliveryDurationDistribution.draw());
+            Demand demand =
+                    new Demand(getActor(), this.product, amount, getSimulatorTime().plus(ed), getSimulatorTime().plus(ld));
             getActor().sendContent(demand, getRole().getAdministrativeDelay().draw());
             this.numberGenerations++;
-            if (this.numberGenerations < this.maxNumberGenerations)
+            if (this.numberGenerations < this.maxNumberGenerations && getSimulatorTime().lt(this.stopTime))
             {
                 getSimulator().scheduleEventRel(this.intervalDistribution.draw(), this, "generateDemand", null);
             }
@@ -139,6 +310,24 @@ public class DemandGeneratingProcess extends AutonomousProcess<ConsumingRole>
         {
             Logger.error(e, "createDemand");
         }
+    }
+
+    /**
+     * Return the startTime of the demand generator.
+     * @return the startTime of the demand generator
+     */
+    public Time getStartTime()
+    {
+        return this.startTime;
+    }
+
+    /**
+     * Return the stopTime.
+     * @return stopTime
+     */
+    public Time getStopTime()
+    {
+        return this.stopTime;
     }
 
     /**
@@ -196,12 +385,12 @@ public class DemandGeneratingProcess extends AutonomousProcess<ConsumingRole>
     }
 
     /**
-     * Set a new value for maxNumberGenerations.
-     * @param maxNumberGenerations set a new value for maxNumberGenerations
+     * Return the numberGenerations.
+     * @return numberGenerations
      */
-    public void setMaxNumberGenerations(final int maxNumberGenerations)
+    public int getNumberGenerations()
     {
-        this.maxNumberGenerations = maxNumberGenerations;
+        return this.numberGenerations;
     }
 
 }
