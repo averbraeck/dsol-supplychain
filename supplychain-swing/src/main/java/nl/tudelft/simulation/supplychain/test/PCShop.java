@@ -39,6 +39,7 @@ import nl.tudelft.simulation.supplychain.role.purchasing.handler.QuoteHandlerAll
 import nl.tudelft.simulation.supplychain.role.purchasing.handler.QuoteNoHandler;
 import nl.tudelft.simulation.supplychain.role.receiving.ReceivingRole;
 import nl.tudelft.simulation.supplychain.role.receiving.handler.TransportDeliveryHandlerStock;
+import nl.tudelft.simulation.supplychain.role.selling.SellingActorRFQ;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRoleRFQ;
 import nl.tudelft.simulation.supplychain.role.selling.handler.InventoryQuoteHandler;
 import nl.tudelft.simulation.supplychain.role.selling.handler.InventoryReservationHandler;
@@ -66,7 +67,7 @@ import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class PCShop extends Retailer
+public class PCShop extends Retailer implements SellingActorRFQ
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
@@ -129,34 +130,32 @@ public class PCShop extends Retailer
         DurationUnit days = DurationUnit.DAY;
 
         // tell PCshop to use the RFQHandler to handle RFQs
-        new RequestForQuoteHandler((SellingRoleRFQ) getSellingRole());
-        new InventoryQuoteRequestHandler(getWarehousingRole());
-        new InventoryQuoteHandler((SellingRoleRFQ) getSellingRole());
-        new TransportQuoteHandler((SellingRoleRFQ) getSellingRole());
+        new RequestForQuoteHandler(this);
+        new InventoryQuoteRequestHandler(this);
+        new InventoryQuoteHandler(this);
+        new TransportQuoteHandler(this);
         //
         // create an order Handler
-        new OrderHandlerStock(getSellingRole());
-        new InventoryReservationRequestHandler(getWarehousingRole());
-        new InventoryReservationHandler(getSellingRole());
+        new OrderHandlerStock(this);
+        new InventoryReservationRequestHandler(this);
+        new InventoryReservationHandler(this);
         //
         // Release the inventory and ship it
-        new InventoryReleaseRequestHandler(getWarehousingRole());
-        new InventoryReleaseHandler(getFinancingRole());
-        new ShippingOrderHandler(getShippingRole());
+        new InventoryReleaseRequestHandler(this);
+        new InventoryReleaseHandler(this);
+        new ShippingOrderHandler(this);
         //
         // hopefully, the PCShop will get payments in the end
-        new TransportInvoiceHandler(getFinancingRole(), PaymentPolicyEnum.PAYMENT_IMMEDIATE,
-                new DistConstantDuration(Duration.ZERO));
-        new PaymentHandler(getFinancingRole());
-        new FixedCostProcess(getFinancingRole(), "no fixed costs", new Duration(1, DurationUnit.WEEK),
-                new Money(0.0, MoneyUnit.USD));
+        new TransportInvoiceHandler(this, PaymentPolicyEnum.PAYMENT_IMMEDIATE, new DistConstantDuration(Duration.ZERO));
+        new PaymentHandler(this);
+        new FixedCostProcess(this, "no fixed costs", new Duration(1, DurationUnit.WEEK), new Money(0.0, MoneyUnit.USD));
         //
         // After a while, the PC Shop needs to restock and order
         // do this for every product we have initially in stock
         for (Product product : getInventory().getProducts())
         {
-            new RestockingProcessSafety(getWarehousingRole(), getInventory(), product, new Duration(24.0, DurationUnit.HOUR),
-                    false, 5.0, true, 10.0, new Duration(14.0, days));
+            new RestockingProcessSafety(this, getInventory(), product, new Duration(24.0, DurationUnit.HOUR), false, 5.0, true,
+                    10.0, new Duration(14.0, days));
             // order 100 PCs when actual+reserved < 100
         }
 
@@ -165,7 +164,7 @@ public class PCShop extends Retailer
         //
 
         // tell PCShop to use the DemandHandler for all products
-        DemandHandlerRFQ demandHandler = new DemandHandlerRFQ(getPurchasingRole(), new Duration(1.0, hours));
+        DemandHandlerRFQ demandHandler = new DemandHandlerRFQ(this, new Duration(1.0, hours));
         TransportPreference transportPreference = new TransportPreference(new ArrayList<>(), CostTimeImportance.COST);
         for (Product product : getInventory().getProducts())
         {
@@ -173,19 +172,19 @@ public class PCShop extends Retailer
         }
         //
         // tell PCShop to use the QuoteHandler to handle quotes
-        new QuoteNoHandler((PurchasingRoleRFQ) getPurchasingRole());
-        new QuoteHandlerAll(getPurchasingRole(), QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE, 0.4, 0.1);
+        new QuoteNoHandler(this);
+        new QuoteHandlerAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE, 0.4, 0.1);
         //
         // PCShop has the standard order confirmation Handler
-        new OrderConfirmationHandler(getPurchasingRole());
+        new OrderConfirmationHandler(this);
         //
         // PCShop will get a bill in the end
-        new InvoiceHandler(getFinancingRole(), PaymentPolicyEnum.PAYMENT_IMMEDIATE, new DistConstantDuration(Duration.ZERO));
+        new InvoiceHandler(this, PaymentPolicyEnum.PAYMENT_IMMEDIATE, new DistConstantDuration(Duration.ZERO));
         //
         // hopefully, PCShop will get computer shipments
-        new TransportDeliveryHandlerStock(getReceivingRole());
-        new InventoryEntryHandler(getWarehousingRole());
-        new FulfillmentHandler(getFinancingRole());
+        new TransportDeliveryHandlerStock(this);
+        new InventoryEntryHandler(this);
+        new FulfillmentHandler(this);
 
         //
         // CHARTS

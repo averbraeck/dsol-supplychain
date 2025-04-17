@@ -85,14 +85,13 @@ public class DemoTransporter extends Transporter
     public void makeHandlers()
     {
         // Handle the transport messages
-        new TransportQuoteRequestHandler(getTransportingRole());
-        new TransportOrderHandler(getTransportingRole());
-        new TransportConfirmationHandler(getFinancingRole());
+        new TransportQuoteRequestHandler(this);
+        new TransportOrderHandler(this);
+        new TransportConfirmationHandler(this);
         //
         // Transporter will get a payment in the end
-        new TransportPaymentHandler(getFinancingRole());
-        new FixedCostProcess(getFinancingRole(), "no fixed costs", new Duration(1, DurationUnit.WEEK),
-                new Money(0.0, MoneyUnit.USD));
+        new TransportPaymentHandler(this);
+        new FixedCostProcess(this, "no fixed costs", new Duration(1, DurationUnit.WEEK), new Money(0.0, MoneyUnit.USD));
 
         //
         // CHARTS

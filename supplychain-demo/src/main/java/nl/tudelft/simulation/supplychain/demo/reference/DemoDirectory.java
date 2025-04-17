@@ -41,7 +41,7 @@ public class DemoDirectory extends Directory
         super(id, id, model, location, id, "X");
 
         setSearchingRole(new SearchingRole(this));
-        new SearchRequestHandler(getSearchingRole(), new DistConstantDuration(new Duration(10.0, DurationUnit.MINUTE)));
+        new SearchRequestHandler(this, new DistConstantDuration(new Duration(10.0, DurationUnit.MINUTE)));
 
         // ANIMATION
 

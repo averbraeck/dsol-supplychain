@@ -28,6 +28,7 @@ import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentPolicyEnu
 import nl.tudelft.simulation.supplychain.role.financing.handler.TransportInvoiceHandler;
 import nl.tudelft.simulation.supplychain.role.financing.process.FixedCostProcess;
 import nl.tudelft.simulation.supplychain.role.receiving.ReceivingRole;
+import nl.tudelft.simulation.supplychain.role.selling.SellingActorRFQ;
 import nl.tudelft.simulation.supplychain.role.selling.SellingRoleRFQ;
 import nl.tudelft.simulation.supplychain.role.selling.handler.InventoryQuoteHandler;
 import nl.tudelft.simulation.supplychain.role.selling.handler.InventoryReservationHandler;
@@ -51,7 +52,7 @@ import nl.tudelft.simulation.supplychain.util.DistConstantDuration;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public class Factory extends Supplier
+public class Factory extends Supplier implements SellingActorRFQ
 {
     /** the serial version uid. */
     private static final long serialVersionUID = 20221201L;
@@ -104,27 +105,25 @@ public class Factory extends Supplier
     public void init() throws RemoteException
     {
         // tell Factory to use the RFQHandler to handle RFQs
-        new RequestForQuoteHandler((SellingRoleRFQ) getSellingRole());
-        new InventoryQuoteRequestHandler(getWarehousingRole());
-        new InventoryQuoteHandler((SellingRoleRFQ) getSellingRole());
-        new TransportQuoteHandler((SellingRoleRFQ) getSellingRole());
+        new RequestForQuoteHandler(this);
+        new InventoryQuoteRequestHandler(this);
+        new InventoryQuoteHandler(this);
+        new TransportQuoteHandler(this);
         //
         // create an order Handler
-        new OrderHandlerStock(getSellingRole());
-        new InventoryReservationRequestHandler(getWarehousingRole());
-        new InventoryReservationHandler(getSellingRole());
+        new OrderHandlerStock(this);
+        new InventoryReservationRequestHandler(this);
+        new InventoryReservationHandler(this);
         //
         // Release the inventory and ship it
-        new InventoryReleaseRequestHandler(getWarehousingRole());
-        new InventoryReleaseHandler(getFinancingRole());
-        new ShippingOrderHandler(getShippingRole());
+        new InventoryReleaseRequestHandler(this);
+        new InventoryReleaseHandler(this);
+        new ShippingOrderHandler(this);
         //
         // hopefully, the Factory will get payments in the end
-        new TransportInvoiceHandler(getFinancingRole(), PaymentPolicyEnum.PAYMENT_IMMEDIATE,
-                new DistConstantDuration(Duration.ZERO));
-        new PaymentHandler(getFinancingRole());
-        new FixedCostProcess(getFinancingRole(), "no fixed costs", new Duration(1, DurationUnit.WEEK),
-                new Money(0.0, MoneyUnit.USD));
+        new TransportInvoiceHandler(this, PaymentPolicyEnum.PAYMENT_IMMEDIATE, new DistConstantDuration(Duration.ZERO));
+        new PaymentHandler(this);
+        new FixedCostProcess(this, "no fixed costs", new Duration(1, DurationUnit.WEEK), new Money(0.0, MoneyUnit.USD));
         //
         // CHARTS
         //

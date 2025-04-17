@@ -87,18 +87,6 @@ public class DemoManufacturer extends Manufacturer
     {
         super(name, simulator, position, bank, initialBankAccount, new LeanContentStore(simulator));
 
-        // COMMUNICATION
-
-        WebApplication www = new WebApplication("Web-" + name, this.simulator);
-        super.addSendingDevice(www);
-        ContentReceiver webSystem = new HandleAllMessages(this);
-        super.addReceivingDevice(www, webSystem, new DistConstantDuration(new Duration(10.0, DurationUnit.SECOND)));
-
-        FaxDevice fax = new FaxDevice("fax-" + name, this.simulator);
-        super.addSendingDevice(fax);
-        ContentReceiver faxChecker = new HandleAllMessages(this);
-        super.addReceivingDevice(fax, faxChecker, new DistConstantDuration(new Duration(1.0, DurationUnit.HOUR)));
-
         // REGISTER IN YP
 
         ypProduction.register(this, Topic.DEFAULT);

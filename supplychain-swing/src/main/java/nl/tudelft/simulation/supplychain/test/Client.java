@@ -117,27 +117,25 @@ public class Client extends Customer
                 .setMaxNumberGenerations(100).setStartAfterInterval().start();
         //
         // tell Client to use the DemandHandler
-        DemandHandlerRFQ demandHandler = new DemandHandlerRFQ(getPurchasingRole(), new Duration(24.0, hours));
+        DemandHandlerRFQ demandHandler = new DemandHandlerRFQ(this, new Duration(24.0, hours));
         TransportPreference transportPreference = new TransportPreference(new ArrayList<>(), CostTimeImportance.COST);
         demandHandler.addSupplier(this.product, this.retailer, transportPreference);
         //
         // tell Client to use the QuoteHandler to handle quotes
-        new QuoteNoHandler((PurchasingRoleRFQ) getPurchasingRole());
-        new QuoteHandlerAll(getPurchasingRole(), QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE, 0.4, 0.1);
+        new QuoteNoHandler(this);
+        new QuoteHandlerAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE, 0.4, 0.1);
         //
         // Client has the standard order confirmation Handler
-        new OrderConfirmationHandler(getPurchasingRole());
+        new OrderConfirmationHandler(this);
         //
         // Client will get a bill in the end
-        new InvoiceHandler(getFinancingRole(), PaymentPolicyEnum.PAYMENT_IMMEDIATE, new DistConstantDuration(Duration.ZERO));
-        new TransportInvoiceHandler(getFinancingRole(), PaymentPolicyEnum.PAYMENT_IMMEDIATE,
-                new DistConstantDuration(Duration.ZERO));
-        new FixedCostProcess(getFinancingRole(), "no fixed costs", new Duration(1, DurationUnit.WEEK),
-                new Money(0.0, MoneyUnit.USD));
+        new InvoiceHandler(this, PaymentPolicyEnum.PAYMENT_IMMEDIATE, new DistConstantDuration(Duration.ZERO));
+        new TransportInvoiceHandler(this, PaymentPolicyEnum.PAYMENT_IMMEDIATE, new DistConstantDuration(Duration.ZERO));
+        new FixedCostProcess(this, "no fixed costs", new Duration(1, DurationUnit.WEEK), new Money(0.0, MoneyUnit.USD));
         //
         // hopefully, Client will get computer shipments
-        new TransportDeliveryHandlerConsume(getReceivingRole());
-        new FulfillmentHandler(getFinancingRole());
+        new TransportDeliveryHandlerConsume(this);
+        new FulfillmentHandler(this);
 
         //
         // CHARTS

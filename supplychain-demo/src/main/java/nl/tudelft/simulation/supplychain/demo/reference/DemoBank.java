@@ -47,10 +47,10 @@ public class DemoBank extends Bank
     {
         super(id, name, model, location, locationDescription, landmass);
         setBankingRole(new BankingRole("ing", this));
-        new InterestProcess(getBankingRole());
+        new InterestProcess(this);
         getBankingRole().setAnnualInterestRateNeg(-0.080);
         getBankingRole().setAnnualInterestRatePos(0.025);
-        new BankTransferHandler(getBankingRole());
+        new BankTransferHandler(this);
         if (getSimulator() instanceof AnimatorInterface)
         {
             new SingleImageRenderable<>(this, getSimulator(),

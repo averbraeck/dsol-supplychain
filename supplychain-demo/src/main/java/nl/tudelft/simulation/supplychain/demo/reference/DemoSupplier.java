@@ -64,13 +64,6 @@ public class DemoSupplier extends Supplier
     {
         super(name, simulator, position, bank, initialBankAccount, new LeanContentStore(simulator));
 
-        // COMMUNICATION
-
-        FaxDevice fax = new FaxDevice("fax-" + name, this.simulator);
-        super.addSendingDevice(fax);
-        ContentReceiver faxChecker = new HandleAllMessages(this);
-        super.addReceivingDevice(fax, faxChecker, new DistConstantDuration(new Duration(1.0, DurationUnit.HOUR)));
-
         // REGISTER IN YP
 
         ypProduction.register(this, Topic.DEFAULT);

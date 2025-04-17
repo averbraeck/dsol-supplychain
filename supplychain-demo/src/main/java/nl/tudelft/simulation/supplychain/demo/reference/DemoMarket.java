@@ -99,27 +99,25 @@ public class DemoMarket extends Customer
     {
         //
         // tell Client to use the DemandHandler
-        new DemandHandlerSearch(getPurchasingRole(), this.directory, new Length(1000.0, LengthUnit.KILOMETER), 100);
+        new DemandHandlerSearch(this, this.directory, new Length(1000.0, LengthUnit.KILOMETER), 100);
         TransportPreference transportPreference = new TransportPreference(new ArrayList<>(), CostTimeImportance.COST);
-        new SearchAnswerHandler(getPurchasingRole(), new Duration(24.0, DurationUnit.HOUR), transportPreference);
+        new SearchAnswerHandler(this, new Duration(24.0, DurationUnit.HOUR), transportPreference);
         //
         // tell Client to use the QuoteHandler to handle quotes
-        new QuoteNoHandler((PurchasingRoleRFQ) getPurchasingRole());
-        new QuoteHandlerAll(getPurchasingRole(), QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE, 0.5, 0.0);
+        new QuoteNoHandler(this);
+        new QuoteHandlerAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE, 0.5, 0.0);
         //
         // Client has the standard order confirmation Handler
-        new OrderConfirmationHandler(getPurchasingRole());
+        new OrderConfirmationHandler(this);
         //
         // Client will get a bill in the end
-        new InvoiceHandler(getFinancingRole(), PaymentPolicyEnum.PAYMENT_ON_TIME, new DistConstantDuration(Duration.ZERO));
-        new TransportInvoiceHandler(getFinancingRole(), PaymentPolicyEnum.PAYMENT_ON_TIME,
-                new DistConstantDuration(Duration.ZERO));
-        new FixedCostProcess(getFinancingRole(), "no fixed costs", new Duration(1, DurationUnit.WEEK),
-                new Money(0.0, MoneyUnit.USD));
+        new InvoiceHandler(this, PaymentPolicyEnum.PAYMENT_ON_TIME, new DistConstantDuration(Duration.ZERO));
+        new TransportInvoiceHandler(this, PaymentPolicyEnum.PAYMENT_ON_TIME, new DistConstantDuration(Duration.ZERO));
+        new FixedCostProcess(this, "no fixed costs", new Duration(1, DurationUnit.WEEK), new Money(0.0, MoneyUnit.USD));
         //
         // hopefully, Client will get computer shipments
-        new TransportDeliveryHandlerConsume(getReceivingRole());
-        new FulfillmentHandler(getFinancingRole());
+        new TransportDeliveryHandlerConsume(this);
+        new FulfillmentHandler(this);
 
         //
         // CHARTS
