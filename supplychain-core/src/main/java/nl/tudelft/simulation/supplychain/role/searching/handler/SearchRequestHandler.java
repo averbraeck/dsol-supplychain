@@ -81,9 +81,9 @@ public class SearchRequestHandler extends ContentHandler<SearchRequest, Searchin
             final Point<?> location)
     {
         SortedMap<Length, Actor> sortedSuppliers = new TreeMap<>();
-        for (Actor actor : sortedSuppliers.values())
+        for (Actor actor : supplierSet)
         {
-            Length distance = getRole().getSimulator().getModel().calculateDistance(actor.getLocation(), location);
+            Length distance = getRole().getModel().calculateDistance(actor.getLocation(), location);
             if (distance.le(maxDistance))
             {
                 sortedSuppliers.put(distance, actor);
