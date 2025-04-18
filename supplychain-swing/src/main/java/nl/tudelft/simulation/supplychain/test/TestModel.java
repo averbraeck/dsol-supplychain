@@ -109,7 +109,7 @@ public class TestModel extends SupplyChainModel implements EventListener
 
             // create a transporter
             this.trucking = new Trucking("transporter", "Transporter", this, new Point2d(200, 20), "Maastricht", "Europe",
-                    this.bank, new Money(50000.0, MoneyUnit.USD), new ContentStoreEmpty());
+                    this.bank, new Money(50000.0, MoneyUnit.USD));
 
             // create a manufacturer
             Geography factoryGeography = new Geography(new Point2d(200, 200), "Delft", "Europe");
