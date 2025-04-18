@@ -37,7 +37,7 @@ import nl.tudelft.simulation.supplychain.role.financing.process.FixedCostProcess
 import nl.tudelft.simulation.supplychain.role.manufacturing.ManufacturingRole;
 import nl.tudelft.simulation.supplychain.role.manufacturing.ManufacturingService;
 import nl.tudelft.simulation.supplychain.role.manufacturing.ManufacturingServiceDelay;
-import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleRFQ;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleSearch;
 import nl.tudelft.simulation.supplychain.role.purchasing.handler.DemandHandlerSearch;
 import nl.tudelft.simulation.supplychain.role.purchasing.handler.OrderConfirmationHandler;
 import nl.tudelft.simulation.supplychain.role.purchasing.handler.QuoteComparatorEnum;
@@ -105,7 +105,7 @@ public class DemoManufacturer extends Manufacturer implements SellingActorRFQ
         super(id, id, model, geography, new ContentStoreEmpty());
         bank.getBankingRole().addToBalance(this, initialBalance);
 
-        setPurchasingRole(new PurchasingRoleRFQ(this));
+        setPurchasingRole(new PurchasingRoleSearch(this));
         setFinancingRole(new FinancingRole(this, bank, initialBalance));
         setWarehousingRole(new WarehousingRole(this));
         setShippingRole(new ShippingRole(this));

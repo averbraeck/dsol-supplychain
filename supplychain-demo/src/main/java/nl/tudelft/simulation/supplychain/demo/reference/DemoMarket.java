@@ -30,7 +30,7 @@ import nl.tudelft.simulation.supplychain.role.financing.handler.InvoiceHandler;
 import nl.tudelft.simulation.supplychain.role.financing.handler.PaymentPolicyEnum;
 import nl.tudelft.simulation.supplychain.role.financing.handler.TransportInvoiceHandler;
 import nl.tudelft.simulation.supplychain.role.financing.process.FixedCostProcess;
-import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleRFQ;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleSearch;
 import nl.tudelft.simulation.supplychain.role.purchasing.handler.DemandHandlerSearch;
 import nl.tudelft.simulation.supplychain.role.purchasing.handler.OrderConfirmationHandler;
 import nl.tudelft.simulation.supplychain.role.purchasing.handler.QuoteComparatorEnum;
@@ -80,7 +80,7 @@ public class DemoMarket extends Customer
         super(id, id, model, geography, new ContentStoreEmpty());
         bank.getBankingRole().addToBalance(this, initialBalance);
         this.directory = directory;
-        setPurchasingRole(new PurchasingRoleRFQ(this));
+        setPurchasingRole(new PurchasingRoleSearch(this));
         setConsumingRole(new ConsumingRole(this, new DistConstantDuration(Duration.ZERO)));
         setFinancingRole(new FinancingRole(this, bank, initialBalance));
         setReceivingRole(new ReceivingRole(this));
