@@ -41,9 +41,7 @@ public class DemoContentAnimator extends ContentAnimator
         {
             if (getSimulator() instanceof AnimatorInterface)
             {
-                Object[] eventContent = (Object[]) event.getContent();
-                Content content = (Content) eventContent[0];
-                Duration delay = (Duration) eventContent[1];
+                Content content = (Content) event.getContent();
 
                 if (content instanceof Shipment)
                 {
@@ -51,27 +49,27 @@ public class DemoContentAnimator extends ContentAnimator
                     switch (shipment.getProduct().getName())
                     {
                         case "PC":
-                            new ContentAnimation(content, delay, DemoContentAnimator.class
+                            new ContentAnimation(content, Duration.instantiateSI(3600), DemoContentAnimator.class
                                     .getResource("/nl/tudelft/simulation/supplychain/demo/images/computer.gif"));
                             return;
 
                         case "keyboard":
-                            new ContentAnimation(content, delay, DemoContentAnimator.class
+                            new ContentAnimation(content, Duration.instantiateSI(3600), DemoContentAnimator.class
                                     .getResource("/nl/tudelft/simulation/supplychain/demo/images/keyboard.gif"));
                             return;
 
                         case "casing":
-                            new ContentAnimation(content, delay, DemoContentAnimator.class
+                            new ContentAnimation(content, Duration.instantiateSI(3600), DemoContentAnimator.class
                                     .getResource("/nl/tudelft/simulation/supplychain/demo/images/casing.gif"));
                             return;
 
                         case "mouse":
-                            new ContentAnimation(content, delay, DemoContentAnimator.class
+                            new ContentAnimation(content, Duration.instantiateSI(3600), DemoContentAnimator.class
                                     .getResource("/nl/tudelft/simulation/supplychain/demo/images/mouse.gif"));
                             return;
 
                         case "monitor":
-                            new ContentAnimation(content, delay, DemoContentAnimator.class
+                            new ContentAnimation(content, Duration.instantiateSI(3600), DemoContentAnimator.class
                                     .getResource("/nl/tudelft/simulation/supplychain/demo/images/monitor.gif"));
                             return;
 
@@ -80,7 +78,7 @@ public class DemoContentAnimator extends ContentAnimator
                     }
                 }
 
-                new ContentAnimation(content, delay);
+                new ContentAnimation(content, Duration.instantiateSI(3600));
             }
         }
 

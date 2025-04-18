@@ -12,9 +12,7 @@ import org.djutils.draw.point.Point2d;
 
 import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
 import nl.tudelft.simulation.dsol.simulators.AnimatorInterface;
-import nl.tudelft.simulation.dsol.swing.charts.xy.XYChart;
 import nl.tudelft.simulation.supplychain.actor.ActorAlreadyDefinedException;
-import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModelInterface;
 import nl.tudelft.simulation.supplychain.money.Money;
 import nl.tudelft.simulation.supplychain.money.MoneyUnit;
@@ -52,15 +50,14 @@ public class DemoTransporter extends Transporter
      * @param landmass continent or island
      * @param bank the bank of this transporter
      * @param initialBalance the initial bank balance
-     * @param contentStore the content store to use
      * @throws ActorAlreadyDefinedException when the actor was already registered in the model
      * @throws NamingException on animation error
      * @throws RemoteException on animation error
      */
     @SuppressWarnings("checkstyle:parameternumber")
     public DemoTransporter(final String id, final String name, final SupplyChainModelInterface model, final Point2d location,
-            final String locationDescription, final String landmass, final Bank bank, final Money initialBalance,
-            final ContentStoreInterface contentStore) throws ActorAlreadyDefinedException, RemoteException, NamingException
+            final String locationDescription, final String landmass, final Bank bank, final Money initialBalance)
+            throws ActorAlreadyDefinedException, RemoteException, NamingException
     {
         super(id, name, model, location, locationDescription, landmass);
         setTransportingRole(new TransportingRole(this));
@@ -92,16 +89,6 @@ public class DemoTransporter extends Transporter
         // Transporter will get a payment in the end
         new TransportPaymentHandler(this);
         new FixedCostProcess(this, "no fixed costs", new Duration(1, DurationUnit.WEEK), new Money(0.0, MoneyUnit.USD));
-
-        //
-        // CHARTS
-        //
-
-        if (getSimulator() instanceof AnimatorInterface)
-        {
-            XYChart bankChart = new XYChart(getSimulator(), "BankAccount " + getName());
-            // TODO: bankChart.add("bank account", getBankAccount(), BankAccount.BANK_ACCOUNT_CHANGED_EVENT);
-        }
     }
 
     @Override

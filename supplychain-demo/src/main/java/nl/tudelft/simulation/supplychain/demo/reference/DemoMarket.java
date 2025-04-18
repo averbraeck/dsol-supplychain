@@ -60,6 +60,8 @@ public class DemoMarket extends Customer
     private Directory directory;
 
     /**
+     * Make a market for the model. The market does not yet have demand generators -- these have to be added in a model-specific
+     * way.
      * @param id String, the unique id of the supplier
      * @param model the model
      * @param geography the location of the actor
@@ -76,6 +78,7 @@ public class DemoMarket extends Customer
             throws ActorAlreadyDefinedException, RemoteException, NamingException
     {
         super(id, id, model, geography, new ContentStoreEmpty());
+        bank.getBankingRole().addToBalance(this, initialBalance);
         this.directory = directory;
         setPurchasingRole(new PurchasingRoleRFQ(this));
         setConsumingRole(new ConsumingRole(this, new DistConstantDuration(Duration.ZERO)));

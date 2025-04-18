@@ -1,13 +1,16 @@
 package nl.tudelft.simulation.supplychain.demo.bullwhip;
 
 import org.djunits.unit.DurationUnit;
+import org.djunits.unit.LengthUnit;
 import org.djunits.unit.MassUnit;
 import org.djunits.unit.VolumeUnit;
 import org.djunits.value.vdouble.scalar.Duration;
+import org.djunits.value.vdouble.scalar.Length;
 import org.djunits.value.vdouble.scalar.Mass;
 import org.djunits.value.vdouble.scalar.Volume;
 import org.djutils.draw.bounds.Bounds3d;
 import org.djutils.draw.point.OrientedPoint3d;
+import org.djutils.draw.point.Point;
 import org.djutils.draw.point.Point2d;
 
 import nl.tudelft.simulation.dsol.animation.d2.SingleImageRenderable;
@@ -23,6 +26,7 @@ import nl.tudelft.simulation.supplychain.demo.reference.DemoDirectory;
 import nl.tudelft.simulation.supplychain.demo.reference.DemoManufacturer;
 import nl.tudelft.simulation.supplychain.demo.reference.DemoMarket;
 import nl.tudelft.simulation.supplychain.demo.reference.DemoRetailer;
+import nl.tudelft.simulation.supplychain.demo.reference.DemoTransporter;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainModel;
 import nl.tudelft.simulation.supplychain.dsol.SupplyChainSimulatorInterface;
 import nl.tudelft.simulation.supplychain.money.Money;
@@ -32,12 +36,13 @@ import nl.tudelft.simulation.supplychain.product.Product;
 import nl.tudelft.simulation.supplychain.product.Sku;
 import nl.tudelft.simulation.supplychain.reference.Bank;
 import nl.tudelft.simulation.supplychain.role.consuming.process.DemandGeneratingProcess;
+import nl.tudelft.simulation.supplychain.role.transporting.TransportingActor;
 import nl.tudelft.simulation.supplychain.test.TestModel;
 import nl.tudelft.simulation.supplychain.util.DistDiscreteTriangular;
 
 /**
- * BullwhipModel.java. <br>
- * <br>
+ * BullwhipModel.java.
+ * <p>
  * Copyright (c) 2003-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
@@ -97,6 +102,11 @@ public class BullwhipModel extends SupplyChainModel
             ing.getBankingRole().setAnnualInterestRateNeg(-0.080);
             ing.getBankingRole().setAnnualInterestRatePos(0.025);
 
+            // create the transporter
+            var trucking = new DemoTransporter("Trucker", "Trucker", this, new Point2d(900, 0), "continent", "US", ing,
+                    new Money(1E5, MoneyUnit.USD));
+            var transporters = new TransportingActor[] {trucking};
+
             // we create two search 'domains', one between the customers and the retailers,
             // and one between the retailers, manufacturers, and suppliers
             var ypCustomerMTS = new DemoDirectory("YP_customer_MTS", this, new Point2d(400, 40));
@@ -137,34 +147,37 @@ public class BullwhipModel extends SupplyChainModel
             StreamInterface streamMTS = new MersenneTwister(2L);
             StreamInterface streamMTO = new MersenneTwister(4L);
             DemoRetailer[] mtsRet = new DemoRetailer[5];
-            mtsRet[0] = new DemoRetailer("Seattle_MTS", getSimulator(), new Point2d(-200, -270, 1), ing,
-                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTS, ypProductionMTS, streamMTS, true);
-            mtsRet[1] = new DemoRetailer("LosAngeles_MTS", getSimulator(), new Point2d(-200, -210, 1), ing,
-                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTS, ypProductionMTS, streamMTS, true);
-            mtsRet[2] = new DemoRetailer("NewYork_MTS", getSimulator(), new Point2d(-200, -150, 1), ing,
-                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTS, ypProductionMTS, streamMTS, true);
-            mtsRet[3] = new DemoRetailer("Washington_MTS", getSimulator(), new Point2d(-200, -90, 1), ing,
-                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTS, ypProductionMTS, streamMTS, true);
-            mtsRet[4] = new DemoRetailer("Miami_MTS", getSimulator(), new Point2d(-200, -30, 1), ing,
-                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTS, ypProductionMTS, streamMTS, true);
+            mtsRet[0] = new DemoRetailer("Seattle_MTS", this, new Geography(new Point2d(-200, -270), "Seattle", "US"), ing,
+                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTS, ypProductionMTS, streamMTS, true, transporters);
+            mtsRet[1] = new DemoRetailer("LosAngeles_MTS", this, new Geography(new Point2d(-200, -210), "Los Angeles", "US"),
+                    ing, new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTS, ypProductionMTS, streamMTS, true,
+                    transporters);
+            mtsRet[2] = new DemoRetailer("NewYork_MTS", this, new Geography(new Point2d(-200, -150), "New York", "US"), ing,
+                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTS, ypProductionMTS, streamMTS, true, transporters);
+            mtsRet[3] = new DemoRetailer("Washington_MTS", this, new Geography(new Point2d(-200, -90), "Washington", "US"), ing,
+                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTS, ypProductionMTS, streamMTS, true, transporters);
+            mtsRet[4] = new DemoRetailer("Miami_MTS", this, new Geography(new Point2d(-200, -30), "Miami", "US"), ing,
+                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTS, ypProductionMTS, streamMTS, true, transporters);
 
             DemoRetailer[] mtoRet = new DemoRetailer[5];
-            mtoRet[0] = new DemoRetailer("Seattle_MTO", getSimulator(), new Point2d(-200, 30, 1), ing,
-                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTO, ypProductionMTO, streamMTO, false);
-            mtoRet[1] = new DemoRetailer("LosAngeles_MTO", getSimulator(), new Point2d(-200, 90, 1), ing,
-                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTO, ypProductionMTO, streamMTO, false);
-            mtoRet[2] = new DemoRetailer("NewYork_MTO", getSimulator(), new Point2d(-200, 150, 1), ing,
-                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTO, ypProductionMTO, streamMTO, false);
-            mtoRet[3] = new DemoRetailer("Washington_MTO", getSimulator(), new Point2d(-200, 210, 1), ing,
-                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTO, ypProductionMTO, streamMTO, false);
-            mtoRet[4] = new DemoRetailer("Miami_MTO", getSimulator(), new Point2d(-200, 270, 1), ing,
-                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTO, ypProductionMTO, streamMTO, false);
+            mtoRet[0] = new DemoRetailer("Seattle_MTO", this, new Geography(new Point2d(-200, 30), "Seattle", "US"), ing,
+                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTO, ypProductionMTO, streamMTO, false, transporters);
+            mtoRet[1] = new DemoRetailer("LosAngeles_MTO", this, new Geography(new Point2d(-200, 90), "Los Angeles", "US"), ing,
+                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTO, ypProductionMTO, streamMTO, false, transporters);
+            mtoRet[2] = new DemoRetailer("NewYork_MTO", this, new Geography(new Point2d(-200, 150), "New York", "US"), ing,
+                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTO, ypProductionMTO, streamMTO, false, transporters);
+            mtoRet[3] = new DemoRetailer("Washington_MTO", this, new Geography(new Point2d(-200, 210), "Washington", "US"), ing,
+                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTO, ypProductionMTO, streamMTO, false, transporters);
+            mtoRet[4] = new DemoRetailer("Miami_MTO", this, new Geography(new Point2d(-200, 270), "Miami", "US"), ing,
+                    new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTO, ypProductionMTO, streamMTO, false, transporters);
 
             // Manufacturers
-            DemoManufacturer mtsMan = new DemoManufacturer("MexicoCity_MTS", getSimulator(), new Point2d(0, -150, 1), ing,
-                    new Money(1000000, MoneyUnit.USD), pc, 50, ypCustomerMTS, ypProductionMTS, streamMTS, true);
-            DemoManufacturer mtoMan = new DemoManufacturer("MexicoCity_MTO", getSimulator(), new Point2d(0, 150, 1), ing,
-                    new Money(1000000, MoneyUnit.USD), pc, 50, ypCustomerMTO, ypProductionMTO, streamMTO, false);
+            DemoManufacturer mtsMan = new DemoManufacturer("MexicoCity_MTS", this,
+                    new Geography(new Point2d(0, -150), "Mexico City", "US"), ing, new Money(1000000, MoneyUnit.USD), pc, 50,
+                    ypCustomerMTS, ypProductionMTS, streamMTS, true, transporters);
+            DemoManufacturer mtoMan = new DemoManufacturer("MexicoCity_MTO", this,
+                    new Geography(new Point2d(0, 150), "Nexico City", "US"), ing, new Money(1000000, MoneyUnit.USD), pc, 50,
+                    ypCustomerMTO, ypProductionMTO, streamMTO, false, transporters);
 
             // Suppliers
 
@@ -178,9 +191,13 @@ public class BullwhipModel extends SupplyChainModel
             contentAnimator.subscribe(customer);
             // contentAnimator.subscribe(marketMTO);
             for (DemoRetailer r : mtsRet)
+            {
                 contentAnimator.subscribe(r);
+            }
             for (DemoRetailer r : mtoRet)
+            {
                 contentAnimator.subscribe(r);
+            }
             contentAnimator.subscribe(mtsMan);
             contentAnimator.subscribe(mtoMan);
         }
@@ -188,6 +205,14 @@ public class BullwhipModel extends SupplyChainModel
         {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Length calculateDistance(final Point<?> loc1, final Point<?> loc2)
+    {
+        double dx = loc2.getX() - loc1.getX();
+        double dy = loc2.getY() - loc1.getY();
+        return new Length(Math.sqrt(dx * dx + dy * dy), LengthUnit.KILOMETER);
     }
 
 }
