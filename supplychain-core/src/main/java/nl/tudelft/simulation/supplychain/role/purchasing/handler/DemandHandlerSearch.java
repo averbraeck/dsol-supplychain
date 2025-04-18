@@ -5,6 +5,7 @@ import org.djunits.value.vdouble.scalar.Length;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.SearchRequest;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleSearch;
 import nl.tudelft.simulation.supplychain.role.searching.SearchingActor;
 
 /**
@@ -53,11 +54,19 @@ public class DemandHandlerSearch extends DemandHandler
         {
             return false;
         }
+        // store the Demand
+        getRole().storeDemand(demand);
         // create a SearchRequest
         SearchRequest searchRequest = new SearchRequest(getActor(), this.searchingActor, demand.groupingId(),
                 this.maximumDistance, this.maximumNumber, demand.product());
         // and send it out immediately
         sendContent(searchRequest, getHandlingTime().draw());
         return true;
+    }
+
+    @Override
+    public PurchasingRoleSearch getRole()
+    {
+        return (PurchasingRoleSearch) super.getRole();
     }
 }

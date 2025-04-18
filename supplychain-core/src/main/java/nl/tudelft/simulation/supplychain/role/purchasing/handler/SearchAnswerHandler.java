@@ -4,18 +4,16 @@ import java.util.List;
 
 import org.djunits.value.vdouble.scalar.Duration;
 import org.djutils.exceptions.Throw;
-import org.pmw.tinylog.Logger;
 
 import nl.tudelft.simulation.supplychain.actor.Actor;
 import nl.tudelft.simulation.supplychain.content.Demand;
 import nl.tudelft.simulation.supplychain.content.RequestForQuote;
 import nl.tudelft.simulation.supplychain.content.SearchAnswer;
 import nl.tudelft.simulation.supplychain.content.SearchRequest;
-import nl.tudelft.simulation.supplychain.content.store.ContentStoreInterface;
 import nl.tudelft.simulation.supplychain.handler.ContentHandler;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingActor;
 import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRole;
-import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleRFQ;
+import nl.tudelft.simulation.supplychain.role.purchasing.PurchasingRoleSearch;
 import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 import nl.tudelft.simulation.supplychain.role.transporting.TransportPreference;
 
@@ -63,16 +61,8 @@ public class SearchAnswerHandler extends ContentHandler<SearchAnswer, Purchasing
         {
             return false;
         }
-        ContentStoreInterface messageStore = getActor().getContentStore();
         SearchRequest searchRequest = searchAnswer.searchRequest();
-        List<Demand> demandList = messageStore.getContentList(searchRequest.groupingId(), Demand.class);
-        if (demandList.size() == 0) // we send it to ourselves, so it is 2x in the content store
-        {
-            Logger.warn("SearchAnswerHandler - Actor '{}' could not find groupingId '{}' for SearchAnswer '{}'",
-                    getActor().getName(), searchRequest.groupingId(), searchAnswer.toString());
-            return false;
-        }
-        Demand demand = demandList.get(0);
+        Demand demand = getRole().getDemandWithGroupingId(searchRequest.groupingId());
         List<Actor> potentialSuppliers = searchAnswer.actorList();
         Duration delay = getHandlingTime().draw();
         for (Actor supplier : potentialSuppliers)
@@ -82,13 +72,14 @@ public class SearchAnswerHandler extends ContentHandler<SearchAnswer, Purchasing
             getRole().addRequestForQuoteToMap(rfq);
             sendContent(rfq, delay);
         }
+        getRole().removeDemandWithGroupingId(searchRequest.groupingId());
         return true;
     }
 
     @Override
-    public PurchasingRoleRFQ getRole()
+    public PurchasingRoleSearch getRole()
     {
-        return (PurchasingRoleRFQ) super.getRole();
+        return (PurchasingRoleSearch) super.getRole();
     }
 
 }

@@ -1,5 +1,10 @@
 package nl.tudelft.simulation.supplychain.role.purchasing;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import nl.tudelft.simulation.supplychain.content.Demand;
+
 /**
  * The purchasing role with searchs is a role that organizes the purchasing based on a SearchRequest, and continues from there.
  * <p>
@@ -13,6 +18,9 @@ public class PurchasingRoleSearch extends PurchasingRoleRFQ
     /** the serial version uid. */
     private static final long serialVersionUID = 20221205L;
 
+    /** The map of groupingId to Demand. */
+    private Map<Long, Demand> groupingIdDemandMap = new LinkedHashMap<>();
+
     /**
      * Construct a new PurchasingRole for Demand - SearchAnswer - Quote - Confirmation - Shipment - Invoice.
      * @param owner the actor to which this role belongs
@@ -22,6 +30,34 @@ public class PurchasingRoleSearch extends PurchasingRoleRFQ
         super(owner);
     }
 
+    /**
+     * Store the demand in the search map.
+     * @param demand the demand to store
+     */
+    public void storeDemand(final Demand demand)
+    {
+        this.groupingIdDemandMap.put(demand.groupingId(), demand);
+    }
+
+    /**
+     * Return the demand with the given groupingId.
+     * @param groupingId the groupingId to look up
+     * @return the Demand belonging to the groupingId
+     */
+    public Demand getDemandWithGroupingId(final long groupingId)
+    {
+        return this.groupingIdDemandMap.get(groupingId);
+    }
+    
+    /**
+     * Remove the demand with the given groupingId.
+     * @param groupingId the groupingId to remove
+     */
+    public void removeDemandWithGroupingId(final long groupingId)
+    {
+        this.groupingIdDemandMap.remove(groupingId);
+    }
+    
     @Override
     public String getId()
     {
