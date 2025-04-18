@@ -101,7 +101,7 @@ public class MTSMTOModel extends SupplyChainModel
             pcBOM.add(monitor, 1.0);
 
             // create the bank
-            Bank ing = new DemoBank("bank", "Bank", this, new Point2d(0, 0), "Bank", "Europe");
+            Bank ing = new DemoBank("bank", "Bank", this, new Point2d(0, 0), "Bank", "US");
             ing.getBankingRole().setAnnualInterestRateNeg(-0.080);
             ing.getBankingRole().setAnnualInterestRatePos(0.025);
 
@@ -118,14 +118,14 @@ public class MTSMTOModel extends SupplyChainModel
             var ypProductionMTO = new DemoDirectory("YP_production_MTO", this, new Point2d(100, 30));
 
             // Markets
-            var marketMTS = new DemoMarket("Market_MTS", this, new Geography(new Point2d(-360, -150), "", "MTS"), ing,
+            var marketMTS = new DemoMarket("Market_MTS", this, new Geography(new Point2d(-360, -150), "", "US"), ing,
                     new Money(10000.0, MoneyUnit.USD), ypCustomerMTS);
             new DemandGeneratingProcess(marketMTS, pc)
                     .setIntervalDistribution(new DistContinuousDuration(new DistExponential(streamMTS, 8.0), DurationUnit.HOUR))
                     .setAmountDistribution(new DistDiscreteTriangular(streamMTS, 1.0, 4.0, 8.0))
                     .setEarliestDeliveryDuration(new Duration(2.0, DurationUnit.DAY))
                     .setLatestDeliveryDuration(new Duration(7.0, DurationUnit.DAY)).setStartAfterInterval().start();
-            var marketMTO = new DemoMarket("Market_MTO", this, new Geography(new Point2d(-360, 150), "", "MTO"), ing,
+            var marketMTO = new DemoMarket("Market_MTO", this, new Geography(new Point2d(-360, 150), "", "US"), ing,
                     new Money(10000.0, MoneyUnit.USD), ypCustomerMTO);
             new DemandGeneratingProcess(marketMTO, pc)
                     .setIntervalDistribution(new DistContinuousDuration(new DistExponential(streamMTO, 8.0), DurationUnit.HOUR))
@@ -160,11 +160,11 @@ public class MTSMTOModel extends SupplyChainModel
                     new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTO, ypProductionMTO, streamMTO, false, transporters);
 
             // Manufacturers
-            DemoManufacturer mtsMan = new DemoManufacturer("MexicoCity_MTS", this,
-                    new Geography(new Point2d(0, -150), "Mexico City", "US"), ing, new Money(1000000, MoneyUnit.USD), pc, 50,
+            DemoManufacturer mtsMan = new DemoManufacturer("Omaha_MTS", this,
+                    new Geography(new Point2d(0, -150), "Omaha", "US"), ing, new Money(1000000, MoneyUnit.USD), pc, 50,
                     ypCustomerMTS, ypProductionMTS, streamMTS, true, transporters);
-            DemoManufacturer mtoMan = new DemoManufacturer("MexicoCity_MTO", this,
-                    new Geography(new Point2d(0, 150), "Nexico City", "US"), ing, new Money(1000000, MoneyUnit.USD), pc, 50,
+            DemoManufacturer mtoMan = new DemoManufacturer("Omaha_MTO", this,
+                    new Geography(new Point2d(0, 150), "Omaha", "US"), ing, new Money(1000000, MoneyUnit.USD), pc, 50,
                     ypCustomerMTO, ypProductionMTO, streamMTO, false, transporters);
 
             // Suppliers

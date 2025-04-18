@@ -108,7 +108,7 @@ public class DemoMarket extends Customer
         //
         // tell Client to use the QuoteHandler to handle quotes
         new QuoteNoHandler(this);
-        new QuoteHandlerAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE, 0.5, 0.0);
+        new QuoteHandlerAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE, 2.0, 0.0); // XXX
         //
         // Client has the standard order confirmation Handler
         new OrderConfirmationHandler(this);

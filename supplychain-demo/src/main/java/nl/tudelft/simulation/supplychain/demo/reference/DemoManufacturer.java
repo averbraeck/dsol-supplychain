@@ -140,7 +140,7 @@ public class DemoManufacturer extends Manufacturer implements SellingActorRFQ
         //
         // tell Manufacturer to use the QuoteHandler to handle quotes
         new QuoteNoHandler(this);
-        new QuoteHandlerAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE, 0.4, 0.1);
+        new QuoteHandlerAll(this, QuoteComparatorEnum.SORT_PRICE_DATE_DISTANCE, 2.0, 0.1); // XXX
         //
         // Manufacturer has the standard order confirmation Handler
         new OrderConfirmationHandler(this);

@@ -98,7 +98,7 @@ public class BullwhipModel extends SupplyChainModel
             pcBOM.add(monitor, 1.0);
 
             // create the bank
-            Bank ing = new DemoBank("bank", "Bank", this, new Point2d(0, 0), "Bank", "Europe");
+            Bank ing = new DemoBank("bank", "Bank", this, new Point2d(0, 0), "Bank", "US");
             ing.getBankingRole().setAnnualInterestRateNeg(-0.080);
             ing.getBankingRole().setAnnualInterestRatePos(0.025);
 
@@ -172,11 +172,11 @@ public class BullwhipModel extends SupplyChainModel
                     new Money(100000, MoneyUnit.USD), pc, 4.0, ypCustomerMTO, ypProductionMTO, streamMTO, false, transporters);
 
             // Manufacturers
-            DemoManufacturer mtsMan = new DemoManufacturer("MexicoCity_MTS", this,
-                    new Geography(new Point2d(0, -150), "Mexico City", "US"), ing, new Money(1000000, MoneyUnit.USD), pc, 50,
+            DemoManufacturer mtsMan = new DemoManufacturer("Omaha_MTS", this,
+                    new Geography(new Point2d(0, -150), "Omaha", "US"), ing, new Money(1000000, MoneyUnit.USD), pc, 50,
                     ypCustomerMTS, ypProductionMTS, streamMTS, true, transporters);
-            DemoManufacturer mtoMan = new DemoManufacturer("MexicoCity_MTO", this,
-                    new Geography(new Point2d(0, 150), "Nexico City", "US"), ing, new Money(1000000, MoneyUnit.USD), pc, 50,
+            DemoManufacturer mtoMan = new DemoManufacturer("Omaha_MTO", this,
+                    new Geography(new Point2d(0, 150), "Omaha", "US"), ing, new Money(1000000, MoneyUnit.USD), pc, 50,
                     ypCustomerMTO, ypProductionMTO, streamMTO, false, transporters);
 
             // Suppliers
