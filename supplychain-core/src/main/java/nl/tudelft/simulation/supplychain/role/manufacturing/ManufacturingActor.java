@@ -5,7 +5,7 @@ import org.djutils.exceptions.Throw;
 import nl.tudelft.simulation.supplychain.actor.Actor;
 
 /**
- * ProducingActor is an interface to indicate that an Actor has a ProducingRole.
+ * ManufacturingActor is an interface to indicate that an Actor has a ManufacturingRole.
  * <p>
  * Copyright (c) 2023-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
@@ -15,8 +15,8 @@ import nl.tudelft.simulation.supplychain.actor.Actor;
 public interface ManufacturingActor extends Actor
 {
     /**
-     * Return the ProducingRole for this actor.
-     * @return the ProducingRole for this actor
+     * Return the ManufacturingRole for this actor.
+     * @return the ManufacturingRole for this actor
      */
     default ManufacturingRole getManufacturingRole()
     {
@@ -24,10 +24,10 @@ public interface ManufacturingActor extends Actor
     }
 
     /**
-     * Set the ProducingRole for this actor.
-     * @param manufacturingRole the new ProducingRole for this actor
+     * Set the ManufacturingRole for this actor.
+     * @param manufacturingRole the new ManufacturingRole for this actor
      */
-    default void setProducingRole(final ManufacturingRole manufacturingRole)
+    default void setManufacturingRole(final ManufacturingRole manufacturingRole)
     {
         Throw.whenNull(manufacturingRole, "manufacturingRole cannot be null");
         registerRole(ManufacturingRole.class, manufacturingRole);
