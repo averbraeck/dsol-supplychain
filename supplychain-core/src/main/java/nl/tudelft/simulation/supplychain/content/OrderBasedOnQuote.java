@@ -15,8 +15,8 @@ import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
- * @param sender the sender of the quote-based order
- * @param receiver the receiver of the quote-based order
+ * @param sender the sender of the quote-based order, a PurchasingActor
+ * @param receiver the receiver of the quote-based order, a SellingActor
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId

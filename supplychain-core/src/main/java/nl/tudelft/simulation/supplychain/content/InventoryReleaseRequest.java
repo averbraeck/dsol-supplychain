@@ -7,14 +7,15 @@ import nl.tudelft.simulation.supplychain.role.selling.SellingActor;
 import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 
 /**
- * The InventoryReleaseRequest is the order to the warehouse to release the inventory.
+ * The InventoryReleaseRequest is the order fro the SellingActor to the warehouse to release the inventory that was reserved
+ * using an InventoryReservation.
  * <p>
  * Copyright (c) 2025-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
- * @param sender the sender of the RFW
- * @param receiver the receiver of the RFQ
+ * @param sender the SellingActor as the sender of the InventoryReleaseRequest
+ * @param receiver the WarehousingActor as the receiver of the message
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId

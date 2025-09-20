@@ -14,7 +14,7 @@ import nl.tudelft.simulation.supplychain.product.Product;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  * @param sender the sender of the demand. It is not specified further, since it can be, e.g., a ConsumingActor or
- *            WaterhousingActor that sends the request.
+ *            WarehousingActor that sends the request.
  * @param receiver the receiver of the demand (same actor). This is also not specified since the sender is not specified. Yet,
  *            it will be typically handled by the PurchasingActor role.
  * @param timestamp the absolute time when the message was created

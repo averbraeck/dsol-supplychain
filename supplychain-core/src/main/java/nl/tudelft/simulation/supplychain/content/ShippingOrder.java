@@ -7,14 +7,14 @@ import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
 
 /**
  * The ShippingOrder is the request from the WarehousingRole to the ShippingRole to ready the goods from the warehouse for
- * transport.
+ * transport. Both the  WarehousingRole and the ShippingRole are typically part of the WarehousingActor. 
  * <p>
  * Copyright (c) 2025-2025 Delft University of Technology, Delft, the Netherlands. All rights reserved. <br>
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
- * @param sender the sender of the RFW
- * @param receiver the receiver of the RFQ
+ * @param sender the WarehousingActor as the sender of the ShippingOrder
+ * @param receiver the receiver of the ShippingOrder, which is the ShippingRole of the WarehousingActor
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId

@@ -15,8 +15,8 @@ import nl.tudelft.simulation.supplychain.role.transporting.TransportingActor;
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
- * @param sender the sender of the RFW
- * @param receiver the receiver of the RFQ; both a buying actor and a receiving actor can reserve transport
+ * @param sender the transport firm as the sender of the TransportQuote
+ * @param receiver the receiver of the TransportQuote; both a buying actor and a receiving actor can reserve transport
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId

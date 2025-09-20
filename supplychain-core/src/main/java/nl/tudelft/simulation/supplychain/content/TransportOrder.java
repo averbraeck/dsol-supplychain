@@ -14,8 +14,8 @@ import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
- * @param sender the sender of the RFW
- * @param receiver the receiver of the RFQ
+ * @param sender the sender of the TransportOrder, which is the Shipping department (role) of the SellingActor
+ * @param receiver the receiver of the TransportOrder, which is the TransportingActor
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
@@ -24,7 +24,8 @@ import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
  * @param order the order to which the transport belongs
  */
 public record TransportOrder(WarehousingActor sender, TransportingActor receiver, Time timestamp, long uniqueId,
-        long groupingId, TransportQuote transportQuote, Shipment shipment, Order order) implements GroupedContent, ProductContent
+        long groupingId, TransportQuote transportQuote, Shipment shipment, Order order)
+        implements GroupedContent, ProductContent
 {
     public TransportOrder(final TransportQuote transportQuote, final Shipment shipment, final Order order)
     {

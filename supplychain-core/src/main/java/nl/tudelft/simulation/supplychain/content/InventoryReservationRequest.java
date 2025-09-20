@@ -14,12 +14,12 @@ import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
- * @param sender the sender of the RFW
- * @param receiver the receiver of the RFQ
+ * @param sender the sender of the InventoryReservationRequest
+ * @param receiver the receiver of the InventoryReservationRequest
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
- * @param order the Order from the purchaser
+ * @param order the Order from the purchaser, which contains the product, amount and due date
  */
 public record InventoryReservationRequest(SellingActor sender, WarehousingActor receiver, Time timestamp, long uniqueId,
         long groupingId, Order order) implements GroupedContent, ProductContent
