@@ -13,14 +13,13 @@ import nl.tudelft.simulation.supplychain.role.warehousing.WarehousingActor;
  * The supply chain Java library uses a BSD-3 style license.
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
- * @param sender the sender of the demand. It is not specified further, since it can be, e.g., a ConsumingActor or
- *            WaterhousingActor that sends the request.
- * @param receiver the receiver of the demand (same actor). This is also not specified since the sender is not specified. Yet,
- *            it will be typically handled by the PurchasingActor role.
+ * @param sender the sender of the Fulfillment; indicates that the shipment has arrived in the warehouse
+ * @param receiver the receiver of the message, e.g., to indicate payment can take place
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
  * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
- * @param transportDelivery info about the delivered goods
+ * @param transportDelivery pointer to the document of the receipt of the goods in the warehouse, when they were transferred
+ *            from the TransportingActor to the WarehouseActor
  */
 public record Fulfillment(WarehousingActor sender, FinancingActor receiver, Time timestamp, long uniqueId, long groupingId,
         TransportDelivery transportDelivery) implements GroupedContent, ProductContent

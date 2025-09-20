@@ -19,7 +19,7 @@ import nl.tudelft.simulation.supplychain.product.Product;
  *            it will be typically handled by the PurchasingActor role.
  * @param timestamp the absolute time when the message was created
  * @param uniqueId the unique id of the message
- * @param groupingId the id used to group multiple messages, such as the demandId or the orderId
+ * @param groupingId the id used to group multiple messages, in this case a copy of the the demandId
  * @param product the product which is demanded
  * @param amount the amount of the product in the product's SKU
  * @param earliestDeliveryDate the earliest delivery date
