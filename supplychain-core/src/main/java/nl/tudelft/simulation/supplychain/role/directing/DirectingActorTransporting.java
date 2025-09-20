@@ -2,7 +2,7 @@ package nl.tudelft.simulation.supplychain.role.directing;
 
 import org.djutils.exceptions.Throw;
 
-import nl.tudelft.simulation.supplychain.actor.Actor;
+import nl.tudelft.simulation.supplychain.role.financing.FinancingActor;
 
 /**
  * DirectingActor is an interface to indicate that an Actor has a DirectingRole. The Transporting version focuses on transport.
@@ -12,7 +12,7 @@ import nl.tudelft.simulation.supplychain.actor.Actor;
  * </p>
  * @author <a href="https://www.tudelft.nl/averbraeck">Alexander Verbraeck</a>
  */
-public interface DirectingActorTransporting extends Actor
+public interface DirectingActorTransporting extends FinancingActor
 {
     /**
      * Return the DirectingRole for this actor.
